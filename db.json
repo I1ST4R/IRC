@@ -1,0 +1,218 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "type": "admin",
+      "login": "admin",
+      "password": "admin"
+    },
+    {
+      "id": 2,
+      "type": "client",
+      "login": "user",
+      "password": "user"
+    }
+  ],
+  "products": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "Тональный крем Estée Lauder Double Wear",
+      "releaseDate": "2023-03-10T00:00:00.000Z",
+      "price": 2890,
+      "prevPrice": 3200,
+      "technology": "Hydra Rescue",
+      "img": "product1.png",
+      "tags": ["новинка", "премиум"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "name": "Помада L'Oréal Paris Color Riche",
+      "releaseDate": "2022-11-15T00:00:00.000Z",
+      "price": 1290,
+      "prevPrice": 1500,
+      "technology": "Color Sensational",
+      "img": "product2.png",
+      "tags": ["акция", "бестселлер"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "name": "Сыворотка для лица La Roche-Posay Hyalu B5",
+      "releaseDate": "2023-01-20T00:00:00.000Z",
+      "price": 2490,
+      "prevPrice": 2700,
+      "technology": "Hyaluronic Acid",
+      "img": "product3.png",
+      "tags": ["уход", "новинка"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "name": "Тушь для ресниц Maybelline Lash Sensational",
+      "releaseDate": "2022-09-05T00:00:00.000Z",
+      "price": 1190,
+      "prevPrice": 1350,
+      "technology": "Fan Effect",
+      "img": "product4.png",
+      "tags": ["бестселлер"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440005",
+      "name": "Крем для век Clinique All About Eyes",
+      "releaseDate": "2023-02-28T00:00:00.000Z",
+      "price": 1990,
+      "prevPrice": 2200,
+      "technology": "Anti-Fatigue",
+      "img": "product5.png",
+      "tags": ["уход", "премиум"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440006",
+      "name": "Духи Chanel Coco Mademoiselle",
+      "releaseDate": "2021-12-01T00:00:00.000Z",
+      "price": 2990,
+      "prevPrice": 3500,
+      "technology": "Eau de Parfum",
+      "img": "product6.png",
+      "tags": ["премиум", "классика"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440007",
+      "name": "Маска для волос Olaplex No.3",
+      "releaseDate": "2023-04-15T00:00:00.000Z",
+      "price": 1590,
+      "prevPrice": 1800,
+      "technology": "Bond Repair",
+      "img": "product1.png",
+      "tags": ["уход", "новинка"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440008",
+      "name": "Подводка для глаз NYX Epic Ink Liner",
+      "releaseDate": "2022-10-22T00:00:00.000Z",
+      "price": 890,
+      "prevPrice": 990,
+      "technology": "Waterproof",
+      "img": "product2.png",
+      "tags": []
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440009",
+      "name": "BB-крем Missha Perfect Cover",
+      "releaseDate": "2023-05-12T00:00:00.000Z",
+      "price": 1490,
+      "prevPrice": 1700,
+      "technology": "SPF42",
+      "img": "product3.png",
+      "tags": ["акция"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440010",
+      "name": "Спрей для лица MAC Fix+",
+      "releaseDate": "2022-08-30T00:00:00.000Z",
+      "price": 1790,
+      "prevPrice": 2000,
+      "technology": "Hydrating Mist",
+      "img": "product4.png",
+      "tags": ["макияж"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440011",
+      "name": "Гель для умывания Cerave Hydrating Cleanser",
+      "releaseDate": "2023-06-10T00:00:00.000Z",
+      "price": 990,
+      "prevPrice": 1200,
+      "technology": "Hyaluronic Acid",
+      "img": "product5.png",
+      "tags": ["уход", "бестселлер"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440012",
+      "name": "Хайлайтер Fenty Beauty Killawatt",
+      "releaseDate": "2022-12-05T00:00:00.000Z",
+      "price": 2190,
+      "prevPrice": 2500,
+      "technology": "Light-reflecting",
+      "img": "product6.png",
+      "tags": ["макияж", "новинка"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440013",
+      "name": "Крем для рук Neutrogena Norwegian Formula",
+      "releaseDate": "2023-01-18T00:00:00.000Z",
+      "price": 590,
+      "prevPrice": 750,
+      "technology": "Intensive Moisture",
+      "img": "product1.png",
+      "tags": ["уход"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440014",
+      "name": "Тени для век Urban Decay Naked",
+      "releaseDate": "2022-07-22T00:00:00.000Z",
+      "price": 2590,
+      "prevPrice": 3000,
+      "technology": "Long-lasting",
+      "img": "product2.png",
+      "tags": ["премиум", "бестселлер"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440015",
+      "name": "Сыворотка для роста ресниц The Ordinary Lash Serum",
+      "releaseDate": "2023-04-05T00:00:00.000Z",
+      "price": 1290,
+      "prevPrice": 1500,
+      "technology": "Peptide Complex",
+      "img": "product3.png",
+      "tags": ["новинка", "уход"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440016",
+      "name": "Бальзам для губ Laneige Lip Sleeping Mask",
+      "releaseDate": "2022-10-14T00:00:00.000Z",
+      "price": 1390,
+      "prevPrice": 1600,
+      "technology": "Overnight Repair",
+      "img": "product4.png",
+      "tags": ["уход", "акция"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440017",
+      "name": "Флюид для лица Shiseido Synchro Skin",
+      "releaseDate": "2023-03-28T00:00:00.000Z",
+      "price": 3290,
+      "prevPrice": 3600,
+      "technology": "Self-refreshing",
+      "img": "product5.png",
+      "tags": ["премиум", "новинка"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440018",
+      "name": "Кисть для макияжа Real Techniques Buffing Brush",
+      "releaseDate": "2022-11-30T00:00:00.000Z",
+      "price": 890,
+      "prevPrice": 1100,
+      "technology": "Synthetic Bristles",
+      "img": "product6.png",
+      "tags": ["аксессуары"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440019",
+      "name": "Мицеллярная вода Bioderma Sensibio H2O",
+      "releaseDate": "2021-09-15T00:00:00.000Z",
+      "price": 1190,
+      "prevPrice": 1400,
+      "technology": "Ultra-mild",
+      "img": "product1.png",
+      "tags": ["уход", "бестселлер"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440020",
+      "name": "Пудра для лица Charlotte Tilbury Airbrush Flawless",
+      "releaseDate": "2023-02-10T00:00:00.000Z",
+      "price": 2790,
+      "prevPrice": 3100,
+      "technology": "Micro-fine",
+      "img": "product2.png",
+      "tags": ["макияж", "премиум"]
+    }
+  ]
+}
