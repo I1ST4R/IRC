@@ -1,0 +1,92 @@
+.blog {
+  padding: 100px 0;
+  position: relative;
+
+  &__title {
+    font-family: "EuropeExt";
+    font-weight: 700;
+    font-size: 50px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  &__swiper {
+    margin-top: 50px;
+    overflow: hidden;
+    padding: 0 20px !important;
+  }
+
+  .swiper-slide {
+    width: auto;
+  }
+
+  &__slide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+
+    &-img {
+      width: 100%;
+      height: 278px;
+      object-fit: cover; 
+    }
+
+    &-text {
+      width: 100%;
+      padding: 0.2rem;
+      box-sizing: border-box;
+      flex-grow: 1;
+    }
+
+    &-title {
+      font-family: "EuropeExt";
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    &-info {
+      margin-top: 10px;
+      font-family: "Manrope";
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 157%;
+      color: #000;
+    }
+  }
+
+  &__slider-navigation{
+    position:absolute !important;
+    width:100%;
+    bottom:10px;
+    transform:translateX(45%);
+    z-index:2;
+  }
+
+  &__slider-l, 
+  &__slider-r {
+    cursor: pointer;
+    height:24px;
+  }
+
+  .categories__slider-navigation{
+    margin-top: 0px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    &__title {
+      font-size: 36px;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    &__title {
+      font-size: 24px;
+    }
+  }
+}

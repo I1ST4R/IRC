@@ -1,0 +1,97 @@
+.categories{
+
+  .swiper{
+    padding: 50px 0px;
+  }
+
+  .swiper-slide{
+
+    div{
+      position:relative;
+      width:100px;
+      height:100px;
+      border-radius: 100%;
+      border:3px solid #CA354F;
+      padding:10px;
+      margin:auto;
+    }
+
+    img{
+      width:100px;
+      height:100px;
+      margin-top: -80px;
+    }
+  }
+
+  &__slide1:after,
+  &__slide2:after,
+  &__slide3:after,
+  &__slide4:after,
+  &__slide5:after,
+  &__slide6:after,
+  &__slide7:after,
+  &__slide8:after{
+    content:"";
+    position:absolute;
+    width:200px;
+    font-family:"Manrope";
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    bottom:-30px;
+    left:-37px;
+  }
+
+  &__slide1:after{
+    content:"диагностика";
+  }
+
+  &__slide2:after{
+    content:"жирность";
+  }
+
+  &__slide3:after{
+    content:"черные точки ";
+  }
+
+  &__slide4:after{
+    content:"сухость";
+  }
+
+  &__slide5:after{
+    content:"антиэйдж";
+  }
+
+  &__slide6:after{
+    content:"ровный тон";
+  }
+
+  &__slide7:after{
+    content:"пигментация";
+  }
+
+  &__slide8:after{
+    content:"отечность";
+  }
+
+
+  &__slider-navigation{
+    display:flex;
+    width:90px;
+    margin-top:50px;
+    margin-inline:auto;
+
+    svg{
+      width:44px;
+      height:34px;
+      padding:10px;
+
+      &:hover path{
+        fill:#CA354F;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,163 @@
+.newsletter{
+
+  .container--big {
+    display: flex;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .information-block__rectangle:after{
+    height: 400px;
+		background: #E1E7F0;
+  }
+
+  .information-block__img:after, 
+  .information-block__info{
+    background: #A8C8FF 
+  }
+
+  .information-block__info{
+    font-size:10px;
+    padding:45px; 
+  }
+
+  form{
+    margin-top:50px;
+  }
+
+  &__row{
+    display:flex;
+    gap:10px;
+    width:100%;
+  }
+
+  &__block-field{
+    width:100%;
+    position:relative;
+    height:75px;
+
+    img{
+      position:absolute;
+      top:27px;
+      left:25px;
+    }
+  }
+
+  &__field{
+    width:100%;
+    height:100%;
+    padding: 25px 0.25rem 25px 55px;
+    border-radius: 50px;
+    border:none;
+    font-family:"Manrope";
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+
+    &:focus {
+      outline: 2px solid #CA354F;
+      border-color: #CA354F;
+    }
+  }
+
+  .btn{
+    width: 220px;
+  }
+
+  &__agreement-block{
+    margin-top: 30px;
+    display:grid;
+    grid-template-columns: 20px auto;
+    align-items: center;
+    gap:10px;
+
+    a{
+      text-decoration: underline;
+    }
+  }
+
+  &__agreement-svg{
+    position: absolute;
+    width:90%;
+    height:90%;
+    padding: 0.7px 0px 0px 0.7px;
+    user-select: none;  
+    z-index:2;
+    opacity:0;
+    transition: .5s;
+  }
+
+  &__agreement-fake{
+    width:20px;
+    height: 20px;
+    border-radius: 50%;
+    border:1px solid #CA354F;
+    position: relative;
+    transition: .5s;
+    
+    &:hover{
+      background-color: #b66d7a;
+    }
+
+    &:before{
+      content: '';
+      position: absolute;
+      width:100%;
+      height:100%;
+      border-radius: 50%;
+      background-color: #CA354F;
+      opacity: 0;
+      transition: .3s;
+    }
+  }
+
+  #newsletter__agreement{
+    display:none;
+
+    &:checked + .newsletter__agreement-fake{
+      &:before{
+        opacity: 1;
+      }
+
+      .newsletter__agreement-svg {
+        opacity: 1;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    .container--big {
+      flex-direction: column;
+      gap: 70px;
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+
+    .information-block__info{
+      padding-top: 50px;
+    }
+
+    .information-block__rectangle:after{
+      width: 627px;
+      height:100%;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+
+    .information-block__title .bold{
+      padding-bottom: 20px;
+    }
+
+    .container--big {
+      padding: 0;
+      gap: 0;
+    }
+
+    &__row{
+      flex-direction: column;
+      align-items:center;
+    }
+  }
+}

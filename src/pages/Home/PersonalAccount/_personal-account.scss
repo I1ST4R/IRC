@@ -1,0 +1,194 @@
+.personal-account {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  &__content {
+    position: relative;
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__title {
+    font-family: "Manrope";
+    font-size: 24px;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: #f5f5f5;
+    color: #666;
+    font-family: "Manrope";
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+
+    &--active {
+      background: #CA354F;
+      color: #fff;
+    }
+  }
+
+  &__error {
+    color: #CA354F;
+    font-family: "Manrope";
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 16px;
+    padding: 8px;
+    background: rgba(202, 53, 79, 0.1);
+    border-radius: 4px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+
+    &--transitioning {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
+  &__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-family: "Manrope";
+      font-size: 14px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: "Manrope";
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #CA354F;
+      }
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+  }
+
+  &__submit {
+    margin-top: 8px;
+    padding: 12px;
+    background: #CA354F;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: "Manrope";
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: #b02e44;
+    }
+  }
+
+  &__welcome {
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+
+    .personal-account__title {
+      color: #CA354F;
+      animation: slideIn 0.3s ease;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    &__content {
+      padding: 24px;
+      margin: 16px;
+    }
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__tab {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+} 

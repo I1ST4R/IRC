@@ -1,0 +1,22 @@
+// Import common styles
+@use 'common';
+
+// Import component styles
+@use '../pages/Home/Header/header';
+@use '../pages/Home/Footer/footer';
+@use '../pages/Home/MainBlock/main-block';
+@use '../pages/Home/Categories/categories';
+@use '../pages/Home/Advantages/advantages';
+@use '../pages/Home/Efficiency/efficiency';
+@use '../pages/Home/Ingredients/ingredients';
+@use '../pages/Home/Selection/selection';
+@use '../pages/Home/SkinType/skin-type';
+@use '../pages/Home/Founder/founder';
+@use '../pages/Home/Press/press';
+@use '../pages/Home/NewsLetter/newsletter';
+@use '../pages/Home/PersonalAccount/personal-account';
+@use '../pages/Home/Blog/blog'; 
+@use '../pages/Catalog/ProductList/productList';
+@use '../pages/Catalog/Product/product';
+@use '../pages/Catalog/catalog';
+@use '../pages/Catalog/Menu/menu';

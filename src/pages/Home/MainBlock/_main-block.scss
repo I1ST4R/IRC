@@ -1,0 +1,143 @@
+.main-block{
+  position:relative;
+  padding-top:290px;
+  padding-bottom:145px;
+  background:linear-gradient(90deg, #a8c8ff 22.21%, #ccdaf2 100%);
+
+  &__information{
+    position:relative;
+    max-width:953px;
+    display:flex;
+    flex-direction: column;
+    gap:30px;
+  }
+
+  &__title{
+    font-family:"EuropeExt";
+    font-weight: 700;
+    font-size: 70px;
+    line-height: 121%;
+    text-transform: uppercase;
+  }
+
+  &__description{
+    font-family:"Manrope";
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+
+    p{
+      margin-bottom: 13px;
+    }
+
+    div{
+      max-width:585px;
+      color: #fff;
+      background-color:#ca354f;
+      padding:5px 10px;
+      line-height: 150%;
+    }
+  }
+
+  &__btn{
+    width:290px;
+  }
+
+  &__bg-svg{
+    width:6.18rem;
+    height:5.75rem;
+    position:absolute;
+    left:0;
+    bottom:0;
+  }
+
+  &__swiper{
+    position:absolute !important;
+    bottom:0;
+    right:60px;
+    width:900px;
+    height:100%;
+    z-index:0 !important;
+  }
+
+  .swiper-slide{
+    background-repeat: no-repeat;
+    background-size:contain;
+  }
+
+  &__slide1{
+    background-image: url('/images/main-block__img1.png');
+    margin-top:40px;
+  }
+
+  &__slide2{
+    background-image: url('/images/main-block__img2.png');
+    background-position: bottom;
+  }
+
+  &__slide3{
+    background-image: url('/images/main-block__img3.png');
+  }
+
+
+
+  @media screen and (max-width: 1000px) {
+    &{
+      padding-top:210px;
+      padding-bottom:100px;
+    }
+
+    .swiper-slide{
+      background-size:cover;
+      background-position: left;
+    }
+
+    &__information{
+      max-width: 590px;
+    }
+
+    &__title{
+      font-size: 60px;
+    }
+
+    &__swiper{
+      width:550px;
+      right:0;
+    }
+
+    &__btn{
+      margin-top: 50px;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    &{
+      padding-top:210px;
+      padding-bottom:100px;
+    }
+
+    &__information{
+      max-width: 100%;
+      text-align:center
+    }
+
+    &__swiper{
+      display:none !important;
+    }
+
+    &__title{
+      font-size: 32px;
+    }
+
+    &__btn{
+      margin-inline: auto;
+      width: 270px;
+    }
+
+    &__bg-svg{
+      display: none;
+    }
+
+  }
+}

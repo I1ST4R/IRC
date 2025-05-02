@@ -1,0 +1,115 @@
+.skin-type {
+  position: relative;
+  margin-top: 100px;
+  padding: 111px 20px 0 20px;
+  height: 510px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #E1E7F0;
+
+  &__title {
+    font-family: "EuropeExt";
+    font-weight: 400;
+    font-size: 50px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  &__points {
+    margin-top: 50px;
+    width: 860px;
+    display: flex;
+    justify-content: space-between;
+    gap: 65px;
+
+    svg {
+      font-size: 0;
+    }
+  }
+
+  &__point {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid transparent;
+    transition: .5s;
+
+    &:hover {
+      border-bottom: 3px solid #CA354F;
+    }
+  }
+
+  &__text {
+    font-family: "Manrope";
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 122%;
+  }
+
+  &__bg-svg {
+    position: absolute;
+    bottom: 0;
+    max-width: 800px;
+  }
+
+  &__img1,
+  &__img2 {
+    position: absolute;
+    height: 100%;
+    width: 4.61rem;
+    object-fit: cover;
+    top: 0;
+  }
+
+  &__img1 {
+    left: -0.8rem;
+  }
+
+  &__img2 {
+    right: 0;
+  }
+
+  &__btn {
+    position: absolute;
+    bottom: -38px
+  }
+
+  @media screen and (max-width: 1400px) {
+
+    &__img1,
+    &__img2 {
+      display: none;
+    }
+
+    &__title {
+      font-size: 32px;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    & {
+      height: auto;
+      padding: 65px 20px 28px 20px;
+    }
+
+    &__points {
+      width: 300px;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    &__btn {
+      margin-top: 40px;
+      position: unset;
+    }
+
+    &__bg-svg {
+      display: none;
+    }
+
+  }
+
+}

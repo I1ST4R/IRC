@@ -1,89 +1,52 @@
 // features/user/userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import api from '../services/api';
 import { User, LoginData, RegisterData } from './types';
-import { api } from '../api';
 
 interface UserState {
-  currentUser: User | null;
-  isAuthenticated: boolean;
+  user: User | null;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: UserState = {
-  currentUser: null,
-  isAuthenticated: false,
+  user: null,
   loading: 'idle',
-  error: null,
+  error: null
 };
 
-// Асинхронные действия для работы с json-server
-export const loginUser = createAsyncThunk(
+export const login = createAsyncThunk(
   'user/login',
-  async (credentials: { login: string; password: string }, { rejectWithValue }) => {
+  async (data: LoginData, { rejectWithValue }) => {
     try {
-      // Ищем пользователя по логину и паролю
-      const response = await api.get(
-        `/users?login=${credentials.login}&password=${credentials.password}`
-      );
-      
-      if (response.data.length === 0) {
-        return rejectWithValue('Неверный логин или пароль');
-      }
-      
-      return response.data[0]; // Возвращаем первого найденного пользователя
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка входа');
-    }
-  }
-);
-
-export const fetchCurrentUser = createAsyncThunk(
-  'user/fetchCurrent',
-  async (userId: number, { rejectWithValue }) => {
-    try {
-      const response = await api.get(`/users/${userId}`);
+      const response = await api.post<User>('/auth/login', data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to fetch user');
+      return rejectWithValue(error.message || 'Failed to login');
     }
   }
 );
 
-export const registerUser = createAsyncThunk(
+export const register = createAsyncThunk(
   'user/register',
-  async (userData: RegisterData, { rejectWithValue }) => {
+  async (data: RegisterData, { rejectWithValue }) => {
     try {
-      // Проверяем, нет ли уже такого пользователя
-      const existingUsers = await api.get<User[]>(`/users?login=${userData.login}`);
-      
-      if (existingUsers.data.length) {
-        return rejectWithValue('Пользователь с таким логином уже существует');
-      }
-      
-      // Создаем нового пользователя
-      const newUser = {
-        ...userData,
-        id: Math.random().toString(36).substring(2, 9),
-        type: 'user' as const,
-      };
-      
-      const response = await api.post<User>('/users', newUser);
+      const response = await api.post<User>('/auth/register', data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка регистрации');
+      return rejectWithValue(error.message || 'Failed to register');
     }
   }
 );
 
-export const logoutUser = createAsyncThunk(
-  'user/logout',
+export const checkAuth = createAsyncThunk(
+  'user/checkAuth',
   async (_, { rejectWithValue }) => {
     try {
-      // Просто очищаем данные, так как json-server не поддерживает logout
-      return null;
+      const response = await api.get<User>('/auth/me');
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка выхода');
+      return rejectWithValue(error.message || 'Failed to check auth');
     }
   }
 );
@@ -92,66 +55,55 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    clearError: (state) => {
+    logout: (state) => {
+      state.user = null;
+      state.loading = 'idle';
       state.error = null;
     },
-    updateUser: (state, action: PayloadAction<Partial<User>>) => {
-      if (state.currentUser) {
-        state.currentUser = { ...state.currentUser, ...action.payload };
-      }
-    },
+    clearError: (state) => {
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(login.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.currentUser = action.payload;
-        state.isAuthenticated = true;
+        state.user = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(login.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       })
-      
-      .addCase(registerUser.pending, (state) => {
+      .addCase(register.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.currentUser = action.payload;
-        state.isAuthenticated = true;
+        state.user = action.payload;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       })
-      
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.currentUser = null;
-        state.isAuthenticated = false;
-        state.loading = 'idle';
-      })
-      
-      .addCase(fetchCurrentUser.pending, (state) => {
+      .addCase(checkAuth.pending, (state) => {
         state.loading = 'pending';
+        state.error = null;
       })
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+      .addCase(checkAuth.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.currentUser = action.payload;
-        state.isAuthenticated = true;
+        state.user = action.payload;
       })
-      .addCase(fetchCurrentUser.rejected, (state) => {
+      .addCase(checkAuth.rejected, (state, action) => {
         state.loading = 'failed';
-        state.currentUser = null;
-        state.isAuthenticated = false;
+        state.error = action.payload as string;
       });
-  },
+  }
 });
 
-export const { clearError, updateUser } = userSlice.actions;
+export const { logout, clearError } = userSlice.actions;
 export default userSlice.reducer;

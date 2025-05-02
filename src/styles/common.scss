@@ -1,0 +1,28 @@
+// Common styles that will be used across all pages
+:root {
+  // Common variables
+  --container-width: 1200px;
+  --container-padding: 15px;
+}
+
+// Common elements
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+// Common utility classes
+.text-center {
+  text-align: center;
+}
+
+// Common animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+} 

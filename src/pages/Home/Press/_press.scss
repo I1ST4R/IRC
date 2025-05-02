@@ -1,0 +1,58 @@
+.press{
+  margin-top: 100px;
+
+
+  &__title{
+    font-family: "EuropeExt";
+    font-weight: 700;
+    font-size: 50px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  &__block{
+    overflow:hidden;
+    left:0;
+    z-index:2;
+
+    div{
+      width:210vw;
+      animation: running-text 8s linear infinite;
+      display:flex;
+      transition:.5s;
+    }
+  }
+
+  
+  @keyframes running-text {
+    0%{
+      transform:translateX(0);
+    }
+
+    100%{
+      transform:translateX(-50%);
+    }
+  }
+
+  @media screen and (max-width: 1800px) {
+    &__block{
+      div{
+        width:3780px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1200px){
+    &__title{
+      font-size:32px;
+    }
+
+    &__block{
+      div{
+        width:2520px;
+      }
+    }
+  }
+  
+}

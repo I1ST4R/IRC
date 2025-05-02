@@ -1,0 +1,40 @@
+.efficiency{
+  position:relative;
+  margin-top: 0.8rem;
+  background-color: #E1E7F0;
+  padding-top:1rem;
+  padding-bottom:1rem;
+
+  .container{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    gap:5px;
+  }
+
+  .block-title,
+  .block-title--bold{
+    text-align:center;
+  }
+
+  &__logos{
+    margin-top:25px;
+    display:flex;
+    gap:40px;
+  }
+
+  &__btn{
+    position:absolute;
+    bottom:-38px;
+  }
+
+  @media screen and (max-width: 600px) {
+
+    &__logos{
+      flex-direction: column;
+      gap:20px;
+      align-items: center;
+    }
+
+  }
+}

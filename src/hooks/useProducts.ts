@@ -1,18 +1,18 @@
 // hooks/useProducts.ts
 import { useState, useEffect, useCallback } from 'react';
-import { api } from '../api';
+import { productApi } from '../services/api';
 import { z } from 'zod';
 
 // Определяем тип продукта на основе вашей схемы Zod
 const ProductDtoSchema = z.object({
   id: z.string(),
   name: z.string(),
-  releaseDate: z.string().datetime(), // ISO-формат
+  releaseDate: z.string(),
   price: z.number(),
   prevPrice: z.number(),
-  technology: z.string(), // Исправлена опечатка (было tecnology)
-  img: z.string().url(), // Добавлена валидация URL
-  tags: z.array(z.string()) // Массив строк
+  technology: z.string(),
+  img: z.string(),
+  tags: z.array(z.string())
 });
 
 type Product = z.infer<typeof ProductDtoSchema>;
@@ -39,7 +39,7 @@ export const useProducts = (): UseProductsResult => {
     setError(null);
 
     try {
-      const { products: newProducts, hasMore: more } = await api.getProducts(page);
+      const { products: newProducts, hasMore: more } = await productApi.getProducts(page);
 
       // Валидируем полученные данные
       const validatedProducts = ProductDtoSchema.array().parse(newProducts);

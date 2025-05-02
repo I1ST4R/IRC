@@ -1,0 +1,309 @@
+html {
+	box-sizing: border-box;
+	font-family: '400';
+	font-size: calc(14px + 86 * (100vw / 1440));
+}
+
+@media screen and (min-width: 1441px) {
+	html {
+		font-size: 100px;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	html {
+		font-size: 63px;
+	}
+}
+
+@font-face {
+	font-family: 'Manrope';
+	src: url('../fonts/Manrope-VariableFont_wght.ttf');
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'EuropeExt';
+	src: url('../fonts/europeext.otf');
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/Inter-VariableFont_opsz,wght.ttf');
+	font-style: normal;
+	font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+	
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	margin: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	font-size: 0;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+button {
+	border: none;
+	background-color: transparent;
+}
+
+.container {
+	max-width: 1440px;
+	padding: 0 20px;
+	margin: auto;
+
+	&--big {
+		max-width: 1920px;
+		padding: 0 30px;
+		margin: auto;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.container--big {
+		padding: 0 20px;
+	}
+}
+
+.counter {
+	position: absolute;
+	z-index: 2;
+	padding: 0 4px;
+	height: 22px;
+	border: 3px solid white;
+	background-color: #CA354F;
+	border-radius: 11px;
+	font-family: "Inter";
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.liked,
+.basket {
+	position: relative;
+	width: 25px;
+	height: 25px
+}
+
+.btn {
+	height: 75px;
+	border-radius: 50px;
+	font-family: "Manrope";
+	font-weight: 800;
+	font-size: 16px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	padding: 20px 40px;
+	color: #CA354F;
+	background: rgba(0, 0, 0, 0.05);
+	cursor: pointer;
+	transition: .4s;
+
+	&:focus,
+	&:hover {
+		outline: none;
+		color: white;
+		background: #CA354F
+	}
+
+	&:active {
+		background: #862334
+	}
+
+	&--flex {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+
+	&--active {
+		background: #CA354F;
+		color: white;
+	}
+}
+
+.violet {
+	color: #660096;
+	font-weight: 700;
+}
+
+.block-title {
+	font-family: "EuropeExt";
+	font-weight: 400;
+	font-size: 36px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+
+	&--bold {
+		font-weight: 700;
+	}
+
+	@media screen and (max-width: 600px) {
+		& {
+			font-size: 20px;
+		}
+	}
+}
+
+.wrap {
+	font-size: 1px;
+}
+
+.bold {
+	font-weight: 900;
+}
+
+.information-block {
+	position: relative;
+	max-width: 1920px;
+	margin: auto;
+
+	&__title {
+		font-weight: 400;
+		font-size: 36px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	&__rectangle {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		display: flex;
+		align-items: center;
+
+		&:after {
+			content: "";
+			width: 100%;
+			height: 518px;
+			background: #ffc47f;
+		}
+	}
+
+	&__img {
+		position: relative;
+		max-width: 890px;
+		font-size: 0;
+		box-sizing: content-box;
+
+		img {
+			z-index: 1;
+			width: calc(100% - 30px);
+			height: calc(100% - 30px);
+			object-fit: cover;
+			margin-left: 30px;
+		}
+
+		&:after {
+			content: "";
+			width: calc(100% - 30px);
+			height: calc(100% - 30px);
+			position: absolute;
+			z-index: -1;
+			top: 30px;
+			left: 0;
+			background: #FFE17F;
+		}
+	}
+
+	&__info {
+		background: radial-gradient(96.55% 112.87% at 23.03% -5.06%, rgb(210, 173, 255) 0%, rgb(255, 201, 222) 31.130927801132202%, rgb(245, 167, 93) 73.29662442207336%, rgb(255, 225, 127) 100%);
+		font-family: 'EuropeExt';
+		padding: 50px;
+		width: 48%;
+	}
+
+	@media screen and (max-width: 1200px) {
+
+		&__rectangle {
+			position: absolute;
+			justify-content: center;
+
+			&:after {
+				content: "";
+				height: 100%;
+				width: 627px;
+				background: #ffc47f;
+			}
+		}
+
+		&__img {
+			max-width: 100%;
+			width: 100%;
+			padding-bottom: 30px;
+		}
+
+		&__title {
+			font-size: 30px;
+			text-align: center;
+		}
+
+		&__info {
+			width: 100%;
+			padding: 30px;
+		}
+
+	}
+
+	@media screen and (max-width: 700px) {
+
+		&__rectangle {
+			display: none;
+		}
+
+		&__img {
+			padding: 0;
+
+			&:after {
+				display: none;
+			}
+
+			img {
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		&__title {
+			font-size: 22px;
+		}
+
+	}
+}
