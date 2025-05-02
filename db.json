@@ -28,305 +28,534 @@
     }
   ],
   "products": [
+  {
+    "id": "1",
+    "name": "Гель для умывания Basic",
+    "releaseDate": "2024-01-01",
+    "price": 1200,
+    "prevPrice": 1500,
+    "technology": "Basic",
+    "img": "product1.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "2", "tagId": "1" },
+      { "categoryId": "3", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Крем Moist + Tonus",
+    "releaseDate": "2024-01-02",
+    "price": 1800,
+    "prevPrice": 2000,
+    "technology": "Moist + Tonus",
+    "img": "product2.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "4" },
+      { "categoryId": "3", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Концентрат Sebo+",
+    "releaseDate": "2024-01-03",
+    "price": 3500,
+    "prevPrice": 4000,
+    "technology": "Sebo+",
+    "img": "product3.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "3", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Крем Anti-age",
+    "releaseDate": "2024-01-04",
+    "price": 4500,
+    "prevPrice": 5000,
+    "technology": "Anti-age",
+    "img": "product4.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "4" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Маска Moist + Tonus",
+    "releaseDate": "2024-01-05",
+    "price": 1800,
+    "prevPrice": 2000,
+    "technology": "Moist + Tonus",
+    "img": "product5.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "5" },
+      { "categoryId": "3", "tagId": "4" }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Гель для умывания Sebo+",
+    "releaseDate": "2024-01-06",
+    "price": 1500,
+    "prevPrice": 1800,
+    "technology": "Sebo+",
+    "img": "product6.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "2", "tagId": "1" },
+      { "categoryId": "4", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Пиллинг Anti-age",
+    "releaseDate": "2024-01-07",
+    "price": 2800,
+    "prevPrice": 3000,
+    "technology": "Anti-age",
+    "img": "product1.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "2" },
+      { "categoryId": "3", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Концентрат Basic",
+    "releaseDate": "2024-01-08",
+    "price": 2200,
+    "prevPrice": 2500,
+    "technology": "Basic",
+    "img": "product2.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "4", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "9",
+    "name": "Шампунь Sebo+",
+    "releaseDate": "2024-01-09",
+    "price": 1700,
+    "prevPrice": 1900,
+    "technology": "Sebo+",
+    "img": "product3.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "5", "tagId": "1" },
+      { "categoryId": "3", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Сыворотка Anti-age",
+    "releaseDate": "2024-01-10",
+    "price": 4200,
+    "prevPrice": 4500,
+    "technology": "Anti-age",
+    "img": "product4.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Маска для волос Moist + Tonus",
+    "releaseDate": "2024-01-11",
+    "price": 2300,
+    "prevPrice": 2500,
+    "technology": "Moist + Tonus",
+    "img": "product5.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "5", "tagId": "2" },
+      { "categoryId": "3", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "12",
+    "name": "Крем для лица Basic",
+    "releaseDate": "2024-01-12",
+    "price": 1600,
+    "prevPrice": 1800,
+    "technology": "Basic",
+    "img": "product6.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "2", "tagId": "4" },
+      { "categoryId": "4", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Пиллинг Sebo+",
+    "releaseDate": "2024-01-13",
+    "price": 1900,
+    "prevPrice": 2100,
+    "technology": "Sebo+",
+    "img": "product1.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "2", "tagId": "2" },
+      { "categoryId": "4", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "14",
+    "name": "Концентрат Anti-age",
+    "releaseDate": "2024-01-14",
+    "price": 3800,
+    "prevPrice": 4000,
+    "technology": "Anti-age",
+    "img": "product2.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "3", "tagId": "4" }
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Шампунь Basic",
+    "releaseDate": "2024-01-15",
+    "price": 1400,
+    "prevPrice": 1600,
+    "technology": "Basic",
+    "img": "product3.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "5", "tagId": "1" },
+      { "categoryId": "3", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Сыворотка Moist + Tonus",
+    "releaseDate": "2024-01-16",
+    "price": 3200,
+    "prevPrice": 3500,
+    "technology": "Moist + Tonus",
+    "img": "product4.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "3", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "17",
+    "name": "Маска для лица Anti-age",
+    "releaseDate": "2024-01-17",
+    "price": 2900,
+    "prevPrice": 3100,
+    "technology": "Anti-age",
+    "img": "product5.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "5" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "18",
+    "name": "Гель для умывания Moist + Tonus",
+    "releaseDate": "2024-01-18",
+    "price": 1500,
+    "prevPrice": 1700,
+    "technology": "Moist + Tonus",
+    "img": "product6.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "1" },
+      { "categoryId": "3", "tagId": "4" }
+    ]
+  },
+  {
+    "id": "19",
+    "name": "Крем Sebo+",
+    "releaseDate": "2024-01-19",
+    "price": 2000,
+    "prevPrice": 2200,
+    "technology": "Sebo+",
+    "img": "product1.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "2", "tagId": "4" },
+      { "categoryId": "3", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "20",
+    "name": "Маска для волос Basic",
+    "releaseDate": "2024-01-20",
+    "price": 1800,
+    "prevPrice": 2000,
+    "technology": "Basic",
+    "img": "product2.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "5", "tagId": "2" },
+      { "categoryId": "4", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "21",
+    "name": "Пиллинг Moist + Tonus",
+    "releaseDate": "2024-01-21",
+    "price": 2100,
+    "prevPrice": 2300,
+    "technology": "Moist + Tonus",
+    "img": "product3.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "2" },
+      { "categoryId": "3", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "22",
+    "name": "Шампунь Anti-age",
+    "releaseDate": "2024-01-22",
+    "price": 2500,
+    "prevPrice": 2700,
+    "technology": "Anti-age",
+    "img": "product4.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "5", "tagId": "1" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "23",
+    "name": "Сыворотка Sebo+",
+    "releaseDate": "2024-01-23",
+    "price": 3700,
+    "prevPrice": 4000,
+    "technology": "Sebo+",
+    "img": "product5.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "4", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "24",
+    "name": "Крем для рук Moist + Tonus",
+    "releaseDate": "2024-01-24",
+    "price": 1500,
+    "prevPrice": 1700,
+    "technology": "Moist + Tonus",
+    "img": "product6.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "4" },
+      { "categoryId": "3", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "25",
+    "name": "Маска для лица Basic",
+    "releaseDate": "2024-01-25",
+    "price": 1700,
+    "prevPrice": 1900,
+    "technology": "Basic",
+    "img": "product1.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "2", "tagId": "5" },
+      { "categoryId": "3", "tagId": "4" }
+    ]
+  },
+  {
+    "id": "26",
+    "name": "Гель для умывания Anti-age",
+    "releaseDate": "2024-01-26",
+    "price": 1900,
+    "prevPrice": 2100,
+    "technology": "Anti-age",
+    "img": "product2.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "2", "tagId": "1" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  },
+  {
+    "id": "27",
+    "name": "Концентрат Moist + Tonus",
+    "releaseDate": "2024-01-27",
+    "price": 3400,
+    "prevPrice": 3600,
+    "technology": "Moist + Tonus",
+    "img": "product3.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "2" },
+      { "categoryId": "2", "tagId": "3" },
+      { "categoryId": "4", "tagId": "1" }
+    ]
+  },
+  {
+    "id": "28",
+    "name": "Шампунь Sebo+ для проблемной кожи",
+    "releaseDate": "2024-01-28",
+    "price": 2000,
+    "prevPrice": 2200,
+    "technology": "Sebo+",
+    "img": "product4.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "3" },
+      { "categoryId": "5", "tagId": "1" },
+      { "categoryId": "4", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "29",
+    "name": "Пиллинг Basic",
+    "releaseDate": "2024-01-29",
+    "price": 1600,
+    "prevPrice": 1800,
+    "technology": "Basic",
+    "img": "product5.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "1" },
+      { "categoryId": "2", "tagId": "2" },
+      { "categoryId": "3", "tagId": "3" }
+    ]
+  },
+  {
+    "id": "30",
+    "name": "Сыворотка для волос Anti-age",
+    "releaseDate": "2024-01-30",
+    "price": 4000,
+    "prevPrice": 4300,
+    "technology": "Anti-age",
+    "img": "product6.png",
+    "tags": [
+      { "categoryId": "1", "tagId": "4" },
+      { "categoryId": "5", "tagId": "3" },
+      { "categoryId": "4", "tagId": "2" }
+    ]
+  }
+  ],
+  "productCategories": [
     {
       "id": "1",
-      "name": "Гель для умывания Basic",
-      "releaseDate": "2024-01-01",
-      "price": 1200,
-      "prevPrice": 1500,
-      "technology": "Basic",
-      "img": "product1.png",
-      "tags": ["Basic", "Гель для умывания", "Комбинированная"]
+      "name": "Линейки",
+      "tags":[
+        {
+          "id": "1",
+          "name": "Basic"
+        },
+        {
+          "id": "2",
+          "name": "Moist + Tonus"
+        },
+        {
+          "id": "3",
+          "name": "Sebo+"
+        },
+        {
+          "id": "4",
+          "name": "Anti-age"
+        }
+      ]
+
     },
     {
       "id": "2",
-      "name": "Крем Moist + Tonus",
-      "releaseDate": "2024-01-02",
-      "price": 1800,
-      "prevPrice": 2000,
-      "technology": "Moist + Tonus",
-      "img": "product2.png",
-      "tags": ["Moist + Tonus", "Крем", "Сухая"]
+      "name": "Уход за лицом",
+      "tags":[
+        {
+          "id": "1",
+          "name": "Гель для умывания"
+        },
+        {
+          "id": "2",
+          "name": "Пиллинг"
+        },
+        {
+          "id": "3",
+          "name": "Активные концентраты"
+        },
+        {
+          "id": "4",
+          "name": "Крем"
+        },
+        {
+          "id": "5",
+          "name": "Маска"
+        }
+      ]
     },
     {
       "id": "3",
-      "name": "Концентрат Sebo+",
-      "releaseDate": "2024-01-03",
-      "price": 3500,
-      "prevPrice": 4000,
-      "technology": "Sebo+",
-      "img": "product3.png",
-      "tags": ["Sebo+", "Активные концентраты", "Жирная"]
+      "name": "Типы кожи",
+      "tags":[
+        {
+          "id": "1",
+          "name": "Сухая"
+        },
+        {
+          "id": "2",
+          "name": "Жирная"
+        },
+        {
+          "id": "3",
+          "name": "Комбинированная"  
+        },
+        {
+          "id": "4",
+          "name": "Чувствительная"
+        }
+      ]
     },
     {
       "id": "4",
-      "name": "Крем Anti-age",
-      "releaseDate": "2024-01-04",
-      "price": 4500,
-      "prevPrice": 5000,
-      "technology": "Anti-age",
-      "img": "product4.png",
-      "tags": ["Anti-age", "Крем", "Антивозрастной"]
+      "name": "Наборы для лица",
+      "tags":[
+        {
+          "id": "1",
+          "name": "Базовый уход"
+        },
+        {
+          "id": "2",
+          "name": "Антивозрастной"
+        },
+        {
+          "id": "3",
+          "name": "Проблемная кожа"  
+        }
+      ]
     },
     {
       "id": "5",
-      "name": "Маска Moist + Tonus",
-      "releaseDate": "2024-01-05",
-      "price": 1800,
-      "prevPrice": 2000,
-      "technology": "Moist + Tonus",
-      "img": "product5.png",
-      "tags": ["Moist + Tonus", "Маска", "Чувствительная"]
-    },
-    {
-      "id": "6",
-      "name": "Гель для умывания Sebo+",
-      "releaseDate": "2024-01-06",
-      "price": 1500,
-      "prevPrice": 1800,
-      "technology": "Sebo+",
-      "img": "product6.png",
-      "tags": ["Sebo+", "Гель для умывания", "Проблемная кожа"]
-    },
-    {
-      "id": "7",
-      "name": "Пиллинг Anti-age",
-      "releaseDate": "2024-01-07",
-      "price": 2800,
-      "prevPrice": 3000,
-      "technology": "Anti-age",
-      "img": "product1.png",
-      "tags": ["Anti-age", "Пиллинг", "Комбинированная"]
-    },
-    {
-      "id": "8",
-      "name": "Концентрат Basic",
-      "releaseDate": "2024-01-08",
-      "price": 2200,
-      "prevPrice": 2500,
-      "technology": "Basic",
-      "img": "product2.png",
-      "tags": ["Basic", "Активные концентраты", "Базовый уход"]
-    },
-    {
-      "id": "9",
-      "name": "Шампунь Sebo+",
-      "releaseDate": "2024-01-09",
-      "price": 1700,
-      "prevPrice": 1900,
-      "technology": "Sebo+",
-      "img": "product3.png",
-      "tags": ["Sebo+", "Шампунь", "Жирная"]
-    },
-    {
-      "id": "10",
-      "name": "Сыворотка Anti-age",
-      "releaseDate": "2024-01-10",
-      "price": 4200,
-      "prevPrice": 4500,
-      "technology": "Anti-age",
-      "img": "product4.png",
-      "tags": ["Anti-age", "Сыворотка", "Антивозрастной"]
-    },
-    {
-      "id": "11",
-      "name": "Маска для волос Moist + Tonus",
-      "releaseDate": "2024-01-11",
-      "price": 2300,
-      "prevPrice": 2500,
-      "technology": "Moist + Tonus",
-      "img": "product5.png",
-      "tags": ["Moist + Tonus", "Маска", "Сухая"]
-    },
-    {
-      "id": "12",
-      "name": "Крем для лица Basic",
-      "releaseDate": "2024-01-12",
-      "price": 1600,
-      "prevPrice": 1800,
-      "technology": "Basic",
-      "img": "product6.png",
-      "tags": ["Basic", "Крем", "Базовый уход"]
-    },
-    {
-      "id": "13",
-      "name": "Пиллинг Sebo+",
-      "releaseDate": "2024-01-13",
-      "price": 1900,
-      "prevPrice": 2100,
-      "technology": "Sebo+",
-      "img": "product1.png",
-      "tags": ["Sebo+", "Пиллинг", "Проблемная кожа"]
-    },
-    {
-      "id": "14",
-      "name": "Концентрат Anti-age",
-      "releaseDate": "2024-01-14",
-      "price": 3800,
-      "prevPrice": 4000,
-      "technology": "Anti-age",
-      "img": "product2.png",
-      "tags": ["Anti-age", "Активные концентраты", "Чувствительная"]
-    },
-    {
-      "id": "15",
-      "name": "Шампунь Basic",
-      "releaseDate": "2024-01-15",
-      "price": 1400,
-      "prevPrice": 1600,
-      "technology": "Basic",
-      "img": "product3.png",
-      "tags": ["Basic", "Шампунь", "Комбинированная"]
-    },
-    {
-      "id": "16",
-      "name": "Сыворотка Moist + Tonus",
-      "releaseDate": "2024-01-16",
-      "price": 3200,
-      "prevPrice": 3500,
-      "technology": "Moist + Tonus",
-      "img": "product4.png",
-      "tags": ["Moist + Tonus", "Сыворотка", "Сухая"]
-    },
-    {
-      "id": "17",
-      "name": "Маска для лица Anti-age",
-      "releaseDate": "2024-01-17",
-      "price": 2900,
-      "prevPrice": 3100,
-      "technology": "Anti-age",
-      "img": "product5.png",
-      "tags": ["Anti-age", "Маска", "Антивозрастной"]
-    },
-    {
-      "id": "18",
-      "name": "Гель для умывания Moist + Tonus",
-      "releaseDate": "2024-01-18",
-      "price": 1500,
-      "prevPrice": 1700,
-      "technology": "Moist + Tonus",
-      "img": "product6.png",
-      "tags": ["Moist + Tonus", "Гель для умывания", "Чувствительная"]
-    },
-    {
-      "id": "19",
-      "name": "Крем Sebo+",
-      "releaseDate": "2024-01-19",
-      "price": 2000,
-      "prevPrice": 2200,
-      "technology": "Sebo+",
-      "img": "product1.png",
-      "tags": ["Sebo+", "Крем", "Жирная"]
-    },
-    {
-      "id": "20",
-      "name": "Маска для волос Basic",
-      "releaseDate": "2024-01-20",
-      "price": 1800,
-      "prevPrice": 2000,
-      "technology": "Basic",
-      "img": "product2.png",
-      "tags": ["Basic", "Маска", "Базовый уход"]
-    },
-    {
-      "id": "21",
-      "name": "Пиллинг Moist + Tonus",
-      "releaseDate": "2024-01-21",
-      "price": 2100,
-      "prevPrice": 2300,
-      "technology": "Moist + Tonus",
-      "img": "product3.png",
-      "tags": ["Moist + Tonus", "Пиллинг", "Комбинированная"]
-    },
-    {
-      "id": "22",
-      "name": "Шампунь Anti-age",
-      "releaseDate": "2024-01-22",
-      "price": 2500,
-      "prevPrice": 2700,
-      "technology": "Anti-age",
-      "img": "product4.png",
-      "tags": ["Anti-age", "Шампунь", "Антивозрастной"]
-    },
-    {
-      "id": "23",
-      "name": "Сыворотка Sebo+",
-      "releaseDate": "2024-01-23",
-      "price": 3700,
-      "prevPrice": 4000,
-      "technology": "Sebo+",
-      "img": "product5.png",
-      "tags": ["Sebo+", "Сыворотка", "Проблемная кожа"]
-    },
-    {
-      "id": "24",
-      "name": "Крем для рук Moist + Tonus",
-      "releaseDate": "2024-01-24",
-      "price": 1500,
-      "prevPrice": 1700,
-      "technology": "Moist + Tonus",
-      "img": "product6.png",
-      "tags": ["Moist + Tonus", "Крем", "Сухая"]
-    },
-    {
-      "id": "25",
-      "name": "Маска для лица Basic",
-      "releaseDate": "2024-01-25",
-      "price": 1700,
-      "prevPrice": 1900,
-      "technology": "Basic",
-      "img": "product1.png",
-      "tags": ["Basic", "Маска", "Чувствительная"]
-    },
-    {
-      "id": "26",
-      "name": "Гель для умывания Anti-age",
-      "releaseDate": "2024-01-26",
-      "price": 1900,
-      "prevPrice": 2100,
-      "technology": "Anti-age",
-      "img": "product2.png",
-      "tags": ["Anti-age", "Гель для умывания", "Антивозрастной"]
-    },
-    {
-      "id": "27",
-      "name": "Концентрат Moist + Tonus",
-      "releaseDate": "2024-01-27",
-      "price": 3400,
-      "prevPrice": 3600,
-      "technology": "Moist + Tonus",
-      "img": "product3.png",
-      "tags": ["Moist + Tonus", "Активные концентраты", "Базовый уход"]
-    },
-    {
-      "id": "28",
-      "name": "Шампунь Sebo+ для проблемной кожи",
-      "releaseDate": "2024-01-28",
-      "price": 2000,
-      "prevPrice": 2200,
-      "technology": "Sebo+",
-      "img": "product4.png",
-      "tags": ["Sebo+", "Шампунь", "Проблемная кожа"]
-    },
-    {
-      "id": "29",
-      "name": "Пиллинг Basic",
-      "releaseDate": "2024-01-29",
-      "price": 1600,
-      "prevPrice": 1800,
-      "technology": "Basic",
-      "img": "product5.png",
-      "tags": ["Basic", "Пиллинг", "Комбинированная"]
-    },
-    {
-      "id": "30",
-      "name": "Сыворотка для волос Anti-age",
-      "releaseDate": "2024-01-30",
-      "price": 4000,
-      "prevPrice": 4300,
-      "technology": "Anti-age",
-      "img": "product6.png",
-      "tags": ["Anti-age", "Сыворотка", "Антивозрастной"]
+      "name": "Уход за волосами",
+      "tags":[
+        {
+          "id": "1",
+          "name": "Шампунь"
+        },
+        {
+          "id": "2",
+          "name": "Маска"
+        },
+        {
+          "id": "3",
+          "name": "Сыворотка"
+        }
+      ]
     }
-]
+  ]
 }

@@ -4,7 +4,7 @@ import { Menu } from "./Menu/Menu";
 
 export const Catalog = () => {
   return (
-    <div className="catalog">
+    <div className="catalog container">
       <div className="breadcrumb">
         <Link to="/" className="breadcrumb__link">Главная</Link>
         <span className="breadcrumb__separator">/</span>

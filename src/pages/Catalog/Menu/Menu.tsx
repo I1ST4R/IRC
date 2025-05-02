@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleLine, toggleCategory } from "../../../store/slices/filterSlice";
-import { RootState } from "../../../store";
+import { setPriceRange, toggleTag } from "../../../main/store/slices/filterSlice";
+import { RootState } from "../../../main/store/store";
+import { getCategories } from "../../../services/api";
+import { setCategories, setLoading, setError } from "../../../main/store/slices/categoriesSlice";
 import "./_menu.scss";
 
 interface AccordionItemProps {
@@ -39,18 +41,31 @@ const AccordionItem = ({ title, children }: AccordionItemProps) => {
   );
 };
 
-const LINES = ["Basic", "Moist + Tonus", "Sebo+", "Anti-age"];
-const CATEGORIES = ["Гель для умывания", "Пиллинг", "Активные концентраты", "Крем", "Маска"];
-const SKIN_TYPES = ["Сухая", "Жирная", "Комбинированная", "Чувствительная"];
-const FACE_SETS = ["Базовый уход", "Антивозрастной", "Проблемная кожа"];
-const HAIR_CARE = ["Шампунь", "Маска", "Сыворотка"];
-
 export const Menu = () => {
   const dispatch = useDispatch();
   const filter = useSelector((state: RootState) => state.filter);
+  const categories = useSelector((state: RootState) => state.categories.categories);
+  const isLoading = useSelector((state: RootState) => state.categories.isLoading);
+  const error = useSelector((state: RootState) => state.categories.error);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [localPriceRange, setLocalPriceRange] = useState(filter?.priceRange || { min: 500, max: 10000 });
-  const debounceTimer = useRef<NodeJS.Timeout>();
+  const debounceTimer = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        dispatch(setLoading(true));
+        const data = await getCategories();
+        dispatch(setCategories(data));
+      } catch (err) {
+        dispatch(setError(err instanceof Error ? err.message : 'Failed to load categories'));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+
+    loadCategories();
+  }, [dispatch]);
 
   const updateRangeHighlight = () => {
     if (sliderRef.current && localPriceRange) {
@@ -89,15 +104,19 @@ export const Menu = () => {
     debouncedPriceChange(type, value);
   };
 
-  const handleLineToggle = (line: string) => {
-    dispatch(toggleLine(line));
+  const handleTagToggle = (categoryId: string, tagId: string) => {
+    dispatch(toggleTag({ categoryId, tagId }));
   };
 
-  const handleCategoryToggle = (category: string) => {
-    dispatch(toggleCategory(category));
+  const isTagSelected = (categoryId: string, tagId: string) => {
+    return filter?.selectedTags.some(
+      tag => tag.categoryId === categoryId && tag.tagId === tagId
+    ) || false;
   };
 
-  if (!filter) return null;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!filter || !categories) return null;
 
   return (
     <div className="menu">
@@ -141,80 +160,22 @@ export const Menu = () => {
         </div>
       </AccordionItem>
 
-      <AccordionItem title="Линейки">
-        <div className="menu__checkboxes">
-          {LINES.map((line) => (
-            <label key={line} className="menu__checkbox">
-              <input 
-                type="checkbox"
-                checked={filter.selectedLines.includes(line)}
-                onChange={() => handleLineToggle(line)}
-              />
-              <span>{line}</span>
-            </label>
-          ))}
-        </div>
-      </AccordionItem>
-
-      <AccordionItem title="Уход за лицом">
-        <div className="menu__checkboxes">
-          {CATEGORIES.map((category) => (
-            <label key={category} className="menu__checkbox">
-              <input 
-                type="checkbox"
-                checked={filter.selectedCategories.includes(category)}
-                onChange={() => handleCategoryToggle(category)}
-              />
-              <span>{category}</span>
-            </label>
-          ))}
-        </div>
-      </AccordionItem>
-
-      <AccordionItem title="Тип кожи">
-        <div className="menu__checkboxes">
-          {SKIN_TYPES.map((type) => (
-            <label key={type} className="menu__checkbox">
-              <input 
-                type="checkbox"
-                checked={filter.selectedCategories.includes(type)}
-                onChange={() => handleCategoryToggle(type)}
-              />
-              <span>{type}</span>
-            </label>
-          ))}
-        </div>
-      </AccordionItem>
-
-      <AccordionItem title="Наборы для лица">
-        <div className="menu__checkboxes">
-          {FACE_SETS.map((set) => (
-            <label key={set} className="menu__checkbox">
-              <input 
-                type="checkbox"
-                checked={filter.selectedCategories.includes(set)}
-                onChange={() => handleCategoryToggle(set)}
-              />
-              <span>{set}</span>
-            </label>
-          ))}
-        </div>
-      </AccordionItem>
-
-      <AccordionItem title="Уход за волосами">
-        <div className="menu__checkboxes">
-          {HAIR_CARE.map((item) => (
-            <label key={item} className="menu__checkbox">
-              <input 
-                type="checkbox"
-                checked={filter.selectedCategories.includes(item)}
-                onChange={() => handleCategoryToggle(item)}
-              />
-              <span>{item}</span>
-            </label>
-          ))}
-        </div>
-      </AccordionItem>
+      {categories.map((category) => (
+        <AccordionItem key={category.id} title={category.name}>
+          <div className="menu__checkboxes">
+            {category.tags.map((tag) => (
+              <label key={tag.id} className="menu__checkbox">
+                <input 
+                  type="checkbox"
+                  checked={isTagSelected(category.id, tag.id)}
+                  onChange={() => handleTagToggle(category.id, tag.id)}
+                />
+                <span>{tag.name}</span>
+              </label>
+            ))}
+          </div>
+        </AccordionItem>
+      ))}
     </div>
   );
 }; 

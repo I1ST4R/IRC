@@ -1,18 +1,35 @@
-import { Link } from 'react-router-dom';
-import styles from './Home.module.css';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
+import MainBlock from './MainBlock/MainBlock';
+import Categories from './Categories/Categories';
+import Advantages from './Advantages/Advantages';
+import Efficiency from './Efficiency/Efficiency';
+import Ingredients from './Ingredients/Ingredients';
+import Selection from './Selection/Selection';
+import SkinType from './SkinType/SkinType';
+import Founder from './Founder/Founder';
+import Press from './Press/Press';
+import NewsLetter from './NewsLetter/Newsletter';
+import Blog from './Blog/Blog';
 
 export const Home = () => {
   return (
-    <div className={styles.home}>
-      <h1>Добро пожаловать в наш магазин</h1>
-      <div className={styles.links}>
-        <Link to="/catalog" className={styles.link}>
-          Перейти в каталог
-        </Link>
-        <Link to="/auth" className={styles.link}>
-          Войти в аккаунт
-        </Link>
-      </div>
-    </div>
+    <>
+      <Header />
+      <main>
+        <MainBlock />
+        <Categories />
+        <Advantages />
+        <Efficiency />
+        <Ingredients />
+        <Selection />
+        <SkinType />
+        <Founder />
+        <Press />
+        <NewsLetter />
+        <Blog />
+      </main>
+      <Footer />
+    </>
   );
 }; 

@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Product as ProductType } from "../../../types";
+import { Product as ProductType } from "../../../entity/products/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../main/store/store";
 
 interface ProductProps {
   product: ProductType;
@@ -7,15 +9,23 @@ interface ProductProps {
 
 export const Product = ({ product }: ProductProps) => {
   const [isLiked, setIsLiked] = useState(false);
+  const categories = useSelector((state: RootState) => state.categories?.categories || []);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
 
+  const getTagName = (categoryId: string, tagId: string) => {
+    const category = categories.find(cat => cat.id === categoryId);
+    if (!category) return '';
+    const tag = category.tags.find(tag => tag.id === tagId);
+    return tag ? tag.name : '';
+  };
+
   return (
     <div className="product">
       <img 
-        src={`/images/${product.img}`} 
+        src={`images/${product.img}`} 
         alt={product.name} 
         className="product__image"
       />
@@ -23,9 +33,9 @@ export const Product = ({ product }: ProductProps) => {
         <h3 className="product__name">{product.name}</h3>
         <div className="product__price">{product.price} ₽</div>
         <div className="product__tags">
-          {product.tags.map((tag: string) => (
-            <span key={tag} className="product__tag">
-              {tag}
+          {product.tags.map((tag) => (
+            <span key={`${tag.categoryId}-${tag.tagId}`} className="product__tag">
+              {getTagName(tag.categoryId, tag.tagId)}
             </span>
           ))}
         </div>

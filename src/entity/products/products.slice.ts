@@ -1,6 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../services/api';
-import { Product } from "./types"
+import api from '../../services/api';
+
+interface Product {
+  id: string;
+  name: string;
+  releaseDate: string;
+  price: number;
+  prevPrice?: number;
+  technology: string;
+  img: string;
+  tags: {
+    categoryId: string;
+    tagId: string;
+  }[];
+}
 
 interface ProductsState {
   items: Product[];
@@ -15,88 +28,7 @@ interface ProductsState {
 }
 
 const initialState: ProductsState = {
-  items: [
-    {
-      id: "1",
-      name: "Гель для умывания Basic",
-      releaseDate: "2024-01-01",
-      price: 1200,
-      prevPrice: 1500,
-      technology: "Basic",
-      img: "product2.png",
-      tags: ["Basic", "Гель для умывания"]
-    },
-    {
-      id: "2",
-      name: "Крем Moist + Tonus",
-      releaseDate: "2024-01-02",
-      price: 1800,
-      prevPrice: 2000,
-      technology: "Moist + Tonus",
-      img: "product2.png",
-      tags: ["Moist + Tonus", "Крем"]
-    },
-    {
-      id: "3",
-      name: "Концентрат Sebo+",
-      releaseDate: "2024-01-03",
-      price: 3500,
-      prevPrice: 4000,
-      technology: "Sebo+",
-      img: "product2.png",
-      tags: ["Sebo+", "Активные концентраты"]
-    },
-    {
-      id: "4",
-      name: "Крем Anti-age",
-      releaseDate: "2024-01-04",
-      price: 4500,
-      prevPrice: 5000,
-      technology: "Anti-age",
-      img: "product2.png",
-      tags: ["Anti-age", "Крем"]
-    },
-    {
-      id: "5",
-      name: "Маска Moist + Tonus",
-      releaseDate: "2024-01-05",
-      price: 1800,
-      prevPrice: 2000,
-      technology: "Moist + Tonus",
-      img: "product2.png",
-      tags: ["Moist + Tonus", "Маска"]
-    },
-    {
-      id: "6",
-      name: "Гель для умывания Sebo+",
-      releaseDate: "2024-01-06",
-      price: 1500,
-      prevPrice: 1800,
-      technology: "Sebo+",
-      img: "product2.png",
-      tags: ["Sebo+", "Гель для умывания"]
-    },
-    {
-      id: "7",
-      name: "Пиллинг Anti-age",
-      releaseDate: "2024-01-07",
-      price: 2800,
-      prevPrice: 3000,
-      technology: "Anti-age",
-      img: "product2.png",
-      tags: ["Anti-age", "Пиллинг"]
-    },
-    {
-      id: "8",
-      name: "Концентрат Basic",
-      releaseDate: "2024-01-08",
-      price: 2200,
-      prevPrice: 2500,
-      technology: "Basic",
-      img: "product2.png",
-      tags: ["Basic", "Активные концентраты"]
-    }
-  ],
+  items: [],
   currentProduct: null,
   loading: 'idle',
   error: null,
@@ -161,6 +93,17 @@ const productsSlice = createSlice({
     resetCurrentProduct: (state) => {
       state.currentProduct = null;
     },
+    setProducts: (state, action: PayloadAction<Product[]>) => {
+      state.items = action.payload;
+      state.loading = 'succeeded';
+    },
+    setLoading: (state, action: PayloadAction<'idle' | 'pending' | 'succeeded' | 'failed'>) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+      state.loading = 'failed';
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -206,5 +149,12 @@ const productsSlice = createSlice({
   },
 });
 
-export const { clearProductsError, resetCurrentProduct } = productsSlice.actions;
+export const {
+  clearProductsError,
+  resetCurrentProduct,
+  setProducts,
+  setLoading,
+  setError
+} = productsSlice.actions;
+
 export default productsSlice.reducer;

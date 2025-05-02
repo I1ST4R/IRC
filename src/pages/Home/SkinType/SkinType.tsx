@@ -2,6 +2,8 @@ import React from 'react';
 import number1 from './number1.svg';
 import number2 from './number2.svg';
 import number3 from './number3.svg';
+import img1 from './skin-type__img1.png';
+import img2 from './skin-type__img2.png';
 
 interface Point {
   id: number;
@@ -62,12 +64,12 @@ const SkinType: React.FC = () => {
 
       <img 
         className="skin-type__img1" 
-        src="src/images/skin-type__img1.png" 
+        src={img1} 
         alt="Декоративное изображение 1" 
-      />
+      />  
       <img 
         className="skin-type__img2" 
-        src="src/images/skin-type__img2.png" 
+        src={img2} 
         alt="Декоративное изображение 2" 
       />
 

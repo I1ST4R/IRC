@@ -16,15 +16,14 @@ export interface FilterParams {
   categories?: string[];
 }
 
-export const productApi = {
-  getFilteredProducts: async (params: FilterParams) => {
-    try {
-      const response = await api.get('/products', { params });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
+export const getCategories = async () => {
+  const response = await api.get('/productCategories');
+  return response.data;
+};
+
+export const getProducts = async (params?: FilterParams) => {
+  const response = await api.get('/products', { params });
+  return response.data;
 };
 
 export default api; 

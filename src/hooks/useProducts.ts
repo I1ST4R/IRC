@@ -1,6 +1,6 @@
 // hooks/useProducts.ts
 import { useState, useEffect, useCallback } from 'react';
-import { productApi } from '../services/api';
+import { productApi } from '../service/api';
 import { z } from 'zod';
 
 // Определяем тип продукта на основе вашей схемы Zod

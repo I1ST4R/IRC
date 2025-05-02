@@ -1,17 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface PriceRange {
-  min: number;
-  max: number;
-}
-
-interface FilterState {
-  priceRange: PriceRange;
-  selectedLines: string[];
-  selectedCategories: string[];
-  isLoading: boolean;
-  error: string | null;
-}
+import { FilterState } from './types';
 
 const initialState: FilterState = {
   priceRange: {
@@ -19,16 +7,14 @@ const initialState: FilterState = {
     max: 10000
   },
   selectedLines: [],
-  selectedCategories: [],
-  isLoading: false,
-  error: null
+  selectedCategories: []
 };
 
 const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setPriceRange: (state, action: PayloadAction<PriceRange>) => {
+    setPriceRange: (state, action: PayloadAction<{ min: number; max: number }>) => {
       state.priceRange = action.payload;
     },
     toggleLine: (state, action: PayloadAction<string>) => {
@@ -46,29 +32,9 @@ const filterSlice = createSlice({
       } else {
         state.selectedCategories.splice(index, 1);
       }
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
-    resetFilters: (state) => {
-      state.priceRange = initialState.priceRange;
-      state.selectedLines = [];
-      state.selectedCategories = [];
-      state.error = null;
     }
   }
 });
 
-export const {
-  setPriceRange,
-  toggleLine,
-  toggleCategory,
-  setLoading,
-  setError,
-  resetFilters
-} = filterSlice.actions;
-
+export const { setPriceRange, toggleLine, toggleCategory } = filterSlice.actions;
 export default filterSlice.reducer; 
