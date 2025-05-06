@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { Product as ProductType } from "../../../entity/products/types";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../../main/store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../main/store/store";
 import { addItemToCart, fetchCart } from "../../../main/store/slices/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { toggleLike } from '../../../entity/users/users.slice';
 
 const USER_ID_KEY = 'currentUserId';
 
@@ -12,38 +13,29 @@ interface ProductProps {
 }
 
 export const Product = ({ product }: ProductProps) => {
-  const [isLiked, setIsLiked] = useState(false);
   const categories = useSelector((state: RootState) => state.categories?.categories || []);
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  const dispatch = useAppDispatch();
+  const likedIds = useSelector((state: RootState) => state.user.likedIds);
+  const userId = localStorage.getItem(USER_ID_KEY) || 'anpri65';
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const getUserId = useCallback(() => {
-    const storedUserId = localStorage.getItem(USER_ID_KEY);
-    if (storedUserId) {
-      return storedUserId;
-    }
-    const defaultUserId = 'anpri65';
-    localStorage.setItem(USER_ID_KEY, defaultUserId);
-    return defaultUserId;
-  }, []);
 
   useEffect(() => {
     const loadCart = async () => {
       try {
-        const userId = getUserId();
-        await dispatch(fetchCart(userId)).unwrap();
+        await dispatch(fetchCart(userId));
       } catch (error) {
         console.error('Failed to load cart:', error);
       }
     };
     loadCart();
-  }, [dispatch, getUserId]);
+  }, [dispatch, userId]);
 
   const isInCart = cartItems.some(item => item.productId === product.id);
+  const isLiked = likedIds.includes(product.id);
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
+    dispatch(toggleLike({ userId, productId: product.id, likedIds }));
   };
 
   const handleCartClick = async () => {
@@ -51,8 +43,7 @@ export const Product = ({ product }: ProductProps) => {
       navigate('/cart');
     } else {
       try {
-        const userId = getUserId();
-        await dispatch(addItemToCart({ userId, productId: product.id })).unwrap();
+        await dispatch(addItemToCart({ userId, productId: product.id }));
       } catch (error) {
         console.error('Failed to add item to cart:', error);
       }
@@ -91,7 +82,7 @@ export const Product = ({ product }: ProductProps) => {
         </button>
       </div>
       <button 
-        className={`product__like ${isLiked ? 'product__like--active' : ''}`}
+        className={`product__like${isLiked ? ' product__like--active' : ''}`}
         onClick={handleLike}
       >
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

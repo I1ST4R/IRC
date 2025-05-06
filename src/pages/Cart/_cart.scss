@@ -92,6 +92,13 @@
       align-items: center;
       gap: 12px;
       margin-top: 8px;
+
+      .product__like {
+        position: initial;
+        font-size: 0px;
+        z-index: 2;
+      }
+
     }
 
     &-quantity {
@@ -145,7 +152,7 @@
       background: none;
       border: none;
       color: #b0b0b0;
-      font-size: 20px;
+      font-size: 0px;
       cursor: pointer;
       margin-left: 8px;
       transition: color 0.15s;
@@ -168,10 +175,6 @@
       font-size: 20px;
       font-weight: 700;
       margin-bottom: 2px;
-    }
-
-    &-oldprice {
-      display: none;
     }
   }
 

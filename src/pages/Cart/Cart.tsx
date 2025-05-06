@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../main/store/store';
 import { fetchCart, updateItemQuantity, removeItemFromCart } from '../../main/store/slices/cartSlice';
 import { fetchProducts } from '../../entity/products/products.slice';
+import { toggleLike } from '../../entity/users/users.slice';
 import { Product } from '../Catalog/Product/Product';
 
 
@@ -23,6 +24,7 @@ export const Cart: React.FC = () => {
   const { items, loading: cartLoading, error: cartError } = useSelector((state: RootState) => state.cart);
   const { items: products, loading: productsLoading, error: productsError } = useSelector((state: RootState) => state.products);
   const [localQuantities, setLocalQuantities] = useState<Record<string, number>>({});
+  const likedIds = useSelector((state: RootState) => state.user.likedIds);
   const userId = getUserId();
 
   useEffect(() => {
@@ -111,6 +113,8 @@ export const Cart: React.FC = () => {
           const itemTotal = getItemTotal(product, localQuantities[item.productId] || 1);
           return (
             <div key={item.productId} className="cart__item">
+              <div className="cart__item-like">
+              </div>
               <img src={product.img} alt={product.name} className="cart__item-image" />
               <div className="cart__item-info">
                 <div className="cart__item-name">{product.name}</div>
@@ -120,6 +124,15 @@ export const Cart: React.FC = () => {
                       <path d="M5 6H15M8.333 9.333V14M11.667 9.333V14M3.333 6.667L4.167 16.167C4.236 16.963 4.929 17.6 5.729 17.6H14.271C15.071 17.6 15.764 16.963 15.833 16.167L16.667 6.667M7.5 6V4.667C7.5 4.298 7.798 4 8.167 4H11.833C12.202 4 12.5 4.298 12.5 4.667V6" stroke="#b0b0b0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
+                  <button
+                  className={`product__like${likedIds.includes(product.id) ? ' product__like--active' : ''}`}
+                  onClick={() => dispatch(toggleLike({ userId, productId: product.id, likedIds }))}
+                  title={likedIds.includes(product.id) ? 'Убрать из избранного' : 'В избранное'}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </button>
                 </div>
               </div>
               <div className="cart__item-price-block">

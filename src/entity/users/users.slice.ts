@@ -2,18 +2,23 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import api from '../../services/api';
 import { User, LoginData, RegisterData } from './types';
+import axios from 'axios';
 
 interface UserState {
   user: User | null;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
+  likedIds: string[];
 }
 
 const initialState: UserState = {
   user: null,
   loading: 'idle',
-  error: null
+  error: null,
+  likedIds: [],
 };
+
+const API_URL = 'http://localhost:3001/users';
 
 export const login = createAsyncThunk(
   'user/login',
@@ -48,6 +53,31 @@ export const checkAuth = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || 'Failed to check auth');
     }
+  }
+);
+
+export const fetchUserLikes = createAsyncThunk(
+  'user/fetchLikes',
+  async (userId: string) => {
+    const { data } = await api.get(`/users?id=${userId}`);
+    return data[0]?.liked?.map((item: { productId: string }) => item.productId) || [];
+  }
+);
+
+export const toggleLike = createAsyncThunk(
+  'user/toggleLike',
+  async ({ userId, productId, likedIds }: { userId: string, productId: string, likedIds: string[] }) => {
+    let newLiked;
+    if (likedIds.includes(productId)) {
+      newLiked = likedIds.filter(id => id !== productId);
+    } else {
+      newLiked = [...likedIds, productId];
+    }
+    await api.patch(`/users/${userId}`, {
+      liked: newLiked.map(id => ({ productId: id }))
+    });
+    const { data } = await api.get(`/users?id=${userId}`);
+    return data[0]?.liked?.map((item: { productId: string }) => item.productId) || [];
   }
 );
 
@@ -101,6 +131,12 @@ const userSlice = createSlice({
       .addCase(checkAuth.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
+      })
+      .addCase(fetchUserLikes.fulfilled, (state, action) => {
+        state.likedIds = action.payload;
+      })
+      .addCase(toggleLike.fulfilled, (state, action) => {
+        state.likedIds = action.payload;
       });
   }
 });

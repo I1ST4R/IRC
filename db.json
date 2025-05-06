@@ -14,16 +14,13 @@
         {
           "productId": "2",
           "quantity": 1
-        }
-      ],
-      "liked":[
-        {
-          "productId": "1"
         },
         {
-          "productId": "2"
+          "productId": "3",
+          "quantity": 1
         }
-      ]
+      ],
+      "liked": []
     },
     {
       "id": "l2yj3zb",
@@ -31,8 +28,7 @@
       "password": "test",
       "email": "test",
       "type": "user",
-      "cart": [],
-      "liked":[]
+      "cart": []
     }
   ],
   "products": [

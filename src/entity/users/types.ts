@@ -1,13 +1,14 @@
 export interface User {
-  id: number;
-  type: 'admin' | 'client';
+  id: number | string;
+  type: 'admin' | 'client' | 'user';
   login: string;
   password: string;
   email: string;
   name?: string;
   avatar?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+  liked?: { productId: string }[];
 }
 
 export interface AuthResponse {

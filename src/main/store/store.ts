@@ -3,6 +3,7 @@ import productsReducer from '../../entity/products/products.slice';
 import filterReducer from './slices/filterSlice';
 import categoriesReducer from './slices/categoriesSlice';
 import cartReducer from './slices/cartSlice';
+import userReducer from '../../entity/users/users.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
 
@@ -46,7 +47,8 @@ export const store = configureStore({
     products: productsReducer,
     filter: filterReducer,
     categories: categoriesReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    user: userReducer,
   }
 });
 
