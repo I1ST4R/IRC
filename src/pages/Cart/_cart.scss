@@ -1,0 +1,259 @@
+.cart {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+  padding: 32px 32px 24px 32px;
+  max-width: 800px;
+  margin: 50px auto;
+  font-size: 15px;
+  min-width: 350px;
+
+  &__loading {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 20px;
+  }
+
+  &__error {
+    text-align: center;
+    font-size: 18px;
+    color: #ff4444;
+    padding: 20px;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Manrope', sans-serif;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  &__empty {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    background: #f8f8fa;
+    border-radius: 14px;
+    padding: 18px 20px;
+    gap: 20px;
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+    position: relative;
+
+    &-image {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #fff;
+      border: 1px solid #ececec;
+    }
+
+    &-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    &-name {
+      font-size: 17px;
+      font-weight: 500;
+      margin-bottom: 2px;
+      color: #222;
+    }
+
+    &-params {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    &-delivery {
+      color: #00b956;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    &-quantity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 8px;
+      height: 36px;
+
+      &-btn {
+        width: 28px;
+        height: 28px;
+        border: none;
+        background: #f0f0f5;
+        color: #a95cff;
+        font-size: 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.2s;
+        padding-bottom:5px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      &-btn:active {
+        background: #e2d6f7;
+      }
+
+      &-input {
+        width: 32px;
+        height: 28px;
+        border: none;
+        text-align: center;
+        font-size: 16px;
+        background: transparent;
+        outline: none;
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        &[type="number"] {
+          -moz-appearance: textfield;
+        }
+      }
+    }
+
+    &-remove {
+      background: none;
+      border: none;
+      color: #b0b0b0;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: color 0.15s;
+
+      &:hover {
+        color: #ff4444;
+      }
+    }
+
+    &-price-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: 110px;
+      margin-left: 16px;
+    }
+
+    &-price {
+      color: #ff2222;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    &-oldprice {
+      display: none;
+    }
+  }
+
+  &__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  &__checkout {
+    padding: 12px 32px;
+    background: #a95cff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: auto;
+    opacity: 0.7;
+  }
+
+  &__checkout:active,
+  &__checkout:hover {
+    background: #8d3be6;
+    opacity: 1;
+  }
+
+  &__select-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  &__select-checkbox {
+    width: 22px;
+    height: 22px;
+    accent-color: #a95cff;
+    margin-right: 4px;
+  }
+
+  &__select-label {
+    font-weight: 500;
+    color: #222;
+    cursor: pointer;
+  }
+
+  &__select-all {
+    color: #a95cff;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+
+  &__summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    margin-top: 32px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  &__summary-label {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  &__summary-sum {
+    font-size: 22px;
+    font-weight: 700;
+    margin-left: 10px;
+    margin-right: 24px;
+  }
+} 

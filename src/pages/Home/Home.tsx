@@ -1,5 +1,4 @@
-import Header from './Header/Header';
-import Footer from './Footer/Footer';
+
 import MainBlock from './MainBlock/MainBlock';
 import Categories from './Categories/Categories';
 import Advantages from './Advantages/Advantages';
@@ -15,7 +14,6 @@ import Blog from './Blog/Blog';
 export const Home = () => {
   return (
     <>
-      <Header />
       <main>
         <MainBlock />
         <Categories />
@@ -29,7 +27,6 @@ export const Home = () => {
         <NewsLetter />
         <Blog />
       </main>
-      <Footer />
     </>
   );
 }; 

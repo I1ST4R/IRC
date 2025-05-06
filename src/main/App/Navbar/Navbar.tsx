@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import close from '../_general/img/close.svg';
-import personalAcc from '../_general/img/personal-acc.svg';
-import phone from '../_general/img/phone.svg';
-import whatsapp from '../_general/img/whatsapp.svg';
-import vk from '../_general/img/vk.svg';
-import instagram from '../_general/img/instagram.svg';
-import youtube from '../_general/img/youtube.svg';
+import close from '../../../pages/Home/_general/img/close.svg';
+import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
+import phone from '../../../pages/Home/_general/img/phone.svg';
+import whatsapp from '../../../pages/Home/_general/img/whatsapp.svg';
+import vk from '../../../pages/Home/_general/img/vk.svg';
+import instagram from '../../../pages/Home/_general/img/instagram.svg';
+import youtube from '../../../pages/Home/_general/img/youtube.svg';
 
 interface Contact {
   icon: string;

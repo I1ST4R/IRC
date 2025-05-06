@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import catalog from './catalog.svg';
-import liked from '../_general/img/liked.svg';
-import basket from '../_general/img/basket.svg';
-import personalAcc from '../_general/img/personal-acc.svg';
+import liked from '../../../pages/Home/_general/img/liked.svg';
+import basket from '../../../pages/Home/_general/img/basket.svg';
+import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
 import { usePersonalAccount } from '../../../context/PersonalAccountContext';
 
 const BottomMenu: React.FC = () => {

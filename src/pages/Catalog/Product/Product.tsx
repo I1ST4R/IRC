@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Product as ProductType } from "../../../entity/products/types";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../main/store/store";
+import { RootState, useAppDispatch } from "../../../main/store/store";
+import { addItemToCart, fetchCart } from "../../../main/store/slices/cartSlice";
+import { useNavigate } from "react-router-dom";
+
+const USER_ID_KEY = 'currentUserId';
 
 interface ProductProps {
   product: ProductType;
@@ -10,9 +14,49 @@ interface ProductProps {
 export const Product = ({ product }: ProductProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const categories = useSelector((state: RootState) => state.categories?.categories || []);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const getUserId = useCallback(() => {
+    const storedUserId = localStorage.getItem(USER_ID_KEY);
+    if (storedUserId) {
+      return storedUserId;
+    }
+    const defaultUserId = 'anpri65';
+    localStorage.setItem(USER_ID_KEY, defaultUserId);
+    return defaultUserId;
+  }, []);
+
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const userId = getUserId();
+        await dispatch(fetchCart(userId)).unwrap();
+      } catch (error) {
+        console.error('Failed to load cart:', error);
+      }
+    };
+    loadCart();
+  }, [dispatch, getUserId]);
+
+  const isInCart = cartItems.some(item => item.productId === product.id);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
+  };
+
+  const handleCartClick = async () => {
+    if (isInCart) {
+      navigate('/cart');
+    } else {
+      try {
+        const userId = getUserId();
+        await dispatch(addItemToCart({ userId, productId: product.id })).unwrap();
+      } catch (error) {
+        console.error('Failed to add item to cart:', error);
+      }
+    }
   };
 
   const getTagName = (categoryId: string, tagId: string) => {
@@ -25,7 +69,7 @@ export const Product = ({ product }: ProductProps) => {
   return (
     <div className="product">
       <img 
-        src={`images/${product.img}`} 
+        src={product.img} 
         alt={product.name} 
         className="product__image"
       />
@@ -39,6 +83,12 @@ export const Product = ({ product }: ProductProps) => {
             </span>
           ))}
         </div>
+        <button 
+          className={`product__btn ${isInCart ? 'product__btn--in-cart' : ''}`}
+          onClick={handleCartClick}
+        >
+          {isInCart ? 'В корзине' : 'Добавить в корзину'}
+        </button>
       </div>
       <button 
         className={`product__like ${isLiked ? 'product__like--active' : ''}`}

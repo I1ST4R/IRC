@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 import logo from './logo.svg';
 import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';
-import personalAcc from '../_general/img/personal-acc.svg';
-import liked from '../_general/img/liked.svg';
-import basket from '../_general/img/basket.svg';
+import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
+import liked from '../../../pages/Home/_general/img/liked.svg';
+import basket from '../../../pages/Home/_general/img/basket.svg';
 import { usePersonalAccount } from '../../../context/PersonalAccountContext';
 
 const Header: React.FC = () => {
@@ -16,6 +18,8 @@ const Header: React.FC = () => {
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
   const { toggleAccount } = usePersonalAccount();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -117,12 +121,14 @@ const Header: React.FC = () => {
             </div>
           </a>
 
-          <a href="#" className="header__button" id="basket__container1">
+          <Link to="/cart" className="header__button" id="basket__container1">
             <img src={basket} alt="basket" />
-            <div className="counter" id="basket-counter">
-              0
-            </div>
-          </a>
+            {totalItems > 0 && (
+              <div className="counter" id="basket-counter">
+                {totalItems}
+              </div>
+            )}
+          </Link>
         </div>
       </div>
     </header>
