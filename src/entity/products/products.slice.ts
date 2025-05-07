@@ -49,23 +49,34 @@ export const fetchProducts = createAsyncThunk(
     price_lte?: number;
     line?: string;
     category?: string;
+    tags?: { categoryId: string; tagId: string }[];
   }, { rejectWithValue }) => {
     try {
-      console.log('Fetching products with params:', params);
       const queryParams = new URLSearchParams();
+      const page = params.page || 1;
+      const limit = params.limit || 10;
+      const start = (page - 1) * limit;
       
-      if (params.page) queryParams.append('_page', params.page.toString());
-      if (params.limit) queryParams.append('_limit', params.limit.toString());
+      queryParams.append('_start', start.toString());
+      queryParams.append('_limit', limit.toString());
+      
       if (params.price_gte) queryParams.append('price_gte', params.price_gte.toString());
       if (params.price_lte) queryParams.append('price_lte', params.price_lte.toString());
-      if (params.line) queryParams.append('line', params.line);
-      if (params.category) queryParams.append('category', params.category);
-
-      const response = await api.get<Product[]>(`/products?${queryParams.toString()}`);
-      console.log('API response:', response);
-      return response.data;
+      
+      if (params.tags && params.tags.length > 0) {
+        params.tags.forEach(tag => {
+          queryParams.append('tags', JSON.stringify(tag));
+        });
+      }
+      
+      const url = `/products?${queryParams.toString()}`;
+      const response = await api.get<Product[]>(url);
+      
+      return {
+        items: response.data,
+        hasMore: response.data.length === limit
+      };
     } catch (error: any) {
-      console.error('Error fetching products:', error);
       return rejectWithValue(error.message || 'Failed to fetch products');
     }
   }
@@ -109,19 +120,30 @@ const productsSlice = createSlice({
     builder
       // Получение списка продуктов
       .addCase(fetchProducts.pending, (state) => {
-        console.log('Fetch products pending');
         state.loading = 'pending';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        console.log('Fetch products fulfilled:', action.payload);
         state.loading = 'succeeded';
-        if (Array.isArray(action.payload)) {
-          state.items = action.payload;
+        
+        if (action.payload && 'items' in action.payload) {
+          const page = action.meta.arg.page || 1;
           const limit = action.meta.arg.limit || 10;
+          const { items, hasMore } = action.payload;
+          
+          // Если это первая страница, заменяем все товары
+          if (page === 1) {
+            state.items = items;
+          } else {
+            // Если это последующие страницы, добавляем только новые товары
+            const existingIds = new Set(state.items.map(item => item.id));
+            const newItems = items.filter(item => !existingIds.has(item.id));
+            state.items = [...state.items, ...newItems];
+          }
+          
           state.pagination = {
-            page: action.meta.arg.page || 1,
+            page,
             limit,
-            hasMore: action.payload.length === limit,
+            hasMore
           };
         } else {
           state.items = [];
@@ -129,7 +151,6 @@ const productsSlice = createSlice({
         }
       })
       .addCase(fetchProducts.rejected, (state, action) => {
-        console.log('Fetch products rejected:', action.payload);
         state.loading = 'failed';
         state.error = action.payload as string;
       })

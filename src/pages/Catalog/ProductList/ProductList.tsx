@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../../entity/products/products.slice";
 import { RootState, AppDispatch } from "../../../main/store/store";
@@ -7,27 +7,41 @@ import type { Product } from "../../../entity/products/types";
 
 export const ProductList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, loading, error } = useSelector((state: RootState) => state.products);
+  const { items, loading, error, pagination } = useSelector((state: RootState) => state.products);
   const filter = useSelector((state: RootState) => state.filter);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
 
-  useEffect(() => {
-    const params: any = {};
-
-    // Добавляем параметры цены
-    if (filter.priceRange) {
-      params.price_gte = filter.priceRange.min;
-      params.price_lte = filter.priceRange.max;
-    }
-
-    // Добавляем параметры тегов
-    if (filter.selectedTags.length > 0) {
+  // Формируем параметры для запроса
+  const getParams = useCallback((pageNum: number) => {
+    const params: any = { 
+      page: pageNum, 
+      limit,
+      price_gte: filter.priceRange?.min,
+      price_lte: filter.priceRange?.max
+    };
+    
+    if (filter.selectedTags && filter.selectedTags.length > 0) {
       params.tags = filter.selectedTags;
     }
+    
+    return params;
+  }, [filter, limit]);
 
-    dispatch(fetchProducts(params));
-  }, [dispatch, filter]);
+  // При изменении фильтра сбрасываем страницу и загружаем заново
+  useEffect(() => {
+    setCurrentPage(1);
+    dispatch(fetchProducts(getParams(1)));
+  }, [dispatch, filter, getParams]);
 
-  if (loading === 'pending') {
+  // Загрузить ещё
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    dispatch(fetchProducts(getParams(nextPage)));
+  };
+
+  if (loading === 'pending' && currentPage === 1) {
     return <div>Loading...</div>;
   }
 
@@ -36,30 +50,31 @@ export const ProductList = () => {
   }
 
   if (!items || items.length === 0) {
+    if (loading === 'pending') {
+      return <div>Loading...</div>;
+    }
     return <div>No products found</div>;
   }
-
-  // Фильтруем продукты по тегам
-  const filteredProducts = items.filter((product: Product) => {
-    // Если нет выбранных тегов, показываем все продукты
-    if (filter.selectedTags.length === 0) return true;
-
-    // Проверяем, что продукт содержит хотя бы один выбранный тег
-    return filter.selectedTags.some(selectedTag => 
-      product.tags.some((productTag: { categoryId: string; tagId: string }) => 
-        productTag.categoryId === selectedTag.categoryId && 
-        productTag.tagId === selectedTag.tagId
-      )
-    );
-  });
 
   return (
     <div className="product-list">
       <div className="product-list__container">
-        {filteredProducts.map((product: Product) => (
-          <ProductComponent key={product.id} product={product} />
+        {items.map((product: Product) => (
+          <ProductComponent
+            key={product.id}
+            product={product}
+          />
         ))}
       </div>
+      {pagination.hasMore && (
+        <button 
+          className="product-list__load-more" 
+          onClick={handleLoadMore} 
+          disabled={loading === 'pending'}
+        >
+          {loading === 'pending' ? 'Загрузка...' : 'Загрузить ещё'}
+        </button>
+      )}
     </div>
   );
 }; 
