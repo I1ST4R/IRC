@@ -35,13 +35,29 @@ export const getProducts = async (page: number, params?: FilterParams) => {
   // Фильтрация по тегам
   if (params?.tags && params.tags.length > 0) {
     console.log('Filtering by tags:', params.tags);
+    
+    // Группируем теги по категориям
+    const tagsByCategory = params.tags.reduce((acc: { [key: string]: string[] }, tagString) => {
+      const [categoryId] = tagString.split(',');
+      if (!acc[categoryId]) {
+        acc[categoryId] = [];
+      }
+      acc[categoryId].push(tagString);
+      return acc;
+    }, {});
+
+    console.log('Tags grouped by category:', tagsByCategory);
+
     filteredProducts = filteredProducts.filter((product: any) => {
-      // Проверяем, содержит ли продукт хотя бы один из выбранных тегов
-      const hasTag = params.tags!.some(selectedTag => 
-        product.tags.some((productTag: string) => productTag === selectedTag)
-      );
-      return hasTag;
+      // Проверяем, что продукт соответствует всем категориям (AND между категориями)
+      return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
+        // Проверяем, что продукт имеет хотя бы один тег из текущей категории (OR внутри категории)
+        return categoryTags.some(selectedTag => 
+          product.tags.some((productTag: string) => productTag === selectedTag)
+        );
+      });
     });
+
     console.log('After tags filter:', filteredProducts.length);
   }
 
