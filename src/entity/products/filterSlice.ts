@@ -6,8 +6,9 @@ const initialState: FilterState = {
     min: 500,
     max: 10000
   },
-  selectedLines: [],
-  selectedCategories: []
+  selectedTags: [],
+  loading: 'idle',
+  error: null
 };
 
 const filterSlice = createSlice({
@@ -17,24 +18,16 @@ const filterSlice = createSlice({
     setPriceRange: (state, action: PayloadAction<{ min: number; max: number }>) => {
       state.priceRange = action.payload;
     },
-    toggleLine: (state, action: PayloadAction<string>) => {
-      const index = state.selectedLines.indexOf(action.payload);
+    toggleTag: (state, action: PayloadAction<string>) => {
+      const index = state.selectedTags.indexOf(action.payload);
       if (index === -1) {
-        state.selectedLines.push(action.payload);
+        state.selectedTags.push(action.payload);
       } else {
-        state.selectedLines.splice(index, 1);
-      }
-    },
-    toggleCategory: (state, action: PayloadAction<string>) => {
-      const index = state.selectedCategories.indexOf(action.payload);
-      if (index === -1) {
-        state.selectedCategories.push(action.payload);
-      } else {
-        state.selectedCategories.splice(index, 1);
+        state.selectedTags.splice(index, 1);
       }
     }
   }
 });
 
-export const { setPriceRange, toggleLine, toggleCategory } = filterSlice.actions;
+export const { setPriceRange, toggleTag } = filterSlice.actions;
 export default filterSlice.reducer; 

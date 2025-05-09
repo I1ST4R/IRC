@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import productsReducer from '../../entity/products/products.slice';
-import filterReducer from './slices/filterSlice';
-import categoriesReducer from './slices/categoriesSlice';
-import cartReducer from './slices/cartSlice';
-import userReducer from '../../entity/users/users.slice';
+import productsReducer from '../entity/products/products.slice';
+import filterReducer from '../entity/products/filterSlice';
+import categoriesReducer from '../entity/productCategories/categoriesSlice';
+import cartReducer from '../entity/products/cartSlice';
+import userReducer from '../entity/users/users.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
 

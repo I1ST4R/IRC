@@ -1,15 +1,7 @@
 // features/user/userSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../services/api';
-import { User, LoginData, RegisterData } from './types';
-import axios from 'axios';
-
-interface UserState {
-  user: User | null;
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error: string | null;
-  likedIds: string[];
-}
+import { User, LoginData, RegisterData, UserState } from './types';
 
 const initialState: UserState = {
   user: null,
@@ -17,8 +9,6 @@ const initialState: UserState = {
   error: null,
   likedIds: [],
 };
-
-const API_URL = 'http://localhost:3001/users';
 
 export const login = createAsyncThunk(
   'user/login',

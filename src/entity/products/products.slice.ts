@@ -1,84 +1,36 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getProducts} from '../../services/api';
+import { FilterParams } from '../../services/types';
 import api from '../../services/api';
-
-interface Product {
-  id: string;
-  name: string;
-  releaseDate: string;
-  price: number;
-  prevPrice?: number;
-  technology: string;
-  img: string;
-  tags: {
-    categoryId: string;
-    tagId: string;
-  }[];
-}
+import { Product } from './types';
 
 interface ProductsState {
-  items: Product[];
-  currentProduct: Product | null;
+  items: any[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
-  pagination: {
-    page: number;
-    limit: number;
-    hasMore: boolean;
-  };
+  hasMore: boolean;
+  currentPage: number;
+  filters: FilterParams;
 }
 
 const initialState: ProductsState = {
   items: [],
-  currentProduct: null,
   loading: 'idle',
   error: null,
-  pagination: {
-    page: 1,
-    limit: 10,
-    hasMore: true,
-  },
+  hasMore: true,
+  currentPage: 1,
+  filters: {
+    minPrice: 0,
+    maxPrice: 10000,
+    tags: []  
+  }
 };
 
-// Асинхронные действия
 export const fetchProducts = createAsyncThunk(
-  'products/fetchAll',
-  async (params: { 
-    page?: number; 
-    limit?: number;
-    price_gte?: number;
-    price_lte?: number;
-    line?: string;
-    category?: string;
-    tags?: { categoryId: string; tagId: string }[];
-  }, { rejectWithValue }) => {
-    try {
-      const queryParams = new URLSearchParams();
-      const page = params.page || 1;
-      const limit = params.limit || 10;
-      const start = (page - 1) * limit;
-      
-      queryParams.append('_start', start.toString());
-      queryParams.append('_limit', limit.toString());
-      
-      if (params.price_gte) queryParams.append('price_gte', params.price_gte.toString());
-      if (params.price_lte) queryParams.append('price_lte', params.price_lte.toString());
-      
-      if (params.tags && params.tags.length > 0) {
-        params.tags.forEach(tag => {
-          queryParams.append('tags', JSON.stringify(tag));
-        });
-      }
-      
-      const url = `/products?${queryParams.toString()}`;
-      const response = await api.get<Product[]>(url);
-      
-      return {
-        items: response.data,
-        hasMore: response.data.length === limit
-      };
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to fetch products');
-    }
+  'products/fetchProducts',
+  async ({ page, filters }: { page: number; filters?: FilterParams }) => {
+    const response = await getProducts(page, filters);
+    return response;
   }
 );
 
@@ -98,84 +50,55 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    clearProductsError: (state) => {
-      state.error = null;
+    setFilters: (state, action) => {
+      state.filters = action.payload;
+      state.currentPage = 1;
+      state.items = [];
     },
-    resetCurrentProduct: (state) => {
-      state.currentProduct = null;
-    },
-    setProducts: (state, action: PayloadAction<Product[]>) => {
-      state.items = action.payload;
-      state.loading = 'succeeded';
-    },
-    setLoading: (state, action: PayloadAction<'idle' | 'pending' | 'succeeded' | 'failed'>) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-      state.loading = 'failed';
+    resetProducts: (state) => {
+      state.items = [];
+      state.currentPage = 1;
+      state.hasMore = true;
     }
   },
   extraReducers: (builder) => {
     builder
-      // Получение списка продуктов
       .addCase(fetchProducts.pending, (state) => {
         state.loading = 'pending';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        
-        if (action.payload && 'items' in action.payload) {
-          const page = action.meta.arg.page || 1;
-          const limit = action.meta.arg.limit || 10;
-          const { items, hasMore } = action.payload;
-          
-          // Если это первая страница, заменяем все товары
-          if (page === 1) {
-            state.items = items;
-          } else {
-            // Если это последующие страницы, добавляем только новые товары
-            const existingIds = new Set(state.items.map(item => item.id));
-            const newItems = items.filter(item => !existingIds.has(item.id));
-            state.items = [...state.items, ...newItems];
-          }
-          
-          state.pagination = {
-            page,
-            limit,
-            hasMore
-          };
+        if (action.meta.arg.page === 1) {
+          state.items = action.payload.products;
         } else {
-          state.items = [];
-          state.pagination.hasMore = false;
+          const existingIds = new Set(state.items.map(item => item.id));
+          const newProducts = action.payload.products.filter(
+            product => !existingIds.has(product.id)
+          );
+          state.items = [...state.items, ...newProducts];
         }
+        state.hasMore = action.payload.hasMore;
+        state.currentPage = action.meta.arg.page;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = 'failed';
-        state.error = action.payload as string;
+        state.error = action.error.message || 'Failed to fetch products';
       })
 
       // Получение одного продукта
-      .addCase(fetchProductById.pending, (state) => {
-        state.loading = 'pending';
-      })
-      .addCase(fetchProductById.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.currentProduct = action.payload;
-      })
-      .addCase(fetchProductById.rejected, (state, action) => {
-        state.loading = 'failed';
-        state.error = action.payload as string;
-      })
+      // .addCase(fetchProductById.pending, (state) => {
+      //   state.loading = 'pending';
+      // })
+      // .addCase(fetchProductById.fulfilled, (state, action) => {
+      //   state.loading = 'succeeded';
+      //   state.currentProduct = action.payload;
+      // })
+      // .addCase(fetchProductById.rejected, (state, action) => {
+      //   state.loading = 'failed';
+      //   state.error = action.payload as string;
+      // })
   },
 });
 
-export const {
-  clearProductsError,
-  resetCurrentProduct,
-  setProducts,
-  setLoading,
-  setError
-} = productsSlice.actions;
-
+export const { setFilters, resetProducts } = productsSlice.actions;
 export default productsSlice.reducer;

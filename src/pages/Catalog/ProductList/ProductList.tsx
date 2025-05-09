@@ -1,24 +1,28 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../../entity/products/products.slice";
-import { RootState, AppDispatch } from "../../../main/store/store";
+import { RootState, AppDispatch } from "../../../main/store";
 import { Product as ProductComponent } from "../Product/Product";
 import type { Product } from "../../../entity/products/types";
 
 export const ProductList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, loading, error, pagination } = useSelector((state: RootState) => state.products);
+  const { 
+    items, 
+    loading, 
+    error, 
+    hasMore,
+    currentPage,
+    filters } = useSelector((state: RootState) => state.products);
   const filter = useSelector((state: RootState) => state.filter);
-  const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
 
   // Формируем параметры для запроса
   const getParams = useCallback((pageNum: number) => {
     const params: any = { 
       page: pageNum, 
-      limit,
-      price_gte: filter.priceRange?.min,
-      price_lte: filter.priceRange?.max
+      minPrice: filter.priceRange?.min,
+      maxPrice: filter.priceRange?.max
     };
     
     if (filter.selectedTags && filter.selectedTags.length > 0) {
@@ -26,19 +30,21 @@ export const ProductList = () => {
     }
     
     return params;
-  }, [filter, limit]);
+  }, [filter]);
 
   // При изменении фильтра сбрасываем страницу и загружаем заново
   useEffect(() => {
-    setCurrentPage(1);
-    dispatch(fetchProducts(getParams(1)));
+    const params = getParams(1);
+    console.log('Dispatching with params:', params);
+    dispatch(fetchProducts({ page: 1, filters: params }));
   }, [dispatch, filter, getParams]);
 
   // Загрузить ещё
   const handleLoadMore = () => {
+    if (!hasMore || loading === 'pending') return;
     const nextPage = currentPage + 1;
-    setCurrentPage(nextPage);
-    dispatch(fetchProducts(getParams(nextPage)));
+    const params = getParams(nextPage);
+    dispatch(fetchProducts({ page: nextPage, filters: params }));
   };
 
   if (loading === 'pending' && currentPage === 1) {
@@ -61,12 +67,12 @@ export const ProductList = () => {
       <div className="product-list__container">
         {items.map((product: Product) => (
           <ProductComponent
-            key={product.id}
+            key={`product-${product.id}`}
             product={product}
           />
         ))}
       </div>
-      {pagination.hasMore && (
+      {hasMore && (
         <button 
           className="product-list__load-more" 
           onClick={handleLoadMore} 

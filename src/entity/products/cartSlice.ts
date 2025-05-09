@@ -1,20 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCart, addToCart, removeFromCart, updateCartItemQuantity } from '../../../services/api';
+import { getCart, addToCart, removeFromCart, updateCartItemQuantity } from '../../services/api';
+
+interface CartItem {
+  productId: string;
+  quantity: number;
+  // другие поля товара...
+}
 
 interface CartState {
-  items: Array<{
-    productId: string;
-    quantity: number;
-  }>;
+  items: CartItem[];
   loading: boolean;
   error: string | null;
 }
-
-const initialState: CartState = {
-  items: [],
-  loading: false,
-  error: null
-};
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
@@ -68,18 +65,36 @@ export const updateItemQuantity = createAsyncThunk(
   }
 );
 
+export const clearCart = createAsyncThunk(
+  'cart/clearCart',
+  async (userId: string) => {
+    try {
+      // Получаем все товары в корзине
+      const cart = await getCart(userId);
+      
+      // Удаляем каждый товар по отдельности
+      for (const item of cart) {
+        await removeFromCart(userId, item.productId);
+      }
+      
+      return userId;
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      throw error;
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
-  initialState,
-  reducers: {
-    clearCart: (state) => {
-      state.items = [];
-      state.error = null;
-    }
-  },
+  initialState: {
+    items: [],
+    loading: false,
+    error: null
+  } as CartState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch cart
       .addCase(fetchCart.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -92,47 +107,28 @@ const cartSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch cart';
       })
-      // Add item
-      .addCase(addItemToCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(addItemToCart.fulfilled, (state, action) => {
-        state.loading = false;
         state.items = action.payload;
-      })
-      .addCase(addItemToCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to add item to cart';
-      })
-      // Remove item
-      .addCase(removeItemFromCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
       })
       .addCase(removeItemFromCart.fulfilled, (state, action) => {
-        state.loading = false;
         state.items = action.payload;
       })
-      .addCase(removeItemFromCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to remove item from cart';
+      .addCase(updateItemQuantity.fulfilled, (state, action) => {
+        state.items = action.payload;
       })
-      // Update quantity
-      .addCase(updateItemQuantity.pending, (state) => {
+      .addCase(clearCart.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateItemQuantity.fulfilled, (state, action) => {
+      .addCase(clearCart.fulfilled, (state) => {
         state.loading = false;
-        state.items = action.payload;
+        state.items = [];
       })
-      .addCase(updateItemQuantity.rejected, (state, action) => {
+      .addCase(clearCart.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to update item quantity';
+        state.error = action.error.message || 'Failed to clear cart';
       });
   }
 });
 
-export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer; 

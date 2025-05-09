@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../main/store/store';
+import { useAppDispatch } from '../../main/store';
 import { login } from '../../entity/users/users.slice';
 import styles from './AuthForm.module.css';
 

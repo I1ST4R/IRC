@@ -11,6 +11,13 @@ export interface User {
   liked?: { productId: string }[];
 }
 
+export interface UserState {
+  user: User | null;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: string | null;
+  likedIds: string[];
+}
+
 export interface AuthResponse {
   user: User;
   token: string;

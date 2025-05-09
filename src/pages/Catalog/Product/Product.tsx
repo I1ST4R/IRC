@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from "react";
 import { Product as ProductType } from "../../../entity/products/types";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../main/store/store";
-import { addItemToCart, fetchCart } from "../../../main/store/slices/cartSlice";
+import { RootState, AppDispatch } from "../../../main/store";
+import { addItemToCart, fetchCart } from "../../../entity/products/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toggleLike } from '../../../entity/users/users.slice';
 
@@ -17,7 +17,7 @@ export const Product = ({ product }: ProductProps) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedIds = useSelector((state: RootState) => state.user.likedIds);
   const userId = localStorage.getItem(USER_ID_KEY) || 'anpri65';
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +50,8 @@ export const Product = ({ product }: ProductProps) => {
     }
   };
 
-  const getTagName = (categoryId: string, tagId: string) => {
+  const getTagName = (tagString: string) => {
+    const [categoryId, tagId] = tagString.split(',');
     const category = categories.find(cat => cat.id === categoryId);
     if (!category) return '';
     const tag = category.tags.find(tag => tag.id === tagId);
@@ -68,9 +69,9 @@ export const Product = ({ product }: ProductProps) => {
         <h3 className="product__name">{product.name}</h3>
         <div className="product__price">{product.price} ₽</div>
         <div className="product__tags">
-          {product.tags.map((tag) => (
-            <span key={`${tag.categoryId}-${tag.tagId}`} className="product__tag">
-              {getTagName(tag.categoryId, tag.tagId)}
+          {product.tags.map((tagString) => (
+            <span key={`${product.id}-${tagString}`} className="product__tag">
+              {getTagName(tagString)}
             </span>
           ))}
         </div>

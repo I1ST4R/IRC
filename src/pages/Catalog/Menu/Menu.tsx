@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag } from "../../../main/store/slices/filterSlice";
-import { RootState } from "../../../main/store/store";
+import { setPriceRange, toggleTag } from "../../../entity/products/filterSlice";
+import { RootState } from "../../../main/store";
 import { getCategories } from "../../../services/api";
-import { setCategories, setLoading, setError } from "../../../main/store/slices/categoriesSlice";
+import { setCategories, setLoading, setError } from "../../../entity/productCategories/categoriesSlice";
 import "./_menu.scss";
 
 interface AccordionItemProps {
@@ -104,14 +104,12 @@ export const Menu = () => {
     debouncedPriceChange(type, value);
   };
 
-  const handleTagToggle = (categoryId: string, tagId: string) => {
-    dispatch(toggleTag({ categoryId, tagId }));
+  const handleTagToggle = (tagString: string) => {
+    dispatch(toggleTag(tagString));
   };
 
-  const isTagSelected = (categoryId: string, tagId: string) => {
-    return filter?.selectedTags.some(
-      tag => tag.categoryId === categoryId && tag.tagId === tagId
-    ) || false;
+  const isTagSelected = (tagString: string) => {
+    return filter?.selectedTags.some(t => t === tagString) || false;
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -163,16 +161,19 @@ export const Menu = () => {
       {categories.map((category) => (
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
-            {category.tags.map((tag) => (
-              <label key={tag.id} className="menu__checkbox">
-                <input 
-                  type="checkbox"
-                  checked={isTagSelected(category.id, tag.id)}
-                  onChange={() => handleTagToggle(category.id, tag.id)}
-                />
-                <span>{tag.name}</span>
-              </label>
-            ))}
+            {category.tags.map((tag) => {
+              const tagString = `${category.id},${tag.id}`;
+              return (
+                <label key={tagString} className="menu__checkbox">
+                  <input 
+                    type="checkbox"
+                    checked={isTagSelected(tagString)}
+                    onChange={() => handleTagToggle(tagString)}
+                  />
+                  <span>{tag.name}</span>
+                </label>
+              );
+            })}
           </div>
         </AccordionItem>
       ))}

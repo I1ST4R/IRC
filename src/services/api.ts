@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {FilterParams} from './types'
+import {CartItem} from './types'
 
 const API_URL = 'http://localhost:3000';
 
@@ -9,41 +11,71 @@ const api = axios.create({
   }
 });
 
-export interface FilterParams {
-  minPrice?: number;
-  maxPrice?: number;
-  lines?: string[];
-  categories?: string[];
-}
+//Products
+export const getProducts = async (page: number, params?: FilterParams) => {
+  const response = await api.get('/products');
+  let filteredProducts = response.data;
 
-export interface CartItem {
-  productId: string;
-  quantity: number;
-}
+  console.log('Filter params:', params);
+  console.log('Initial products count:', filteredProducts.length);
 
+  // Фильтрация по цене
+  const minPrice = params?.minPrice;
+  const maxPrice = params?.maxPrice;
+
+  if (minPrice !== undefined) {
+    filteredProducts = filteredProducts.filter((product: any) => product.price >= minPrice);
+    console.log('After minPrice filter:', filteredProducts.length);
+  }
+  if (maxPrice !== undefined) {
+    filteredProducts = filteredProducts.filter((product: any) => product.price <= maxPrice);
+    console.log('After maxPrice filter:', filteredProducts.length);
+  }
+
+  // Фильтрация по тегам
+  if (params?.tags && params.tags.length > 0) {
+    console.log('Filtering by tags:', params.tags);
+    filteredProducts = filteredProducts.filter((product: any) => {
+      // Проверяем, содержит ли продукт хотя бы один из выбранных тегов
+      const hasTag = params.tags!.some(selectedTag => 
+        product.tags.some((productTag: string) => productTag === selectedTag)
+      );
+      return hasTag;
+    });
+    console.log('After tags filter:', filteredProducts.length);
+  }
+
+  // Пагинация
+  const paginatedProducts = filteredProducts.slice(0, page * 10);
+  const hasMore = filteredProducts.length > page * 10;
+
+  return {
+    products: paginatedProducts,
+    hasMore: hasMore 
+  };
+};
+
+export const getProductById = async (productId?: string) => {
+  const response = await api.get(`/products/${ productId }`);
+  return response.data;
+};
+
+//Categories
 export const getCategories = async () => {
   const response = await api.get('/productCategories');
   return response.data;
 };
 
-export const getProducts = async (params?: FilterParams) => {
-  const response = await api.get('/products', { params });
-  return response.data;
-};
-
+//Cart
 export const getCart = async (userId: string) => {
   try {
-    console.log('Getting cart for user:', userId);
     const response = await api.get(`/users/${userId}`);
-    console.log('Cart data:', response.data.cart);
     if (!response.data.cart) {
-      // Если корзины нет, создаем пустую
       await api.patch(`/users/${userId}`, { cart: [] });
       return [];
     }
     return response.data.cart;
   } catch (error) {
-    console.error('Error getting cart:', error);
     throw error;
   }
 };

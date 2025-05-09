@@ -1,6 +1,4 @@
-import { store } from '../../main/store/store';
-import { FilterState } from '../../main/store/slices/filterSlice';
-import { CategoriesState } from '../../main/store/slices/categoriesSlice';
+import { store } from '../../main/store';
 
 export interface Product {
   id: string;
@@ -10,21 +8,30 @@ export interface Product {
   prevPrice?: number;
   technology: string;
   img: string;
-  tags: {
-    categoryId: string;
-    tagId: string;
-  }[];
+  tags: string[];
 }
 
-export interface RootState {
-  user: any; // нахуй пока типизацию юзера
-  products: {
-    items: Product[];
-    loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-    error: string | null;
+export interface ProductsState {
+  items: Product[];
+  currentProduct: Product | null;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: string | null;
+  pagination: {
+    page: number;
+    hasMore: boolean;
   };
-  filter: FilterState;
-  categories: CategoriesState;
+}
+
+interface PriceRange {
+  min: number;
+  max: number;
+}
+
+export interface FilterState {
+  priceRange: PriceRange;
+  selectedTags: string[];
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: string | null;
 }
 
 export type AppDispatch = typeof store.dispatch;

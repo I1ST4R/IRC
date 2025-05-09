@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useAppDispatch } from '../../main/store/store';
-import { fetchCart } from '../../main/store/slices/cartSlice';
+import { useAppDispatch } from '../store';
+import { fetchCart } from '../../entity/products/cartSlice';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
