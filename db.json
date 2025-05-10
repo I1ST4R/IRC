@@ -9,7 +9,7 @@
       "cart": [
         {
           "productId": "1",
-          "quantity": 8
+          "quantity": 6
         }
       ],
       "liked": []
@@ -26,12 +26,11 @@
   "products": [
     {
       "id": "1",
-      "name": "Гель для умывания Basic",
-      "releaseDate": "2024-01-01",
+      "name": "Гель для умывания",
+      "technology": "IRC pure cleanse foam",
       "price": 1200,
-      "quantity": 20,
       "prevPrice": 1500,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product1.png",
       "tags": [
         "1,1",
@@ -41,12 +40,11 @@
     },
     {
       "id": "2",
-      "name": "Крем Moist + Tonus",
-      "releaseDate": "2024-01-02",
+      "name": "Крем",
+      "technology": "IRC hydro-lift cream",
       "price": 1800,
-      "quantity": 20,
       "prevPrice": 2000,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product2.png",
       "tags": [
         "1,2",
@@ -56,12 +54,11 @@
     },
     {
       "id": "3",
-      "name": "Концентрат Sebo+",
-      "releaseDate": "2024-01-03",
+      "name": "Концентрат",
+      "technology": "IRC sebum control complex",
       "price": 3500,
-      "quantity": 20,
       "prevPrice": 4000,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product3.png",
       "tags": [
         "1,3",
@@ -71,12 +68,11 @@
     },
     {
       "id": "4",
-      "name": "Крем Anti-age",
-      "releaseDate": "2024-01-04",
+      "name": "Крем",
+      "technology": "IRC collagen renew",
       "price": 4500,
-      "quantity": 20,
       "prevPrice": 5000,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product4.png",
       "tags": [
         "1,4",
@@ -86,12 +82,11 @@
     },
     {
       "id": "5",
-      "name": "Маска Moist + Tonus",
-      "releaseDate": "2024-01-05",
+      "name": "Маска",
+      "technology": "IRC aqua infusion mask",
       "price": 1800,
-      "quantity": 20,
       "prevPrice": 2000,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product5.png",
       "tags": [
         "1,2",
@@ -101,12 +96,11 @@
     },
     {
       "id": "6",
-      "name": "Гель для умывания Sebo+",
-      "releaseDate": "2024-01-06",
+      "name": "Гель для умывания",
+      "technology": "IRC purifying wash",
       "price": 1500,
-      "quantity": 20,
       "prevPrice": 1800,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product6.png",
       "tags": [
         "1,3",
@@ -116,12 +110,11 @@
     },
     {
       "id": "7",
-      "name": "Пиллинг Anti-age",
-      "releaseDate": "2024-01-07",
+      "name": "Пиллинг",
+      "technology": "IRC gentle resurface",
       "price": 2800,
-      "quantity": 20,
       "prevPrice": 3000,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product1.png",
       "tags": [
         "1,4",
@@ -131,12 +124,11 @@
     },
     {
       "id": "8",
-      "name": "Концентрат Basic",
-      "releaseDate": "2024-01-08",
+      "name": "Концентрат",
+      "technology": "IRC skin reset serum",
       "price": 2200,
-      "quantity": 20,
       "prevPrice": 2500,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product2.png",
       "tags": [
         "1,1",
@@ -146,12 +138,11 @@
     },
     {
       "id": "9",
-      "name": "Шампунь Sebo+",
-      "releaseDate": "2024-01-09",
+      "name": "Шампунь",
+      "technology": "IRC scalp detox",
       "price": 1700,
-      "quantity": 20,
       "prevPrice": 1900,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product3.png",
       "tags": [
         "1,3",
@@ -161,12 +152,11 @@
     },
     {
       "id": "10",
-      "name": "Сыворотка Anti-age",
-      "releaseDate": "2024-01-10",
+      "name": "Сыворотка",
+      "technology": "IRC peptide booster",
       "price": 4200,
-      "quantity": 20,
       "prevPrice": 4500,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product4.png",
       "tags": [
         "1,4",
@@ -176,12 +166,11 @@
     },
     {
       "id": "11",
-      "name": "Маска для волос Moist + Tonus",
-      "releaseDate": "2024-01-11",
+      "name": "Маска для волос",
+      "technology": "IRC hair revival",
       "price": 2300,
-      "quantity": 20,
       "prevPrice": 2500,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product5.png",
       "tags": [
         "1,2",
@@ -191,12 +180,11 @@
     },
     {
       "id": "12",
-      "name": "Крем для лица Basic",
-      "releaseDate": "2024-01-12",
+      "name": "Крем для лица",
+      "technology": "IRC daily shield",
       "price": 1600,
-      "quantity": 20,
       "prevPrice": 1800,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product6.png",
       "tags": [
         "1,1",
@@ -206,12 +194,11 @@
     },
     {
       "id": "13",
-      "name": "Пиллинг Sebo+",
-      "releaseDate": "2024-01-13",
+      "name": "Пиллинг",
+      "technology": "IRC pore refine",
       "price": 1900,
-      "quantity": 20,
       "prevPrice": 2100,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product1.png",
       "tags": [
         "1,3",
@@ -221,12 +208,11 @@
     },
     {
       "id": "14",
-      "name": "Концентрат Anti-age",
-      "releaseDate": "2024-01-14",
+      "name": "Концентрат",
+      "technology": "IRC time reverse",
       "price": 3800,
-      "quantity": 20,
       "prevPrice": 4000,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product2.png",
       "tags": [
         "1,4",
@@ -236,12 +222,11 @@
     },
     {
       "id": "15",
-      "name": "Шампунь Basic",
-      "releaseDate": "2024-01-15",
+      "name": "Шампунь",
+      "technology": "IRC gentle cleanse",
       "price": 1400,
-      "quantity": 20,
       "prevPrice": 1600,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product3.png",
       "tags": [
         "1,1",
@@ -251,12 +236,11 @@
     },
     {
       "id": "16",
-      "name": "Сыворотка Moist + Tonus",
-      "releaseDate": "2024-01-16",
+      "name": "Сыворотка",
+      "technology": "IRC hydration surge",
       "price": 3200,
-      "quantity": 20,
       "prevPrice": 3500,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product4.png",
       "tags": [
         "1,2",
@@ -266,12 +250,11 @@
     },
     {
       "id": "17",
-      "name": "Маска для лица Anti-age",
-      "releaseDate": "2024-01-17",
+      "name": "Маска для лица",
+      "technology": "IRC gold renewal",
       "price": 2900,
-      "quantity": 20,
       "prevPrice": 3100,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product5.png",
       "tags": [
         "1,4",
@@ -281,12 +264,11 @@
     },
     {
       "id": "18",
-      "name": "Гель для умывания Moist + Tonus",
-      "releaseDate": "2024-01-18",
+      "name": "Гель для умывания",
+      "technology": "IRC dew balance",
       "price": 1500,
-      "quantity": 20,
       "prevPrice": 1700,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product6.png",
       "tags": [
         "1,2",
@@ -296,12 +278,11 @@
     },
     {
       "id": "19",
-      "name": "Крем Sebo+",
-      "releaseDate": "2024-01-19",
+      "name": "Крем",
+      "technology": "IRC matte perfection",
       "price": 2000,
-      "quantity": 20,
       "prevPrice": 2200,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product1.png",
       "tags": [
         "1,3",
@@ -311,12 +292,11 @@
     },
     {
       "id": "20",
-      "name": "Маска для волос Basic",
-      "releaseDate": "2024-01-20",
+      "name": "Маска для волос",
+      "technology": "IRC hair silk",
       "price": 1800,
-      "quantity": 20,
       "prevPrice": 2000,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product2.png",
       "tags": [
         "1,1",
@@ -326,12 +306,11 @@
     },
     {
       "id": "21",
-      "name": "Пиллинг Moist + Tonus",
-      "releaseDate": "2024-01-21",
+      "name": "Пиллинг",
+      "technology": "IRC glow reveal",
       "price": 2100,
-      "quantity": 20,
       "prevPrice": 2300,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product3.png",
       "tags": [
         "1,2",
@@ -341,12 +320,11 @@
     },
     {
       "id": "22",
-      "name": "Шампунь Anti-age",
-      "releaseDate": "2024-01-22",
+      "name": "Шампунь",
+      "technology": "IRC age-defy hair",
       "price": 2500,
-      "quantity": 20,
       "prevPrice": 2700,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product4.png",
       "tags": [
         "1,4",
@@ -356,12 +334,11 @@
     },
     {
       "id": "23",
-      "name": "Сыворотка Sebo+",
-      "releaseDate": "2024-01-23",
+      "name": "Сыворотка",
+      "technology": "IRC blemish control",
       "price": 3700,
-      "quantity": 20,
       "prevPrice": 4000,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product5.png",
       "tags": [
         "1,3",
@@ -371,12 +348,11 @@
     },
     {
       "id": "24",
-      "name": "Крем для рук Moist + Tonus",
-      "releaseDate": "2024-01-24",
+      "name": "Крем для рук",
+      "technology": "IRC hand revival",
       "price": 1500,
-      "quantity": 20,
       "prevPrice": 1700,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product6.png",
       "tags": [
         "1,2",
@@ -386,12 +362,11 @@
     },
     {
       "id": "25",
-      "name": "Маска для лица Basic",
-      "releaseDate": "2024-01-25",
+      "name": "Маска для лица",
+      "technology": "IRC skin detox",
       "price": 1700,
-      "quantity": 20,
       "prevPrice": 1900,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product1.png",
       "tags": [
         "1,1",
@@ -401,12 +376,11 @@
     },
     {
       "id": "26",
-      "name": "Гель для умывания Anti-age",
-      "releaseDate": "2024-01-26",
+      "name": "Гель для умывания",
+      "technology": "IRC youth cleanse",
       "price": 1900,
-      "quantity": 20,
       "prevPrice": 2100,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product2.png",
       "tags": [
         "1,4",
@@ -416,12 +390,11 @@
     },
     {
       "id": "27",
-      "name": "Концентрат Moist + Tonus",
-      "releaseDate": "2024-01-27",
+      "name": "Концентрат",
+      "technology": "IRC aqua boost",
       "price": 3400,
-      "quantity": 20,
       "prevPrice": 3600,
-      "technology": "Moist + Tonus",
+      "quantity": 20,
       "img": "images/product3.png",
       "tags": [
         "1,2",
@@ -431,12 +404,11 @@
     },
     {
       "id": "28",
-      "name": "Шампунь Sebo+ для проблемной кожи",
-      "releaseDate": "2024-01-28",
+      "name": "Шампунь для проблемной кожи",
+      "technology": "IRC scalp relief",
       "price": 2000,
-      "quantity": 20,
       "prevPrice": 2200,
-      "technology": "Sebo+",
+      "quantity": 20,
       "img": "images/product4.png",
       "tags": [
         "1,3",
@@ -446,12 +418,11 @@
     },
     {
       "id": "29",
-      "name": "Пиллинг Basic",
-      "releaseDate": "2024-01-29",
+      "name": "Пиллинг",
+      "technology": "IRC smooth polish",
       "price": 1600,
-      "quantity": 20,
       "prevPrice": 1800,
-      "technology": "Basic",
+      "quantity": 20,
       "img": "images/product5.png",
       "tags": [
         "1,1",
@@ -461,12 +432,11 @@
     },
     {
       "id": "30",
-      "name": "Сыворотка для волос Anti-age",
-      "releaseDate": "2024-01-30",
+      "name": "Сыворотка для волос",
+      "technology": "IRC hair renewal",
       "price": 4000,
-      "quantity": 20,
       "prevPrice": 4300,
-      "technology": "Anti-age",
+      "quantity": 20,
       "img": "images/product6.png",
       "tags": [
         "1,4",
@@ -581,6 +551,34 @@
           "name": "Сыворотка"
         }
       ]
+    }
+  ],
+  "promo":[
+    {
+      "id": "1",
+      "used": false,
+      "code": "PROMO10",
+      "discount": 10
+    },
+    {
+      "id": "2",
+      "used": false,
+      "code": "PROMO20",
+      "discount": 20
+    }
+  ],
+  "certificates":[
+    {
+      "id": "1",
+      "used": false,
+      "code": "SERTIFICATE1000",
+      "discount": 1000
+    },
+    {
+      "id": "2",
+      "used": false,
+      "code": "SERTIFICATE2000",
+      "discount": 2000
     }
   ]
 }

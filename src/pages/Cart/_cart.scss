@@ -1,9 +1,5 @@
 .cart {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
   padding: 32px 32px 24px 32px;
-  max-width: 800px;
   margin: 50px auto;
   font-size: 15px;
   min-width: 350px;
@@ -22,18 +18,81 @@
     padding: 20px;
   }
 
-  &__title {
-    font-size: 28px;
-    font-weight: 700;
-    font-family: 'Manrope', sans-serif;
-    margin-bottom: 8px;
-    letter-spacing: -0.5px;
+  &__body{
+    display: grid;
+    grid-template-columns: auto 300px;
+    gap: 50px;
   }
 
+  &__title {
+    font-family: 'EuropeExt', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  &__info{
+    display: flex ;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    
+
+    button{
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+  } 
+
   &__empty {
+    margin-top: 100px;
     text-align: center;
     font-size: 18px;
-    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    &-text{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &-message {
+      font-family: 'EuropeExt', sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    &-link {
+      font-family: 'Manrope';
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+
+      a{
+        text-decoration: underline;
+        color: #ca354f;
+      }
+    }
   }
 
   &__items {
@@ -42,23 +101,52 @@
     gap: 24px;
   }
 
+  &__items-count span{
+    color: #CA354F;
+  }
+
+  &__clear{
+    display:flex;
+    align-items: center;
+    gap:5px;
+    position: absolute;
+    right: 350px;
+    bottom: 0;
+  }
+
+  &__header{
+    position:relative;
+  }
+
   &__item {
     display: flex;
-    align-items: flex-start;
-    background: #f8f8fa;
-    border-radius: 14px;
-    padding: 18px 20px;
-    gap: 20px;
-    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.03);
+    height:125px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
     position: relative;
+    margin: 24px 0;
+    padding: 0;
 
-    &-image {
-      width: 90px;
-      height: 90px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #fff;
-      border: 1px solid #ececec;
+    &-img-block {
+      position: relative;
+
+      .cart__item-image {
+        width: 125px;
+        height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #fff;
+        border: 1px solid #ececec;
+      }
+
+      .product__like {
+        position: absolute;
+        font-size: 0px;
+        right:5px;
+        top:5px;
+        z-index: 2;
+      }
     }
 
     &-info {
@@ -69,10 +157,19 @@
     }
 
     &-name {
-      font-size: 17px;
-      font-weight: 500;
-      margin-bottom: 2px;
-      color: #222;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    &-technology {
+      font-family: 'EuropeExt', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     &-params {
@@ -87,46 +184,35 @@
       font-weight: 500;
     }
 
-    &-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 8px;
-
-      .product__like {
-        position: initial;
-        font-size: 0px;
-        z-index: 2;
-      }
-
-    }
-
     &-quantity {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 20px;
       padding: 2px 8px;
       height: 36px;
+      font-weight: 400;
+      font-size: 20px;
+      font-family: 'Manrope', sans-serif;
 
       &-btn {
-        width: 28px;
-        height: 28px;
+        aspect-ratio: 1;
+        width: 50px;
         border: none;
-        background: #f0f0f5;
-        color: #a95cff;
+        background: #f2f2f2;
+        color: black;
         font-size: 20px;
-        border-radius: 6px;
+        border-radius: 50%;
         cursor: pointer;
-        transition: 0.2s;
-        padding-bottom:5px !important;
+        transition: 0.3s;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
       }
 
-      &-btn:active {
-        background: #e2d6f7;
+      &-btn:hover {
+        background: #CA354F;
+        color:white;
       }
 
       &-input {
@@ -149,32 +235,50 @@
     }
 
     &-remove {
-      background: none;
-      border: none;
-      color: #b0b0b0;
-      font-size: 0px;
-      cursor: pointer;
-      margin-left: 8px;
-      transition: color 0.15s;
+      height:100%;
+      width: 30px;
+      background: #f2f2f2;
+      transition: 0.3s;
 
-      &:hover {
-        color: #ff4444;
+      svg{
+        path{
+          transition: 0.3s;
+        }
+      }
+    }
+
+    &-remove:hover {
+      background: #CA354F;
+
+      svg{
+        path{
+          fill:white;
+        }
       }
     }
 
     &-price-block {
       display: flex;
-      flex-direction: column;
+      gap:10px;
       align-items: flex-end;
       min-width: 110px;
       margin-left: 16px;
     }
 
     &-price {
-      color: #ff2222;
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 2px;
+      font-family: 'Manrope', sans-serif;
+
+      &--old{
+        text-decoration: line-through;
+        color: #888;
+        font-weight: 400;
+        font-size: 18px;
+      }
+
+      &--new{
+        font-weight: 600;
+        font-size: 20px;
+      }
     }
   }
 
@@ -238,25 +342,97 @@
     margin-right: 8px;
   }
 
-  &__summary-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 18px;
-    margin-top: 32px;
-    font-size: 22px;
-    font-weight: 600;
+  &__summary{
+    background: #F2F2F2;
+
+    &-item{
+      padding: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display:flex;
+      flex-direction: column;
+      gap:10px;
+
+      &-name{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+    }
+
+    &-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    &-arrow {
+      transition: transform 0.3s ease;
+
+      &--open {
+        transform: rotate(180deg);
+      }
+    }
+
+    input {
+      height:65px;
+      border-radius: 32px; 
+      background: rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      border: none;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: black;
+      outline: none;
+
+      &:focus {
+        border-color: #CA354F;
+      }
+    }
+
+    &-text{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &-value{
+      color: #CA354F;
+    }
+
+    &-button{
+      background: #CA354F;
+      color: white;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      width:245px;
+      height: 65px;
+      box-sizing:content-box;
+      border-radius: 32px;
+      margin: 20px;
+      transition: 0.3s;
+
+      &:hover{
+        background: #b12e43;
+        color: black;
+      }
+    }
   }
 
-  &__summary-label {
-    font-size: 22px;
-    font-weight: 600;
-  }
-
-  &__summary-sum {
-    font-size: 22px;
-    font-weight: 700;
-    margin-left: 10px;
-    margin-right: 24px;
-  }
+  
 } 
