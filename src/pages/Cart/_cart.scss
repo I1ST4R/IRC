@@ -280,6 +280,68 @@
         font-size: 20px;
       }
     }
+
+    &-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    &-error {
+      position: absolute;
+      top: -20px;
+      left: 0;
+      color: #CA354F;
+      font-size: 12px;
+      font-weight: 400;
+      background: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &-success {
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      color: #00b956;
+      font-size: 12px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &-clear {
+      background: none;
+      border: none;
+      color: #00b956;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      transition: 0.3s;
+
+      &:hover {
+        background: rgba(0, 185, 86, 0.1);
+      }
+    }
+
+    &-certificate-info {
+      display: block;
+      color: #CA354F;
+      font-size: 12px;
+      margin-left: 10px;
+      font-weight: 600;
+    }
   }
 
   &__total {

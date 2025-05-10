@@ -9,3 +9,8 @@ export interface CartItem {
   productId: string;
   quantity: number;
 }
+
+export interface LikedItem {
+  productId: string;
+}
+

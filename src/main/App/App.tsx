@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppDispatch } from '../store';
 import { fetchCart } from '../../entity/products/cartSlice';
+import { fetchLiked } from '../../entity/products/likedSlice';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
@@ -24,15 +25,16 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const loadCart = async () => {
+    const loadCartAndLiked = async () => {
       try {
         const userId = getUserId();
         await dispatch(fetchCart(userId)).unwrap();
+        await dispatch(fetchLiked(userId)).unwrap();
       } catch (error) {
-        console.error('Failed to load cart:', error);
+        console.error('Failed to load cart or liked:', error);
       }
     };
-    loadCart();
+    loadCartAndLiked();
   }, [dispatch, getUserId]);
 
   return (

@@ -1,15 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import {
-  fetchCart,
-  removeItemFromCart,
-  updateItemQuantity,
-  clearCart,
-} from "../../entity/products/cartSlice.ts";
+import { fetchCart, removeItemFromCart, updateItemQuantity, clearCart } from "../../entity/products/cartSlice.ts";
 import { toggleLike } from "../../entity/users/users.slice";
 import { fetchProducts } from "../../entity/products/products.slice";
+import { validatePromoCode, clearPromo } from "../../entity/promo/promo.slice";
+import { validateCertificateCode, clearCertificate } from "../../entity/certificates/certificates.slice";
 import cart from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import promo from "./promo.svg";
@@ -31,8 +28,13 @@ export const Cart: React.FC = () => {
     error: productsError,
   } = useSelector((state: RootState) => state.products);
   const { likedIds } = useSelector((state: RootState) => state.user);
-  const [isPromoOpen, setIsPromoOpen] = React.useState(false);
-  const [isCertificateOpen, setIsCertificateOpen] = React.useState(false);
+  const { code: promoCode, discount: promoDiscount, error: promoError } = useSelector((state: RootState) => state.promo);
+  const { code: certificateCode, amount: certificateAmount, error: certificateError } = useSelector((state: RootState) => state.certificates);
+  
+  const [isPromoOpen, setIsPromoOpen] = useState(false);
+  const [isCertificateOpen, setIsCertificateOpen] = useState(false);
+  const [promoInput, setPromoInput] = useState("");
+  const [certificateInput, setCertificateInput] = useState("");
 
   useEffect(() => {
     if (userId) {
@@ -89,6 +91,59 @@ export const Cart: React.FC = () => {
       if (!product || !product.prevPrice) return sum;
       return sum + (product.prevPrice - product.price) * item.quantity;
     }, 0);
+  };
+
+  const handlePromoSubmit = async () => {
+    if (!promoInput.trim()) {
+      return;
+    }
+    dispatch(validatePromoCode(promoInput));
+  };
+
+  const handleCertificateSubmit = async () => {
+    if (!certificateInput.trim()) {
+      return;
+    }
+    dispatch(validateCertificateCode(certificateInput));
+  };
+
+  // Функция для расчёта скидки по промокоду
+  const getPromoDiscountValue = () => {
+    if (promoDiscount) {
+      // Скидка по промокоду применяется к сумме после товарных скидок
+      return Math.round(getCartTotal(true) * (promoDiscount / 100));
+    }
+    return 0;
+  };
+
+  // Чистая функция для расчёта скидки по сертификату
+  const getCertificateDiscountValue = () => {
+    const afterPromo = getCartTotal(true) - getPromoDiscountValue();
+    console.log('certificateAmount:', certificateAmount, 'afterPromo:', afterPromo);
+    if (certificateAmount && afterPromo > 0) {
+      const applied = Math.min(certificateAmount, afterPromo);
+      console.log('applied certificate:', applied);
+      return applied;
+    }
+    return 0;
+  };
+
+  // Итоговая сумма
+  const getFinalPrice = () => {
+    const afterPromo = getCartTotal(true) - getPromoDiscountValue();
+    const afterCertificate = afterPromo - getCertificateDiscountValue();
+    console.log('getFinalPrice:', { afterPromo, afterCertificate });
+    return afterCertificate > 0 ? Math.round(afterCertificate) : 0;
+  };
+
+  // Обработка нажатия на кнопку оформления заказа: если промокод или сертификат введены, но не валидированы, запускаем их валидацию
+  const handleCheckout = async () => {
+    if (promoInput && !promoCode) {
+      await dispatch(validatePromoCode(promoInput));
+    }
+    if (certificateInput && !certificateCode) {
+      await dispatch(validateCertificateCode(certificateInput));
+    }
   };
 
   const loading = cartLoading || productsLoading === "pending";
@@ -258,7 +313,6 @@ export const Cart: React.FC = () => {
         </div>
 
         <div className="cart__summary">
-
           <p className="cart__summary-item">Ваш заказ</p>
 
           <div className="cart__summary-item">
@@ -274,13 +328,29 @@ export const Cart: React.FC = () => {
                 {getTotalDiscount()} ₽
               </span>
             </div>
+            {(promoDiscount ?? 0) > 0 && (
+              <div className="cart__summary-text">
+                <span className="cart__summary-label">Скидка по промокоду:</span>
+                <span className="cart__summary-value cart__summary-value--discount">
+                  {getPromoDiscountValue()} ₽
+                </span>
+              </div>
+            )}
+            {(certificateAmount ?? 0) > 0 && (
+              <div className="cart__summary-text">
+                <span className="cart__summary-label">Сертификат:</span>
+                <span className="cart__summary-value cart__summary-value--discount">
+                  {getCertificateDiscountValue()} ₽
+                </span>
+              </div>
+            )}
             <div className="cart__summary-text">
               <span className="cart__summary-label">Доставка:</span>
               <span className="cart__summary-value">0 ₽</span>
             </div>
             <div className="cart__summary-text">
               <span className="cart__summary-label">Всего к оплате:</span>
-              <span className="cart__summary-value">{getCartTotal(true)} ₽</span>
+              <span className="cart__summary-value">{getFinalPrice()} ₽</span>
             </div>
           </div>
 
@@ -305,8 +375,33 @@ export const Cart: React.FC = () => {
               </svg>
             </div>
             {isPromoOpen && (
-              <input type="text" placeholder="промокод" />
-              
+              <div className="cart__summary-input-wrapper">
+                {promoError && <div className="cart__summary-error">{promoError}</div>}
+                <input 
+                  type="text" 
+                  placeholder="промокод" 
+                  value={promoInput}
+                  onChange={(e) => {
+                    setPromoInput(e.target.value);
+                    if (promoError) dispatch(clearPromo());
+                  }}
+                  onKeyPress={(e) => e.key === 'Enter' && handlePromoSubmit()}
+                />
+                {promoCode && (
+                  <div className="cart__summary-success">
+                    Промокод применен
+                    <button 
+                      className="cart__summary-clear"
+                      onClick={() => {
+                        dispatch(clearPromo());
+                        setPromoInput('');
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
           
@@ -331,12 +426,42 @@ export const Cart: React.FC = () => {
               </svg>
             </div>
             {isCertificateOpen && (
-              <input type="text" placeholder="сертификат" />
+              <div className="cart__summary-input-wrapper">
+                {certificateError && <div className="cart__summary-error">{certificateError}</div>}
+                <input 
+                  type="text" 
+                  placeholder="сертификат" 
+                  value={certificateInput}
+                  onChange={(e) => {
+                    setCertificateInput(e.target.value);
+                    if (certificateError) dispatch(clearCertificate());
+                  }}
+                  onKeyPress={(e) => e.key === 'Enter' && handleCertificateSubmit()}
+                />
+                {certificateCode && (
+                  <div className="cart__summary-success">
+                    Сертификат применен
+                    <button 
+                      className="cart__summary-clear"
+                      onClick={() => {
+                        dispatch(clearCertificate());
+                        setCertificateInput('');
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
-          <button className="cart__summary-button">Оформить заказ</button>
-
+          <button 
+            className="cart__summary-button"
+            onClick={handleCheckout}
+          >
+            Оформить заказ
+          </button>
         </div>
       </div>
     </div>

@@ -3,7 +3,10 @@ import productsReducer from '../entity/products/products.slice';
 import filterReducer from '../entity/products/filterSlice';
 import categoriesReducer from '../entity/productCategories/categoriesSlice';
 import cartReducer from '../entity/products/cartSlice';
+import likedReducer from '../entity/products/likedSlice';
 import userReducer from '../entity/users/users.slice';
+import promoReducer from '../entity/promo/promo.slice';
+import certificatesReducer from '../entity/certificates/certificates.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
 
@@ -48,7 +51,10 @@ export const store = configureStore({
     filter: filterReducer,
     categories: categoriesReducer,
     cart: cartReducer,
+    liked: likedReducer,
     user: userReducer,
+    promo: promoReducer,
+    certificates: certificatesReducer,
   }
 });
 

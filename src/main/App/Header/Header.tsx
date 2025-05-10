@@ -19,7 +19,10 @@ const Header: React.FC = () => {
   const counter = useRef(0);
   const { toggleAccount } = usePersonalAccount();
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const likedItems = useSelector((state: RootState) => state.liked.items);
+  const totalLikedItems = likedItems.length;
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,18 +117,18 @@ const Header: React.FC = () => {
             <img src={personalAcc} alt="personal-acc" />
           </button>
 
-          <a href="#" className="header__button" id="liked__container1">
+          <Link to="/liked" className="header__button" id="liked__container1">
             <img src={liked} alt="liked" />
             <div className="counter" id="liked__counter">
-              5
+            {totalLikedItems}
             </div>
-          </a>
+          </Link>
 
           <Link to="/cart" className="header__button" id="basket__container1">
             <img src={basket} alt="basket" />
-            {totalItems > 0 && (
+            {totalCartItems > 0 && (
               <div className="counter" id="basket-counter">
-                {totalItems}
+                {totalCartItems}
               </div>
             )}
           </Link>

@@ -3,6 +3,7 @@ import { Home } from '../pages/Home/Home';
 import { Catalog } from '../pages/Catalog/Catalog';
 import { AuthForm } from '../pages/Auth/AuthForm';
 import { Cart } from '../pages/Cart/Cart';
+import { Liked } from '../pages/Liked/Liked';
 import App from '../main/App/App';
 
 export const router = createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: '/cart',
         element: <Cart />,
+      },
+      {
+        path: '/liked',
+        element: <Liked />,
       },
     ],
   },

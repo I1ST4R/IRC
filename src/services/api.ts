@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {FilterParams} from './types'
 import {CartItem} from './types'
+import {LikedItem} from './types'
 
 const API_URL = 'http://localhost:3000';
 
@@ -143,6 +144,84 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     return response.data.cart;
   } catch (error) {
     console.error('Error updating cart quantity:', error);
+    throw error;
+  }
+};
+
+//Liked
+export const getLiked = async (userId: string) => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    if (!response.data.liked) {
+      await api.patch(`/users/${userId}`, { liked: [] });
+      return [];
+    }
+    return response.data.liked;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addToLiked = async (userId: string, productId: string) => {
+  try {
+    const user = await api.get(`/users/${userId}`);
+    const liked = user.data.liked || [];
+    
+    const existingItem = liked.find((item: LikedItem) => item.productId === productId);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      liked.push({ productId, quantity: 1 });
+    }
+    
+    const response = await api.patch(`/users/${userId}`, { liked });
+    return response.data.liked;
+  } catch (error) {
+    console.error('Error adding to liked:', error);
+    throw error;
+  }
+}
+
+export const removeFromLiked = async (userId: string, productId: string) => {
+  try {
+    const user = await api.get(`/users/${userId}`);
+    const liked = (user.data.liked || []).filter((item: LikedItem) => item.productId !== productId);
+    
+    const response = await api.patch(`/users/${userId}`, { liked });
+    return response.data.liked;
+  } catch (error) {
+    console.error('Error removing from liked:', error);
+    throw error;
+  }
+};
+
+//Promo
+export const validatePromo = async (code: string) => {
+  try {
+    const response = await api.get(`/promo?code=${code}`);
+    if (response.data && response.data.length > 0) {
+      return { valid: true, code: response.data[0].code, discount: response.data[0].discount };
+    } else {
+      return { valid: false, message: 'Промокод не найден' };
+    }
+  } catch (error) {
+    console.error('Error validating promo:', error);
+    throw error;
+  }
+};
+
+//Certificates
+export const validateCertificate = async (code: string) => {
+  try {
+    const response = await api.get(`/certificates?code=${code}`);
+    if (response.data && response.data.length > 0) {
+      const cert = response.data[0];
+      return { valid: true, code: cert.code, amount: cert.amount };
+    } else {
+      return { valid: false, message: 'Сертификат не найден' };
+    }
+  } catch (error) {
+    console.error('Error validating certificate:', error);
     throw error;
   }
 };

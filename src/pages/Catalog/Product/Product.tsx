@@ -5,17 +5,19 @@ import { RootState, AppDispatch } from "../../../main/store";
 import { addItemToCart, fetchCart } from "../../../entity/products/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toggleLike } from '../../../entity/users/users.slice';
+import { addItemToLiked, fetchLiked } from "@/entity/products/likedSlice";
 
 const USER_ID_KEY = 'currentUserId';
 
 interface ProductProps {
   product: ProductType;
+  onRemoveFromLiked?: () => void;
 }
 
-export const Product = ({ product }: ProductProps) => {
+export const Product = ({ product, onRemoveFromLiked }: ProductProps) => {
   const categories = useSelector((state: RootState) => state.categories?.categories || []);
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  const likedIds = useSelector((state: RootState) => state.user.likedIds);
+  const likedItems = useSelector((state: RootState) => state.liked.items);
   const userId = localStorage.getItem(USER_ID_KEY) || 'anpri65';
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -32,10 +34,15 @@ export const Product = ({ product }: ProductProps) => {
   }, [dispatch, userId]);
 
   const isInCart = cartItems.some(item => item.productId === product.id);
-  const isLiked = likedIds.includes(product.id);
+  const isLiked = likedItems.some(item => item.productId === product.id);
 
-  const handleLike = () => {
-    dispatch(toggleLike({ userId, productId: product.id, likedIds }));
+  const handleLike = async () => {
+    if (onRemoveFromLiked) {
+      onRemoveFromLiked();
+    } else {
+      await dispatch(addItemToLiked({ userId, productId: product.id }));
+      await dispatch(fetchLiked(userId));
+    }
   };
 
   const handleCartClick = async () => {

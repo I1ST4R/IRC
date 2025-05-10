@@ -9,10 +9,19 @@
       "cart": [
         {
           "productId": "1",
-          "quantity": 6
+          "quantity": 1
         }
       ],
-      "liked": []
+      "liked": [
+        {
+          "productId": "1",
+          "quantity": 2
+        },
+        {
+          "productId": "2",
+          "quantity": 1
+        }
+      ]
     },
     {
       "id": "l2yj3zb",
@@ -20,7 +29,8 @@
       "password": "test",
       "email": "test",
       "type": "user",
-      "cart": []
+      "cart": [],
+      "liked": []
     }
   ],
   "products": [
@@ -553,7 +563,7 @@
       ]
     }
   ],
-  "promo":[
+  "promo": [
     {
       "id": "1",
       "used": false,
@@ -567,18 +577,18 @@
       "discount": 20
     }
   ],
-  "certificates":[
+  "certificates": [
     {
       "id": "1",
       "used": false,
       "code": "SERTIFICATE1000",
-      "discount": 1000
+      "amount": 1000
     },
     {
       "id": "2",
       "used": false,
       "code": "SERTIFICATE2000",
-      "discount": 2000
+      "amount": 2000
     }
   ]
 }
