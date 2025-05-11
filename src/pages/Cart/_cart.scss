@@ -41,6 +41,7 @@
     font-family: 'Manrope', sans-serif;
     font-weight: 800;
     font-size: 12px;
+    margin: 0 0 20px 40px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     
@@ -98,7 +99,7 @@
   &__items {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
   }
 
   &__items-count span{
@@ -119,24 +120,59 @@
   }
 
   &__item {
-    display: flex;
-    height:125px;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 20px 125px 250px auto auto 30px;
+    gap:20px;
     align-items: center;
-    gap: 30px;
-    position: relative;
-    margin: 24px 0;
-    padding: 0;
+    background: #fff;
+    border-radius: 8px;
+
+    &-checkbox {
+      margin-right: 15px;
+      
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+        appearance: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:checked {
+          background-color: #CA354F;
+          border-color: #CA354F;
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-top: -2px;
+          }
+        }
+
+        &:hover {
+          border-color: #CA354F;
+        }
+      }
+    }
 
     &-img-block {
       position: relative;
 
       .cart__item-image {
         width: 125px;
-        height: 100%;
-        border-radius: 8px;
-        object-fit: cover;
-        background: #fff;
+        height: 125px;
+        object-fit: contain;
+        background: #f2f2f2;
         border: 1px solid #ececec;
       }
 

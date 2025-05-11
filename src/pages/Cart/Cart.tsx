@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { fetchCart, removeItemFromCart, updateItemQuantity, clearCart } from "../../entity/products/cartSlice.ts";
+import { 
+  fetchCart, 
+  removeItemFromCart, 
+  updateItemQuantity, 
+  clearCart,
+  toggleItemSelection,
+  selectAllItems,
+  deselectAllItems
+} from "../../entity/products/cartSlice";
 import { toggleLike } from "../../entity/users/users.slice";
 import { fetchProducts } from "../../entity/products/products.slice";
 import { validatePromoCode, clearPromo } from "../../entity/promo/promo.slice";
@@ -16,11 +24,12 @@ const USER_ID_KEY = "currentUserId";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = localStorage.getItem(USER_ID_KEY) || "";
+  const userId = localStorage.getItem(USER_ID_KEY) || "anpri65";
   const {
     items,
     loading: cartLoading,
     error: cartError,
+    selectedItems
   } = useSelector((state: RootState) => state.cart);
   const {
     items: products,
@@ -78,15 +87,24 @@ export const Cart: React.FC = () => {
     return price * quantity;
   };
 
-  const getCartTotal = (withDiscount: boolean = true) =>
-    items.reduce((sum, item) => {
+  const getCartTotal = (withDiscount: boolean = true) => {
+    const itemsToCalculate = selectedItems.length > 0 
+      ? items.filter(item => selectedItems.includes(item.productId))
+      : items;
+
+    return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
       if (!product) return sum;
       return sum + getItemTotal(product, item.quantity, withDiscount);
     }, 0);
+  };
 
   const getTotalDiscount = () => {
-    return items.reduce((sum, item) => {
+    const itemsToCalculate = selectedItems.length > 0 
+      ? items.filter(item => selectedItems.includes(item.productId))
+      : items;
+
+    return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
       if (!product || !product.prevPrice) return sum;
       return sum + (product.prevPrice - product.price) * item.quantity;
@@ -207,6 +225,13 @@ export const Cart: React.FC = () => {
 
             return (
               <div key={item.productId} className="cart__item">
+                <div className="cart__item-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.productId)}
+                    onChange={() => dispatch(toggleItemSelection(item.productId))}
+                  />
+                </div>
                 <div className="cart__item-img-block">
                   <img
                     src={product.img}

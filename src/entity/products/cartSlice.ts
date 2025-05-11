@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getCart, addToCart, removeFromCart, updateCartItemQuantity } from '../../services/api';
 
 interface CartItem {
@@ -9,9 +9,17 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  selectedItems: string[];
   loading: boolean;
   error: string | null;
 }
+
+const initialState: CartState = {
+  items: [],
+  selectedItems: [],
+  loading: false,
+  error: null,
+};
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
@@ -85,14 +93,25 @@ export const clearCart = createAsyncThunk(
   }
 );
 
-const cartSlice = createSlice({
+export const cartSlice = createSlice({
   name: 'cart',
-  initialState: {
-    items: [],
-    loading: false,
-    error: null
-  } as CartState,
-  reducers: {},
+  initialState,
+  reducers: {
+    toggleItemSelection: (state, action: PayloadAction<string>) => {
+      const index = state.selectedItems.indexOf(action.payload);
+      if (index === -1) {
+        state.selectedItems.push(action.payload);
+      } else {
+        state.selectedItems.splice(index, 1);
+      }
+    },
+    selectAllItems: (state) => {
+      state.selectedItems = state.items.map(item => item.productId);
+    },
+    deselectAllItems: (state) => {
+      state.selectedItems = [];
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
@@ -130,5 +149,11 @@ const cartSlice = createSlice({
       });
   }
 });
+
+export const { 
+  toggleItemSelection,
+  selectAllItems,
+  deselectAllItems
+} = cartSlice.actions;
 
 export default cartSlice.reducer; 
