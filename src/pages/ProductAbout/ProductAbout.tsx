@@ -95,6 +95,11 @@ export const ProductAbout = ({ onRemoveFromLiked }: { onRemoveFromLiked?: () => 
           </div>
           <h3 className="product__name">{product.name}</h3>
           <h3 className="product__technology">{product.technology}</h3>
+          <h3 className="product__technology">{product.article}</h3>
+          <h3 className="product__technology">{product.description}</h3>
+          <h3 className="product__technology">{product.formula}</h3>
+          <h3 className="product__technology">{product.for_what}</h3>
+          <h3 className="product__technology">{product.skin_type}</h3>
           <div className="product__prices">
             <span>{product.price} ₽</span>
             <span className="product__prev-price">{product.prevPrice} ₽</span>
