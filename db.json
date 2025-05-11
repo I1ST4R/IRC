@@ -10,15 +10,19 @@
         {
           "productId": "1",
           "quantity": 1
+        },
+        {
+          "productId": "2",
+          "quantity": 1
         }
       ],
       "liked": [
         {
-          "productId": "1",
-          "quantity": 2
+          "productId": "2",
+          "quantity": 6
         },
         {
-          "productId": "2",
+          "productId": "3",
           "quantity": 1
         }
       ]

@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag } from "../../../entity/products/filterSlice";
+import { setPriceRange, toggleTag, resetFilters } from "../../../entity/products/filterSlice";
 import { RootState } from "../../../main/store";
 import { getCategories } from "../../../services/api";
 import { setCategories, setLoading, setError } from "../../../entity/productCategories/categoriesSlice";
-import "./_menu.scss";
+import reset from "./reset.svg";
 
 interface AccordionItemProps {
   title: string;
@@ -112,6 +112,11 @@ export const Menu = () => {
     return filter?.selectedTags.some(t => t === tagString) || false;
   };
 
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+    setLocalPriceRange({ min: 500, max: 10000 });
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!filter || !categories) return null;
@@ -177,6 +182,14 @@ export const Menu = () => {
           </div>
         </AccordionItem>
       ))}
+
+      <button 
+        className="menu__reset-btn"
+        onClick={handleResetFilters}
+      >
+        <img src={reset} alt="reset" />
+        очистить
+      </button>
     </div>
   );
 }; 

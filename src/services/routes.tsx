@@ -4,7 +4,8 @@ import { Catalog } from '../pages/Catalog/Catalog';
 import { AuthForm } from '../pages/Auth/AuthForm';
 import { Cart } from '../pages/Cart/Cart';
 import { Liked } from '../pages/Liked/Liked';
-import App from '../main/App/App';
+import App from '../main/App/App';  
+import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: '/liked',
         element: <Liked />,
+      },
+      {
+        path: '/product/:id',
+        element: <ProductAbout />,
       },
     ],
   },

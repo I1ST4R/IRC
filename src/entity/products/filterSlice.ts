@@ -25,9 +25,13 @@ const filterSlice = createSlice({
       } else {
         state.selectedTags.splice(index, 1);
       }
+    },
+    resetFilters: (state) => {
+      state.priceRange = initialState.priceRange;
+      state.selectedTags = [];
     }
   }
 });
 
-export const { setPriceRange, toggleTag } = filterSlice.actions;
+export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions;
 export default filterSlice.reducer; 
