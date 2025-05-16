@@ -6,11 +6,9 @@ import { fetchLiked, removeItemFromLiked } from "@/entity/products/likedSlice";
 import { fetchProducts } from "@/entity/products/products.slice";
 import { Product } from "../Catalog/Product/Product";
 
-const USER_ID_KEY = "currentUserId";
-
 export const Liked = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = localStorage.getItem(USER_ID_KEY) || "";
+  const { user } = useSelector((state: RootState) => state.user);
   const { items, loading: likedLoading, error: likedError } = useSelector((state: RootState) => state.liked);
   const { items: products, loading: productsLoading, error: productsError,} = useSelector((state: RootState) => state.products);
   const likedItems = useSelector((state: RootState) => state.liked.items);
@@ -18,15 +16,15 @@ export const Liked = () => {
   const likedProducts = products.filter((product) => likedProductIds.includes(product.id));
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchLiked(userId));
+    if (user?.id) {
+      dispatch(fetchLiked(user.id.toString()));
       dispatch(fetchProducts({ page: 1 }));
     }
-  }, [dispatch, userId]);
+  }, [dispatch, user?.id]);
 
   const handleRemoveItem = (productId: string) => {
-    if (userId) {
-      dispatch(removeItemFromLiked({ userId, productId }));
+    if (user?.id) {
+      dispatch(removeItemFromLiked({ userId: user.id.toString(), productId }));
     }
   };
 
@@ -78,7 +76,7 @@ export const Liked = () => {
           <Product
             key={`product-${product.id}`}
             product={product}
-            onRemoveFromLiked={() => dispatch(removeItemFromLiked({ userId, productId: product.id }))}
+            onRemoveFromLiked={() => handleRemoveItem(product.id)}
           />
         ))}
       </div>

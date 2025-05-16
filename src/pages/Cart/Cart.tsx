@@ -9,8 +9,13 @@ import {
   clearCart,
   toggleItemSelection,
   selectAllItems,
-  deselectAllItems
+  deselectAllItems,
+  clearCartOnLogout
 } from "../../entity/products/cartSlice";
+import { 
+  fetchLiked,
+  clearLikedOnLogout
+} from "../../entity/products/likedSlice";
 import { toggleLike } from "../../entity/users/users.slice";
 import { fetchProducts } from "../../entity/products/products.slice";
 import { validatePromoCode, clearPromo } from "../../entity/promo/promo.slice";
@@ -19,14 +24,14 @@ import cart from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import promo from "./promo.svg";
 import certificate from "./certificate.svg";
+import { useAppSelector } from "../../main/store";
 
-const USER_ID_KEY = "currentUserId";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = localStorage.getItem(USER_ID_KEY) || "anpri65";
+  const { user } = useAppSelector((state) => state.user);
   const {
-    items,
+    items: cartItems,
     loading: cartLoading,
     error: cartError,
     selectedItems
@@ -40,40 +45,51 @@ export const Cart: React.FC = () => {
   const { code: promoCode, discount: promoDiscount, error: promoError } = useSelector((state: RootState) => state.promo);
   const { code: certificateCode, amount: certificateAmount, error: certificateError } = useSelector((state: RootState) => state.certificates);
   
+  console.log('[Cart.tsx] Rendering with props/state:', {
+    user,
+    cartItems,
+    cartLoading,
+    cartError,
+    selectedItems,
+    products,
+    productsLoading,
+    productsError,
+    likedIds,
+  });
+
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [promoInput, setPromoInput] = useState("");
   const [certificateInput, setCertificateInput] = useState("");
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchCart(userId));
-      dispatch(fetchProducts({ page: 1 }));
+    if (user?.id) {
+      dispatch(fetchCart(user.id.toString()));
     }
-  }, [dispatch, userId]);
+  }, [dispatch, user?.id]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (userId && newQuantity > 0) {
+    if (user && user.id && newQuantity > 0) {
       dispatch(
-        updateItemQuantity({ userId, productId, quantity: newQuantity })
+        updateItemQuantity({ userId: user.id.toString(), productId, quantity: newQuantity })
       );
     }
   };
 
   const handleRemoveItem = (productId: string) => {
-    if (userId) {
-      dispatch(removeItemFromCart({ userId, productId }));
+    if (user && user.id) {
+      dispatch(removeItemFromCart({ userId: user.id.toString(), productId }));
     }
   };
 
   const handleClearCart = () => {
-    if (userId) {
-      dispatch(clearCart(userId));
+    if (user && user.id) {
+      dispatch(clearCart(user.id.toString()));
     }
   };
 
   const getTotalItems = () => {
-    return items.reduce((total, item) => total + item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
   const getItemTotal = (
@@ -89,8 +105,8 @@ export const Cart: React.FC = () => {
 
   const getCartTotal = (withDiscount: boolean = true) => {
     const itemsToCalculate = selectedItems.length > 0 
-      ? items.filter(item => selectedItems.includes(item.productId))
-      : items;
+      ? cartItems.filter(item => selectedItems.includes(item.productId))
+      : cartItems;
 
     return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
@@ -101,8 +117,8 @@ export const Cart: React.FC = () => {
 
   const getTotalDiscount = () => {
     const itemsToCalculate = selectedItems.length > 0 
-      ? items.filter(item => selectedItems.includes(item.productId))
-      : items;
+      ? cartItems.filter(item => selectedItems.includes(item.productId))
+      : cartItems;
 
     return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
@@ -168,6 +184,7 @@ export const Cart: React.FC = () => {
   const error = cartError || productsError;
 
   if (loading) {
+    console.log('[Cart.tsx] Showing loading state');
     return (
       <div className="cart">
         <h2 className="cart__title">Корзина</h2>
@@ -177,10 +194,12 @@ export const Cart: React.FC = () => {
   }
 
   if (error) {
+    console.log('[Cart.tsx] Showing error state:', error);
     return <div className="cart__error">{error}</div>;
   }
 
-  if (items.length === 0) {
+  if (cartItems.length === 0) {
+    console.log('[Cart.tsx] cartItems.length is 0, showing empty cart message');
     return (
       <div className="cart__empty">
         <h2 className="cart__title">Корзина</h2>
@@ -204,7 +223,7 @@ export const Cart: React.FC = () => {
           <span className="cart__items-count">
             В корзине <span>{getTotalItems()}</span>
           </span>
-          {items.length > 0 && (
+          {cartItems.length > 0 && (
             <button
               onClick={handleClearCart}
               title="Очистить корзину"
@@ -218,8 +237,9 @@ export const Cart: React.FC = () => {
       </div>
       <div className="cart__body">
         <div className="cart__items">
-          {items.map((item) => {
+          {cartItems.map((item) => {
             const product = products.find((p) => p.id === item.productId);
+            console.log(`[Cart.tsx] Mapping item: ${item.productId}, found product:`, product);
             if (!product) return null;
             const itemTotal = getItemTotal(product, item.quantity);
 
@@ -244,11 +264,13 @@ export const Cart: React.FC = () => {
                         ? " product__like--active"
                         : ""
                     }`}
-                    onClick={() =>
-                      dispatch(
-                        toggleLike({ userId, productId: product.id, likedIds })
-                      )
-                    }
+                    onClick={() => {
+                      if (user && user.id) {
+                        dispatch(
+                          toggleLike({ userId: user.id.toString(), productId: product.id, likedIds })
+                        )
+                      }
+                    }}
                     title={
                       likedIds.includes(product.id)
                         ? "Убрать из избранного"

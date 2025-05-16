@@ -57,7 +57,15 @@ const likedSlice = createSlice({
     loading: false,
     error: null
   } as LikedState,
-  reducers: {},
+  reducers: {
+    clearLikedOnLogout: (state) => {
+      console.log('[likedSlice] Before clearLikedOnLogout:', JSON.parse(JSON.stringify(state.items)));
+      state.items = [];
+      state.loading = false;
+      state.error = null;
+      console.log('[likedSlice] After clearLikedOnLogout:', JSON.parse(JSON.stringify(state.items)));
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLiked.pending, (state) => {
@@ -67,6 +75,7 @@ const likedSlice = createSlice({
       .addCase(fetchLiked.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
+        console.log('[likedSlice] fetchLiked.fulfilled payload:', JSON.parse(JSON.stringify(action.payload)));
       })
       .addCase(fetchLiked.rejected, (state, action) => {
         state.loading = false;
@@ -81,4 +90,5 @@ const likedSlice = createSlice({
   }
 });
 
+export const { clearLikedOnLogout } = likedSlice.actions;
 export default likedSlice.reducer; 

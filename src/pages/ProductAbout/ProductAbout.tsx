@@ -6,8 +6,6 @@ import { addItemToCart, fetchCart } from "@/entity/products/cartSlice";
 import { addItemToLiked, fetchLiked } from "@/entity/products/likedSlice";
 import { fetchProducts } from "@/entity/products/products.slice";
 
-const USER_ID_KEY = 'currentUserId';
-
 export const ProductAbout = ({ onRemoveFromLiked }: { onRemoveFromLiked?: () => void }) => {
   const { id } = useParams();
   const products = useSelector((state: RootState) => state.products.items);
@@ -20,21 +18,23 @@ export const ProductAbout = ({ onRemoveFromLiked }: { onRemoveFromLiked?: () => 
   const categories = useSelector((state: RootState) => state.categories?.categories || []);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
-  const userId = localStorage.getItem(USER_ID_KEY) || 'anpri65';
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
-      try {
-        await dispatch(fetchProducts({ page: 1 }));
-        await dispatch(fetchCart(userId));
-      } catch (error) {
-        console.error('Failed to load data:', error);
+      if (user?.id) {
+        try {
+          await dispatch(fetchProducts({ page: 1 }));
+          await dispatch(fetchCart(user.id.toString()));
+        } catch (error) {
+          console.error('Failed to load data:', error);
+        }
       }
     };
     loadData();
-  }, [dispatch, userId]);
+  }, [dispatch, user?.id]);
 
   if (!product) return <div>Товар не найден</div>;
 
@@ -42,20 +42,24 @@ export const ProductAbout = ({ onRemoveFromLiked }: { onRemoveFromLiked?: () => 
   const isLiked = likedItems.some(item => item.productId === product.id);
 
   const handleLike = async () => {
+    if (!user?.id) return;
+    
     if (onRemoveFromLiked) {
       onRemoveFromLiked();
     } else {
-      await dispatch(addItemToLiked({ userId, productId: product.id }));
-      await dispatch(fetchLiked(userId));
+      await dispatch(addItemToLiked({ userId: user.id.toString(), productId: product.id }));
+      await dispatch(fetchLiked(user.id.toString()));
     }
   };
 
   const handleCartClick = async () => {
+    if (!user?.id) return;
+    
     if (isInCart) {
       navigate('/cart');
     } else {
       try {
-        await dispatch(addItemToCart({ userId, productId: product.id }));
+        await dispatch(addItemToCart({ userId: user.id.toString(), productId: product.id }));
       } catch (error) {
         console.error('Failed to add item to cart:', error);
       }

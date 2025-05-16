@@ -110,6 +110,14 @@ export const cartSlice = createSlice({
     },
     deselectAllItems: (state) => {
       state.selectedItems = [];
+    },
+    clearCartOnLogout: (state) => {
+      console.log('[cartSlice] Before clearCartOnLogout:', JSON.parse(JSON.stringify(state.items)));
+      state.items = [];
+      state.selectedItems = [];
+      state.loading = false;
+      state.error = null;
+      console.log('[cartSlice] After clearCartOnLogout:', JSON.parse(JSON.stringify(state.items)));
     }
   },
   extraReducers: (builder) => {
@@ -121,6 +129,7 @@ export const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
+        console.log('[cartSlice] fetchCart.fulfilled payload:', JSON.parse(JSON.stringify(action.payload)));
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
@@ -153,7 +162,8 @@ export const cartSlice = createSlice({
 export const { 
   toggleItemSelection,
   selectAllItems,
-  deselectAllItems
+  deselectAllItems,
+  clearCartOnLogout
 } = cartSlice.actions;
 
 export default cartSlice.reducer; 

@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../services/api';
 import { User, LoginData, RegisterData, UserState } from './types';
+import { fetchCart } from '../../products/cartSlice';
 
 const initialState: UserState = {
   user: null,
@@ -14,10 +15,23 @@ export const login = createAsyncThunk(
   'user/login',
   async (data: LoginData, { rejectWithValue }) => {
     try {
-      const response = await api.post<User>('/auth/login', data);
-      return response.data;
+      const response = await api.get<User[]>(`/users?login=${data.login}`);
+      if (response.data.length === 0) {
+        return rejectWithValue('User not found');
+      }
+      const user = response.data[0];
+      if (user.password !== data.password) {
+        return rejectWithValue('Invalid password');
+      }
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword as User;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to login');
+      if (error.response && error.response.data && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else if (error.message) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Failed to login');
     }
   }
 );
@@ -26,22 +40,59 @@ export const register = createAsyncThunk(
   'user/register',
   async (data: RegisterData, { rejectWithValue }) => {
     try {
-      const response = await api.post<User>('/auth/register', data);
-      return response.data;
+      const existingByLogin = await api.get<User[]>(`/users?login=${data.login}`);
+      if (existingByLogin.data.length > 0) {
+        return rejectWithValue('Login already exists');
+      }
+      const existingByEmail = await api.get<User[]>(`/users?email=${data.email}`);
+      if (existingByEmail.data.length > 0) {
+        return rejectWithValue('Email already exists');
+      }
+
+      const response = await api.post<User>('/users', data);
+      const { password, ...userWithoutPassword } = response.data;
+      return userWithoutPassword as User;
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to register');
+      if (error.response && error.response.data && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else if (error.message) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Failed to register');
     }
   }
 );
 
 export const checkAuth = createAsyncThunk(
   'user/checkAuth',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    console.log('[userSlice] checkAuth started');
     try {
-      const response = await api.get<User>('/auth/me');
-      return response.data;
+      const userId = localStorage.getItem('userId');
+      console.log('[userSlice] checkAuth: userId from localStorage:', userId);
+      if (!userId) {
+        console.log('[userSlice] checkAuth: No userId in localStorage, rejecting...');
+        return rejectWithValue('No user ID found in storage');
+      }
+      console.log(`[userSlice] checkAuth: Found userId ${userId}, attempting to fetch user...`);
+      const response = await api.get<User[]>(`/users?id=${userId}`);
+      console.log('[userSlice] checkAuth: API response received for /users?id=', response.data);
+      if (response.data.length === 0) {
+        console.log('[userSlice] checkAuth: User not found by ID, rejecting...');
+        return rejectWithValue('User not found by stored ID');
+      }
+      const user = response.data[0];
+      const { password, ...userWithoutPassword } = user;
+      console.log('[userSlice] checkAuth: User found, fulfilling with:', userWithoutPassword);
+      return fulfillWithValue(userWithoutPassword as User);
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to check auth');
+      console.error('[userSlice] checkAuth: CATCH block error:', error);
+      if (error.response && error.response.data && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else if (error.message) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Failed to check auth due to an unexpected error');
     }
   }
 );
@@ -79,6 +130,7 @@ const userSlice = createSlice({
       state.user = null;
       state.loading = 'idle';
       state.error = null;
+      localStorage.removeItem('userId');
     },
     clearError: (state) => {
       state.error = null;
@@ -93,6 +145,10 @@ const userSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.user = action.payload;
+        console.log('[userSlice] login.fulfilled, new user state:', JSON.parse(JSON.stringify(action.payload)));
+        if (action.payload && action.payload.id) {
+          localStorage.setItem('userId', action.payload.id.toString());
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = 'failed';
@@ -111,16 +167,22 @@ const userSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(checkAuth.pending, (state) => {
+        console.log('[userSlice] checkAuth.pending');
         state.loading = 'pending';
         state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
+        console.log('[userSlice] checkAuth.fulfilled, payload:', action.payload);
         state.loading = 'succeeded';
         state.user = action.payload;
       })
       .addCase(checkAuth.rejected, (state, action) => {
+        console.log('[userSlice] checkAuth.rejected, payload (error message):', action.payload);
         state.loading = 'failed';
         state.error = action.payload as string;
+        state.user = null;
+        localStorage.removeItem('userId');
+        console.log('[userSlice] checkAuth.rejected, user set to null, userId removed from localStorage');
       })
       .addCase(fetchUserLikes.fulfilled, (state, action) => {
         state.likedIds = action.payload;
