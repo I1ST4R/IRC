@@ -65,99 +65,101 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header
-      className="header"
-      ref={headerRef}
-      style={{ transform: isHeaderVisible ? "scaleY(1)" : "scaleY(0)" }}
-    >
-      <div className="container">
-        <button className="header__menu">
-          <img className="header__logo" src={logo} alt="logo" />
-          <p>МЕНЮ</p>
-        </button>
-
-        <div className="header__links">
-          <Link to="/catalog" className="header__link">
-            Каталог
-          </Link>
-          <a href="#" className="header__link">
-            Подобрать уход
-          </a>
-          <a href="#" className="header__link">
-            Акции
-          </a>
-          <a href="#" className="header__link">
-            Блог
-          </a>
-          <button
-            className={`header__link header__list-btn ${
-              isMenuActive ? "header__list-btn--active" : ""
-            }`}
-            ref={btnRef}
-            onClick={handleMenuClick}
-          >
-            <p>О бренде</p>
-            <img src={arrowDown} alt="arrow" />
-
-            <ul className="header__list" style={{ display: isMenuActive ? "flex" : "none" }}>
-              <li>
-                <a href="#">Доставки и оплата</a>
-              </li>
-              <li>
-                <a href="#">Где купить</a>
-              </li>
-              <li>
-                <a href="#">Программа лояльности</a>
-              </li>
-              <li>
-                <a href="#">Контакты</a>
-              </li>
-            </ul>
-          </button>
-        </div>
-
-        <div className="header__buttons">
-          <button className="header__button header__search">
-            <img src={search} alt="search" />
+    <>
+      <header
+        className="header"
+        ref={headerRef}
+        style={{ transform: isHeaderVisible ? "scaleY(1)" : "scaleY(0)" }}
+      >
+        <div className="container">
+          <button className="header__menu">
+            <img className="header__logo" src={logo} alt="logo" />
+            <p>МЕНЮ</p>
           </button>
 
-          {user ? (
-            <div className="header__user-info">
-              <button onClick={handleLogout} className="header__button header__logout" title="Выйти">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M14 4L12.59 5.41L18.17 11H2V13H18.17L12.59 18.59L14 20L22 12L14 4Z" fill="#333"/>
-                  <path d="M7 2H17V0H7V2Z" fill="#333" transform="rotate(90 17 2)" />
-                </svg>
-              </button>
-            </div>
-          ) : (
+          <div className="header__links">
+            <Link to="/catalog" className="header__link">
+              Каталог
+            </Link>
+            <a href="#" className="header__link">
+              Подобрать уход
+            </a>
+            <a href="#" className="header__link">
+              Акции
+            </a>
+            <a href="#" className="header__link">
+              Блог
+            </a>
             <button
-              className="header__button"
-              onClick={togglePersonalAccount}
+              className={`header__link header__list-btn ${
+                isMenuActive ? "header__list-btn--active" : ""
+              }`}
+              ref={btnRef}
+              onClick={handleMenuClick}
             >
-              <img src={personalAcc} alt="personal-acc" />
+              <p>О бренде</p>
+              <img src={arrowDown} alt="arrow" />
+
+              <ul className="header__list" style={{ display: isMenuActive ? "flex" : "none" }}>
+                <li>
+                  <a href="#">Доставки и оплата</a>
+                </li>
+                <li>
+                  <a href="#">Где купить</a>
+                </li>
+                <li>
+                  <a href="#">Программа лояльности</a>
+                </li>
+                <li>
+                  <a href="#">Контакты</a>
+                </li>
+              </ul>
             </button>
-          )}
+          </div>
 
-          <Link to="/liked" className="header__button" id="liked__container1">
-            <img src={liked} alt="liked" />
-            <div className="counter" id="liked__counter">
-            {totalLikedItems}
-            </div>
-          </Link>
+          <div className="header__buttons">
+            <button className="header__button header__search">
+              <img src={search} alt="search" />
+            </button>
 
-          <Link to="/cart" className="header__button" id="basket__container1">
-            <img src={basket} alt="basket" />
-            {totalCartItems > 0 && (
-              <div className="counter" id="basket-counter">
-                {totalCartItems}
+            {user ? (
+              <div className="header__user-info">
+                <button onClick={handleLogout} className="header__button header__logout" title="Выйти">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 4L12.59 5.41L18.17 11H2V13H18.17L12.59 18.59L14 20L22 12L14 4Z" fill="#333"/>
+                    <path d="M7 2H17V0H7V2Z" fill="#333" transform="rotate(90 17 2)" />
+                  </svg>
+                </button>
               </div>
+            ) : (
+              <button
+                className="header__button"
+                onClick={togglePersonalAccount}
+              >
+                <img src={personalAcc} alt="personal-acc" />
+              </button>
             )}
-          </Link>
+
+            <Link to="/liked" className="header__button" id="liked__container1">
+              <img src={liked} alt="liked" />
+              <div className="counter" id="liked__counter">
+              {totalLikedItems}
+              </div>
+            </Link>
+
+            <Link to="/cart" className="header__button" id="basket__container1">
+              <img src={basket} alt="basket" />
+              {totalCartItems > 0 && (
+                <div className="counter" id="basket-counter">
+                  {totalCartItems}
+                </div>
+              )}
+            </Link>
+          </div>
         </div>
-      </div>
+      </header>
       {isPersonalAccountOpen && <PersonalAccount onClose={togglePersonalAccount} />}
-    </header>
+    </>
   );
 };
 
