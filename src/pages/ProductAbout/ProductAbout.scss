@@ -1,0 +1,85 @@
+.product-about {
+  &__auth-block {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  &__auth-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #333;
+    font-size: 14px;
+    transition: opacity 0.2s;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__auth-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: "Manrope";
+    font-size: 14px;
+    line-height: 1.2;
+
+    a {
+      color: #CA354F;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__formula-container {
+    margin-top: 24px;
+  }
+
+  &__formula-title {
+    font-family: "Manrope";
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+  }
+
+  &__formula-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__formula-item {
+    font-family: "Manrope";
+    font-size: 16px;
+    color: #666;
+    line-height: 1.4;
+    padding-left: 24px;
+    position: relative;
+
+    &::before {
+      content: "•";
+      position: absolute;
+      left: 8px;
+      color: #CA354F;
+    }
+  }
+} 
