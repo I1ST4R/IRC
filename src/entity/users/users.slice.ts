@@ -17,11 +17,11 @@ export const login = createAsyncThunk(
     try {
       const response = await api.get<User[]>(`/users?login=${data.login}`);
       if (response.data.length === 0) {
-        return rejectWithValue('User not found');
+        return rejectWithValue('Пользователь не найден');
       }
       const user = response.data[0];
       if (user.password !== data.password) {
-        return rejectWithValue('Invalid password');
+        return rejectWithValue('Неверный пароль');
       }
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword as User;
@@ -31,7 +31,7 @@ export const login = createAsyncThunk(
       } else if (error.message) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue('Failed to login');
+      return rejectWithValue('Ошибка при входе');
     }
   }
 );
@@ -42,11 +42,11 @@ export const register = createAsyncThunk(
     try {
       const existingByLogin = await api.get<User[]>(`/users?login=${data.login}`);
       if (existingByLogin.data.length > 0) {
-        return rejectWithValue('Login already exists');
+        return rejectWithValue('Такой логин уже существует');
       }
       const existingByEmail = await api.get<User[]>(`/users?email=${data.email}`);
       if (existingByEmail.data.length > 0) {
-        return rejectWithValue('Email already exists');
+        return rejectWithValue('Такой email уже существует');
       }
 
       const response = await api.post<User>('/users', data);
@@ -58,7 +58,7 @@ export const register = createAsyncThunk(
       } else if (error.message) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue('Failed to register');
+      return rejectWithValue('Ошибка при регистрации');
     }
   }
 );
@@ -71,15 +71,15 @@ export const checkAuth = createAsyncThunk(
       const userId = localStorage.getItem('userId');
       console.log('[userSlice] checkAuth: userId from localStorage:', userId);
       if (!userId) {
-        console.log('[userSlice] checkAuth: No userId in localStorage, rejecting...');
-        return rejectWithValue('No user ID found in storage');
+        console.log('[userSlice] checkAuth: No userId in localStorage');
+        return fulfillWithValue(null);
       }
       console.log(`[userSlice] checkAuth: Found userId ${userId}, attempting to fetch user...`);
       const response = await api.get<User[]>(`/users?id=${userId}`);
       console.log('[userSlice] checkAuth: API response received for /users?id=', response.data);
       if (response.data.length === 0) {
         console.log('[userSlice] checkAuth: User not found by ID, rejecting...');
-        return rejectWithValue('User not found by stored ID');
+        return rejectWithValue('Пользователь не найден по сохраненному ID');
       }
       const user = response.data[0];
       const { password, ...userWithoutPassword } = user;
@@ -92,7 +92,7 @@ export const checkAuth = createAsyncThunk(
       } else if (error.message) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue('Failed to check auth due to an unexpected error');
+      return rejectWithValue('Ошибка при проверке авторизации');
     }
   }
 );

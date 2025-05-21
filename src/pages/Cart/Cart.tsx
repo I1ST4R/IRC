@@ -28,6 +28,7 @@ import cartGarbageIcon from "./cartGarbageIcon.svg";
 import promo from "./promo.svg";
 import certificate from "./certificate.svg";
 import { useAppSelector } from "../../main/store";
+import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,6 +72,7 @@ export const Cart: React.FC = () => {
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [promoInput, setPromoInput] = useState("");
   const [certificateInput, setCertificateInput] = useState("");
+  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -203,6 +205,28 @@ export const Cart: React.FC = () => {
 
   const loading = cartLoading || productsLoading === "pending";
   const error = cartError || productsError;
+
+  if (!user) {
+    return (
+      <div className="cart container">
+        <h2 className="cart__title">Корзина</h2>
+        <div className="cart__empty">
+          <p className="cart__empty-message">
+            <button 
+              className="cart__login-btn"
+              onClick={() => setIsPersonalAccountOpen(true)}
+            >
+              ВОЙДИТЕ
+            </button>
+            , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ В КОРЗИНУ
+          </p>
+        </div>
+        {isPersonalAccountOpen && (
+          <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
+        )}
+      </div>
+    );
+  }
 
   if (loading) {
     console.log("[Cart.tsx] Showing loading state");

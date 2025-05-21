@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../main/store";
 import { fetchLiked, removeItemFromLiked } from "@/entity/products/likedSlice";
 import { fetchProducts } from "@/entity/products/products.slice";
 import { Product } from "../Catalog/Product/Product";
+import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Liked = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,6 +15,7 @@ export const Liked = () => {
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const likedProductIds = likedItems.map(item => item.productId);
   const likedProducts = products.filter((product) => likedProductIds.includes(product.id));
+  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -34,6 +36,28 @@ export const Liked = () => {
 
   const loading = likedLoading || productsLoading === "pending";
   const error = likedError || productsError;
+
+  if (!user) {
+    return (
+      <div className="cart container">
+        <h2 className="cart__title">Избранное</h2>
+        <div className="cart__empty">
+          <p className="cart__empty-message">
+            <button 
+              className="cart__login-btn"
+              onClick={() => setIsPersonalAccountOpen(true)}
+            >
+              ВОЙДИТЕ
+            </button>
+            , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ В ИЗБРАННОЕ
+          </p>
+        </div>
+        {isPersonalAccountOpen && (
+          <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
+        )}
+      </div>
+    );
+  }
 
   if (loading) {
     return (

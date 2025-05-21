@@ -2,8 +2,12 @@ import { Link } from "react-router-dom";
 import { ProductList } from "./ProductList/ProductList";
 import { Menu } from "./Menu/Menu";
 import "./_catalog.scss";
+import { useState } from "react";
+import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Catalog = () => {
+  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
+
   return (
     <div className="catalog container">
       <div className="catalog__header">
@@ -16,8 +20,12 @@ export const Catalog = () => {
 
       <div className="catalog__content">
         <Menu />
-        <ProductList />
+        <ProductList onAuthRequired={() => setIsPersonalAccountOpen(true)} />
       </div>
+
+      {isPersonalAccountOpen && (
+        <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
+      )}
     </div>
   );
 }; 

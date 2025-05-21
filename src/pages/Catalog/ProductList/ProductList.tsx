@@ -5,7 +5,11 @@ import { RootState, AppDispatch } from "../../../main/store";
 import { Product as ProductComponent } from "../Product/Product";
 import type { Product } from "../../../entity/products/types";
 
-export const ProductList = () => {
+interface ProductListProps {
+  onAuthRequired?: () => void;
+}
+
+export const ProductList = ({ onAuthRequired }: ProductListProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { 
     items, 
@@ -69,6 +73,7 @@ export const ProductList = () => {
           <ProductComponent
             key={`product-${product.id}`}
             product={product}
+            onAuthRequired={onAuthRequired}
           />
         ))}
       </div>
