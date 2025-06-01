@@ -11,6 +11,31 @@ interface AccordionItemProps {
   children: React.ReactNode;
 }
 
+interface PriceRange {
+  min: number;
+  max: number;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  tags: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
+interface FilterState {
+  priceRange: PriceRange;
+  selectedTags: string[];
+}
+
+interface CategoriesState {
+  items: Category[];
+  loading: boolean;
+  error: string | null;
+}
+
 const AccordionItem = ({ title, children }: AccordionItemProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,13 +68,13 @@ const AccordionItem = ({ title, children }: AccordionItemProps) => {
 
 export const Menu = () => {
   const dispatch = useDispatch();
-  const filter = useSelector((state: RootState) => state.filter);
-  const categories = useSelector((state: RootState) => state.categories.categories);
-  const isLoading = useSelector((state: RootState) => state.categories.isLoading);
+  const filter = useSelector((state: RootState) => state.filter) as unknown as FilterState;
+  const categories = useSelector((state: RootState) => state.categories.items);
+  const isLoading = useSelector((state: RootState) => state.categories.loading);
   const error = useSelector((state: RootState) => state.categories.error);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [localPriceRange, setLocalPriceRange] = useState(filter?.priceRange || { min: 500, max: 10000 });
-  const debounceTimer = useRef<number | undefined>(undefined);
+  const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter?.priceRange || { min: 500, max: 10000 });
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -67,7 +92,7 @@ export const Menu = () => {
     loadCategories();
   }, [dispatch]);
 
-  const updateRangeHighlight = () => {
+  const updateRangeHighlight = useCallback(() => {
     if (sliderRef.current && localPriceRange) {
       const minPercent = ((localPriceRange.min - 500) / (10000 - 500)) * 100;
       const maxPercent = ((localPriceRange.max - 500) / (10000 - 500)) * 100;
@@ -75,11 +100,11 @@ export const Menu = () => {
       sliderRef.current.style.setProperty('--range-left', `${minPercent}%`);
       sliderRef.current.style.setProperty('--range-width', `${maxPercent - minPercent}%`);
     }
-  };
+  }, [localPriceRange]);
 
   useEffect(() => {
     updateRangeHighlight();
-  }, [localPriceRange]);
+  }, [localPriceRange, updateRangeHighlight]);
 
   const debouncedPriceChange = useCallback((type: 'min' | 'max', value: number) => {
     if (debounceTimer.current) {
@@ -99,23 +124,23 @@ export const Menu = () => {
     }, 300);
   }, [dispatch, localPriceRange]);
 
-  const handlePriceChange = (type: 'min' | 'max', value: number) => {
+  const handlePriceChange = useCallback((type: 'min' | 'max', value: number) => {
     if (!filter) return;
     debouncedPriceChange(type, value);
-  };
+  }, [filter, debouncedPriceChange]);
 
-  const handleTagToggle = (tagString: string) => {
+  const handleTagToggle = useCallback((tagString: string) => {
     dispatch(toggleTag(tagString));
-  };
+  }, [dispatch]);
 
-  const isTagSelected = (tagString: string) => {
-    return filter?.selectedTags.some(t => t === tagString) || false;
-  };
+  const isTagSelected = useCallback((tagString: string) => {
+    return filter?.selectedTags.some((t: string) => t === tagString) || false;
+  }, [filter]);
 
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     dispatch(resetFilters());
     setLocalPriceRange({ min: 500, max: 10000 });
-  };
+  }, [dispatch]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -163,7 +188,7 @@ export const Menu = () => {
         </div>
       </AccordionItem>
 
-      {categories.map((category) => (
+      {categories.map((category: Category) => (
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
             {category.tags.map((tag) => {

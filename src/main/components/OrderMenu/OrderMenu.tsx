@@ -1,13 +1,22 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { AppDispatch, RootState } from '../../../services/store';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { AppDispatch, RootState } from '../../../main/store';
 import { validatePromoCode, clearPromo } from '../../../entity/promo/promo.slice';
 import { validateCertificateCode, clearCertificate } from '../../../entity/certificates/certificates.slice';
 import { fetchOrderTotals } from '../../../entity/cart/cart.slice';
 import promo from '../../../pages/Cart/promo.svg';
 import certificate from '../../../pages/Cart/certificate.svg';
 import './_order-menu.scss';
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  prevPrice?: number;
+  technology: string;
+  img: string;
+}
 
 interface OrderMenuProps {
   selectedItems?: string[];
@@ -24,8 +33,10 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { id: userId } = useSelector((state: RootState) => state.user);
-  const { totals, loading, error } = useSelector((state: RootState) => state.cart);
+  const { totals, loading, error, items } = useSelector((state: RootState) => state.cart);
+  const { items: products } = useSelector((state: RootState) => state.products);
 
   console.log('OrderMenu render:', { userId, totals, loading, error });
 
@@ -86,9 +97,38 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
     );
   }
 
+  const isOrderPage = location.pathname === '/order';
+
   return (
     <div className="order-menu">
       <p className="order-menu__item">Ваш заказ</p>
+
+      {isOrderPage && items.length > 0 && (
+        <div className="order-menu__items">
+          {items.map((item) => {
+            const product = products.find((p: Product) => p.id === item.productId);
+            if (!product) return null;
+            
+            return (
+              <div key={item.productId} className="order-menu__item-details">
+                <div className="order-menu__item-info">
+                  <img 
+                    src={product.img} 
+                    alt={product.name} 
+                    className="order-menu__item-image"
+                  />
+                  <div className="order-menu__item-text">
+                    <span className="order-menu__item-name">{product.name}</span>
+                    <span className="order-menu__item-technology">{product.technology}</span>
+                    <span className="order-menu__item-quantity">x{item.quantity}</span>
+                  </div>
+                </div>
+                <span className="order-menu__item-price">{product.price * item.quantity} ₽</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="order-menu__item">
         <div className="order-menu__text">
