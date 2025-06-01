@@ -4,6 +4,12 @@
   font-size: 15px;
   min-width: 350px;
 
+  &__list{
+    display:flex;
+    flex-direction: column;
+    gap:30px;
+  }
+
   &__loading {
     text-align: center;
     font-size: 18px;

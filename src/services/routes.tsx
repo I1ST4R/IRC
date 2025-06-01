@@ -6,6 +6,7 @@ import { Cart } from '../pages/Cart/Cart';
 import { Liked } from '../pages/Liked/Liked';
 import App from '../main/App/App';  
 import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
+import { Order } from '../pages/Order/Order';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: '/product/:id',
         element: <ProductAbout />,
+      },
+      {
+        path: '/order',
+        element: <Order />,
       },
     ],
   },

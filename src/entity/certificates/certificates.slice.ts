@@ -1,28 +1,29 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { validateCertificate } from '../../services/api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { validateCertificate } from '@/services/api';
 
 interface CertificateState {
   code: string | null;
   amount: number | null;
-  error: string | null;
   loading: boolean;
+  error: string | null;
 }
 
 const initialState: CertificateState = {
   code: null,
   amount: null,
-  error: null,
-  loading: false
+  loading: false,
+  error: null
 };
 
 export const validateCertificateCode = createAsyncThunk(
   'certificates/validate',
-  async (code: string, { rejectWithValue }) => {
+  async (code: string) => {
     try {
-      const response = await validateCertificate(code);
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Ошибка при проверке сертификата');
+      const result = await validateCertificate(code);
+      return result;
+    } catch (error) {
+      console.error('Error validating certificate:', error);
+      throw error;
     }
   }
 );
@@ -46,20 +47,16 @@ const certificatesSlice = createSlice({
       .addCase(validateCertificateCode.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload.valid) {
-          state.code = action.payload.code || (action.meta && action.meta.arg) || null;
+          state.code = action.payload.code;
           state.amount = action.payload.amount;
           state.error = null;
         } else {
-          state.error = action.payload.message || 'Недействительный сертификат';
-          state.code = null;
-          state.amount = null;
+          state.error = 'Неверный сертификат';
         }
       })
       .addCase(validateCertificateCode.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
-        state.code = null;
-        state.amount = null;
+        state.error = action.error.message || 'Ошибка при проверке сертификата';
       });
   }
 });

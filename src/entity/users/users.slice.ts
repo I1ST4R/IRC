@@ -1,37 +1,45 @@
 // features/user/userSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../services/api';
-import { User, LoginData, RegisterData, UserState } from './types';
-import { fetchCart } from '../../products/cartSlice';
+import { login as apiLogin, register as apiRegister, checkAuth as apiCheckAuth, getCart, addToCart, removeFromCart, updateCartItemQuantity, getLiked, addToLiked, removeFromLiked } from '@/services/api';
+import { CartItem, LikedItem } from '@/services/types';
+import { LoginData, RegisterData } from './types';
+
+interface UserState {
+  id: string | null;
+  login: string | null;
+  email: string | null;
+  type: string | null;
+  cart: CartItem[];
+  liked: LikedItem[];
+  loading: boolean;
+  error: string | null;
+}
 
 const initialState: UserState = {
-  user: null,
-  loading: 'idle',
-  error: null,
-  likedIds: [],
+  id: null,
+  login: null,
+  email: null,
+  type: null,
+  cart: [],
+  liked: [],
+  loading: false,
+  error: null
 };
 
 export const login = createAsyncThunk(
   'user/login',
-  async (data: LoginData, { rejectWithValue }) => {
+  async (data: LoginData, { dispatch, rejectWithValue }) => {
     try {
-      const response = await api.get<User[]>(`/users?login=${data.login}`);
-      if (response.data.length === 0) {
-        return rejectWithValue('Пользователь не найден');
+      const user = await apiLogin(data);
+      if (user && user.id) {
+        localStorage.setItem('userId', String(user.id));
+        // Загружаем корзину и избранное после успешного входа
+        await dispatch(fetchCart(String(user.id)));
+        await dispatch(fetchLiked(String(user.id)));
       }
-      const user = response.data[0];
-      if (user.password !== data.password) {
-        return rejectWithValue('Неверный пароль');
-      }
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword as User;
+      return user;
     } catch (error: any) {
-      if (error.response && error.response.data && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else if (error.message) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('Ошибка при входе');
+      return rejectWithValue(error.message || 'Ошибка при входе');
     }
   }
 );
@@ -40,96 +48,132 @@ export const register = createAsyncThunk(
   'user/register',
   async (data: RegisterData, { rejectWithValue }) => {
     try {
-      const existingByLogin = await api.get<User[]>(`/users?login=${data.login}`);
-      if (existingByLogin.data.length > 0) {
-        return rejectWithValue('Такой логин уже существует');
+      const user = await apiRegister(data);
+      if (user && user.id) {
+        localStorage.setItem('userId', String(user.id));
       }
-      const existingByEmail = await api.get<User[]>(`/users?email=${data.email}`);
-      if (existingByEmail.data.length > 0) {
-        return rejectWithValue('Такой email уже существует');
-      }
-
-      const response = await api.post<User>('/users', data);
-      const { password, ...userWithoutPassword } = response.data;
-      return userWithoutPassword as User;
+      return user;
     } catch (error: any) {
-      if (error.response && error.response.data && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else if (error.message) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('Ошибка при регистрации');
+      return rejectWithValue(error.message || 'Ошибка при регистрации');
     }
   }
 );
 
 export const checkAuth = createAsyncThunk(
   'user/checkAuth',
-  async (_, { rejectWithValue, fulfillWithValue }) => {
-    console.log('[userSlice] checkAuth started');
+  async (_, { rejectWithValue }) => {
     try {
       const userId = localStorage.getItem('userId');
-      console.log('[userSlice] checkAuth: userId from localStorage:', userId);
       if (!userId) {
-        console.log('[userSlice] checkAuth: No userId in localStorage');
-        return fulfillWithValue(null);
+        return null;
       }
-      console.log(`[userSlice] checkAuth: Found userId ${userId}, attempting to fetch user...`);
-      const response = await api.get<User[]>(`/users?id=${userId}`);
-      console.log('[userSlice] checkAuth: API response received for /users?id=', response.data);
-      if (response.data.length === 0) {
-        console.log('[userSlice] checkAuth: User not found by ID, rejecting...');
-        return rejectWithValue('Пользователь не найден по сохраненному ID');
-      }
-      const user = response.data[0];
-      const { password, ...userWithoutPassword } = user;
-      console.log('[userSlice] checkAuth: User found, fulfilling with:', userWithoutPassword);
-      return fulfillWithValue(userWithoutPassword as User);
+      const user = await apiCheckAuth(userId);
+      return user;
     } catch (error: any) {
-      console.error('[userSlice] checkAuth: CATCH block error:', error);
-      if (error.response && error.response.data && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else if (error.message) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('Ошибка при проверке авторизации');
+      localStorage.removeItem('userId');
+      return rejectWithValue(error.message || 'Ошибка при проверке авторизации');
     }
   }
 );
 
-export const fetchUserLikes = createAsyncThunk(
-  'user/fetchLikes',
-  async (userId: string) => {
-    const { data } = await api.get(`/users?id=${userId}`);
-    return data[0]?.liked?.map((item: { productId: string }) => item.productId) || [];
-  }
-);
-
-export const toggleLike = createAsyncThunk(
-  'user/toggleLike',
-  async ({ userId, productId, likedIds }: { userId: string, productId: string, likedIds: string[] }) => {
-    let newLiked;
-    if (likedIds.includes(productId)) {
-      newLiked = likedIds.filter(id => id !== productId);
-    } else {
-      newLiked = [...likedIds, productId];
+// Cart actions
+export const fetchCart = createAsyncThunk(
+  'users/fetchCart',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const cart = await getCart(userId);
+      return cart;
+    } catch (error: any) {
+      console.error('Error fetching cart:', error);
+      return rejectWithValue(error.message || 'Ошибка при загрузке корзины');
     }
-    await api.patch(`/users/${userId}`, {
-      liked: newLiked.map(id => ({ productId: id }))
-    });
-    const { data } = await api.get(`/users?id=${userId}`);
-    return data[0]?.liked?.map((item: { productId: string }) => item.productId) || [];
   }
 );
 
-const userSlice = createSlice({
-  name: 'user',
+export const addItemToCart = createAsyncThunk(
+  'users/addToCart',
+  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
+    try {
+      const cart = await addToCart(userId, productId);
+      return cart;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при добавлении в корзину');
+    }
+  }
+);
+
+export const removeItemFromCart = createAsyncThunk(
+  'users/removeFromCart',
+  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
+    try {
+      const cart = await removeFromCart(userId, productId);
+      return cart;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при удалении из корзины');
+    }
+  }
+);
+
+export const updateCartQuantity = createAsyncThunk(
+  'users/updateCartQuantity',
+  async ({ userId, productId, quantity }: { userId: string; productId: string; quantity: number }, { rejectWithValue }) => {
+    try {
+      const cart = await updateCartItemQuantity(userId, productId, quantity);
+      return cart;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при обновлении количества');
+    }
+  }
+);
+
+// Liked actions
+export const fetchLiked = createAsyncThunk(
+  'users/fetchLiked',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const liked = await getLiked(userId);
+      return liked;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при загрузке избранного');
+    }
+  }
+);
+
+export const addItemToLiked = createAsyncThunk(
+  'users/addToLiked',
+  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
+    try {
+      const liked = await addToLiked(userId, productId);
+      return liked;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при добавлении в избранное');
+    }
+  }
+);
+
+export const removeItemFromLiked = createAsyncThunk(
+  'users/removeFromLiked',
+  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
+    try {
+      const liked = await removeFromLiked(userId, productId);
+      return liked;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Ошибка при удалении из избранного');
+    }
+  }
+);
+
+const usersSlice = createSlice({
+  name: 'users',
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = null;
-      state.loading = 'idle';
-      state.error = null;
+      state.id = null;
+      state.login = null;
+      state.email = null;
+      state.type = null;
+      state.cart = [];
+      state.liked = [];
       localStorage.removeItem('userId');
     },
     clearError: (state) => {
@@ -138,60 +182,89 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Auth reducers
       .addCase(login.pending, (state) => {
-        state.loading = 'pending';
+        state.loading = true;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.user = action.payload;
-        console.log('[userSlice] login.fulfilled, new user state:', JSON.parse(JSON.stringify(action.payload)));
-        if (action.payload && action.payload.id) {
-          localStorage.setItem('userId', action.payload.id.toString());
-        }
+        state.loading = false;
+        state.id = String(action.payload.id);
+        state.login = action.payload.login;
+        state.email = action.payload.email;
+        state.type = action.payload.type;
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = 'failed';
+        state.loading = false;
         state.error = action.payload as string;
       })
       .addCase(register.pending, (state) => {
-        state.loading = 'pending';
+        state.loading = true;
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.user = action.payload;
+        state.loading = false;
+        state.id = String(action.payload.id);
+        state.login = action.payload.login;
+        state.email = action.payload.email;
+        state.type = action.payload.type;
       })
       .addCase(register.rejected, (state, action) => {
-        state.loading = 'failed';
+        state.loading = false;
         state.error = action.payload as string;
-      })
-      .addCase(checkAuth.pending, (state) => {
-        console.log('[userSlice] checkAuth.pending');
-        state.loading = 'pending';
-        state.error = null;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        console.log('[userSlice] checkAuth.fulfilled, payload:', action.payload);
-        state.loading = 'succeeded';
-        state.user = action.payload;
+        if (action.payload) {
+          state.id = String(action.payload.id);
+          state.login = action.payload.login;
+          state.email = action.payload.email;
+          state.type = action.payload.type;
+        }
       })
-      .addCase(checkAuth.rejected, (state, action) => {
-        console.log('[userSlice] checkAuth.rejected, payload (error message):', action.payload);
-        state.loading = 'failed';
+      // Cart reducers
+      .addCase(fetchCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cart = action.payload;
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload as string;
-        state.user = null;
-        localStorage.removeItem('userId');
-        console.log('[userSlice] checkAuth.rejected, user set to null, userId removed from localStorage');
+        state.cart = [];
       })
-      .addCase(fetchUserLikes.fulfilled, (state, action) => {
-        state.likedIds = action.payload;
+      .addCase(addItemToCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
       })
-      .addCase(toggleLike.fulfilled, (state, action) => {
-        state.likedIds = action.payload;
+      .addCase(removeItemFromCart.fulfilled, (state, action) => {
+        state.cart = action.payload;
+      })
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
+        state.cart = action.payload;
+      })
+      // Liked reducers
+      .addCase(fetchLiked.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLiked.fulfilled, (state, action) => {
+        state.loading = false;
+        state.liked = action.payload;
+      })
+      .addCase(fetchLiked.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch liked items';
+      })
+      .addCase(addItemToLiked.fulfilled, (state, action) => {
+        state.liked = action.payload;
+      })
+      .addCase(removeItemFromLiked.fulfilled, (state, action) => {
+        state.liked = action.payload;
       });
   }
 });
 
-export const { logout, clearError } = userSlice.actions;
-export default userSlice.reducer;
+export const { logout, clearError } = usersSlice.actions;
+export default usersSlice.reducer;

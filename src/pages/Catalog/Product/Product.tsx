@@ -24,29 +24,29 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
   );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
-  const { user } = useSelector((state: RootState) => state.user);
+  const { id: userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
     const loadCart = async () => {
-      if (user?.id) {
+      if (userId) {
         try {
-          await dispatch(fetchCart(user.id));
+          await dispatch(fetchCart(userId));
         } catch (error) {
           console.error("Failed to load cart:", error);
         }
       }
     };
     loadCart();
-  }, [dispatch, user?.id]);
+  }, [dispatch, userId]);
 
   const isInCart = cartItems.some((item) => item.productId === product.id);
   const isLiked = likedItems.some((item) => item.productId === product.id);
 
   const handleLike = async () => {
-    if (!user?.id) {
+    if (!userId) {
       onAuthRequired?.();
       return;
     }
@@ -55,16 +55,16 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       onRemoveFromLiked();
     } else {
       if (isLiked) {
-        await dispatch(removeItemFromLiked({ userId: user.id, productId: product.id }));
+        await dispatch(removeItemFromLiked({ userId, productId: product.id }));
       } else {
-        await dispatch(addItemToLiked({ userId: user.id, productId: product.id }));
+        await dispatch(addItemToLiked({ userId, productId: product.id }));
       }
-      await dispatch(fetchLiked(user.id));
+      await dispatch(fetchLiked(userId));
     }
   };
 
   const handleCartClick = async () => {
-    if (!user?.id) {
+    if (!userId) {
       onAuthRequired?.();
       return;
     }
@@ -73,7 +73,7 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       navigate("/cart");
     } else {
       try {
-        await dispatch(addItemToCart({ userId: user.id, productId: product.id }));
+        await dispatch(addItemToCart({ userId, productId: product.id }));
       } catch (error) {
         console.error("Failed to add item to cart:", error);
       }

@@ -25,7 +25,7 @@ const Header: React.FC = () => {
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { id, login, email, type } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
               <img src={search} alt="search" />
             </button>
 
-            {user ? (
+            {id ? (
               <div className="header__user-info">
                 <button onClick={handleLogout} className="header__button header__logout" title="Выйти">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -142,9 +142,11 @@ const Header: React.FC = () => {
 
             <Link to="/liked" className="header__button" id="liked__container1">
               <img src={liked} alt="liked" />
-              <div className="counter" id="liked__counter">
-              {totalLikedItems}
-              </div>
+              {totalLikedItems > 0 && (
+                <div className="counter" id="liked__counter">
+                  {totalLikedItems}
+                </div>
+              )}
             </Link>
 
             <Link to="/cart" className="header__button" id="basket__container1">

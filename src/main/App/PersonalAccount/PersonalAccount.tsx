@@ -18,7 +18,7 @@ interface FormData {
 
 const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error: authError, user } = useSelector((state: RootState) => state.user);
+  const { loading, error: authError } = useSelector((state: RootState) => state.user);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     login: '',
@@ -52,7 +52,6 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
         type: 'client'
       }));
       if (register.fulfilled.match(resultAction)) {
-        console.log('Registration fulfilled. Full action object:', resultAction);
         onClose();
       }
     }
@@ -190,9 +189,9 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
             <button 
               type="submit" 
               className="personal-account__submit"
-              disabled={loading === 'pending'}
+              disabled={loading}
             >
-              {loading === 'pending' ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
+              {loading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
             </button>
           </form>
         </>

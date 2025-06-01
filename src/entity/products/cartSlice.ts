@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getCart, addToCart, removeFromCart, updateCartItemQuantity } from '../../services/api';
+import { getCart, addToCart, removeFromCart, updateCartItemQuantity } from '@/services/api';
 
 interface CartItem {
   productId: string;
@@ -77,14 +77,10 @@ export const clearCart = createAsyncThunk(
   'cart/clearCart',
   async (userId: string) => {
     try {
-      // Получаем все товары в корзине
       const cart = await getCart(userId);
-      
-      // Удаляем каждый товар по отдельности
       for (const item of cart) {
         await removeFromCart(userId, item.productId);
       }
-      
       return userId;
     } catch (error) {
       console.error('Error clearing cart:', error);

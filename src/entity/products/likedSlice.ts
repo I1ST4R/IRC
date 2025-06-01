@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getLiked, addToLiked, removeFromLiked } from '../../services/api';
+import { addToLiked, getLiked, removeFromLiked } from '@/services/api';
 
 interface LikedItem {
   productId: string;

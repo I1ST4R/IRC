@@ -2,19 +2,85 @@ import axios from 'axios';
 import {FilterParams} from './types'
 import {CartItem} from './types'
 import {LikedItem} from './types'
+import { recipientInterface } from './types';
+import { User, LoginData, RegisterData } from '@/entity/users/types';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://localhost:3001';
 
-const api = axios.create({
+const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-//Products
+// Auth
+export const login = async (data: LoginData) => {
+  try {
+    const response = await axiosInstance.get<User[]>('/users');
+    const users = Object.values(response.data);
+    const user = users.find(u => u.login === data.login);
+    
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+    
+    if (user.password !== data.password) {
+      throw new Error('Неверный пароль');
+    }
+    
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as User;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+export const register = async (data: RegisterData) => {
+  try {
+    const existingByLogin = await axiosInstance.get<User[]>(`/users?login=${data.login}`);
+    if (existingByLogin.data.length > 0) {
+      throw new Error('Такой логин уже существует');
+    }
+    const existingByEmail = await axiosInstance.get<User[]>(`/users?email=${data.email}`);
+    if (existingByEmail.data.length > 0) {
+      throw new Error('Такой email уже существует');
+    }
+
+    const response = await axiosInstance.post<User>('/users', data);
+    const { password, ...userWithoutPassword } = response.data;
+    return userWithoutPassword as User;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+export const checkAuth = async (userId: string) => {
+  try {
+    const response = await axiosInstance.get<User[]>(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as User;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+// Products
 export const getProducts = async (page: number, params?: FilterParams) => {
-  const response = await api.get('/products');
+  const response = await axiosInstance.get('/products');
   let filteredProducts = response.data;
 
   console.log('Filter params:', params);
@@ -73,34 +139,46 @@ export const getProducts = async (page: number, params?: FilterParams) => {
 };
 
 export const getProductById = async (productId?: string) => {
-  const response = await api.get(`/products/${ productId }`);
+  const response = await axiosInstance.get(`/products/${productId}`);
   return response.data;
 };
 
-//Categories
+// Categories
 export const getCategories = async () => {
-  const response = await api.get('/productCategories');
+  const response = await axiosInstance.get('/productCategories');
   return response.data;
 };
 
-//Cart
+// Cart
 export const getCart = async (userId: string) => {
   try {
-    const response = await api.get(`/users/${userId}`);
-    if (!response.data.cart) {
-      await api.patch(`/users/${userId}`, { cart: [] });
-      return [];
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
     }
-    return response.data.cart;
-  } catch (error) {
+    const user = response.data[0];
+    if (!user.cart) {
+      const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart: [] });
+      return updateResponse.data.cart;
+    }
+    return user.cart;
+  } catch (error: any) {
+    console.error('Error in getCart:', error);
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
 export const addToCart = async (userId: string, productId: string) => {
   try {
-    const user = await api.get(`/users/${userId}`);
-    const cart = user.data.cart || [];
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const cart = user.cart || [];
     
     const existingItem = cart.find((item: CartItem) => item.productId === productId);
     if (existingItem) {
@@ -109,121 +187,185 @@ export const addToCart = async (userId: string, productId: string) => {
       cart.push({ productId, quantity: 1 });
     }
     
-    const response = await api.patch(`/users/${userId}`, { cart });
-    return response.data.cart;
-  } catch (error) {
-    console.error('Error adding to cart:', error);
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
+    return updateResponse.data.cart;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
 export const removeFromCart = async (userId: string, productId: string) => {
   try {
-    const user = await api.get(`/users/${userId}`);
-    const cart = (user.data.cart || []).filter((item: CartItem) => item.productId !== productId);
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const cart = (user.cart || []).filter((item: CartItem) => item.productId !== productId);
     
-    const response = await api.patch(`/users/${userId}`, { cart });
-    return response.data.cart;
-  } catch (error) {
-    console.error('Error removing from cart:', error);
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
+    return updateResponse.data.cart;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
 export const updateCartItemQuantity = async (userId: string, productId: string, quantity: number) => {
   try {
-    const user = await api.get(`/users/${userId}`);
-    const cart = user.data.cart || [];
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const cart = user.cart || [];
     
     const item = cart.find((item: CartItem) => item.productId === productId);
     if (item) {
       item.quantity = quantity;
     }
     
-    const response = await api.patch(`/users/${userId}`, { cart });
-    return response.data.cart;
-  } catch (error) {
-    console.error('Error updating cart quantity:', error);
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
+    return updateResponse.data.cart;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
-//Liked
+// Liked
 export const getLiked = async (userId: string) => {
   try {
-    const response = await api.get(`/users/${userId}`);
-    if (!response.data.liked) {
-      await api.patch(`/users/${userId}`, { liked: [] });
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    if (!user.liked) {
+      await axiosInstance.patch(`/users/${user.id}`, { liked: [] });
       return [];
     }
-    return response.data.liked;
-  } catch (error) {
+    return user.liked;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
 export const addToLiked = async (userId: string, productId: string) => {
   try {
-    const user = await api.get(`/users/${userId}`);
-    const liked = user.data.liked || [];
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const liked = user.liked || [];
     
     const existingItem = liked.find((item: LikedItem) => item.productId === productId);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      liked.push({ productId, quantity: 1 });
+    if (!existingItem) {
+      liked.push({ productId });
     }
     
-    const response = await api.patch(`/users/${userId}`, { liked });
-    return response.data.liked;
-  } catch (error) {
-    console.error('Error adding to liked:', error);
-    throw error;
-  }
-}
-
-export const removeFromLiked = async (userId: string, productId: string) => {
-  try {
-    const user = await api.get(`/users/${userId}`);
-    const liked = (user.data.liked || []).filter((item: LikedItem) => item.productId !== productId);
-    
-    const response = await api.patch(`/users/${userId}`, { liked });
-    return response.data.liked;
-  } catch (error) {
-    console.error('Error removing from liked:', error);
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
+    return updateResponse.data.liked;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
     throw error;
   }
 };
 
-//Promo
+export const removeFromLiked = async (userId: string, productId: string) => {
+  try {
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const liked = (user.liked || []).filter((item: LikedItem) => item.productId !== productId);
+    
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
+    return updateResponse.data.liked;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+// Promo
 export const validatePromo = async (code: string) => {
   try {
-    const response = await api.get(`/promo?code=${code}`);
+    const response = await axiosInstance.get(`/promo?code=${code}`);
     if (response.data && response.data.length > 0) {
       return { valid: true, code: response.data[0].code, discount: response.data[0].discount };
-    } else {
-      return { valid: false, message: 'Промокод не найден' };
     }
+    return { valid: false };
   } catch (error) {
     console.error('Error validating promo:', error);
     throw error;
   }
 };
 
-//Certificates
+// Certificates
 export const validateCertificate = async (code: string) => {
   try {
-    const response = await api.get(`/certificates?code=${code}`);
+    const response = await axiosInstance.get(`/certificates?code=${code}`);
     if (response.data && response.data.length > 0) {
-      const cert = response.data[0];
-      return { valid: true, code: cert.code, amount: cert.amount };
-    } else {
-      return { valid: false, message: 'Сертификат не найден' };
+      return { valid: true, code: response.data[0].code, amount: response.data[0].amount };
     }
+    return { valid: false };
   } catch (error) {
     console.error('Error validating certificate:', error);
     throw error;
   }
 };
 
-export default api; 
+// Orders
+export const addOrder = async (userId: string, recipient: recipientInterface) => {
+  try {
+    const user = await axiosInstance.get(`/users/${userId}`);
+    const cart = user.data.cart || [];
+    
+    const newOrder = {
+      userId,
+      recipient,
+      cart,
+      createDate: new Date().toISOString(),
+      status: 'new'
+    }
+    
+    const response = await axiosInstance.post('/orders', newOrder);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating order:', error);
+    throw error;
+  }
+};
+
+export default {
+  getProducts,
+  getProductById,
+  getCategories,
+  getCart,
+  addToCart,
+  removeFromCart,
+  updateCartItemQuantity,
+  getLiked,
+  addToLiked,
+  removeFromLiked,
+  validatePromo,
+  validateCertificate,
+  addOrder
+}; 

@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProducts} from '../../services/api';
-import { FilterParams } from '../../services/types';
-import api from '../../services/api';
+import { getProducts, getProductById } from '@/services/api';
+import { FilterParams } from '@/services/types';
 import { Product } from './types';
 
 interface ProductsState {
-  items: any[];
+  items: Product[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
   hasMore: boolean;
@@ -36,12 +35,13 @@ export const fetchProducts = createAsyncThunk(
 
 export const fetchProductById = createAsyncThunk(
   'products/fetchById',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
-      const response = await api.get<Product>(`/products/${id}`);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to fetch product');
+      const response = await getProductById(id);
+      return response;
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      throw error;
     }
   }
 );
@@ -73,7 +73,7 @@ const productsSlice = createSlice({
         } else {
           const existingIds = new Set(state.items.map(item => item.id));
           const newProducts = action.payload.products.filter(
-            product => !existingIds.has(product.id)
+            (product: Product) => !existingIds.has(product.id)
           );
           state.items = [...state.items, ...newProducts];
         }
@@ -83,20 +83,7 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch products';
-      })
-
-      // Получение одного продукта
-      // .addCase(fetchProductById.pending, (state) => {
-      //   state.loading = 'pending';
-      // })
-      // .addCase(fetchProductById.fulfilled, (state, action) => {
-      //   state.loading = 'succeeded';
-      //   state.currentProduct = action.payload;
-      // })
-      // .addCase(fetchProductById.rejected, (state, action) => {
-      //   state.loading = 'failed';
-      //   state.error = action.payload as string;
-      // })
+      });
   },
 });
 

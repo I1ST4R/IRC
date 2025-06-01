@@ -1,50 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
 import {
   fetchCart,
   removeItemFromCart,
-  updateItemQuantity,
-  clearCart,
-  toggleItemSelection,
-  selectAllItems,
-  deselectAllItems,
-  clearCartOnLogout,
-} from "../../entity/products/cartSlice";
-import {
-  fetchLiked,
-  clearLikedOnLogout,
-} from "../../entity/products/likedSlice";
-import { toggleLike } from "../../entity/users/users.slice";
+  updateCartQuantity,
+  addItemToLiked,
+  removeItemFromLiked
+} from "../../entity/users/users.slice";
+import { validatePromoCode } from "../../entity/promo/promo.slice";
+import { validateCertificateCode } from "../../entity/certificates/certificates.slice";
 import { fetchProducts } from "../../entity/products/products.slice";
-import { validatePromoCode, clearPromo } from "../../entity/promo/promo.slice";
-import {
-  validateCertificateCode,
-  clearCertificate,
-} from "../../entity/certificates/certificates.slice";
 import cart from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
-import promo from "./promo.svg";
-import certificate from "./certificate.svg";
 import { useAppSelector } from "../../main/store";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
+import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
+import "./_cart.scss";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useAppSelector((state) => state.user);
-  const {
-    items: cartItems,
-    loading: cartLoading,
-    error: cartError,
-    selectedItems,
-  } = useSelector((state: RootState) => state.cart);
+  const { id: userId, cart: cartItems, liked, loading: userLoading } = useAppSelector((state) => state.user);
   const {
     items: products,
     loading: productsLoading,
     error: productsError,
   } = useSelector((state: RootState) => state.products);
-  const { likedIds } = useSelector((state: RootState) => state.user);
   const {
     code: promoCode,
     discount: promoDiscount,
@@ -55,36 +37,30 @@ export const Cart: React.FC = () => {
     amount: certificateAmount,
     error: certificateError,
   } = useSelector((state: RootState) => state.certificates);
-
-  console.log("[Cart.tsx] Rendering with props/state:", {
-    user,
-    cartItems,
-    cartLoading,
-    cartError,
-    selectedItems,
-    products,
-    productsLoading,
-    productsError,
-    likedIds,
-  });
+  const navigate = useNavigate();
 
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [promoInput, setPromoInput] = useState("");
   const [certificateInput, setCertificateInput] = useState("");
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchCart(user.id.toString()));
+    if (userId) {
+      dispatch(fetchCart(userId));
     }
-  }, [dispatch, user?.id]);
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    dispatch(fetchProducts({ page: 1 }));
+  }, [dispatch]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (user && user.id && newQuantity > 0) {
+    if (userId && newQuantity > 0) {
       dispatch(
-        updateItemQuantity({
-          userId: user.id.toString(),
+        updateCartQuantity({
+          userId,
           productId,
           quantity: newQuantity,
         })
@@ -93,19 +69,29 @@ export const Cart: React.FC = () => {
   };
 
   const handleRemoveItem = (productId: string) => {
-    if (user && user.id) {
-      dispatch(removeItemFromCart({ userId: user.id.toString(), productId }));
+    if (userId) {
+      dispatch(removeItemFromCart({ userId, productId }));
+      setSelectedItems(prev => prev.filter(id => id !== productId));
     }
   };
 
-  const handleClearCart = () => {
-    if (user && user.id) {
-      dispatch(clearCart(user.id.toString()));
-    }
+  const handleSelectItem = (productId: string) => {
+    setSelectedItems(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
   };
 
   const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    if (selectedItems.length === 0) {
+      return cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
+    return cartItems
+      .filter(item => selectedItems.includes(item.productId))
+      .reduce((total, item) => total + item.quantity, 0);
   };
 
   const getItemTotal = (
@@ -120,10 +106,9 @@ export const Cart: React.FC = () => {
   };
 
   const getCartTotal = (withDiscount: boolean = true) => {
-    const itemsToCalculate =
-      selectedItems.length > 0
-        ? cartItems.filter((item) => selectedItems.includes(item.productId))
-        : cartItems;
+    const itemsToCalculate = selectedItems.length === 0 
+      ? cartItems 
+      : cartItems.filter(item => selectedItems.includes(item.productId));
 
     return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
@@ -133,10 +118,9 @@ export const Cart: React.FC = () => {
   };
 
   const getTotalDiscount = () => {
-    const itemsToCalculate =
-      selectedItems.length > 0
-        ? cartItems.filter((item) => selectedItems.includes(item.productId))
-        : cartItems;
+    const itemsToCalculate = selectedItems.length === 0 
+      ? cartItems 
+      : cartItems.filter(item => selectedItems.includes(item.productId));
 
     return itemsToCalculate.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
@@ -159,66 +143,34 @@ export const Cart: React.FC = () => {
     dispatch(validateCertificateCode(certificateInput));
   };
 
-  // Функция для расчёта скидки по промокоду
   const getPromoDiscountValue = () => {
     if (promoDiscount) {
-      // Скидка по промокоду применяется к сумме после товарных скидок
       return Math.round(getCartTotal(true) * (promoDiscount / 100));
     }
     return 0;
   };
 
-  // Чистая функция для расчёта скидки по сертификату
   const getCertificateDiscountValue = () => {
     const afterPromo = getCartTotal(true) - getPromoDiscountValue();
-    console.log(
-      "certificateAmount:",
-      certificateAmount,
-      "afterPromo:",
-      afterPromo
-    );
     if (certificateAmount && afterPromo > 0) {
-      const applied = Math.min(certificateAmount, afterPromo);
-      console.log("applied certificate:", applied);
-      return applied;
+      return Math.min(certificateAmount, afterPromo);
     }
     return 0;
   };
 
-  // Итоговая сумма
   const getFinalPrice = () => {
     const afterPromo = getCartTotal(true) - getPromoDiscountValue();
     const afterCertificate = afterPromo - getCertificateDiscountValue();
-    console.log("getFinalPrice:", { afterPromo, afterCertificate });
     return afterCertificate > 0 ? Math.round(afterCertificate) : 0;
   };
 
-  // Обработка нажатия на кнопку оформления заказа: если промокод или сертификат введены, но не валидированы, запускаем их валидацию
-  const handleCheckout = async () => {
-    if (promoInput && !promoCode) {
-      await dispatch(validatePromoCode(promoInput));
-    }
-    if (certificateInput && !certificateCode) {
-      await dispatch(validateCertificateCode(certificateInput));
-    }
-  };
-
-  const loading = cartLoading || productsLoading === "pending";
-  const error = cartError || productsError;
-
-  if (!user) {
+  if (!userId) {
     return (
       <div className="cart container">
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__empty">
           <p className="cart__empty-message">
-            <button 
-              className="cart__login-btn"
-              onClick={() => setIsPersonalAccountOpen(true)}
-            >
-              ВОЙДИТЕ
-            </button>
-            , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ В КОРЗИНУ
+            Авторизуйтесь, чтобы добавлять товары в корзину
           </p>
         </div>
         {isPersonalAccountOpen && (
@@ -228,8 +180,7 @@ export const Cart: React.FC = () => {
     );
   }
 
-  if (loading) {
-    console.log("[Cart.tsx] Showing loading state");
+  if (userLoading) {
     return (
       <div className="cart">
         <h2 className="cart__title">Корзина</h2>
@@ -238,13 +189,11 @@ export const Cart: React.FC = () => {
     );
   }
 
-  if (error) {
-    console.log("[Cart.tsx] Showing error state:", error);
-    return <div className="cart__error">{error}</div>;
+  if (productsError) {
+    return <div className="cart__error">{productsError}</div>;
   }
 
   if (cartItems.length === 0) {
-    console.log("[Cart.tsx] cartItems.length is 0, showing empty cart message");
     return (
       <div className="cart__empty">
         <h2 className="cart__title">Корзина</h2>
@@ -271,324 +220,147 @@ export const Cart: React.FC = () => {
         </div>
       </div>
       <div className="cart__body">
-        <div className="cart__items">
-
         {cartItems.length > 0 && (
-            <button
-              onClick={handleClearCart}
-              title="Очистить корзину"
-              className="cart__clear"
-            >
-              <img src={cartGarbageIcon} alt="cart-garbage-icon" />
-              Очистить корзину
-            </button>
-          )}
-          {cartItems.map((item) => {
-            const product = products.find((p) => p.id === item.productId);
-            console.log(
-              `[Cart.tsx] Mapping item: ${item.productId}, found product:`,
-              product
-            );
-            if (!product) return null;
-            const itemTotal = getItemTotal(product, item.quantity);
+          <button
+            onClick={() => {}}
+            title="Очистить корзину"
+            className="cart__clear"
+          >
+            <img src={cartGarbageIcon} alt="cart-garbage-icon" />
+            Очистить корзину
+          </button>
+        )}
+        <div className="cart__list">
+        {cartItems.map((item) => {
+          const product = products.find((p) => p.id === item.productId);
+          if (!product) return null;
+          const itemTotal = getItemTotal(product, item.quantity);
 
-            return (
-              <div key={item.productId} className="cart__item">
-                <div className="cart__item-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(item.productId)}
-                    onChange={() =>
-                      dispatch(toggleItemSelection(item.productId))
-                    }
-                  />
-                </div>
+          return (
+            <div key={item.productId} className="cart__item">
+              <div className="cart__item-checkbox">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.productId)}
+                  onChange={() => handleSelectItem(item.productId)}
+                />
+              </div>
 
-                <div className="cart__item-img-block">
-                  <img
-                    src={product.img}
-                    alt={product.name}
-                    className="cart__item-image"
-                  />
-                  <button
-                    className={`product__like${
-                      likedIds.includes(product.id)
-                        ? " product__like--active"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      if (user && user.id) {
-                        dispatch(
-                          toggleLike({
-                            userId: user.id.toString(),
-                            productId: product.id,
-                            likedIds,
-                          })
-                        );
-                      }
-                    }}
-                    title={
-                      likedIds.includes(product.id)
-                        ? "Убрать из избранного"
-                        : "В избранное"
-                    }
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                    >
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="cart__item-text">
-                  <div className="cart__item-name-block">
-                    <p className="cart__item-name">{product.name}</p>
-                    <p className="cart__item-technology">{product.technology}</p>
-                  </div>
-
-                  <div className="cart__item-quantity">
-                    <button
-                      className="cart__item-quantity-btn"
-                      onClick={() =>
-                        handleQuantityChange(
-                          item.productId,
-                          Math.max(1, item.quantity - 1)
-                        )
-                      }
-                    >
-                      -
-                    </button>
-                    <span className="cart__item-quantity-value">
-                      {item.quantity}
-                    </span>
-                    <button
-                      className="cart__item-quantity-btn"
-                      onClick={() =>
-                        handleQuantityChange(item.productId, item.quantity + 1)
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-
-                  <div className="cart__item-price-block">
-                    {product.prevPrice ? (
-                      <>
-                        <p className="cart__item-price cart__item-price--new">
-                          {itemTotal} ₽
-                        </p>
-                        <p className="cart__item-price cart__item-price--old">
-                          {product.prevPrice * item.quantity} ₽
-                        </p>
-                      </>
-                    ) : (
-                      <div className="cart__item-price">{itemTotal} ₽</div>
-                    )}
-                  </div>
-                </div>
-
+              <div className="cart__item-img-block">
+                <img
+                  src={product.img}
+                  alt={product.name}
+                  className="cart__item-image"
+                />
                 <button
-                  className="cart__item-remove"
-                  onClick={() => handleRemoveItem(item.productId)}
-                  title="Удалить из корзины"
+                  className={`product__like${
+                    liked.some(item => item.productId === product.id)
+                      ? " product__like--active"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (userId) {
+                      const isLiked = liked.some(item => item.productId === product.id);
+                      if (isLiked) {
+                        dispatch(removeItemFromLiked({ userId, productId: product.id }));
+                      } else {
+                        dispatch(addItemToLiked({ userId, productId: product.id }));
+                      }
+                    }
+                  }}
+                  title={
+                    liked.some(item => item.productId === product.id)
+                      ? "Убрать из избранного"
+                      : "В избранное"
+                  }
                 >
                   <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
                   >
-                    <g>
-                      <path
-                        d="M15.0018 4.99985C14.8455 4.84362 14.6336 4.75586 14.4126 4.75586C14.1917 4.75586 13.9797 4.84362 13.8235 4.99985L10.0018 8.82152L6.18013 4.99985C6.02386 4.84362 5.81194 4.75586 5.59097 4.75586C5.37 4.75586 5.15807 4.84362 5.0018 4.99985C4.84558 5.15612 4.75781 5.36804 4.75781 5.58901C4.75781 5.80998 4.84558 6.02191 5.0018 6.17818L8.82347 9.99985L5.0018 13.8215C4.84558 13.9778 4.75781 14.1897 4.75781 14.4107C4.75781 14.6317 4.84558 14.8436 5.0018 14.9998C5.15807 15.1561 5.37 15.2438 5.59097 15.2438C5.81194 15.2438 6.02386 15.1561 6.18013 14.9998L10.0018 11.1782L13.8235 14.9998C13.9797 15.1561 14.1917 15.2438 14.4126 15.2438C14.6336 15.2438 14.8455 15.1561 15.0018 14.9998C15.158 14.8436 15.2458 14.6317 15.2458 14.4107C15.2458 14.1897 15.158 13.9778 15.0018 13.8215L11.1801 9.99985L15.0018 6.17818C15.158 6.02191 15.2458 5.80998 15.2458 5.58901C15.2458 5.36804 15.158 5.15612 15.0018 4.99985Z"
-                        fill="grey"
-                      />
-                    </g>
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
                 </button>
               </div>
-            );
-          })}
+
+              <div className="cart__item-text">
+                <div className="cart__item-name-block">
+                  <p className="cart__item-name">{product.name}</p>
+                  <p className="cart__item-technology">{product.technology}</p>
+                </div>
+
+                <div className="cart__item-quantity">
+                  <button
+                    className="cart__item-quantity-btn"
+                    onClick={() =>
+                      handleQuantityChange(
+                        item.productId,
+                        Math.max(1, item.quantity - 1)
+                      )
+                    }
+                  >
+                    -
+                  </button>
+                  <span className="cart__item-quantity-value">
+                    {item.quantity}
+                  </span>
+                  <button
+                    className="cart__item-quantity-btn"
+                    onClick={() =>
+                      handleQuantityChange(item.productId, item.quantity + 1)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div className="cart__item-price-block">
+                  {product.prevPrice ? (
+                    <>
+                      <p className="cart__item-price cart__item-price--new">
+                        {itemTotal} ₽
+                      </p>
+                      <p className="cart__item-price cart__item-price--old">
+                        {product.prevPrice * item.quantity} ₽
+                      </p>
+                    </>
+                  ) : (
+                    <div className="cart__item-price">{itemTotal} ₽</div>
+                  )}
+                </div>
+              </div>
+
+              <button
+                className="cart__item-remove"
+                onClick={() => handleRemoveItem(item.productId)}
+                title="Удалить из корзины"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M15 5L5 15" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 5L15 15" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          );
+        })}
         </div>
 
-        <div className="cart__summary">
-          <p className="cart__summary-item">Ваш заказ</p>
-
-          <div className="cart__summary-item">
-            <div className="cart__summary-text">
-              <span className="cart__summary-label">Товары на сумму:</span>
-              <span className="cart__summary-value">
-                {getCartTotal(false)} ₽
-              </span>
-            </div>
-            <div className="cart__summary-text">
-              <span className="cart__summary-label">Скидка:</span>
-              <span className="cart__summary-value cart__summary-value--discount">
-                {getTotalDiscount()} ₽
-              </span>
-            </div>
-            {(promoDiscount ?? 0) > 0 && (
-              <div className="cart__summary-text">
-                <span className="cart__summary-label">
-                  Скидка по промокоду:
-                </span>
-                <span className="cart__summary-value cart__summary-value--discount">
-                  {getPromoDiscountValue()} ₽
-                </span>
-              </div>
-            )}
-            {(certificateAmount ?? 0) > 0 && (
-              <div className="cart__summary-text">
-                <span className="cart__summary-label">Сертификат:</span>
-                <span className="cart__summary-value cart__summary-value--discount">
-                  {getCertificateDiscountValue()} ₽
-                </span>
-              </div>
-            )}
-            <div className="cart__summary-text">
-              <span className="cart__summary-label">Доставка:</span>
-              <span className="cart__summary-value">0 ₽</span>
-            </div>
-            <div className="cart__summary-text">
-              <span className="cart__summary-label">Всего к оплате:</span>
-              <span className="cart__summary-value">{getFinalPrice()} ₽</span>
-            </div>
-          </div>
-
-          <div className="cart__summary-item">
-            <div
-              className="cart__summary-field"
-              onClick={() => setIsPromoOpen(!isPromoOpen)}
-            >
-              <div className="cart__summary-item-name">
-                <img src={promo} alt="promo" />
-                <span>Промокод</span>
-              </div>
-              <svg
-                className={`cart__summary-arrow ${
-                  isPromoOpen ? "cart__summary-arrow--open" : ""
-                }`}
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 1.5L6 6.5L11 1.5"
-                  stroke="black"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            {isPromoOpen && (
-              <div className="cart__summary-input-wrapper">
-                {promoError && (
-                  <div className="cart__summary-error">{promoError}</div>
-                )}
-                <input
-                  type="text"
-                  placeholder="промокод"
-                  value={promoInput}
-                  onChange={(e) => {
-                    setPromoInput(e.target.value);
-                    if (promoError) dispatch(clearPromo());
-                  }}
-                  onKeyPress={(e) => e.key === "Enter" && handlePromoSubmit()}
-                />
-                {promoCode && (
-                  <div className="cart__summary-success">
-                    Промокод применен
-                    <button
-                      className="cart__summary-clear"
-                      onClick={() => {
-                        dispatch(clearPromo());
-                        setPromoInput("");
-                      }}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="cart__summary-item">
-            <div
-              className="cart__summary-field"
-              onClick={() => setIsCertificateOpen(!isCertificateOpen)}
-            >
-              <div className="cart__summary-item-name">
-                <img src={certificate} alt="certificate" />
-                <span>Сертификат</span>
-              </div>
-              <svg
-                className={`cart__summary-arrow ${
-                  isCertificateOpen ? "cart__summary-arrow--open" : ""
-                }`}
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 1.5L6 6.5L11 1.5"
-                  stroke="black"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            {isCertificateOpen && (
-              <div className="cart__summary-input-wrapper">
-                {certificateError && (
-                  <div className="cart__summary-error">{certificateError}</div>
-                )}
-                <input
-                  type="text"
-                  placeholder="сертификат"
-                  value={certificateInput}
-                  onChange={(e) => {
-                    setCertificateInput(e.target.value);
-                    if (certificateError) dispatch(clearCertificate());
-                  }}
-                  onKeyPress={(e) =>
-                    e.key === "Enter" && handleCertificateSubmit()
-                  }
-                />
-                {certificateCode && (
-                  <div className="cart__summary-success">
-                    Сертификат применен
-                    <button
-                      className="cart__summary-clear"
-                      onClick={() => {
-                        dispatch(clearCertificate());
-                        setCertificateInput("");
-                      }}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <button className="cart__summary-button" onClick={handleCheckout}>
-            Оформить заказ
-          </button>
-        </div>
+        <OrderMenu 
+          selectedItems={selectedItems}
+          cartItems={cartItems}
+          products={products}
+          promoDiscount={promoDiscount}
+          certificateAmount={certificateAmount}
+        />
       </div>
     </div>
   );

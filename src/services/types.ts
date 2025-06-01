@@ -14,3 +14,12 @@ export interface LikedItem {
   productId: string;
 }
 
+export interface recipientInterface {
+  fullName: string;
+  phone: string;
+  address: string;
+  email: string;
+  deliveryDate: string;
+  comment?: string;
+}
+

@@ -9,21 +9,26 @@
       "cart": [
         {
           "productId": "1",
+          "quantity": 3
+        },
+        {
+          "productId": "2",
+          "quantity": 1
+        },
+        {
+          "productId": "3",
           "quantity": 1
         }
       ],
       "liked": [
         {
-          "productId": "2",
-          "quantity": 7
+          "productId": "2"
         },
         {
-          "productId": "3",
-          "quantity": 1
+          "productId": "3"
         },
         {
-          "productId": "1",
-          "quantity": 3
+          "productId": "1"
         }
       ]
     },
@@ -896,5 +901,6 @@
       "code": "SERTIFICATE2000",
       "amount": 2000
     }
-  ]
+  ],
+  "orders": []
 }

@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:client": "vite",
-    "dev:server": "json-server db.json",
+    "dev:client": "vite --port 3000",
+    "dev:server": "json-server --port 3001 db.json",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

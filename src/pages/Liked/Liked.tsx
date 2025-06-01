@@ -9,7 +9,7 @@ import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Liked = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { id } = useSelector((state: RootState) => state.user);
   const { items, loading: likedLoading, error: likedError } = useSelector((state: RootState) => state.liked);
   const { items: products, loading: productsLoading, error: productsError,} = useSelector((state: RootState) => state.products);
   const likedItems = useSelector((state: RootState) => state.liked.items);
@@ -18,15 +18,15 @@ export const Liked = () => {
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchLiked(user.id.toString()));
+    if (id) {
+      dispatch(fetchLiked(id));
       dispatch(fetchProducts({ page: 1 }));
     }
-  }, [dispatch, user?.id]);
+  }, [dispatch, id]);
 
   const handleRemoveItem = (productId: string) => {
-    if (user?.id) {
-      dispatch(removeItemFromLiked({ userId: user.id.toString(), productId }));
+    if (id) {
+      dispatch(removeItemFromLiked({ userId: id, productId }));
     }
   };
 
@@ -37,7 +37,7 @@ export const Liked = () => {
   const loading = likedLoading || productsLoading === "pending";
   const error = likedError || productsError;
 
-  if (!user) {
+  if (!id) {
     return (
       <div className="cart container">
         <h2 className="cart__title">Избранное</h2>
@@ -88,14 +88,14 @@ export const Liked = () => {
   }
 
   return (
-    <div className="cart container">
+    <div className="cart container liked-page">
       <div className="cart__header">
-        <h2 className="cart__title">Избранное</h2>
+        <h2 className="cart__title liked-page__title">Избранное</h2>
         <span className="cart__items-count">
             В избранном <span>{likedProducts.length}</span>
         </span>
       </div>
-      <div className="product-list__container">
+      <div className="product-list__container liked-page__container">
         {likedProducts.map((product) => (
           <Product
             key={`product-${product.id}`}

@@ -1,35 +1,29 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { validatePromo } from '../../services/api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { validatePromo } from '@/services/api';
 
 interface PromoState {
   code: string | null;
   discount: number | null;
-  error: string | null;
   loading: boolean;
+  error: string | null;
 }
 
 const initialState: PromoState = {
   code: null,
   discount: null,
-  error: null,
-  loading: false
+  loading: false,
+  error: null
 };
 
 export const validatePromoCode = createAsyncThunk(
   'promo/validate',
-  async (code: string, { rejectWithValue }) => {
+  async (code: string) => {
     try {
-      const response = await validatePromo(code);
-      if (response && typeof response === 'object') {
-        return response;
-      } else {
-        return rejectWithValue('Некорректный ответ от сервера');
-      }
-    } catch (error: any) {
-      console.error('Ошибка при проверке промокода:', error, error?.response?.data);
-      return rejectWithValue(
-        error?.response?.data?.message || error?.message || 'Ошибка при проверке промокода'
-      );
+      const result = await validatePromo(code);
+      return result;
+    } catch (error) {
+      console.error('Error validating promo:', error);
+      throw error;
     }
   }
 );
@@ -53,20 +47,16 @@ const promoSlice = createSlice({
       .addCase(validatePromoCode.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload.valid) {
-          state.code = action.payload.code || (action.meta && action.meta.arg) || null;
+          state.code = action.payload.code;
           state.discount = action.payload.discount;
           state.error = null;
         } else {
-          state.error = action.payload.message || 'Недействительный промокод';
-          state.code = null;
-          state.discount = null;
+          state.error = 'Неверный промокод';
         }
       })
       .addCase(validatePromoCode.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
-        state.code = null;
-        state.discount = null;
+        state.error = action.error.message || 'Ошибка при проверке промокода';
       });
   }
 });
