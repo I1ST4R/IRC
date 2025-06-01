@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../main/store';
+import { getCart } from '../../services/api';
+import { setCartItems } from '../../entity/cart/cart.slice';
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import './_order.scss';
 
 export const Order: React.FC = () => {
-  const { id: userId, cart: cartItems } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const { id: userId } = useSelector((state: RootState) => state.user);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const { items: products } = useSelector((state: RootState) => state.products);
   const { discount: promoDiscount } = useSelector((state: RootState) => state.promo);
   const { amount: certificateAmount } = useSelector((state: RootState) => state.certificates);
 
-  const [deliveryMethod, setDeliveryMethod] = useState<"courier" | "pickup">(
-    "courier"
-  );
+  const [deliveryMethod, setDeliveryMethod] = useState<"courier" | "pickup">("courier");
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -21,6 +23,21 @@ export const Order: React.FC = () => {
     deliveryDate: "",
     comment: "",
   });
+
+  useEffect(() => {
+    const loadCartData = async () => {
+      if (userId) {
+        try {
+          const cartData = await getCart(userId);
+          dispatch(setCartItems(cartData));
+        } catch (error) {
+          console.error('Error loading cart:', error);
+        }
+      }
+    };
+
+    loadCartData();
+  }, [userId, dispatch]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

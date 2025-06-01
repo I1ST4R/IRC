@@ -18,6 +18,9 @@ import { useAppSelector } from "../../main/store";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import "./_cart.scss";
+import { setCartItems } from '../../entity/cart/cart.slice';
+import { getCart } from '../../services/api';
+import CartMenu from '../../main/components/CartMenu/CartMenu';
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -55,6 +58,21 @@ export const Cart: React.FC = () => {
   useEffect(() => {
     dispatch(fetchProducts({ page: 1 }));
   }, [dispatch]);
+
+  useEffect(() => {
+    const loadCartData = async () => {
+      if (userId) {
+        try {
+          const cartData = await getCart(userId);
+          dispatch(setCartItems(cartData));
+        } catch (error) {
+          console.error('Error loading cart:', error);
+        }
+      }
+    };
+
+    loadCartData();
+  }, [userId, dispatch]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (userId && newQuantity > 0) {

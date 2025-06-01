@@ -2,13 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import productsReducer from '../entity/products/products.slice';
 import filterReducer from '../entity/products/filterSlice';
 import categoriesReducer from '../entity/productCategories/categoriesSlice';
-import cartReducer from '../entity/products/cartSlice';
+import cartReducer from '../entity/cart/cart.slice';
 import likedReducer from '../entity/products/likedSlice';
 import userReducer from '../entity/users/users.slice';
 import promoReducer from '../entity/promo/promo.slice';
 import certificatesReducer from '../entity/certificates/certificates.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
+import { CartItem, CartTotals } from '../entity/cart/types';
 
 interface Product {
   id: string;
@@ -40,8 +41,48 @@ interface Category {
 }
 
 interface CategoriesState {
-  categories: Category[];
-  isLoading: boolean;
+  items: Category[];
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: string | null;
+}
+
+interface FilterState {
+  minPrice: number | null;
+  maxPrice: number | null;
+  tags: string[];
+}
+
+interface CartState {
+  items: CartItem[];
+  loading: boolean;
+  error: string | null;
+  totals: CartTotals | null;
+}
+
+interface LikedState {
+  items: string[];
+  loading: boolean;
+  error: string | null;
+}
+
+interface UserState {
+  id: string;
+  login: string;
+  email: string;
+  type: string;
+}
+
+interface PromoState {
+  code: string | null;
+  discount: number | null;
+  loading: boolean;
+  error: string | null;
+}
+
+interface CertificatesState {
+  code: string | null;
+  amount: number | null;
+  loading: boolean;
   error: string | null;
 }
 
@@ -54,17 +95,22 @@ export const store = configureStore({
     liked: likedReducer,
     user: userReducer,
     promo: promoReducer,
-    certificates: certificatesReducer,
+    certificates: certificatesReducer
   }
 });
 
-export type RootState = ReturnType<typeof store.getState> & {
+export type RootState = {
   products: ProductsState;
+  filter: FilterState;
   categories: CategoriesState;
+  cart: CartState;
+  liked: LikedState;
+  user: UserState;
+  promo: PromoState;
+  certificates: CertificatesState;
 };
 
 export type AppDispatch = typeof store.dispatch;
 
-// Типы для хуков
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector; 

@@ -354,18 +354,99 @@ export const addOrder = async (userId: string, recipient: recipientInterface) =>
   }
 };
 
-export default {
-  getProducts,
-  getProductById,
-  getCategories,
-  getCart,
-  addToCart,
-  removeFromCart,
-  updateCartItemQuantity,
-  getLiked,
-  addToLiked,
-  removeFromLiked,
-  validatePromo,
-  validateCertificate,
-  addOrder
+export const getOrder = async (userId: string) => {
+  try {
+    const responseUser = await axiosInstance.get(`/users?id=${userId}`);
+    if (responseUser.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    else {
+      const responseOrder = await axiosInstance.get(`/orders?userId=${userId}`)
+      return responseOrder.data;
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw error;
+  }
+};
+
+export const calculateCartTotals = async (userId: string) => {
+  try {
+    console.log('Calculating cart totals for user:', userId);
+    const cartData = await getCart(userId);
+    console.log('Cart data:', cartData);
+    const { products } = await getProducts(1);
+    console.log('Products:', products);
+    
+    const totals = cartData.reduce((acc: {
+      total: number;
+      totalWithoutDiscount: number;
+      totalDiscount: number;
+      itemsCount: number;
+    }, item: CartItem) => {
+      const product = products.find((p: any) => p.id === item.productId);
+      console.log('Processing item:', item, 'Found product:', product);
+      if (!product) return acc;
+      
+      const itemTotal = product.price * item.quantity;
+      const itemTotalWithoutDiscount = (product.prevPrice || product.price) * item.quantity;
+      const itemDiscount = itemTotalWithoutDiscount - itemTotal;
+      
+      return {
+        total: acc.total + itemTotal,
+        totalWithoutDiscount: acc.totalWithoutDiscount + itemTotalWithoutDiscount,
+        totalDiscount: acc.totalDiscount + itemDiscount,
+        itemsCount: acc.itemsCount + item.quantity
+      };
+    }, { total: 0, totalWithoutDiscount: 0, totalDiscount: 0, itemsCount: 0 });
+
+    console.log('Calculated totals:', totals);
+    return totals;
+  } catch (error) {
+    console.error('Error calculating cart totals:', error);
+    throw error;
+  }
+};
+
+export const calculateOrderTotals = async (userId: string, promoCode?: string, certificateCode?: string) => {
+  try {
+    console.log('Calculating order totals for user:', userId, 'promo:', promoCode, 'certificate:', certificateCode);
+    const cartTotals = await calculateCartTotals(userId);
+    console.log('Cart totals:', cartTotals);
+    let finalTotal = cartTotals.total;
+    let promoDiscount = 0;
+    let certificateDiscount = 0;
+
+    if (promoCode) {
+      const promo = await validatePromo(promoCode);
+      console.log('Promo validation result:', promo);
+      if (promo.valid && promo.code) {
+        promoDiscount = Math.round(finalTotal * (promo.discount / 100));
+        finalTotal -= promoDiscount;
+      }
+    }
+
+    if (certificateCode) {
+      const certificate = await validateCertificate(certificateCode);
+      console.log('Certificate validation result:', certificate);
+      if (certificate.valid && certificate.code) {
+        certificateDiscount = Math.min(certificate.amount, finalTotal);
+        finalTotal -= certificateDiscount;
+      }
+    }
+
+    const result = {
+      ...cartTotals,
+      promoDiscount,
+      certificateDiscount,
+      finalTotal: Math.max(0, finalTotal)
+    };
+    console.log('Final order totals:', result);
+    return result;
+  } catch (error) {
+    console.error('Error calculating order totals:', error);
+    throw error;
+  }
 }; 
