@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store';
-import { fetchCart, clearCartOnLogout } from '../../entity/products/cartSlice';
-import { fetchLiked, clearLikedOnLogout } from '../../entity/products/likedSlice';
-import { checkAuth } from '../../entity/users/users.slice';
-import { fetchProducts } from '../../entity/products/products.slice';
+import { fetchCart, clearCartOnLogout } from '../../entity/product/cartSlice';
+import { fetchLiked, clearLikedOnLogout } from '../../entity/product/likedSlice';
+import { checkAuth } from '../../entity/users/slice';
+import { fetchProducts } from '../../entity/product/slice';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';

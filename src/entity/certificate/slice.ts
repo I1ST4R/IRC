@@ -1,12 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { validateCertificate } from '@/services/api';
+import { CertificateState } from './types'
 
-interface CertificateState {
-  code: string | null;
-  amount: number | null;
-  loading: boolean;
-  error: string | null;
-}
 
 const initialState: CertificateState = {
   code: null,

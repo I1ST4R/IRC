@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { fetchLiked, removeItemFromLiked } from "@/entity/products/likedSlice";
-import { fetchProducts } from "@/entity/products/products.slice";
+import { fetchLiked, removeItemFromLiked } from "@/entity/product/likedSlice";
+import { fetchProducts } from "@/entity/product/slice";
 import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 

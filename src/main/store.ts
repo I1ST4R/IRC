@@ -1,90 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
-import productsReducer from '../entity/products/products.slice';
-import filterReducer from '../entity/products/filterSlice';
-import categoriesReducer from '../entity/productCategories/categoriesSlice';
-import cartReducer from '../entity/cart/cart.slice';
-import likedReducer from '../entity/products/likedSlice';
-import userReducer from '../entity/users/users.slice';
-import promoReducer from '../entity/promo/promo.slice';
-import certificatesReducer from '../entity/certificates/certificates.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
-import { CartItem, CartTotals } from '../entity/cart/types';
-
-interface Product {
-  id: string;
-  name: string;
-  releaseDate: string;
-  price: number;
-  prevPrice?: number;
-  technology: string;
-  img: string;
-  tags: {
-    categoryId: string;
-    tagId: string;
-  }[];
-}
-
-interface ProductsState {
-  items: Product[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error: string | null;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  tags: {
-    id: string;
-    name: string;
-  }[];
-}
-
-interface CategoriesState {
-  items: Category[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error: string | null;
-}
-
-interface FilterState {
-  minPrice: number | null;
-  maxPrice: number | null;
-  tags: string[];
-}
-
-interface CartState {
-  items: CartItem[];
-  loading: boolean;
-  error: string | null;
-  totals: CartTotals | null;
-}
-
-interface LikedState {
-  items: string[];
-  loading: boolean;
-  error: string | null;
-}
-
-interface UserState {
-  id: string;
-  login: string;
-  email: string;
-  type: string;
-}
-
-interface PromoState {
-  code: string | null;
-  discount: number | null;
-  loading: boolean;
-  error: string | null;
-}
-
-interface CertificatesState {
-  code: string | null;
-  amount: number | null;
-  loading: boolean;
-  error: string | null;
-}
+//Reducers
+import productsReducer from '../entity/product/slice.ts';
+import filterReducer from '../entity/productFilter/slice.ts';
+import categoriesReducer from '../entity/productCategory/slice.ts';
+import cartReducer from '../entity/cart/cart.slice';
+import likedReducer from '../entity/liked/slice.ts';
+import userReducer from '../entity/users/slice.ts';
+import promoReducer from '../entity/promo/slice.ts';
+import certificatesReducer from '../entity/certificate/slice.ts';
+//State Interface
+import { CartState } from '../entity/cart/types';
+import { UserState } from '../entity/users/types.ts'
+import { CertificateState } from '../entity/certificate/types.ts'
+import { CategoriesState } from '../entity/productCategory/types.ts'
+import { LikedState } from '../entity/liked/types.ts'
+import { FilterState } from '../entity/productFilter/types.ts'
+import { ProductsState } from '../entity/product/types.ts'
+import { PromoState } from '../entity/promo/types.ts'
 
 export const store = configureStore({
   reducer: {
@@ -107,7 +41,7 @@ export type RootState = {
   liked: LikedState;
   user: UserState;
   promo: PromoState;
-  certificates: CertificatesState;
+  certificates: CertificateState;
 };
 
 export type AppDispatch = typeof store.dispatch;

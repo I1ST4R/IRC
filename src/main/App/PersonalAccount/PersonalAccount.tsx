@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../main/store';
-import { login, register, clearError } from '../../../entity/users/users.slice';
+import { login, register, clearError } from '../../../entity/users/slice';
 import './_personal-account.scss';
 
 interface PersonalAccountProps {

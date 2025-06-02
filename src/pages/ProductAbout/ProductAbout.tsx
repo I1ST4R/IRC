@@ -3,14 +3,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
 import { addItemToCart, fetchCart } from "@/entity/products/cartSlice";
-import { addItemToLiked, fetchLiked } from "@/entity/products/likedSlice";
-import { fetchProducts } from "@/entity/products/products.slice";
+import { addItemToLiked, fetchLiked } from "@/entity/product/likedSlice";
+import { fetchProducts } from "@/entity/product/slice";
 import { getCategories } from "@/services/api";
 import {
   setCategories,
   setLoading,
   setError,
-} from "@/entity/productCategories/categoriesSlice";
+} from "@/entity/productCategory/slice";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
 

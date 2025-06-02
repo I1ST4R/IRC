@@ -1,13 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals, calculateOrderTotals } from '../../services/api';
-import { CartItem, CartTotals } from './types';
-
-interface CartState {
-  items: CartItem[];
-  loading: boolean;
-  error: string | null;
-  totals: CartTotals | null;
-}
+import { CartItem, CartTotals, CartState } from './types';
 
 const initialState: CartState = {
   items: [],

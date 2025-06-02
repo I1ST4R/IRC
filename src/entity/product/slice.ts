@@ -1,16 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getProducts, getProductById } from '@/services/api';
-import { FilterParams } from '@/services/types';
+import { FilterParams } from '../productFilter/types';
 import { Product } from './types';
+import { ProductsState } from './types'
 
-interface ProductsState {
-  items: Product[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error: string | null;
-  hasMore: boolean;
-  currentPage: number;
-  filters: FilterParams;
-}
 
 const initialState: ProductsState = {
   items: [],
@@ -19,9 +12,11 @@ const initialState: ProductsState = {
   hasMore: true,
   currentPage: 1,
   filters: {
-    minPrice: 0,
-    maxPrice: 10000,
-    tags: []  
+    priceRange: {
+      min: 0,
+      max: 10000
+    },
+    selectedTags: []  
   }
 };
 

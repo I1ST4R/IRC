@@ -1,15 +1,15 @@
 import { useEffect, useCallback, useState } from "react";
-import { Product as ProductType } from "../../../entity/products/types";
+import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
-import { addItemToCart, fetchCart } from "../../../entity/products/cartSlice";
+import { addItemToCart, fetchCart } from "../../../entity/product/cartSlice";
 import { useNavigate, Link } from "react-router-dom";
-import { toggleLike } from "../../../entity/users/users.slice";
+import { toggleLike } from "../../../entity/users/slice";
 import {
   addItemToLiked,
   fetchLiked,
   removeItemFromLiked,
-} from "@/entity/products/likedSlice";
+} from "@/entity/product/likedSlice";
 import PersonalAccount from "../../../main/App/PersonalAccount/PersonalAccount";
 
 interface ProductProps {

@@ -2,17 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import {
-  fetchCart,
-  removeItemFromCart,
-  updateCartQuantity,
-  addItemToLiked,
-  removeItemFromLiked
-} from "../../entity/users/users.slice";
-import { validatePromoCode } from "../../entity/promo/promo.slice";
-import { validateCertificateCode } from "../../entity/certificates/certificates.slice";
-import { fetchProducts } from "../../entity/products/products.slice";
-import cart from "./cart.svg";
+import { fetchCart,removeItemFromCart, updateCartQuantity, addItemToLiked,removeItemFromLiked } from "../../entity/users/slice";
+import { validatePromoCode } from "../../entity/promo/slice";
+import { validateCertificateCode } from "../../entity/certificate/slice";
+import { fetchProducts } from "../../entity/product/slice";
+// import cart from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import { useAppSelector } from "../../main/store";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
@@ -20,11 +14,11 @@ import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import "./_cart.scss";
 import { setCartItems } from '../../entity/cart/cart.slice';
 import { getCart } from '../../services/api';
-import CartMenu from '../../main/components/CartMenu/CartMenu';
+
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { id: userId, cart: cartItems, liked, loading: userLoading } = useAppSelector((state) => state.user);
+  const { id, cart, liked, userLoading } = useAppSelector((state) => state.user);
   const {
     items: products,
     loading: productsLoading,

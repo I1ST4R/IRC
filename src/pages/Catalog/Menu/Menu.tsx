@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag, resetFilters } from "../../../entity/products/filterSlice";
+import { setPriceRange, toggleTag, resetFilters } from "../../../entity/product/filterSlice";
 import { RootState } from "../../../main/store";
 import { getCategories } from '@/services/api';
-import { setCategories, setLoading, setError } from "../../../entity/productCategories/categoriesSlice";
+import { setCategories, setLoading, setError } from "../../../entity/productCategory/slice";
 import reset from "./reset.svg";
 
 interface AccordionItemProps {

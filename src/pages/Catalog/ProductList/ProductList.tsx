@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../entity/products/products.slice";
+import { fetchProducts } from "../../../entity/product/slice";
 import { RootState, AppDispatch } from "../../../main/store";
 import { Product as ProductComponent } from "../Product/Product";
-import type { Product } from "../../../entity/products/types";
+import type { Product } from "../../../entity/product/types";
 
 interface ProductListProps {
   onAuthRequired?: () => void;

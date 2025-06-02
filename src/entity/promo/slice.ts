@@ -1,12 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { validatePromo } from '@/services/api';
-
-interface PromoState {
-  code: string | null;
-  discount: number | null;
-  loading: boolean;
-  error: string | null;
-}
+import { PromoState } from '../promo/types'
 
 const initialState: PromoState = {
   code: null,

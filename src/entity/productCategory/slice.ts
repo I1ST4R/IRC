@@ -1,21 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface Tag {
-  id: string;
-  name: string;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  tags: Tag[];
-}
-
-export interface CategoriesState {
-  categories: Category[];
-  isLoading: boolean;
-  error: string | null;
-}
+import { CategoriesState, Category } from "./types"
 
 const initialState: CategoriesState = {
   categories: [],

@@ -1,21 +1,19 @@
+import { CartItem, LikedItem } from '@/services/types';
+
 export interface User {
-  id: number | string;
-  type: 'admin' | 'client' | 'user';
-  login: string;
-  password: string;
-  email: string;
-  name?: string;
-  avatar?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  liked?: { productId: string }[];
+  id: string | null;
+  login: string | null;
+  email: string | null;
+  password: string | null;
+  type: "client" | "admin" | null;
+  cart: CartItem[] | null;
+  liked: LikedItem[] | null;
 }
 
 export interface UserState {
-  user: User | null;
+  user: User,
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
-  likedIds: string[];
 }
 
 export interface AuthResponse {

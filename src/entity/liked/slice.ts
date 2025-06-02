@@ -1,15 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addToLiked, getLiked, removeFromLiked } from '@/services/api';
-
-interface LikedItem {
-  productId: string;
-}
-
-interface LikedState {
-  items: LikedItem[];
-  loading: boolean;
-  error: string | null;
-}
+import { LikedState } from './types'
 
 export const fetchLiked = createAsyncThunk(
   'liked/fetchLiked',

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
-import { logout } from '../../../entity/users/users.slice';
+import { logout } from '../../../entity/users/slice';
 import logo from './logo.svg';
 import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';

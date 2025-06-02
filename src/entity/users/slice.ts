@@ -1,28 +1,19 @@
 // features/user/userSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { login as apiLogin, register as apiRegister, checkAuth as apiCheckAuth, getCart, addToCart, removeFromCart, updateCartItemQuantity, getLiked, addToLiked, removeFromLiked } from '@/services/api';
-import { CartItem, LikedItem } from '@/services/types';
-import { LoginData, RegisterData } from './types';
-
-interface UserState {
-  id: string | null;
-  login: string | null;
-  email: string | null;
-  type: string | null;
-  cart: CartItem[];
-  liked: LikedItem[];
-  loading: boolean;
-  error: string | null;
-}
+import { LoginData, RegisterData, UserState } from './types';
 
 const initialState: UserState = {
-  id: null,
-  login: null,
-  email: null,
-  type: null,
-  cart: [],
-  liked: [],
-  loading: false,
+  user:{
+    id: null,
+    login: null,
+    email: null,
+    password: null,
+    type: null,
+    cart: null,
+    liked: null,
+  },
+  loading: 'idle',
   error: null
 };
 
@@ -168,12 +159,12 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.id = null;
-      state.login = null;
-      state.email = null;
-      state.type = null;
-      state.cart = [];
-      state.liked = [];
+      state.user.id = null;
+      state.user.login = null;
+      state.user.email = null;
+      state.user.type = null;
+      state.user.cart = null;
+      state.user.liked = null;
       localStorage.removeItem('userId');
     },
     clearError: (state) => {
@@ -182,87 +173,46 @@ const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Auth reducers
+      // Login
       .addCase(login.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.id = String(action.payload.id);
-        state.login = action.payload.login;
-        state.email = action.payload.email;
-        state.type = action.payload.type;
+        state.loading = 'succeeded';
+        state.user.id = String(action.payload.id);
+        state.user.login = action.payload.login;
+        state.user.password = action.payload.password;
+        state.user.type = action.payload.type;
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(register.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
-        state.id = String(action.payload.id);
-        state.login = action.payload.login;
-        state.email = action.payload.email;
-        state.type = action.payload.type;
-      })
-      .addCase(register.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.payload as string;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         if (action.payload) {
-          state.id = String(action.payload.id);
-          state.login = action.payload.login;
-          state.email = action.payload.email;
-          state.type = action.payload.type;
+          state.user.id = String(action.payload.id);
+          state.user.login = action.payload.login;
+          state.user.email = action.payload.email;
+          state.user.type = action.payload.type;
         }
       })
-      // Cart reducers
-      .addCase(fetchCart.pending, (state) => {
-        state.loading = true;
+      // Register
+      .addCase(register.pending, (state) => {
+        state.loading = 'pending';
         state.error = null;
       })
-      .addCase(fetchCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cart = action.payload;
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.user.id = String(action.payload.id);
+        state.user.login = action.payload.login;
+        state.user.email = action.payload.email;
+        state.user.type = action.payload.type;
       })
-      .addCase(fetchCart.rejected, (state, action) => {
-        state.loading = false;
+      .addCase(register.rejected, (state, action) => {
+        state.loading = 'failed';
         state.error = action.payload as string;
-        state.cart = [];
       })
-      .addCase(addItemToCart.fulfilled, (state, action) => {
-        state.cart = action.payload;
-      })
-      .addCase(removeItemFromCart.fulfilled, (state, action) => {
-        state.cart = action.payload;
-      })
-      .addCase(updateCartQuantity.fulfilled, (state, action) => {
-        state.cart = action.payload;
-      })
-      // Liked reducers
-      .addCase(fetchLiked.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchLiked.fulfilled, (state, action) => {
-        state.loading = false;
-        state.liked = action.payload;
-      })
-      .addCase(fetchLiked.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Failed to fetch liked items';
-      })
-      .addCase(addItemToLiked.fulfilled, (state, action) => {
-        state.liked = action.payload;
-      })
-      .addCase(removeItemFromLiked.fulfilled, (state, action) => {
-        state.liked = action.payload;
-      });
   }
 });
 
