@@ -1,12 +1,13 @@
 export interface Tag {
   id: string;
   name: string;
+  categoryId: string;
 }
 
 export interface Category {
   id: string;
   name: string;
-  tags: Tag[];
+  tags: string[];
 }
 
 export interface CategoriesState {

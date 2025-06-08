@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './types';
+import { Tag } from '../productCategory/types';
 
 const initialState: FilterState = {
-  priceRange: {
-    min: 500,
-    max: 10000
+  filterParams: {
+    priceRange: {
+      min: 500,
+      max: 10000
+    },
+    tags: [],
   },
-  selectedTags: [],
   loading: 'idle',
   error: null
 };
@@ -16,19 +19,19 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     setPriceRange: (state, action: PayloadAction<{ min: number; max: number }>) => {
-      state.priceRange = action.payload;
+      state.filterParams.priceRange = action.payload;
     },
-    toggleTag: (state, action: PayloadAction<string>) => {
-      const index = state.selectedTags.indexOf(action.payload);
+    toggleTag: (state, action: PayloadAction<Tag>) => {
+      const index = state.filterParams.tags.indexOf(action.payload);
       if (index === -1) {
-        state.selectedTags.push(action.payload);
+        state.filterParams.tags.push(action.payload);
       } else {
-        state.selectedTags.splice(index, 1);
+        state.filterParams.tags.splice(index, 1);
       }
     },
     resetFilters: (state) => {
-      state.priceRange = initialState.priceRange;
-      state.selectedTags = [];
+      state.filterParams.priceRange = initialState.filterParams.priceRange;
+      state.filterParams.tags = initialState.filterParams.tags;
     }
   }
 });

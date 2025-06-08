@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getProducts, getProductById } from '@/services/api';
-import { FilterParams } from '@/services/types';
+import { getOrders } from '@/services/api';
 import { OrdersState } from './types';
 
 
@@ -12,14 +12,14 @@ const initialState: OrdersState = {
 };
 
 export const fetchOrders = createAsyncThunk(
-  'products/fetchProducts',
-  async ({ page, filters }: { page: number; filters?: FilterParams }) => {
-    const response = await getProducts(page, filters);
+  'products/fetchOrders',
+  async () => {
+    const response = await getOrders();
     return response;
   }
 );
 
-export const fetchProductById = createAsyncThunk(
+export const fetchOrderById = createAsyncThunk(
   'products/fetchById',
   async (id: string) => {
     try {

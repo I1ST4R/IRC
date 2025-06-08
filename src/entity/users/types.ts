@@ -6,8 +6,8 @@ export interface User {
   email: string | null;
   password: string | null;
   type: "client" | "admin" | null;
-  cart: CartItem[] | null;
-  liked: LikedItem[] | null;
+  cart: CartItem[];
+  liked: LikedItem[];
 }
 
 export interface UserState {

@@ -10,8 +10,8 @@ const initialState: UserState = {
     email: null,
     password: null,
     type: null,
-    cart: null,
-    liked: null,
+    cart: [],
+    liked: [],
   },
   loading: 'idle',
   error: null
@@ -163,8 +163,8 @@ const usersSlice = createSlice({
       state.user.login = null;
       state.user.email = null;
       state.user.type = null;
-      state.user.cart = null;
-      state.user.liked = null;
+      state.user.cart = [];
+      state.user.liked = [];
       localStorage.removeItem('userId');
     },
     clearError: (state) => {
@@ -179,11 +179,13 @@ const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.user.id = String(action.payload.id);
-        state.user.login = action.payload.login;
-        state.user.password = action.payload.password;
-        state.user.type = action.payload.type;
+        if (action.payload) {  
+          state.loading = 'succeeded';
+          state.user.id = String(action.payload.id);
+          state.user.login = action.payload.login;
+          state.user.password = action.payload.password;
+          state.user.type = action.payload.type;
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = 'failed';
@@ -203,11 +205,13 @@ const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.user.id = String(action.payload.id);
-        state.user.login = action.payload.login;
-        state.user.email = action.payload.email;
-        state.user.type = action.payload.type;
+        if (action.payload) {  
+          state.loading = 'succeeded';
+          state.user.id = String(action.payload.id);
+          state.user.login = action.payload.login;
+          state.user.password = action.payload.password;
+          state.user.type = action.payload.type;
+        }
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = 'failed';

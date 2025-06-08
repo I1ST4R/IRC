@@ -1,9 +1,11 @@
 import axios from 'axios';
-import {FilterParams} from './types'
+import {FilterParams} from '@/entity/productFilter/types'
 import {CartItem} from './types'
 import {LikedItem} from './types'
 import { recipientInterface } from './types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
+import { Category, Tag } from '@/entity/productCategory/types';
+import { Product } from '@/entity/product/types';
 
 const API_URL = 'http://localhost:3001';
 
@@ -32,10 +34,7 @@ export const login = async (data: LoginData) => {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in login', error);
   }
 };
 
@@ -54,10 +53,7 @@ export const register = async (data: RegisterData) => {
     const { password, ...userWithoutPassword } = response.data;
     return userWithoutPassword as User;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in register', error);
   }
 };
 
@@ -71,54 +67,45 @@ export const checkAuth = async (userId: string) => {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in checkAuth', error);
   }
 };
 
 // Products
 export const getProducts = async (page: number, params?: FilterParams) => {
+  try{
+
   const response = await axiosInstance.get('/products');
   let filteredProducts = response.data;
 
-  console.log('Filter params:', params);
-  console.log('Initial products count:', filteredProducts.length);
-
   // Фильтрация по цене
-  const minPrice = params?.minPrice;
-  const maxPrice = params?.maxPrice;
+  const priceRange = params?.priceRange;
+  const priceMin = priceRange?.min
+  const priceMax = priceRange?.max
 
-  if (minPrice !== undefined) {
-    filteredProducts = filteredProducts.filter((product: any) => product.price >= minPrice);
+  if (priceMin !== undefined) {
+    filteredProducts = filteredProducts.filter((product: Product) => product.price >= priceMin);
     console.log('After minPrice filter:', filteredProducts.length);
   }
-  if (maxPrice !== undefined) {
-    filteredProducts = filteredProducts.filter((product: any) => product.price <= maxPrice);
+  if (priceMax !== undefined) {
+    filteredProducts = filteredProducts.filter((product: Product) => product.price <= priceMax);
     console.log('After maxPrice filter:', filteredProducts.length);
   }
 
+  const allTags = await getTagsById(params?.tagsId as string[]);
+  const tagsByCategory = allTags.reduce((acc: { [categoryId: string]: string[] }, tag) => {
+    if (!acc[tag.categoryId]) acc[tag.categoryId] = [];
+    acc[tag.categoryId].push(tag.id);
+    return acc;
+}, {});
+
   // Фильтрация по тегам
-  if (params?.tags && params.tags.length > 0) {
-    console.log('Filtering by tags:', params.tags);
-    
-    // Группируем теги по категориям
-    const tagsByCategory = params.tags.reduce((acc: { [key: string]: string[] }, tagString) => {
-      const [categoryId] = tagString.split(',');
-      if (!acc[categoryId]) {
-        acc[categoryId] = [];
-      }
-      acc[categoryId].push(tagString);
-      return acc;
-    }, {});
+  if (params?.tagsId && params.tagsId.length > 0) {
+    console.log('Filtering by tags:', params.tagsId);
 
-    console.log('Tags grouped by category:', tagsByCategory);
+    filteredProducts = filteredProducts.filter((product : Product) => {
 
-    filteredProducts = filteredProducts.filter((product: any) => {
-      // Проверяем, что продукт соответствует всем категориям (AND между категориями)
       return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
-        // Проверяем, что продукт имеет хотя бы один тег из текущей категории (OR внутри категории)
         return categoryTags.some(selectedTag => 
           product.tags.some((productTag: string) => productTag === selectedTag)
         );
@@ -136,11 +123,37 @@ export const getProducts = async (page: number, params?: FilterParams) => {
     products: paginatedProducts,
     hasMore: hasMore 
   };
+
+  } catch (error: any) {
+    console.error('error in getProducts', error);
+  }
+
 };
 
-export const getProductById = async (productId?: string) => {
-  const response = await axiosInstance.get(`/products/${productId}`);
-  return response.data;
+export const getProductById = async (productId: string) => {
+  try{
+    const response = await axiosInstance.get(`/products/${productId}`);
+    return response.data;
+  }catch (error: any) {
+    console.error('error in getProductTagById', error);
+  }
+};
+
+export const getProductsById = async (productsId: string[]) => {
+  return Promise.all(productsId.map(productId => getProductById(productId)));
+};
+
+export const getTagById = async (tagId: string) => {
+  try{
+    const response = await axiosInstance.get(`/productTags/${tagId}`);
+    return response.data;
+  } catch (error: any) {
+    console.error('error in getProductTagById', error);
+  }
+}
+
+export const getTagsById = async (tagsId: string[]) => {
+  return Promise.all(tagsId.map(tagId => getTagById(tagId)));
 };
 
 // Categories
@@ -163,11 +176,7 @@ export const getCart = async (userId: string) => {
     }
     return user.cart;
   } catch (error: any) {
-    console.error('Error in getCart:', error);
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in getCart', error);
   }
 };
 
@@ -190,10 +199,7 @@ export const addToCart = async (userId: string, productId: string) => {
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
     return updateResponse.data.cart;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in addToCart', error);
   }
 };
 
@@ -209,10 +215,7 @@ export const removeFromCart = async (userId: string, productId: string) => {
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
     return updateResponse.data.cart;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in removeFromCart', error);
   }
 };
 
@@ -233,10 +236,41 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
     return updateResponse.data.cart;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in updateCartItemQuantity', error);
+  }
+};
+
+export const calculateCartTotals = async (userId: string) => {
+  try {
+    const cartData: CartItem[] = await getCart(userId);
+
+    const productIds = cartData.map(item => item.productId)
+
+    const cartProducts = await getProductsById(productIds);
+    
+    const totals = cartData.reduce((acc: {
+      total: number;
+      totalWithoutDiscount: number;
+      totalDiscount: number;
+      itemsCount: number;
+    }, item: CartItem) => {
+      const product = cartProducts.find(p => p.id === item.productId);
+      
+      const itemTotal = product.price * item.quantity;
+      const itemTotalWithoutDiscount = (product.prevPrice || product.price) * item.quantity;
+      const itemDiscount = itemTotalWithoutDiscount - itemTotal;
+      
+      return {
+        total: acc.total + itemTotal,
+        totalWithoutDiscount: acc.totalWithoutDiscount + itemTotalWithoutDiscount,
+        totalDiscount: acc.totalDiscount + itemDiscount,
+        itemsCount: acc.itemsCount + item.quantity
+      };
+    }, { total: 0, totalWithoutDiscount: 0, totalDiscount: 0, itemsCount: 0 });
+
+    return totals;
+  } catch (error: any) {
+    console.error('error in calculateCartTotals ', error);
   }
 };
 
@@ -254,10 +288,7 @@ export const getLiked = async (userId: string) => {
     }
     return user.liked;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in getLiked', error);
   }
 };
 
@@ -278,10 +309,7 @@ export const addToLiked = async (userId: string, productId: string) => {
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
     return updateResponse.data.liked;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in addToLiked', error);
   }
 };
 
@@ -297,10 +325,7 @@ export const removeFromLiked = async (userId: string, productId: string) => {
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
     return updateResponse.data.liked;
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in removeFromLiked', error);
   }
 };
 
@@ -312,9 +337,8 @@ export const validatePromo = async (code: string) => {
       return { valid: true, code: response.data[0].code, discount: response.data[0].discount };
     }
     return { valid: false };
-  } catch (error) {
-    console.error('Error validating promo:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('error in validatePromo', error);
   }
 };
 
@@ -326,9 +350,8 @@ export const validateCertificate = async (code: string) => {
       return { valid: true, code: response.data[0].code, amount: response.data[0].amount };
     }
     return { valid: false };
-  } catch (error) {
-    console.error('Error validating certificate:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('error in validateCertificate', error);
   }
 };
 
@@ -348,9 +371,8 @@ export const addOrder = async (userId: string, recipient: recipientInterface) =>
     
     const response = await axiosInstance.post('/orders', newOrder);
     return response.data;
-  } catch (error) {
-    console.error('Error creating order:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('error in addOrder', error);
   }
 };
 
@@ -365,63 +387,36 @@ export const getOrder = async (userId: string) => {
       return responseOrder.data;
     }
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-    throw error;
+    console.error('error in getOrder', error);
   }
 };
 
-export const calculateCartTotals = async (userId: string) => {
+export const getOrders = async () => {
   try {
-    console.log('Calculating cart totals for user:', userId);
-    const cartData = await getCart(userId);
-    console.log('Cart data:', cartData);
-    const { products } = await getProducts(1);
-    console.log('Products:', products);
-    
-    const totals = cartData.reduce((acc: {
-      total: number;
-      totalWithoutDiscount: number;
-      totalDiscount: number;
-      itemsCount: number;
-    }, item: CartItem) => {
-      const product = products.find((p: any) => p.id === item.productId);
-      console.log('Processing item:', item, 'Found product:', product);
-      if (!product) return acc;
-      
-      const itemTotal = product.price * item.quantity;
-      const itemTotalWithoutDiscount = (product.prevPrice || product.price) * item.quantity;
-      const itemDiscount = itemTotalWithoutDiscount - itemTotal;
-      
-      return {
-        total: acc.total + itemTotal,
-        totalWithoutDiscount: acc.totalWithoutDiscount + itemTotalWithoutDiscount,
-        totalDiscount: acc.totalDiscount + itemDiscount,
-        itemsCount: acc.itemsCount + item.quantity
-      };
-    }, { total: 0, totalWithoutDiscount: 0, totalDiscount: 0, itemsCount: 0 });
-
-    console.log('Calculated totals:', totals);
-    return totals;
-  } catch (error) {
-    console.error('Error calculating cart totals:', error);
-    throw error;
+    const response = await axiosInstance.get(`/orders`)
+    return response.data;
+  } catch (error: any) {
+    console.error('error in getOrders', error);
   }
 };
 
 export const calculateOrderTotals = async (userId: string, promoCode?: string, certificateCode?: string) => {
   try {
-    console.log('Calculating order totals for user:', userId, 'promo:', promoCode, 'certificate:', certificateCode);
     const cartTotals = await calculateCartTotals(userId);
-    console.log('Cart totals:', cartTotals);
+
+    if (!cartTotals) {
+      throw new Error('error: cartTotals is undefined');
+    }
+
     let finalTotal = cartTotals.total;
     let promoDiscount = 0;
     let certificateDiscount = 0;
 
     if (promoCode) {
       const promo = await validatePromo(promoCode);
-      console.log('Promo validation result:', promo);
+      if (!promo) {
+        throw new Error('error: promo is undefined');
+      }
       if (promo.valid && promo.code) {
         promoDiscount = Math.round(finalTotal * (promo.discount / 100));
         finalTotal -= promoDiscount;
@@ -430,6 +425,9 @@ export const calculateOrderTotals = async (userId: string, promoCode?: string, c
 
     if (certificateCode) {
       const certificate = await validateCertificate(certificateCode);
+      if (!certificate) {
+        throw new Error('error: promo is undefined');
+      }
       console.log('Certificate validation result:', certificate);
       if (certificate.valid && certificate.code) {
         certificateDiscount = Math.min(certificate.amount, finalTotal);
@@ -445,8 +443,7 @@ export const calculateOrderTotals = async (userId: string, promoCode?: string, c
     };
     console.log('Final order totals:', result);
     return result;
-  } catch (error) {
-    console.error('Error calculating order totals:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('error in calculateOrderTotals ', error);
   }
 }; 

@@ -7,7 +7,7 @@ interface PriceRange {
 
 export interface FilterParams {
   priceRange: PriceRange;
-  selectedTags: Tag[];
+  tagsId: string[];
 }
 
 export interface FilterState {

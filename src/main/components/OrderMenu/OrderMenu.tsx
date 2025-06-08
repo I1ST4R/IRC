@@ -34,9 +34,9 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { id: userId } = useSelector((state: RootState) => state.user);
-  const { totals, loading, error, items } = useSelector((state: RootState) => state.cart);
-  const { items: products } = useSelector((state: RootState) => state.products);
+  const { id: userId } = useSelector((state: RootState) => state.user as UserState);
+  const { totals, loading, error, items } = useSelector((state: RootState) => state.cart as CartState);
+  const { items: products } = useSelector((state: RootState) => state.products as ProductsState);
 
   console.log('OrderMenu render:', { userId, totals, loading, error });
 
