@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../../main/store';
 import { validatePromoCode, clearPromo } from '../../../entity/promo/slice';
 import { validateCertificateCode, clearCertificate } from '../../../entity/certificate/slice';
-import { fetchOrderTotals } from '../../../entity/cart/cart.slice';
+import { fetchOrderTotals } from '../../../entity/cart/slice';
 import promo from '../../../pages/Cart/promo.svg';
 import certificate from '../../../pages/Cart/certificate.svg';
 import './_order-menu.scss';

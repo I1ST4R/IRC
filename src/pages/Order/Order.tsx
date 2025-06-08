@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../main/store';
 import { getCart } from '../../services/api';
-import { setCartItems } from '../../entity/cart/cart.slice';
+import { setCartItems } from '../../entity/cart/slice';
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import './_order.scss';
 

@@ -1,10 +1,9 @@
 import axios from 'axios';
 import {FilterParams} from '@/entity/productFilter/types'
-import {CartItem} from './types'
-import {LikedItem} from './types'
-import { recipientInterface } from './types';
+import {CartItem} from '@/entity/cart/types'
+import {LikedItem} from '@/entity/liked/types'
+import { recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
-import { Category, Tag } from '@/entity/productCategory/types';
 import { Product } from '@/entity/product/types';
 
 const API_URL = 'http://localhost:3001';
@@ -35,6 +34,7 @@ export const login = async (data: LoginData) => {
     return userWithoutPassword as User;
   } catch (error: any) {
     console.error('error in login', error);
+    throw error;
   }
 };
 
@@ -54,6 +54,7 @@ export const register = async (data: RegisterData) => {
     return userWithoutPassword as User;
   } catch (error: any) {
     console.error('error in register', error);
+    throw error;
   }
 };
 
@@ -68,66 +69,64 @@ export const checkAuth = async (userId: string) => {
     return userWithoutPassword as User;
   } catch (error: any) {
     console.error('error in checkAuth', error);
+    throw error;
   }
 };
 
 // Products
 export const getProducts = async (page: number, params?: FilterParams) => {
-  try{
+  try {
+    const response = await axiosInstance.get('/products');
+    let filteredProducts = response.data;
 
-  const response = await axiosInstance.get('/products');
-  let filteredProducts = response.data;
+    // Фильтрация по цене
+    const priceRange = params?.priceRange;
+    const priceMin = priceRange?.min
+    const priceMax = priceRange?.max
 
-  // Фильтрация по цене
-  const priceRange = params?.priceRange;
-  const priceMin = priceRange?.min
-  const priceMax = priceRange?.max
+    if (priceMin !== undefined) {
+      filteredProducts = filteredProducts.filter((product: Product) => product.price >= priceMin);
+      console.log('After minPrice filter:', filteredProducts.length);
+    }
+    if (priceMax !== undefined) {
+      filteredProducts = filteredProducts.filter((product: Product) => product.price <= priceMax);
+      console.log('After maxPrice filter:', filteredProducts.length);
+    }
 
-  if (priceMin !== undefined) {
-    filteredProducts = filteredProducts.filter((product: Product) => product.price >= priceMin);
-    console.log('After minPrice filter:', filteredProducts.length);
-  }
-  if (priceMax !== undefined) {
-    filteredProducts = filteredProducts.filter((product: Product) => product.price <= priceMax);
-    console.log('After maxPrice filter:', filteredProducts.length);
-  }
+    const allTags = await getTagsById(params?.tagsId as string[]);
+    const tagsByCategory = allTags.reduce((acc: { [categoryId: string]: string[] }, tag) => {
+      if (!acc[tag.categoryId]) acc[tag.categoryId] = [];
+      acc[tag.categoryId].push(tag.id);
+      return acc;
+    }, {});
 
-  const allTags = await getTagsById(params?.tagsId as string[]);
-  const tagsByCategory = allTags.reduce((acc: { [categoryId: string]: string[] }, tag) => {
-    if (!acc[tag.categoryId]) acc[tag.categoryId] = [];
-    acc[tag.categoryId].push(tag.id);
-    return acc;
-}, {});
+    // Фильтрация по тегам
+    if (params?.tagsId && params.tagsId.length > 0) {
+      console.log('Filtering by tags:', params.tagsId);
 
-  // Фильтрация по тегам
-  if (params?.tagsId && params.tagsId.length > 0) {
-    console.log('Filtering by tags:', params.tagsId);
-
-    filteredProducts = filteredProducts.filter((product : Product) => {
-
-      return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
-        return categoryTags.some(selectedTag => 
-          product.tags.some((productTag: string) => productTag === selectedTag)
-        );
+      filteredProducts = filteredProducts.filter((product : Product) => {
+        return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
+          return categoryTags.some(selectedTag => 
+            product.tags.some((productTag: string) => productTag === selectedTag)
+          );
+        });
       });
-    });
 
-    console.log('After tags filter:', filteredProducts.length);
-  }
+      console.log('After tags filter:', filteredProducts.length);
+    }
 
-  // Пагинация
-  const paginatedProducts = filteredProducts.slice(0, page * 10);
-  const hasMore = filteredProducts.length > page * 10;
+    // Пагинация
+    const paginatedProducts = filteredProducts.slice(0, page * 10);
+    const hasMore = filteredProducts.length > page * 10;
 
-  return {
-    products: paginatedProducts,
-    hasMore: hasMore 
-  };
-
+    return {
+      products: paginatedProducts,
+      hasMore: hasMore 
+    };
   } catch (error: any) {
     console.error('error in getProducts', error);
+    throw error;
   }
-
 };
 
 export const getProductById = async (productId: string) => {
@@ -135,7 +134,8 @@ export const getProductById = async (productId: string) => {
     const response = await axiosInstance.get(`/products/${productId}`);
     return response.data;
   }catch (error: any) {
-    console.error('error in getProductTagById', error);
+    console.error('error in getProductById', error);
+    throw error;
   }
 };
 
@@ -148,7 +148,8 @@ export const getTagById = async (tagId: string) => {
     const response = await axiosInstance.get(`/productTags/${tagId}`);
     return response.data;
   } catch (error: any) {
-    console.error('error in getProductTagById', error);
+    console.error('error in getTagById', error);
+    throw error;
   }
 }
 
@@ -158,8 +159,13 @@ export const getTagsById = async (tagsId: string[]) => {
 
 // Categories
 export const getCategories = async () => {
-  const response = await axiosInstance.get('/productCategories');
-  return response.data;
+  try{
+    const response = await axiosInstance.get('/productCategories');
+    return response.data;
+  } catch (error: any) {
+    console.error('error in getCategories', error);
+    throw error;
+  }
 };
 
 // Cart
@@ -177,6 +183,7 @@ export const getCart = async (userId: string) => {
     return user.cart;
   } catch (error: any) {
     console.error('error in getCart', error);
+    throw error;
   }
 };
 
@@ -200,6 +207,7 @@ export const addToCart = async (userId: string, productId: string) => {
     return updateResponse.data.cart;
   } catch (error: any) {
     console.error('error in addToCart', error);
+    throw error;
   }
 };
 
@@ -216,6 +224,7 @@ export const removeFromCart = async (userId: string, productId: string) => {
     return updateResponse.data.cart;
   } catch (error: any) {
     console.error('error in removeFromCart', error);
+    throw error;
   }
 };
 
@@ -237,6 +246,7 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     return updateResponse.data.cart;
   } catch (error: any) {
     console.error('error in updateCartItemQuantity', error);
+    throw error;
   }
 };
 
@@ -270,7 +280,8 @@ export const calculateCartTotals = async (userId: string) => {
 
     return totals;
   } catch (error: any) {
-    console.error('error in calculateCartTotals ', error);
+    console.error('error in calculateCartTotals', error);
+    throw error;
   }
 };
 
@@ -289,6 +300,7 @@ export const getLiked = async (userId: string) => {
     return user.liked;
   } catch (error: any) {
     console.error('error in getLiked', error);
+    throw error;
   }
 };
 
@@ -310,6 +322,7 @@ export const addToLiked = async (userId: string, productId: string) => {
     return updateResponse.data.liked;
   } catch (error: any) {
     console.error('error in addToLiked', error);
+    throw error;
   }
 };
 
@@ -326,6 +339,7 @@ export const removeFromLiked = async (userId: string, productId: string) => {
     return updateResponse.data.liked;
   } catch (error: any) {
     console.error('error in removeFromLiked', error);
+    throw error;
   }
 };
 
@@ -339,6 +353,7 @@ export const validatePromo = async (code: string) => {
     return { valid: false };
   } catch (error: any) {
     console.error('error in validatePromo', error);
+    throw error;
   }
 };
 
@@ -352,6 +367,7 @@ export const validateCertificate = async (code: string) => {
     return { valid: false };
   } catch (error: any) {
     console.error('error in validateCertificate', error);
+    throw error;
   }
 };
 
@@ -373,6 +389,7 @@ export const addOrder = async (userId: string, recipient: recipientInterface) =>
     return response.data;
   } catch (error: any) {
     console.error('error in addOrder', error);
+    throw error;
   }
 };
 
@@ -388,6 +405,7 @@ export const getOrder = async (userId: string) => {
     }
   } catch (error: any) {
     console.error('error in getOrder', error);
+    throw error;
   }
 };
 
@@ -397,6 +415,7 @@ export const getOrders = async () => {
     return response.data;
   } catch (error: any) {
     console.error('error in getOrders', error);
+    throw error;
   }
 };
 
@@ -444,6 +463,7 @@ export const calculateOrderTotals = async (userId: string, promoCode?: string, c
     console.log('Final order totals:', result);
     return result;
   } catch (error: any) {
-    console.error('error in calculateOrderTotals ', error);
+    console.error('error in calculateOrderTotals', error);
+    throw error;
   }
 }; 

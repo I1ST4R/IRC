@@ -3,12 +3,17 @@ import { FilterParams } from '../productFilter/types';
 export interface Product {
   id: string;
   name: string;
-  releaseDate: string;
+  technology: string;
   price: number;
   prevPrice?: number;
-  technology: string;
+  quantity: string;
   img: string;
   tags: string[];
+  article: string;
+  description: string;
+  formula: string[];
+  for_what: string;
+  skin_type: string;
 }
 
 export interface ProductsState {

@@ -2,8 +2,8 @@ import { useEffect, useCallback, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
-import { addItemToCart, fetchCart } from "@/entity/products/cartSlice";
-import { addItemToLiked, fetchLiked } from "@/entity/product/likedSlice";
+import { addToCart, fetchCart } from "@/entity/cart/slice.ts";
+import { addItemToLiked, fetchLiked } from "@/entity/liked/slice";
 import { fetchProducts } from "@/entity/product/slice";
 import { getCategories } from "@/services/api";
 import {
@@ -13,6 +13,7 @@ import {
 } from "@/entity/productCategory/slice";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
+import { fetchTagsById } from '../../entity/tag/slice';
 
 export const ProductAbout = ({
   onRemoveFromLiked,
@@ -22,23 +23,19 @@ export const ProductAbout = ({
   const { id } = useParams();
   const products = useSelector((state: RootState) => state.products.items);
   const product = products.find((p) => p.id === id);
-  console.log("Product ID:", id);
-  console.log("All products:", products);
-  console.log("Found product:", product);
-  console.log("Image path:", product?.img);
-  console.log(
-    "Full image URL:",
-    product?.img ? new URL(product.img, window.location.origin).href : null
-  );
-  const categories = useSelector(
-    (state: RootState) => state.categories?.categories || []
-  );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
+  const tags = useSelector((state: RootState) => state.tags.tags);
+
+  useEffect(() => {
+    if (product?.tags) {
+      dispatch(fetchTagsById(product.tags));
+    }
+  }, [dispatch, product?.tags]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -92,7 +89,7 @@ export const ProductAbout = ({
     } else {
       try {
         await dispatch(
-          addItemToCart({ userId: user.id.toString(), productId: product.id })
+          addToCart({ userId: user.id.toString(), productId: product.id })
         );
       } catch (error) {
         console.error("Failed to add item to cart:", error);
@@ -100,12 +97,10 @@ export const ProductAbout = ({
     }
   };
 
-  const getTagName = (tagString: string) => {
-    const [categoryId, tagId] = tagString.split(",");
-    const category = categories.find((cat) => cat.id === categoryId);
-    if (!category) return "";
-    const tag = category.tags.find((tag) => tag.id === tagId);
-    return tag ? tag.name : "";
+  const getTagName = (tagId: string) => {
+    if (!tagId) return "";
+    const tag = tags.find(t => t.id === tagId);
+    return tag?.name || "";
   };
 
   const togglePersonalAccount = () => {

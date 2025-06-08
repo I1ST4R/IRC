@@ -16,7 +16,7 @@ const initialState: ProductsState = {
       min: 0,
       max: 10000
     },
-    selectedTags: []  
+    tagsId: []  
   }
 };
 

@@ -125,6 +125,10 @@ const cartSlice = createSlice({
       })
       // Fetch cart totals
       .addCase(fetchCartTotals.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.totals = null;
+          return;
+        }
         state.totals = {
           ...action.payload,
           promoDiscount: 0,
@@ -139,6 +143,10 @@ const cartSlice = createSlice({
       })
       .addCase(fetchOrderTotals.fulfilled, (state, action) => {
         state.loading = false;
+        if (!action.payload) {
+          state.totals = null;
+          return;
+        }
         state.totals = {
           total: action.payload.total,
           totalWithoutDiscount: action.payload.totalWithoutDiscount,

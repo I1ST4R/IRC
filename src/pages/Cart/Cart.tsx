@@ -12,7 +12,7 @@ import { useAppSelector } from "../../main/store";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import "./_cart.scss";
-import { setCartItems } from '../../entity/cart/cart.slice';
+import { setCartItems } from '../../entity/cart/slice';
 import { getCart } from '../../services/api';
 
 

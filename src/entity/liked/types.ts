@@ -1,4 +1,4 @@
-interface LikedItem {
+export interface LikedItem {
   productId: string;
 }
 
