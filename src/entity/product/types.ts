@@ -18,6 +18,7 @@ export interface Product {
 
 export interface ProductsState {
   items: Product[];
+  currentProduct: Product | null
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
   hasMore: boolean;

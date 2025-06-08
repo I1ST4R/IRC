@@ -1,15 +1,10 @@
-import { useEffect, useCallback, useState } from "react";
+import { useState } from "react";
 import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
-import { addItemToCart, fetchCart } from "../../../entity/product/cartSlice";
+import { addToCart, fetchCart } from "../../../entity/cart/slice";
 import { useNavigate, Link } from "react-router-dom";
-import { toggleLike } from "../../../entity/users/slice";
-import {
-  addItemToLiked,
-  fetchLiked,
-  removeItemFromLiked,
-} from "@/entity/product/likedSlice";
+import { addItemToLiked, fetchLiked, removeItemFromLiked, } from "@/entity/liked/slice";
 import PersonalAccount from "../../../main/App/PersonalAccount/PersonalAccount";
 
 interface ProductProps {
@@ -24,29 +19,16 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
   );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
-  const { id: userId } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-
-  useEffect(() => {
-    const loadCart = async () => {
-      if (userId) {
-        try {
-          await dispatch(fetchCart(userId));
-        } catch (error) {
-          console.error("Failed to load cart:", error);
-        }
-      }
-    };
-    loadCart();
-  }, [dispatch, userId]);
-
+  const tags = useSelector((state: RootState) => state.tags.tags);
   const isInCart = cartItems.some((item) => item.productId === product.id);
   const isLiked = likedItems.some((item) => item.productId === product.id);
 
   const handleLike = async () => {
-    if (!userId) {
+    if (!user.id) {
       onAuthRequired?.();
       return;
     }
@@ -55,16 +37,16 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       onRemoveFromLiked();
     } else {
       if (isLiked) {
-        await dispatch(removeItemFromLiked({ userId, productId: product.id }));
+        await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId: product.id }));
       } else {
-        await dispatch(addItemToLiked({ userId, productId: product.id }));
+        await dispatch(addItemToLiked({ userId: user.id.toString(), productId: product.id }));
       }
-      await dispatch(fetchLiked(userId));
+      await dispatch(fetchLiked(user.id));
     }
   };
 
   const handleCartClick = async () => {
-    if (!userId) {
+    if (!user.id) {
       onAuthRequired?.();
       return;
     }
@@ -73,19 +55,17 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       navigate("/cart");
     } else {
       try {
-        await dispatch(addItemToCart({ userId, productId: product.id }));
+        await dispatch(addToCart({ userId: user.id.toString(), productId: product.id }));
       } catch (error) {
         console.error("Failed to add item to cart:", error);
       }
     }
   };
 
-  const getTagName = (tagString: string) => {
-    const [categoryId, tagId] = tagString.split(",");
-    const category = categories.find((cat) => cat.id === categoryId);
-    if (!category) return "";
-    const tag = category.tags.find((tag) => tag.id === tagId);
-    return tag ? tag.name : "";
+  const getTagName = (tagId: string) => {
+    if (!tagId) return "";
+    const tag = tags.find(t => t.id === tagId);
+    return tag?.name || "";
   };
 
   return (

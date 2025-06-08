@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag, resetFilters } from "../../../entity/product/filterSlice";
+import { setPriceRange, toggleTag, resetFilters } from "../../../entity/productFilter/slice";
 import { RootState } from "../../../main/store";
 import { getCategories } from '@/services/api';
 import { setCategories, setLoading, setError } from "../../../entity/productCategory/slice";
@@ -69,7 +69,7 @@ const AccordionItem = ({ title, children }: AccordionItemProps) => {
 export const Menu = () => {
   const dispatch = useDispatch();
   const filter = useSelector((state: RootState) => state.filter) as unknown as FilterState;
-  const categories = useSelector((state: RootState) => state.categories.items);
+  const categories = useSelector((state: RootState) => state.categories.categories);
   const isLoading = useSelector((state: RootState) => state.categories.loading);
   const error = useSelector((state: RootState) => state.categories.error);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ export const Menu = () => {
     debouncedPriceChange(type, value);
   }, [filter, debouncedPriceChange]);
 
-  const handleTagToggle = useCallback((tagString: string) => {
+  const handleTagToggle = useCallback((tagId: string) => {
     dispatch(toggleTag(tagString));
   }, [dispatch]);
 

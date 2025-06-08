@@ -1,12 +1,20 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals, calculateOrderTotals } from '../../services/api';
-import { CartItem, CartTotals, CartState } from './types';
+import { CartTotals, CartState } from './types';
 
 const initialState: CartState = {
   items: [],
-  loading: false,
+  loading: 'idle',
   error: null,
-  totals: null
+  totals: {
+    total: 0,
+    totalWithoutDiscount: 0,
+    totalDiscount: 0,
+    itemsCount: 0,
+    promoDiscount: 0,
+    certificateDiscount: 0,
+    finalTotal: 0
+  },
 };
 
 export const fetchCart = createAsyncThunk(
@@ -96,37 +104,36 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
       state.error = null;
-      state.totals = null;
+      state.totals = {
+        total: 0,
+        totalWithoutDiscount: 0,
+        totalDiscount: 0,
+        itemsCount: 0,
+        promoDiscount: 0,
+        certificateDiscount: 0,
+        finalTotal: 0
+      };
     },
-    setCartItems: (state, action: PayloadAction<CartItem[]>) => {
-      state.items = action.payload;
-    },
-    setCartLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setCartError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    }
   },
   extraReducers: (builder) => {
     builder
       // Fetch cart
       .addCase(fetchCart.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = 'succeeded';
         state.items = action.payload;
       })
       .addCase(fetchCart.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch cart';
       })
       // Fetch cart totals
       .addCase(fetchCartTotals.fulfilled, (state, action) => {
         if (!action.payload) {
-          state.totals = null;
+          state.totals = initialState.totals;
           return;
         }
         state.totals = {
@@ -138,13 +145,13 @@ const cartSlice = createSlice({
       })
       // Fetch order totals
       .addCase(fetchOrderTotals.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(fetchOrderTotals.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = 'succeeded';
         if (!action.payload) {
-          state.totals = null;
+          state.totals = initialState.totals;
           return;
         }
         state.totals = {
@@ -158,8 +165,9 @@ const cartSlice = createSlice({
         };
       })
       .addCase(fetchOrderTotals.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch order totals';
+        state.totals = initialState.totals;
       })
       // Add to cart
       .addCase(addToCart.fulfilled, (state, action) => {
@@ -172,9 +180,9 @@ const cartSlice = createSlice({
       // Remove from cart
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.items = state.items.filter(item => item.productId !== action.payload);
-      });
+      })
   }
 });
 
-export const { clearCart, setCartItems, setCartLoading, setCartError } = cartSlice.actions;
+export const { clearCart} = cartSlice.actions;
 export default cartSlice.reducer; 

@@ -7,6 +7,7 @@ import { ProductsState } from './types'
 
 const initialState: ProductsState = {
   items: [],
+  currentProduct: null,
   loading: 'idle',
   error: null,
   hasMore: true,
@@ -78,6 +79,25 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch products';
+      })
+      .addCase(fetchProductById.pending, (state) => {
+        state.loading = 'pending';
+        state.currentProduct = null;
+      })
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.currentProduct = action.payload;
+        const existingProductIndex = state.items.findIndex(item => item.id === action.payload.id);
+        if (existingProductIndex === -1) {
+          state.items.push(action.payload);
+        } else {
+          state.items[existingProductIndex] = action.payload;
+        }
+      })
+      .addCase(fetchProductById.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message || 'Failed to fetch product';
+        state.currentProduct = null;
       });
   },
 });

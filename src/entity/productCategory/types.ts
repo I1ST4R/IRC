@@ -12,6 +12,6 @@ export interface Category {
 
 export interface CategoriesState {
   categories: Category[];
-  isLoading: boolean;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }

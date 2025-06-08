@@ -1,19 +1,13 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
 import { addToCart, fetchCart } from "@/entity/cart/slice.ts";
 import { addItemToLiked, fetchLiked } from "@/entity/liked/slice";
-import { fetchProducts } from "@/entity/product/slice";
-import { getCategories } from "@/services/api";
-import {
-  setCategories,
-  setLoading,
-  setError,
-} from "@/entity/productCategory/slice";
+import { fetchTagsById } from '../../entity/tag/slice';
+import { fetchProductById } from '@/entity/product/slice';
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
-import { fetchTagsById } from '../../entity/tag/slice';
 
 export const ProductAbout = ({
   onRemoveFromLiked,
@@ -21,8 +15,9 @@ export const ProductAbout = ({
   onRemoveFromLiked?: () => void;
 }) => {
   const { id } = useParams();
-  const products = useSelector((state: RootState) => state.products.items);
-  const product = products.find((p) => p.id === id);
+  const product = useSelector((state: RootState) => state.products.currentProduct);
+  const loading = useSelector((state: RootState) => state.products.loading);
+  const error = useSelector((state: RootState) => state.products.error);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const { user } = useSelector((state: RootState) => state.user);
@@ -32,44 +27,48 @@ export const ProductAbout = ({
   const tags = useSelector((state: RootState) => state.tags.tags);
 
   useEffect(() => {
+    if (id) {
+      dispatch(fetchProductById(id));
+    }
+  }, [dispatch, id]);
+
+  //tags dispatch
+  useEffect(() => {
     if (product?.tags) {
       dispatch(fetchTagsById(product.tags));
     }
   }, [dispatch, product?.tags]);
 
-  useEffect(() => {
-    const loadData = async () => {
+  const isInCart = cartItems.some((item) => item.productId === product?.id);
+  const isLiked = likedItems.some((item) => item.productId === product?.id);
+
+  const handleCartClick = async () => {
+    if (!user?.id) {
+      togglePersonalAccount();
+      return;
+    }
+
+    if (!product) return
+
+    if (isInCart) {
+      navigate("/cart");
+    } else {
       try {
-        dispatch(setLoading(true));
-        const [categoriesData] = await Promise.all([
-          getCategories(),
-          dispatch(fetchProducts({ page: 1 })),
-        ]);
-        dispatch(setCategories(categoriesData));
-        if (user?.id) {
-          await dispatch(fetchCart(user.id.toString()));
-        }
+        await dispatch(addToCart({ userId: user.id.toString(), productId: product.id }));
+        await dispatch(fetchCart(user.id.toString()));
       } catch (error) {
-        console.error("Failed to load data:", error);
-        dispatch(
-          setError(
-            error instanceof Error ? error.message : "Failed to load categories"
-          )
-        );
-      } finally {
-        dispatch(setLoading(false));
+        console.error("Failed to add item to cart:", error);
       }
-    };
-    loadData();
-  }, [dispatch, user?.id]);
-
-  if (!product) return <div>Товар не найден</div>;
-
-  const isInCart = cartItems.some((item) => item.productId === product.id);
-  const isLiked = likedItems.some((item) => item.productId === product.id);
+    }
+  };
 
   const handleLike = async () => {
-    if (!user?.id) return;
+    if (!user?.id) {
+      togglePersonalAccount();
+      return;
+    }
+
+    if (!product) return
 
     if (onRemoveFromLiked) {
       onRemoveFromLiked();
@@ -78,22 +77,6 @@ export const ProductAbout = ({
         addItemToLiked({ userId: user.id.toString(), productId: product.id })
       );
       await dispatch(fetchLiked(user.id.toString()));
-    }
-  };
-
-  const handleCartClick = async () => {
-    if (!user?.id) return;
-
-    if (isInCart) {
-      navigate("/cart");
-    } else {
-      try {
-        await dispatch(
-          addToCart({ userId: user.id.toString(), productId: product.id })
-        );
-      } catch (error) {
-        console.error("Failed to add item to cart:", error);
-      }
     }
   };
 
@@ -106,6 +89,18 @@ export const ProductAbout = ({
   const togglePersonalAccount = () => {
     setIsPersonalAccountOpen(!isPersonalAccountOpen);
   };
+
+  if (loading === 'pending') {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка: {error}</div>;
+  }
+
+  if (!product) {
+    return <div>Товар не найден</div>;
+  }
 
   return (
     <div className="product-about container">

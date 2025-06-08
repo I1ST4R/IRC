@@ -15,7 +15,7 @@ export interface CartTotals {
 
 export interface CartState {
   items: CartItem[];
-  loading: boolean;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
-  totals: CartTotals | null;
+  totals: CartTotals;
 } 
