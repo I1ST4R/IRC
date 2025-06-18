@@ -1,6 +1,6 @@
-import { Tag } from '../productCategory/types'
 
-interface PriceRange {
+
+export interface PriceRange {
   min: number;
   max: number;
 }

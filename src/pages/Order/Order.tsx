@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../main/store';
-import { getCart } from '../../services/api';
-import { setCartItems } from '../../entity/cart/slice';
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import './_order.scss';
+import { fetchCart } from "@/entity/cart/slice";
 
 export const Order: React.FC = () => {
-  const dispatch = useDispatch();
-  const { id: userId } = useSelector((state: RootState) => state.user);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const { items: products } = useSelector((state: RootState) => state.products);
-  const { discount: promoDiscount } = useSelector((state: RootState) => state.promo);
-  const { amount: certificateAmount } = useSelector((state: RootState) => state.certificates);
+  const { user } = useSelector((state: RootState) => state.user);
+  const cart = useSelector((state: RootState) => state.cart);
 
   const [deliveryMethod, setDeliveryMethod] = useState<"courier" | "pickup">("courier");
   const [formData, setFormData] = useState({
@@ -24,21 +19,6 @@ export const Order: React.FC = () => {
     comment: "",
   });
 
-  useEffect(() => {
-    const loadCartData = async () => {
-      if (userId) {
-        try {
-          const cartData = await getCart(userId);
-          dispatch(setCartItems(cartData));
-        } catch (error) {
-          console.error('Error loading cart:', error);
-        }
-      }
-    };
-
-    loadCartData();
-  }, [userId, dispatch]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -49,7 +29,7 @@ export const Order: React.FC = () => {
     }));
   };
 
-  if (!userId) {
+  if (!user.id) {
     return (
       <div className="order container">
         <h2 className="order__title">Оформление заказа</h2>
@@ -192,14 +172,7 @@ export const Order: React.FC = () => {
           </div>
         </div>
 
-        <OrderMenu
-          selectedItems={[]}
-          cartItems={cartItems}
-          products={products}
-          promoDiscount={promoDiscount}
-          certificateAmount={certificateAmount}
-          showItems={true}
-        />
+        <OrderMenu cartItems={cart.items} />
     </div>
   );
 };

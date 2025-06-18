@@ -179,7 +179,7 @@ const cartSlice = createSlice({
       })
       // Remove from cart
       .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.items = state.items.filter(item => item.productId !== action.payload);
+        state.items = state.items.filter(item => item.product.id !== action.payload);
       })
   }
 });

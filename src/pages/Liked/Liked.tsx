@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { fetchLiked, removeItemFromLiked } from "@/entity/product/likedSlice";
+import { fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
 import { fetchProducts } from "@/entity/product/slice";
 import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Liked = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { id } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const { items, loading: likedLoading, error: likedError } = useSelector((state: RootState) => state.liked);
   const { items: products, loading: productsLoading, error: productsError,} = useSelector((state: RootState) => state.products);
   const likedItems = useSelector((state: RootState) => state.liked.items);
@@ -18,15 +18,15 @@ export const Liked = () => {
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchLiked(id));
+    if (user.id) {
+      dispatch(fetchLiked(user.id));
       dispatch(fetchProducts({ page: 1 }));
     }
-  }, [dispatch, id]);
+  }, [dispatch, user.id]);
 
   const handleRemoveItem = (productId: string) => {
-    if (id) {
-      dispatch(removeItemFromLiked({ userId: id, productId }));
+    if (user.id) {
+      dispatch(removeItemFromLiked({ userId: user.id, productId }));
     }
   };
 
@@ -37,7 +37,7 @@ export const Liked = () => {
   const loading = likedLoading || productsLoading === "pending";
   const error = likedError || productsError;
 
-  if (!id) {
+  if (!user.id) {
     return (
       <div className="cart container">
         <h2 className="cart__title">Избранное</h2>

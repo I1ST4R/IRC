@@ -14,9 +14,6 @@ interface ProductProps {
 }
 
 export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductProps) => {
-  const categories = useSelector(
-    (state: RootState) => state.categories?.categories || []
-  );
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const { user } = useSelector((state: RootState) => state.user);

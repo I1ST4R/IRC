@@ -8,64 +8,45 @@ import { fetchOrderTotals } from '../../../entity/cart/slice';
 import promo from '../../../pages/Cart/promo.svg';
 import certificate from '../../../pages/Cart/certificate.svg';
 import './_order-menu.scss';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  prevPrice?: number;
-  technology: string;
-  img: string;
-}
+import { CartItem, CartState } from '@/entity/cart/types';
 
 interface OrderMenuProps {
-  selectedItems?: string[];
-  promoCode?: string;
-  certificateCode?: string;
-  showItems?: boolean;
+  cartItems: CartItem[];
 }
 
-export const OrderMenu: React.FC<OrderMenuProps> = ({
-  selectedItems = [],
-  promoCode,
-  certificateCode,
-  showItems = false
-}) => {
+export const OrderMenu: React.FC<OrderMenuProps> = ({ cartItems }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { id: userId } = useSelector((state: RootState) => state.user as UserState);
+  const { user } = useSelector((state: RootState) => state.user);
   const { totals, loading, error, items } = useSelector((state: RootState) => state.cart as CartState);
-  const { items: products } = useSelector((state: RootState) => state.products as ProductsState);
 
-  console.log('OrderMenu render:', { userId, totals, loading, error });
+  // useEffect(() => {
+  //   if (user.id) dispatch(fetchOrderTotals({
+  //     userId : user.id, 
+  //     promoCode : promoCode, 
+  //     certificateCode : certificateCode }));
+  // }, [dispatch, userId, promoCode, certificateCode]);
 
-  useEffect(() => {
-    if (userId) {
-      console.log('Dispatching fetchOrderTotals with:', { userId, promoCode, certificateCode });
-      dispatch(fetchOrderTotals({ userId, promoCode, certificateCode }));
-    }
-  }, [dispatch, userId, promoCode, certificateCode]);
+  // const handlePromoSubmit = async () => {
+  //   if (!promoCode) {
+  //     return;
+  //   }
+  //   dispatch(validatePromoCode(promoCode));
+  // };
 
-  const handlePromoSubmit = async () => {
-    if (!promoCode) {
-      return;
-    }
-    dispatch(validatePromoCode(promoCode));
-  };
-
-  const handleCertificateSubmit = async () => {
-    if (!certificateCode) {
-      return;
-    }
-    dispatch(validateCertificateCode(certificateCode));
-  };
+  // const handleCertificateSubmit = async () => {
+  //   if (!certificateCode) {
+  //     return;
+  //   }
+  //   dispatch(validateCertificateCode(certificateCode));
+  // };
 
   const handleCheckout = () => {
     navigate('/order');
   };
 
-  if (!userId) {
+  if (!user.id) {
     return (
       <div className="order-menu">
         <div className="order-menu__error">Пожалуйста, войдите в систему</div>
@@ -106,24 +87,22 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
       {isOrderPage && items.length > 0 && (
         <div className="order-menu__items">
           {items.map((item) => {
-            const product = products.find((p: Product) => p.id === item.productId);
-            if (!product) return null;
             
             return (
-              <div key={item.productId} className="order-menu__item-details">
+              <div key={item.product.id} className="order-menu__item-details">
                 <div className="order-menu__item-info">
                   <img 
-                    src={product.img} 
-                    alt={product.name} 
+                    src={item.product.img} 
+                    alt={item.product.name} 
                     className="order-menu__item-image"
                   />
                   <div className="order-menu__item-text">
-                    <span className="order-menu__item-name">{product.name}</span>
-                    <span className="order-menu__item-technology">{product.technology}</span>
+                    <span className="order-menu__item-name">{item.product.name}</span>
+                    <span className="order-menu__item-technology">{item.product.technology}</span>
                     <span className="order-menu__item-quantity">x{item.quantity}</span>
                   </div>
                 </div>
-                <span className="order-menu__item-price">{product.price * item.quantity} ₽</span>
+                <span className="order-menu__item-price">{item.product.price * item.quantity} ₽</span>
               </div>
             );
           })}
@@ -172,7 +151,7 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
       <div className="order-menu__item">
         <div
           className="order-menu__field"
-          onClick={handlePromoSubmit}
+          // onClick={handlePromoSubmit}
         >
           <div className="order-menu__item-name">
             <img src={promo} alt="promo" />
@@ -184,7 +163,7 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({
       <div className="order-menu__item">
         <div
           className="order-menu__field"
-          onClick={handleCertificateSubmit}
+          // onClick={handleCertificateSubmit}
         >
           <div className="order-menu__item-name">
             <img src={certificate} alt="certificate" />

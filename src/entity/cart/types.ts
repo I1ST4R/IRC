@@ -1,5 +1,12 @@
-export interface CartItem {
+import { Product } from "../product/types";
+
+export interface CartItemDb {
   productId: string;
+  quantity: number;
+}
+
+export interface CartItem {
+  product: Product;
   quantity: number;
 }
 

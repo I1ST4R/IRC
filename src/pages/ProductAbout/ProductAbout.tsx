@@ -39,7 +39,7 @@ export const ProductAbout = ({
     }
   }, [dispatch, product?.tags]);
 
-  const isInCart = cartItems.some((item) => item.productId === product?.id);
+  const isInCart = cartItems.some((item) => item.product.id === product?.id);
   const isLiked = likedItems.some((item) => item.productId === product?.id);
 
   const handleCartClick = async () => {

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store';
-import { fetchCart, clearCartOnLogout } from '../../entity/product/cartSlice';
-import { fetchLiked, clearLikedOnLogout } from '../../entity/product/likedSlice';
+import { fetchCart, clearCart } from '../../entity/cart/slice';
+import { fetchLiked, clearLikedOnLogout } from '../../entity/liked/slice';
 import { checkAuth } from '../../entity/users/slice';
 import { fetchProducts } from '../../entity/product/slice';
 import Header from './Header/Header';
@@ -28,7 +28,7 @@ const App: React.FC = () => {
       dispatch(fetchLiked(userId)).unwrap().catch((error: any) => console.error('Failed to load liked:', error));
     } else {
       console.log('[App.tsx] User is null or has no ID, clearing cart and liked.');
-      dispatch(clearCartOnLogout());
+      dispatch(clearCart());
       dispatch(clearLikedOnLogout());
     }
   }, [user, dispatch]);

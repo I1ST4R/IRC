@@ -1,6 +1,6 @@
 // features/user/userSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { login as apiLogin, register as apiRegister, checkAuth as apiCheckAuth, getCart, addToCart, removeFromCart, updateCartItemQuantity, getLiked, addToLiked, removeFromLiked } from '@/services/api';
+import { login as apiLogin, register as apiRegister, checkAuth as apiCheckAuth} from '@/services/api';
 import { LoginData, RegisterData, UserState } from './types';
 
 const initialState: UserState = {
@@ -22,12 +22,7 @@ export const login = createAsyncThunk(
   async (data: LoginData, { dispatch, rejectWithValue }) => {
     try {
       const user = await apiLogin(data);
-      if (user && user.id) {
-        localStorage.setItem('userId', String(user.id));
-        // Загружаем корзину и избранное после успешного входа
-        await dispatch(fetchCart(String(user.id)));
-        await dispatch(fetchLiked(String(user.id)));
-      }
+      if (user && user.id) localStorage.setItem('userId', String(user.id));
       return user;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Ошибка при входе');
@@ -63,93 +58,6 @@ export const checkAuth = createAsyncThunk(
     } catch (error: any) {
       localStorage.removeItem('userId');
       return rejectWithValue(error.message || 'Ошибка при проверке авторизации');
-    }
-  }
-);
-
-// Cart actions
-export const fetchCart = createAsyncThunk(
-  'users/fetchCart',
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const cart = await getCart(userId);
-      return cart;
-    } catch (error: any) {
-      console.error('Error fetching cart:', error);
-      return rejectWithValue(error.message || 'Ошибка при загрузке корзины');
-    }
-  }
-);
-
-export const addItemToCart = createAsyncThunk(
-  'users/addToCart',
-  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
-    try {
-      const cart = await addToCart(userId, productId);
-      return cart;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при добавлении в корзину');
-    }
-  }
-);
-
-export const removeItemFromCart = createAsyncThunk(
-  'users/removeFromCart',
-  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
-    try {
-      const cart = await removeFromCart(userId, productId);
-      return cart;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при удалении из корзины');
-    }
-  }
-);
-
-export const updateCartQuantity = createAsyncThunk(
-  'users/updateCartQuantity',
-  async ({ userId, productId, quantity }: { userId: string; productId: string; quantity: number }, { rejectWithValue }) => {
-    try {
-      const cart = await updateCartItemQuantity(userId, productId, quantity);
-      return cart;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при обновлении количества');
-    }
-  }
-);
-
-// Liked actions
-export const fetchLiked = createAsyncThunk(
-  'users/fetchLiked',
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const liked = await getLiked(userId);
-      return liked;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при загрузке избранного');
-    }
-  }
-);
-
-export const addItemToLiked = createAsyncThunk(
-  'users/addToLiked',
-  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
-    try {
-      const liked = await addToLiked(userId, productId);
-      return liked;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при добавлении в избранное');
-    }
-  }
-);
-
-export const removeItemFromLiked = createAsyncThunk(
-  'users/removeFromLiked',
-  async ({ userId, productId }: { userId: string; productId: string }, { rejectWithValue }) => {
-    try {
-      const liked = await removeFromLiked(userId, productId);
-      return liked;
-    } catch (error: any) {
-      return rejectWithValue(error.message || 'Ошибка при удалении из избранного');
     }
   }
 );

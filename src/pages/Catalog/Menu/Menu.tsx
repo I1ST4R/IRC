@@ -2,38 +2,18 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPriceRange, toggleTag, resetFilters } from "../../../entity/productFilter/slice";
 import { RootState } from "../../../main/store";
-import { getCategories } from '@/services/api';
-import { setCategories, setLoading, setError } from "../../../entity/productCategory/slice";
 import reset from "./reset.svg";
+import { PriceRange } from "@/entity/productFilter/types"
+import { Category } from "@/entity/productCategory/types"
 
 interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
 }
 
-interface PriceRange {
-  min: number;
-  max: number;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  tags: Array<{
-    id: string;
-    name: string;
-  }>;
-}
-
 interface FilterState {
   priceRange: PriceRange;
   selectedTags: string[];
-}
-
-interface CategoriesState {
-  items: Category[];
-  loading: boolean;
-  error: string | null;
 }
 
 const AccordionItem = ({ title, children }: AccordionItemProps) => {
@@ -68,29 +48,16 @@ const AccordionItem = ({ title, children }: AccordionItemProps) => {
 
 export const Menu = () => {
   const dispatch = useDispatch();
-  const filter = useSelector((state: RootState) => state.filter) as unknown as FilterState;
+  const filter = useSelector((state: RootState) => state.filter);
+
   const categories = useSelector((state: RootState) => state.categories.categories);
-  const isLoading = useSelector((state: RootState) => state.categories.loading);
+  const loading = useSelector((state: RootState) => state.categories.loading);
   const error = useSelector((state: RootState) => state.categories.error);
+  const tags = useSelector((state: RootState) => state.tags.tags);
+
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter?.priceRange || { min: 500, max: 10000 });
+  const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter.filterParams.priceRange || { min: 500, max: 10000 });
   const debounceTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        dispatch(setLoading(true));
-        const data = await getCategories();
-        dispatch(setCategories(data));
-      } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to load categories'));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-    loadCategories();
-  }, [dispatch]);
 
   const updateRangeHighlight = useCallback(() => {
     if (sliderRef.current && localPriceRange) {
@@ -130,11 +97,11 @@ export const Menu = () => {
   }, [filter, debouncedPriceChange]);
 
   const handleTagToggle = useCallback((tagId: string) => {
-    dispatch(toggleTag(tagString));
+    dispatch(toggleTag(tagId));
   }, [dispatch]);
 
-  const isTagSelected = useCallback((tagString: string) => {
-    return filter?.selectedTags.some((t: string) => t === tagString) || false;
+  const isTagSelected = useCallback((tagId: string) => {
+    return filter.filterParams.tagsId.some((t: string) => t === tagId) || false;
   }, [filter]);
 
   const handleResetFilters = useCallback(() => {
@@ -142,7 +109,13 @@ export const Menu = () => {
     setLocalPriceRange({ min: 500, max: 10000 });
   }, [dispatch]);
 
-  if (isLoading) return <div>Loading...</div>;
+  const getTagName = (tagId: string) => {
+    if (!tagId) return "";
+    const tag = tags.find(t => t.id === tagId);
+    return tag?.name || "";
+  };
+
+  if (loading === "pending") return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!filter || !categories) return null;
 
@@ -192,15 +165,14 @@ export const Menu = () => {
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
             {category.tags.map((tag) => {
-              const tagString = `${category.id},${tag.id}`;
               return (
-                <label key={tagString} className="menu__checkbox">
+                <label key={tag} className="menu__checkbox">
                   <input 
                     type="checkbox"
-                    checked={isTagSelected(tagString)}
-                    onChange={() => handleTagToggle(tagString)}
+                    checked={isTagSelected(tag)}
+                    onChange={() => handleTagToggle(tag)}
                   />
-                  <span>{tag.name}</span>
+                  <span>{getTagName(tag)}</span>
                 </label>
               );
             })}

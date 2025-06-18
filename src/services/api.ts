@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {FilterParams} from '@/entity/productFilter/types'
-import {CartItem} from '@/entity/cart/types'
+import {CartItem, CartItemDb, CartTotals} from '@/entity/cart/types'
 import {LikedItem} from '@/entity/liked/types'
 import { recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
@@ -180,9 +180,31 @@ export const getCart = async (userId: string) => {
       const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart: [] });
       return updateResponse.data.cart;
     }
-    return user.cart;
+    const cartItems = await loadCartProducts(user.cart)
+
+    return cartItems;
   } catch (error: any) {
     console.error('error in getCart', error);
+    throw error;
+  }
+};
+
+export const loadCartProducts = async (cartItems: CartItemDb[]) => {
+  try {
+    const productIds = cartItems.map(item => item.productId);
+    const products = await getProductsById(productIds);
+    
+    const cartWithProducts = cartItems.map(cartItem => {
+      const product = products.find(p => p.id === cartItem.productId);
+      return {
+        product,
+        quantity: cartItem.quantity
+      };
+    });
+
+    return cartWithProducts;
+  } catch (error) {
+    console.error('Error loading cart products:', error);
     throw error;
   }
 };
@@ -196,7 +218,7 @@ export const addToCart = async (userId: string, productId: string) => {
     const user = response.data[0];
     const cart = user.cart || [];
     
-    const existingItem = cart.find((item: CartItem) => item.productId === productId);
+    const existingItem = cart.find((item: CartItemDb) => item.productId === productId);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
@@ -218,7 +240,7 @@ export const removeFromCart = async (userId: string, productId: string) => {
       throw new Error('Пользователь не найден');
     }
     const user = response.data[0];
-    const cart = (user.cart || []).filter((item: CartItem) => item.productId !== productId);
+    const cart = (user.cart || []).filter((item: CartItemDb) => item.productId !== productId);
     
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
     return updateResponse.data.cart;
@@ -237,7 +259,7 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     const user = response.data[0];
     const cart = user.cart || [];
     
-    const item = cart.find((item: CartItem) => item.productId === productId);
+    const item = cart.find((item: CartItemDb) => item.productId === productId);
     if (item) {
       item.quantity = quantity;
     }
@@ -253,21 +275,16 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
 export const calculateCartTotals = async (userId: string) => {
   try {
     const cartData: CartItem[] = await getCart(userId);
-
-    const productIds = cartData.map(item => item.productId)
-
-    const cartProducts = await getProductsById(productIds);
     
     const totals = cartData.reduce((acc: {
-      total: number;
+      total: number
       totalWithoutDiscount: number;
       totalDiscount: number;
       itemsCount: number;
     }, item: CartItem) => {
-      const product = cartProducts.find(p => p.id === item.productId);
       
-      const itemTotal = product.price * item.quantity;
-      const itemTotalWithoutDiscount = (product.prevPrice || product.price) * item.quantity;
+      const itemTotal = item.product.price * item.quantity;
+      const itemTotalWithoutDiscount = (item.product.prevPrice || item.product.price) * item.quantity;
       const itemDiscount = itemTotalWithoutDiscount - itemTotal;
       
       return {

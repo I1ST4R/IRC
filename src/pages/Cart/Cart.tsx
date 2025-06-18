@@ -2,108 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { fetchCart,removeItemFromCart, updateCartQuantity, addItemToLiked,removeItemFromLiked } from "../../entity/users/slice";
 import { validatePromoCode } from "../../entity/promo/slice";
 import { validateCertificateCode } from "../../entity/certificate/slice";
-import { fetchProducts } from "../../entity/product/slice";
-// import cart from "./cart.svg";
+import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
-import { useAppSelector } from "../../main/store";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
-import "./_cart.scss";
-import { setCartItems } from '../../entity/cart/slice';
-import { getCart } from '../../services/api';
+import { fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
+import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
 
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { id, cart, liked, userLoading } = useAppSelector((state) => state.user);
-  const {
-    items: products,
-    loading: productsLoading,
-    error: productsError,
-  } = useSelector((state: RootState) => state.products);
-  const {
-    code: promoCode,
-    discount: promoDiscount,
-    error: promoError,
-  } = useSelector((state: RootState) => state.promo);
-  const {
-    code: certificateCode,
-    amount: certificateAmount,
-    error: certificateError,
-  } = useSelector((state: RootState) => state.certificates);
-  const navigate = useNavigate();
-
-  const [isPromoOpen, setIsPromoOpen] = useState(false);
-  const [isCertificateOpen, setIsCertificateOpen] = useState(false);
+  const { user } = useSelector((state: RootState) => state.user);
+  
+  const { code : promoCode } = useSelector((state: RootState) => state.promo);
+  const { code : Sertificate} = useSelector((state: RootState) => state.certificates);
+  const cart = useSelector((state: RootState) => state.cart);
   const [promoInput, setPromoInput] = useState("");
   const [certificateInput, setCertificateInput] = useState("");
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchCart(userId));
-    }
-  }, [dispatch, userId]);
+    if (user.id) dispatch(fetchCart(user.id));
+  }, [dispatch, user.id]);
 
   useEffect(() => {
-    dispatch(fetchProducts({ page: 1 }));
-  }, [dispatch]);
-
-  useEffect(() => {
-    const loadCartData = async () => {
-      if (userId) {
-        try {
-          const cartData = await getCart(userId);
-          dispatch(setCartItems(cartData));
-        } catch (error) {
-          console.error('Error loading cart:', error);
-        }
-      }
-    };
-
-    loadCartData();
-  }, [userId, dispatch]);
+    if (user.id) dispatch(fetchCartTotals(user.id));
+  }, [dispatch, user.id, cart.items]);
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (userId && newQuantity > 0) {
+    if (user.id && newQuantity > 0) {
       dispatch(
-        updateCartQuantity({
-          userId,
-          productId,
-          quantity: newQuantity,
-        })
+        updateCartItem({userId: user.id,productId: productId,quantity: newQuantity})
       );
     }
   };
 
   const handleRemoveItem = (productId: string) => {
-    if (userId) {
-      dispatch(removeItemFromCart({ userId, productId }));
+    if (user.id) {
+      dispatch(removeFromCart({ userId: user.id, productId: productId }));
       setSelectedItems(prev => prev.filter(id => id !== productId));
     }
-  };
-
-  const handleSelectItem = (productId: string) => {
-    setSelectedItems(prev => {
-      if (prev.includes(productId)) {
-        return prev.filter(id => id !== productId);
-      } else {
-        return [...prev, productId];
-      }
-    });
-  };
-
-  const getTotalItems = () => {
-    if (selectedItems.length === 0) {
-      return cartItems.reduce((total, item) => total + item.quantity, 0);
-    }
-    return cartItems
-      .filter(item => selectedItems.includes(item.productId))
-      .reduce((total, item) => total + item.quantity, 0);
   };
 
   const getItemTotal = (
@@ -115,30 +56,6 @@ export const Cart: React.FC = () => {
       ? product.price
       : product.prevPrice || product.price;
     return price * quantity;
-  };
-
-  const getCartTotal = (withDiscount: boolean = true) => {
-    const itemsToCalculate = selectedItems.length === 0 
-      ? cartItems 
-      : cartItems.filter(item => selectedItems.includes(item.productId));
-
-    return itemsToCalculate.reduce((sum, item) => {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product) return sum;
-      return sum + getItemTotal(product, item.quantity, withDiscount);
-    }, 0);
-  };
-
-  const getTotalDiscount = () => {
-    const itemsToCalculate = selectedItems.length === 0 
-      ? cartItems 
-      : cartItems.filter(item => selectedItems.includes(item.productId));
-
-    return itemsToCalculate.reduce((sum, item) => {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product || !product.prevPrice) return sum;
-      return sum + (product.prevPrice - product.price) * item.quantity;
-    }, 0);
   };
 
   const handlePromoSubmit = async () => {
@@ -155,28 +72,7 @@ export const Cart: React.FC = () => {
     dispatch(validateCertificateCode(certificateInput));
   };
 
-  const getPromoDiscountValue = () => {
-    if (promoDiscount) {
-      return Math.round(getCartTotal(true) * (promoDiscount / 100));
-    }
-    return 0;
-  };
-
-  const getCertificateDiscountValue = () => {
-    const afterPromo = getCartTotal(true) - getPromoDiscountValue();
-    if (certificateAmount && afterPromo > 0) {
-      return Math.min(certificateAmount, afterPromo);
-    }
-    return 0;
-  };
-
-  const getFinalPrice = () => {
-    const afterPromo = getCartTotal(true) - getPromoDiscountValue();
-    const afterCertificate = afterPromo - getCertificateDiscountValue();
-    return afterCertificate > 0 ? Math.round(afterCertificate) : 0;
-  };
-
-  if (!userId) {
+  if (!user.id) {
     return (
       <div className="cart container">
         <h2 className="cart__title">Корзина</h2>
@@ -192,24 +88,11 @@ export const Cart: React.FC = () => {
     );
   }
 
-  if (userLoading) {
-    return (
-      <div className="cart">
-        <h2 className="cart__title">Корзина</h2>
-        <div className="cart__loading">Загрузка...</div>
-      </div>
-    );
-  }
-
-  if (productsError) {
-    return <div className="cart__error">{productsError}</div>;
-  }
-
-  if (cartItems.length === 0) {
+  if (cart.items.length === 0) {
     return (
       <div className="cart__empty">
         <h2 className="cart__title">Корзина</h2>
-        <img src={cart} alt="cart" />
+        <img src={cartImg} alt="cart" />
         <div className="cart__empty-text">
           <p className="cart__empty-message">Ваша корзина пуста</p>
           <p className="cart__empty-link">
@@ -227,12 +110,12 @@ export const Cart: React.FC = () => {
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__info">
           <span className="cart__items-count">
-            В корзине <span>{getTotalItems()}</span>
+            В корзине <span>{cart.totals.itemsCount}</span>
           </span>
         </div>
       </div>
       <div className="cart__body">
-        {cartItems.length > 0 && (
+        {cart.items.length > 0 && (
           <button
             onClick={() => {}}
             title="Очистить корзину"
@@ -243,45 +126,39 @@ export const Cart: React.FC = () => {
           </button>
         )}
         <div className="cart__list">
-        {cartItems.map((item) => {
-          const product = products.find((p) => p.id === item.productId);
-          if (!product) return null;
-          const itemTotal = getItemTotal(product, item.quantity);
-
+        {cart.items.map((item) => {
           return (
-            <div key={item.productId} className="cart__item">
+            <div key={item.product.id} className="cart__item">
               <div className="cart__item-checkbox">
                 <input
                   type="checkbox"
-                  checked={selectedItems.includes(item.productId)}
-                  onChange={() => handleSelectItem(item.productId)}
                 />
               </div>
 
               <div className="cart__item-img-block">
                 <img
-                  src={product.img}
-                  alt={product.name}
+                  src={item.product.img}
+                  alt={item.product.name}
                   className="cart__item-image"
                 />
                 <button
                   className={`product__like${
-                    liked.some(item => item.productId === product.id)
+                    user.liked.some(item => item.productId === item.product.id)
                       ? " product__like--active"
                       : ""
                   }`}
                   onClick={() => {
-                    if (userId) {
-                      const isLiked = liked.some(item => item.productId === product.id);
+                    if (user.id) {
+                      const isLiked = user.liked.some(item => item.productId === item.product.id);
                       if (isLiked) {
-                        dispatch(removeItemFromLiked({ userId, productId: product.id }));
+                        dispatch(removeItemFromLiked({ userId: user.id, productId: item.product.id }));
                       } else {
-                        dispatch(addItemToLiked({ userId, productId: product.id }));
+                        dispatch(addItemToLiked({ userId: user.id, productId: item.product.id }));
                       }
                     }
                   }}
                   title={
-                    liked.some(item => item.productId === product.id)
+                    user.liked.some(item => item.productId === item.product.id)
                       ? "Убрать из избранного"
                       : "В избранное"
                   }
@@ -300,8 +177,8 @@ export const Cart: React.FC = () => {
 
               <div className="cart__item-text">
                 <div className="cart__item-name-block">
-                  <p className="cart__item-name">{product.name}</p>
-                  <p className="cart__item-technology">{product.technology}</p>
+                  <p className="cart__item-name">{item.product.name}</p>
+                  <p className="cart__item-technology">{item.product.technology}</p>
                 </div>
 
                 <div className="cart__item-quantity">
@@ -309,7 +186,7 @@ export const Cart: React.FC = () => {
                     className="cart__item-quantity-btn"
                     onClick={() =>
                       handleQuantityChange(
-                        item.productId,
+                        item.product.id,
                         Math.max(1, item.quantity - 1)
                       )
                     }
@@ -322,7 +199,7 @@ export const Cart: React.FC = () => {
                   <button
                     className="cart__item-quantity-btn"
                     onClick={() =>
-                      handleQuantityChange(item.productId, item.quantity + 1)
+                      handleQuantityChange(item.product.id, item.quantity + 1)
                     }
                   >
                     +
@@ -330,24 +207,24 @@ export const Cart: React.FC = () => {
                 </div>
 
                 <div className="cart__item-price-block">
-                  {product.prevPrice ? (
+                  {item.product.prevPrice ? (
                     <>
                       <p className="cart__item-price cart__item-price--new">
-                        {itemTotal} ₽
+                        {/* {item.product.total} ₽ */} item.product.total
                       </p>
                       <p className="cart__item-price cart__item-price--old">
-                        {product.prevPrice * item.quantity} ₽
+                        {/* {product.prevPrice * item.quantity} ₽ */} product.prevPrice * item.quantity
                       </p>
                     </>
                   ) : (
-                    <div className="cart__item-price">{itemTotal} ₽</div>
+                    <div className="cart__item-price">{/* {itemTotal} ₽ */} item.product.total ₽</div>
                   )}
                 </div>
               </div>
 
               <button
                 className="cart__item-remove"
-                onClick={() => handleRemoveItem(item.productId)}
+                onClick={() => handleRemoveItem(item.product.id)}
                 title="Удалить из корзины"
               >
                 <svg
@@ -367,11 +244,7 @@ export const Cart: React.FC = () => {
         </div>
 
         <OrderMenu 
-          selectedItems={selectedItems}
-          cartItems={cartItems}
-          products={products}
-          promoDiscount={promoDiscount}
-          certificateAmount={certificateAmount}
+          cartItems={cart.items}
         />
       </div>
     </div>
