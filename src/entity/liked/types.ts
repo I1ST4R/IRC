@@ -4,6 +4,6 @@ export interface LikedItem {
 
 export interface LikedState {
   items: LikedItem[];
-  loading: boolean;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }

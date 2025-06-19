@@ -45,28 +45,28 @@ const likedSlice = createSlice({
   name: 'liked',
   initialState: {
     items: [],
-    loading: false,
+    loading: 'idle',
     error: null
   } as LikedState,
   reducers: {
     clearLikedOnLogout: (state) => {
       state.items = [];
-      state.loading = false;
+      state.loading = 'succeeded';
       state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLiked.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(fetchLiked.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = 'succeeded';
         state.items = action.payload;
       })
       .addCase(fetchLiked.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch liked';
       })
       .addCase(addItemToLiked.fulfilled, (state, action) => {

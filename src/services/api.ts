@@ -211,9 +211,7 @@ export const loadCartProducts = async (cartItems: CartItemDb[]) => {
 export const addToCart = async (userId: string, productId: string) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
-    if (response.data.length === 0) {
-      throw new Error('Пользователь не найден');
-    }
+    if (response.data.length === 0) throw new Error('Пользователь не найден');
     const user = response.data[0];
     const cart = user.cart || [];
     
@@ -224,8 +222,8 @@ export const addToCart = async (userId: string, productId: string) => {
       cart.push({ productId, quantity: 1 });
     }
     
-    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
-    return updateResponse.data.cart;
+     await axiosInstance.patch(`/users/${user.id}`, { cart });//меняем количество в бд
+    return loadCartProducts(user.cart)// затем подгружаем корзину заного
   } catch (error: any) {
     console.error('error in addToCart', error);
     throw error;
@@ -259,12 +257,11 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     const cart = user.cart || [];
     
     const item = cart.find((item: CartItemDb) => item.productId === productId);
-    if (item) {
-      item.quantity = quantity;
-    }
+    if (item) item.quantity = quantity
     
-    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
-    return updateResponse.data.cart;
+    //меняем количество в бд
+    await axiosInstance.patch(`/users/${user.id}`, { cart });
+    return loadCartProducts(user.cart);// затем подгружаем корзину заного
   } catch (error: any) {
     console.error('error in updateCartItemQuantity', error);
     throw error;

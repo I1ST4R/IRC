@@ -10,15 +10,11 @@ import certificate from '../../../pages/Cart/certificate.svg';
 import './_order-menu.scss';
 import { CartItem, CartState } from '@/entity/cart/types';
 
-interface OrderMenuProps {
-  cartItems: CartItem[];
-}
-
-export const OrderMenu: React.FC<OrderMenuProps> = ({ cartItems }) => {
+export const OrderMenu = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const { totals, loading, error, items } = useSelector((state: RootState) => state.cart as CartState);
 
   // useEffect(() => {
@@ -54,13 +50,13 @@ export const OrderMenu: React.FC<OrderMenuProps> = ({ cartItems }) => {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="order-menu">
-        <div className="order-menu__loading">Загрузка...</div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="order-menu">
+  //       <div className="order-menu__loading">Загрузка...</div>
+  //     </div>
+  //   );
+  // }
 
   if (error) {
     return (

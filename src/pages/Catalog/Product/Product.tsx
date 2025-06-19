@@ -14,15 +14,25 @@ interface ProductProps {
 }
 
 export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductProps) => {
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const likedItems = useSelector((state: RootState) => state.liked.items);
-  const { user } = useSelector((state: RootState) => state.user);
+  const cart = useSelector((state: RootState) => state.cart);
+  const liked = useSelector((state: RootState) => state.liked);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
   const tags = useSelector((state: RootState) => state.tags.tags);
-  const isInCart = cartItems.some((item) => item.productId === product.id);
-  const isLiked = likedItems.some((item) => item.productId === product.id);
+
+  const isInCart = () =>{
+    if (cart.loading === 'succeeded'){
+      return cart.items.some((item) => item.product.id === product.id)
+    } 
+    return false
+  }
+
+  const isLiked = () =>{
+    if (liked.loading === 'succeeded') return liked.items.some((item) => item.productId === product.id)
+    return
+  }
 
   const handleLike = async () => {
     if (!user.id) {
@@ -33,7 +43,7 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
     if (onRemoveFromLiked) {
       onRemoveFromLiked();
     } else {
-      if (isLiked) {
+      if (isLiked()) {
         await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId: product.id }));
       } else {
         await dispatch(addItemToLiked({ userId: user.id.toString(), productId: product.id }));
@@ -48,7 +58,7 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       return;
     }
     
-    if (isInCart) {
+    if (isInCart()) {
       navigate("/cart");
     } else {
       try {
@@ -86,13 +96,13 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
         </div>
       </Link>
       <button
-        className={`product__btn ${isInCart ? "product__btn--in-cart" : ""}`}
+        className={`product__btn ${isInCart() ? "product__btn--in-cart" : ""}`}
         onClick={handleCartClick}
       >
-        {isInCart ? "В корзине" : "Добавить в корзину"}
+        {isInCart() ? "В корзине" : "Добавить в корзину"}
       </button>
       <button
-        className={`product__like${isLiked ? " product__like--active" : ""}`}
+        className={`product__like${isLiked() ? " product__like--active" : ""}`}
         onClick={handleLike}
       >
         <svg
