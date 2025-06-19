@@ -13,7 +13,7 @@ import './_app.scss';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(checkAuth());

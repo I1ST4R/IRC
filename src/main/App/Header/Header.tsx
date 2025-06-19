@@ -25,7 +25,7 @@ const Header: React.FC = () => {
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { id, login, email, type } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
               <img src={search} alt="search" />
             </button>
 
-            {id ? (
+            {user.id ? (
               <div className="header__user-info">
                 <button onClick={handleLogout} className="header__button header__logout" title="Выйти">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

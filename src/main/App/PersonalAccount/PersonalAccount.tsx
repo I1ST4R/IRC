@@ -18,7 +18,7 @@ interface FormData {
 
 const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error: authError } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     login: '',
@@ -111,7 +111,7 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
             </button>
           </div>
 
-          {authError && <div className="personal-account__error">{authError}</div>}
+          {user.error && <div className="personal-account__error">{user.error}</div>}
 
           <form 
             className={`personal-account__form ${isTransitioning ? 'personal-account__form--transitioning' : ''}`} 
@@ -189,9 +189,9 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
             <button 
               type="submit" 
               className="personal-account__submit"
-              disabled={loading}
+              disabled={user.loading === 'pending'}
             >
-              {loading ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
+              {user.loading === 'pending' ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
             </button>
           </form>
         </>

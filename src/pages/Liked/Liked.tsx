@@ -9,7 +9,7 @@ import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 
 export const Liked = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const { items, loading: likedLoading, error: likedError } = useSelector((state: RootState) => state.liked);
   const { items: products, loading: productsLoading, error: productsError,} = useSelector((state: RootState) => state.products);
   const likedItems = useSelector((state: RootState) => state.liked.items);

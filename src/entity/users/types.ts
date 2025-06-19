@@ -1,4 +1,5 @@
-import { CartItem, LikedItem } from '@/services/types';
+import { LikedItem } from '../liked/types';
+import { CartItem } from '../cart/types'
 
 export interface User {
   id: string | null;
@@ -11,7 +12,13 @@ export interface User {
 }
 
 export interface UserState {
-  user: User,
+  id: string | null;
+  login: string | null;
+  email: string | null;
+  password: string | null;
+  type: "client" | "admin" | null;
+  cart: CartItem[];
+  liked: LikedItem[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }

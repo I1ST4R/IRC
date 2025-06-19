@@ -4,15 +4,13 @@ import { login as apiLogin, register as apiRegister, checkAuth as apiCheckAuth} 
 import { LoginData, RegisterData, UserState } from './types';
 
 const initialState: UserState = {
-  user:{
-    id: null,
-    login: null,
-    email: null,
-    password: null,
-    type: null,
-    cart: [],
-    liked: [],
-  },
+  id: null,
+  login: null,
+  email: null,
+  password: null,
+  type: null,
+  cart: [],
+  liked: [],
   loading: 'idle',
   error: null
 };
@@ -67,12 +65,12 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.user.id = null;
-      state.user.login = null;
-      state.user.email = null;
-      state.user.type = null;
-      state.user.cart = [];
-      state.user.liked = [];
+      state.id = null;
+      state.login = null;
+      state.email = null;
+      state.type = null;
+      state.cart = [];
+      state.liked = [];
       localStorage.removeItem('userId');
     },
     clearError: (state) => {
@@ -89,10 +87,10 @@ const usersSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         if (action.payload) {  
           state.loading = 'succeeded';
-          state.user.id = String(action.payload.id);
-          state.user.login = action.payload.login;
-          state.user.password = action.payload.password;
-          state.user.type = action.payload.type;
+          state.id = String(action.payload.id);
+          state.login = action.payload.login;
+          state.password = action.payload.password;
+          state.type = action.payload.type;
         }
       })
       .addCase(login.rejected, (state, action) => {
@@ -101,10 +99,10 @@ const usersSlice = createSlice({
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         if (action.payload) {
-          state.user.id = String(action.payload.id);
-          state.user.login = action.payload.login;
-          state.user.email = action.payload.email;
-          state.user.type = action.payload.type;
+          state.id = String(action.payload.id);
+          state.login = action.payload.login;
+          state.email = action.payload.email;
+          state.type = action.payload.type;
         }
       })
       // Register
@@ -115,10 +113,10 @@ const usersSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         if (action.payload) {  
           state.loading = 'succeeded';
-          state.user.id = String(action.payload.id);
-          state.user.login = action.payload.login;
-          state.user.password = action.payload.password;
-          state.user.type = action.payload.type;
+          state.id = String(action.payload.id);
+          state.login = action.payload.login;
+          state.password = action.payload.password;
+          state.type = action.payload.type;
         }
       })
       .addCase(register.rejected, (state, action) => {
