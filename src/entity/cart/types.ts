@@ -10,19 +10,19 @@ export interface CartItem {
   quantity: number;
 }
 
-export interface CartTotals {
-  total: number;
-  totalWithoutDiscount: number;
-  totalDiscount: number;
-  itemsCount: number;
-  promoDiscount: number;
-  certificateDiscount: number;
-  finalTotal: number;
-}
+// export interface CartTotals {
+//   total: number;
+//   totalWithoutDiscount: number;
+//   totalDiscount: number;
+//   itemsCount: number;
+//   promoDiscount: number;
+//   certificateDiscount: number;
+//   finalTotal: number;
+// }
 
 export interface CartState {
   items: CartItem[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
-  totals: CartTotals;
+  itemsCount: number;
 } 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {FilterParams} from '@/entity/productFilter/types'
-import {CartItem, CartItemDb, CartTotals} from '@/entity/cart/types'
+import {CartItem, CartItemDb} from '@/entity/cart/types'
 import {LikedItem} from '@/entity/liked/types'
 import { recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
@@ -258,6 +258,7 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     
     const item = cart.find((item: CartItemDb) => item.productId === productId);
     if (item) item.quantity = quantity
+
     
     //меняем количество в бд
     await axiosInstance.patch(`/users/${user.id}`, { cart });
@@ -272,25 +273,11 @@ export const calculateCartTotals = async (userId: string) => {
   try {
     const cartData: CartItem[] = await getCart(userId);
     
-    const totals = cartData.reduce((acc: {
-      total: number
-      totalWithoutDiscount: number;
-      totalDiscount: number;
-      itemsCount: number;
-    }, item: CartItem) => {
-      
-      const itemTotal = item.product.price * item.quantity;
-      const itemTotalWithoutDiscount = (item.product.prevPrice || item.product.price) * item.quantity;
-      const itemDiscount = itemTotalWithoutDiscount - itemTotal;
-      
-      return {
-        total: acc.total + itemTotal,
-        totalWithoutDiscount: acc.totalWithoutDiscount + itemTotalWithoutDiscount,
-        totalDiscount: acc.totalDiscount + itemDiscount,
-        itemsCount: acc.itemsCount + item.quantity
-      };
-    }, { total: 0, totalWithoutDiscount: 0, totalDiscount: 0, itemsCount: 0 });
-
+    let totals = 0
+    cartData.forEach((item) => {
+      totals += item.quantity
+    })
+   
     return totals;
   } catch (error: any) {
     console.error('error in calculateCartTotals', error);
@@ -432,51 +419,51 @@ export const getOrders = async () => {
   }
 };
 
-export const calculateOrderTotals = async (userId: string, promoCode?: string, certificateCode?: string) => {
-  try {
-    const cartTotals = await calculateCartTotals(userId);
+// export const calculateOrderTotals = async (userId: string, promoCode?: string, certificateCode?: string) => {
+//   try {
+//     const cartTotals = await calculateCartTotals(userId);
 
-    if (!cartTotals) {
-      throw new Error('error: cartTotals is undefined');
-    }
+//     if (!cartTotals) {
+//       throw new Error('error: cartTotals is undefined');
+//     }
 
-    let finalTotal = cartTotals.total;
-    let promoDiscount = 0;
-    let certificateDiscount = 0;
+//     let finalTotal = cartTotals.total;
+//     let promoDiscount = 0;
+//     let certificateDiscount = 0;
 
-    if (promoCode) {
-      const promo = await validatePromo(promoCode);
-      if (!promo) {
-        throw new Error('error: promo is undefined');
-      }
-      if (promo.valid && promo.code) {
-        promoDiscount = Math.round(finalTotal * (promo.discount / 100));
-        finalTotal -= promoDiscount;
-      }
-    }
+//     if (promoCode) {
+//       const promo = await validatePromo(promoCode);
+//       if (!promo) {
+//         throw new Error('error: promo is undefined');
+//       }
+//       if (promo.valid && promo.code) {
+//         promoDiscount = Math.round(finalTotal * (promo.discount / 100));
+//         finalTotal -= promoDiscount;
+//       }
+//     }
 
-    if (certificateCode) {
-      const certificate = await validateCertificate(certificateCode);
-      if (!certificate) {
-        throw new Error('error: promo is undefined');
-      }
-      console.log('Certificate validation result:', certificate);
-      if (certificate.valid && certificate.code) {
-        certificateDiscount = Math.min(certificate.amount, finalTotal);
-        finalTotal -= certificateDiscount;
-      }
-    }
+//     if (certificateCode) {
+//       const certificate = await validateCertificate(certificateCode);
+//       if (!certificate) {
+//         throw new Error('error: promo is undefined');
+//       }
+//       console.log('Certificate validation result:', certificate);
+//       if (certificate.valid && certificate.code) {
+//         certificateDiscount = Math.min(certificate.amount, finalTotal);
+//         finalTotal -= certificateDiscount;
+//       }
+//     }
 
-    const result = {
-      ...cartTotals,
-      promoDiscount,
-      certificateDiscount,
-      finalTotal: Math.max(0, finalTotal)
-    };
-    console.log('Final order totals:', result);
-    return result;
-  } catch (error: any) {
-    console.error('error in calculateOrderTotals', error);
-    throw error;
-  }
-}; 
+//     const result = {
+//       ...cartTotals,
+//       promoDiscount,
+//       certificateDiscount,
+//       finalTotal: Math.max(0, finalTotal)
+//     };
+//     console.log('Final order totals:', result);
+//     return result;
+//   } catch (error: any) {
+//     console.error('error in calculateOrderTotals', error);
+//     throw error;
+//   }
+// }; 

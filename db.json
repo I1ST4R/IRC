@@ -8,8 +8,8 @@
       "type": "user",
       "cart": [
         {
-          "productId": "2",
-          "quantity": 1
+          "productId": "1",
+          "quantity": 4
         }
       ],
       "liked": [

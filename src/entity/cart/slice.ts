@@ -1,20 +1,12 @@
 import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals, calculateOrderTotals } from '../../services/api';
-import { CartTotals, CartState } from './types';
+import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals} from '../../services/api';
+import { CartState } from './types';
 
 const initialState: CartState = {
   items: [],
   loading: 'idle',
   error: null,
-  totals: {
-    total: 0,
-    totalWithoutDiscount: 0,
-    totalDiscount: 0,
-    itemsCount: 0,
-    promoDiscount: 0,
-    certificateDiscount: 0,
-    finalTotal: 0
-  },
+  itemsCount: 0,
 };
 
 export const fetchCart = createAsyncThunk(
@@ -38,21 +30,6 @@ export const fetchCartTotals = createAsyncThunk(
       return totals;
     } catch (error) {
       console.error('Error fetching cart totals:', error);
-      throw error;
-    }
-  }
-);
-
-export const fetchOrderTotals = createAsyncThunk(
-  'cart/fetchOrderTotals',
-  async ({ userId, promoCode, certificateCode }: { userId: string; promoCode?: string; certificateCode?: string }) => {
-    try {
-      console.log('Fetching order totals with params:', { userId, promoCode, certificateCode });
-      const totals = await calculateOrderTotals(userId, promoCode, certificateCode);
-      console.log('Received totals:', totals);
-      return totals;
-    } catch (error) {
-      console.error('Error fetching order totals:', error);
       throw error;
     }
   }
@@ -104,15 +81,7 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
       state.error = null;
-      state.totals = {
-        total: 0,
-        totalWithoutDiscount: 0,
-        totalDiscount: 0,
-        itemsCount: 0,
-        promoDiscount: 0,
-        certificateDiscount: 0,
-        finalTotal: 0
-      };
+      state.itemsCount = 0;
     },
   },
   extraReducers: (builder) => {
@@ -131,43 +100,17 @@ const cartSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch cart';
       })
       // Fetch cart totals
-      .addCase(fetchCartTotals.fulfilled, (state, action) => {
-        if (!action.payload) {
-          state.totals = initialState.totals;
-          return;
-        }
-        state.totals = {
-          ...action.payload,
-          promoDiscount: 0,
-          certificateDiscount: 0,
-          finalTotal: action.payload.total
-        } as CartTotals;
-      })
-      // Fetch order totals
-      .addCase(fetchOrderTotals.pending, (state) => {
+      .addCase(fetchCartTotals.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(fetchOrderTotals.fulfilled, (state, action) => {
+      .addCase(fetchCartTotals.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        if (!action.payload) {
-          state.totals = initialState.totals;
-          return;
-        }
-        state.totals = {
-          total: action.payload.total,
-          totalWithoutDiscount: action.payload.totalWithoutDiscount,
-          totalDiscount: action.payload.totalDiscount,
-          itemsCount: action.payload.itemsCount,
-          promoDiscount: action.payload.promoDiscount || 0,
-          certificateDiscount: action.payload.certificateDiscount || 0,
-          finalTotal: action.payload.finalTotal || action.payload.total
-        };
+        state.itemsCount = action.payload;
       })
-      .addCase(fetchOrderTotals.rejected, (state, action) => {
+      .addCase(fetchCartTotals.rejected, (state, action) => {
         state.loading = 'failed';
-        state.error = action.error.message || 'Failed to fetch order totals';
-        state.totals = initialState.totals;
+        state.error = action.error.message || 'Failed to fetch cart totals';
       })
       // Add to cart
       .addCase(addToCart.fulfilled, (state, action) => {

@@ -1,42 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { validatePromoCode } from "../../entity/promo/slice";
-import { validateCertificateCode } from "../../entity/certificate/slice";
 import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
-import {
-  fetchCart,
-  fetchCartTotals,
-  removeFromCart,
-  updateCartItem,
-} from "@/entity/cart/slice";
-import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
-
-  const { code: promoCode } = useSelector((state: RootState) => state.promo);
-  const { code: Sertificate } = useSelector(
-    (state: RootState) => state.certificates
-  );
   const cart = useSelector((state: RootState) => state.cart);
-  const [promoInput, setPromoInput] = useState("");
-  const [certificateInput, setCertificateInput] = useState("");
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
-    if(user.id){
-      dispatch(fetchCart(user.id))
-    }  ""}, 
-  [dispatch, user.id]);
-
+    if (user.id) {
+      const userId = user.id
+      dispatch(fetchCart(userId)).then(() => {
+        dispatch(fetchCartTotals(userId));
+      });
+    }
+  }, [dispatch, user.id]);
 
   if (!user.id) {
     return (
@@ -83,7 +69,7 @@ export const Cart: React.FC = () => {
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__info">
           <span className="cart__items-count">
-            В корзине <span>{cart.totals.itemsCount}</span>
+            В корзине <span>{cart.itemsCount}</span>
           </span>
         </div>
       </div>
@@ -103,6 +89,7 @@ export const Cart: React.FC = () => {
             const isItemLiked = user.liked.some(likedItem => likedItem.productId === item.product.id);
             return (
               <CartItem
+                key={item.product.id}
                 cartItem = {item}
                 userId = {user.id}
                 isLiked = {isItemLiked}

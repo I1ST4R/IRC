@@ -1,34 +1,39 @@
-import { fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
+import { fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
 import { CartItem as ICartItem } from "@/entity/cart/types";
 import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
 import { AppDispatch } from "@/main/store";
 import { useDispatch } from "react-redux";
 
-interface CartItemProps{
-  cartItem: ICartItem,
-  userId: string | null,
-  isLiked : boolean,
+interface CartItemProps {
+  cartItem: ICartItem;
+  userId: string | null;
+  isLiked: boolean;
 }
 
-export const CartItem = ({ cartItem, userId, isLiked }: CartItemProps) => {
+export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if ( userId && newQuantity > 0) {
+  const handleQuantityChange = (productId: string, type: "increase" | "decrease") => {
+    if ( userId ) {
+      if (type === "decrease" && cartItem.quantity === 1) return
+      const changes = type === "increase" ? 1 : -1
       dispatch(
         updateCartItem({
           userId:  userId,
           productId: productId,
-          quantity: newQuantity,
+          quantity: cartItem.quantity + changes,
         })
-      );
-      dispatch(fetchCartTotals( userId))
+      ).then(() => {
+        dispatch(fetchCartTotals(userId));
+      });
     }
   };
 
   const handleRemoveItem = (productId: string) => {
     if (userId) {
-      dispatch(removeFromCart({ userId: userId, productId: productId }));
+      dispatch(removeFromCart({ userId: userId, productId: productId })).then(() => {
+        dispatch(fetchCartTotals(userId));
+      });
     }
   };
 
@@ -100,7 +105,7 @@ export const CartItem = ({ cartItem, userId, isLiked }: CartItemProps) => {
               console.log(11);
               handleQuantityChange(
                 cartItem.product.id,
-                Math.max(1, cartItem.quantity - 1)
+                'decrease'
               );
             }}
           >
@@ -110,7 +115,7 @@ export const CartItem = ({ cartItem, userId, isLiked }: CartItemProps) => {
           <button
             className="cart__item-quantity-btn"
             onClick={() =>
-              handleQuantityChange(cartItem.product.id, cartItem.quantity + 1)
+              handleQuantityChange(cartItem.product.id, 'increase')
             }
           >
             +
