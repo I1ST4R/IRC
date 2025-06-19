@@ -16,39 +16,20 @@ export const ProductList = ({ onAuthRequired }: ProductListProps) => {
     loading, 
     error, 
     hasMore,
-    currentPage,
-    filters } = useSelector((state: RootState) => state.products);
+    currentPage} = useSelector((state: RootState) => state.products);
   const filter = useSelector((state: RootState) => state.filter);
-  const limit = 10;
-
-  // Формируем параметры для запроса
-  const getParams = useCallback((pageNum: number) => {
-    const params: any = { 
-      page: pageNum, 
-      minPrice: filter.priceRange?.min,
-      maxPrice: filter.priceRange?.max
-    };
-    
-    if (filter.selectedTags && filter.selectedTags.length > 0) {
-      params.tags = filter.selectedTags;
-    }
-    
-    return params;
-  }, [filter]);
+  let page = 1
 
   // При изменении фильтра сбрасываем страницу и загружаем заново
   useEffect(() => {
-    const params = getParams(1);
-    console.log('Dispatching with params:', params);
-    dispatch(fetchProducts({ page: 1, filters: params }));
-  }, [dispatch, filter, getParams]);
+    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
+  }, [dispatch, filter]);
 
   // Загрузить ещё
   const handleLoadMore = () => {
     if (!hasMore || loading === 'pending') return;
-    const nextPage = currentPage + 1;
-    const params = getParams(nextPage);
-    dispatch(fetchProducts({ page: nextPage, filters: params }));
+    page ++
+    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
   };
 
   if (loading === 'pending' && currentPage === 1) {

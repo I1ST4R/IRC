@@ -74,15 +74,15 @@ export const checkAuth = async (userId: string) => {
 };
 
 // Products
-export const getProducts = async (page: number, params?: FilterParams) => {
+export const getProducts = async (page: number, filter?: FilterParams) => {
   try {
     const response = await axiosInstance.get('/products');
     let filteredProducts = response.data;
 
     // Фильтрация по цене
-    const priceRange = params?.priceRange;
-    const priceMin = priceRange?.min
-    const priceMax = priceRange?.max
+    const priceMin = filter?.priceRange?.min
+    const priceMax = filter?.priceRange?.max
+    console.log("API ", priceMin, priceMax)
 
     if (priceMin !== undefined) {
       filteredProducts = filteredProducts.filter((product: Product) => product.price >= priceMin);
@@ -92,8 +92,7 @@ export const getProducts = async (page: number, params?: FilterParams) => {
       filteredProducts = filteredProducts.filter((product: Product) => product.price <= priceMax);
       console.log('After maxPrice filter:', filteredProducts.length);
     }
-
-    const allTags = await getTagsById(params?.tagsId as string[]);
+    const allTags = await getTagsById(filter?.tagsId || []);
     const tagsByCategory = allTags.reduce((acc: { [categoryId: string]: string[] }, tag) => {
       if (!acc[tag.categoryId]) acc[tag.categoryId] = [];
       acc[tag.categoryId].push(tag.id);
@@ -101,8 +100,8 @@ export const getProducts = async (page: number, params?: FilterParams) => {
     }, {});
 
     // Фильтрация по тегам
-    if (params?.tagsId && params.tagsId.length > 0) {
-      console.log('Filtering by tags:', params.tagsId);
+    if (filter?.tagsId && filter.tagsId.length > 0) {
+      console.log('Filtering by tags:', filter.tagsId);
 
       filteredProducts = filteredProducts.filter((product : Product) => {
         return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {

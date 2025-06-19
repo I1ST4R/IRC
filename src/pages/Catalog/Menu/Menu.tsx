@@ -1,19 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPriceRange, toggleTag, resetFilters } from "../../../entity/productFilter/slice";
-import { RootState } from "../../../main/store";
+import { AppDispatch, RootState } from "../../../main/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
+import { fetchCategories } from "@/entity/productCategory/slice";
+import { fetchTagsById } from "@/entity/tag/slice";
 
 interface AccordionItemProps {
   title: string;
   children: React.ReactNode;
-}
-
-interface FilterState {
-  priceRange: PriceRange;
-  selectedTags: string[];
 }
 
 const AccordionItem = ({ title, children }: AccordionItemProps) => {
@@ -47,7 +44,7 @@ const AccordionItem = ({ title, children }: AccordionItemProps) => {
 };
 
 export const Menu = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const filter = useSelector((state: RootState) => state.filter);
 
   const categories = useSelector((state: RootState) => state.categories.categories);
@@ -68,6 +65,15 @@ export const Menu = () => {
       sliderRef.current.style.setProperty('--range-width', `${maxPercent - minPercent}%`);
     }
   }, [localPriceRange]);
+
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTagsById(categories.flatMap(category => category.tags)));
+  }, [categories]);
 
   useEffect(() => {
     updateRangeHighlight();
