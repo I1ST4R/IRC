@@ -15,6 +15,7 @@ import {
   updateCartItem,
 } from "@/entity/cart/slice";
 import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { CartItem } from "@/main/components/CartItem/CartItem";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,26 +37,6 @@ export const Cart: React.FC = () => {
     }  ""}, 
   [dispatch, user.id]);
 
-
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (user.id && newQuantity > 0) {
-      dispatch(
-        updateCartItem({
-          userId: user.id,
-          productId: productId,
-          quantity: newQuantity,
-        })
-      );
-      dispatch(fetchCartTotals(user.id))
-    }
-  };
-
-  const handleRemoveItem = (productId: string) => {
-    if (user.id) {
-      dispatch(removeFromCart({ userId: user.id, productId: productId }));
-      // setSelectedItems((prev) => prev.filter((id) => id !== productId));
-    }
-  };
 
   if (!user.id) {
     return (
@@ -119,136 +100,13 @@ export const Cart: React.FC = () => {
         )}
         <div className="cart__list">
           {cart.items.map((item) => {
+            const isItemLiked = user.liked.some(likedItem => likedItem.productId === item.product.id);
             return (
-              <div key={item.product.id} className="cart__item">
-                <div className="cart__item-checkbox">
-                  <input type="checkbox" />
-                </div>
-
-                <div className="cart__item-img-block">
-                  <img
-                    src={item.product.img}
-                    alt={item.product.name}
-                    className="cart__item-image"
-                  />
-                  {/* <button
-                  className={`product__like${
-                    user.liked.some(item => item.productId === item.product.id)
-                      ? " product__like--active"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (user.id) {
-                      const isLiked = user.liked.some(item => item.productId === item.product.id);
-                      if (isLiked) {
-                        dispatch(removeItemFromLiked({ userId: user.id, productId: item.product.id }));
-                      } else {
-                        dispatch(addItemToLiked({ userId: user.id, productId: item.product.id }));
-                      }
-                    }
-                  }}
-                  title={
-                    user.liked.some(item => item.productId === item.product.id)
-                      ? "Убрать из избранного"
-                      : "В избранное"
-                  }
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                  >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                </button> */}
-                </div>
-
-                <div className="cart__item-text">
-                  <div className="cart__item-name-block">
-                    <p className="cart__item-name">{item.product.name}</p>
-                    <p className="cart__item-technology">
-                      {item.product.technology}
-                    </p>
-                  </div>
-
-                  <div className="cart__item-quantity">
-                    <button
-                      className="cart__item-quantity-btn"
-                      onClick={() =>{
-                        console.log(11)
-                        handleQuantityChange(
-                          item.product.id,
-                          Math.max(1, item.quantity - 1)
-                        )
-                      }
-                        
-                      }
-                    >
-                      -
-                    </button>
-                    <span className="cart__item-quantity-value">
-                      {item.quantity}
-                    </span>
-                    <button
-                      className="cart__item-quantity-btn"
-                      onClick={() =>
-                        handleQuantityChange(item.product.id, item.quantity + 1)
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-
-                  <div className="cart__item-price-block">
-                    {item.product.prevPrice ? (
-                      <>
-                        <p className="cart__item-price cart__item-price--new">
-                          {/* {item.product.total} ₽ */} item.product.total
-                        </p>
-                        <p className="cart__item-price cart__item-price--old">
-                          {/* {product.prevPrice * item.quantity} ₽ */}{" "}
-                          product.prevPrice * item.quantity
-                        </p>
-                      </>
-                    ) : (
-                      <div className="cart__item-price">
-                        {/* {itemTotal} ₽ */} item.product.total ₽
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <button
-                  className="cart__item-remove"
-                  onClick={() => handleRemoveItem(item.product.id)}
-                  title="Удалить из корзины"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15 5L5 15"
-                      stroke="#333"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M5 5L15 15"
-                      stroke="#333"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
+              <CartItem
+                cartItem = {item}
+                userId = {user.id}
+                isLiked = {isItemLiked}
+              />
             );
           })}
         </div>

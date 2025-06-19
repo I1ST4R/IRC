@@ -223,7 +223,7 @@ export const addToCart = async (userId: string, productId: string) => {
     }
     
      await axiosInstance.patch(`/users/${user.id}`, { cart });//меняем количество в бд
-    return loadCartProducts(user.cart)// затем подгружаем корзину заного
+    return loadCartProducts(user.cart)// затем подгружаем корзину заново
   } catch (error: any) {
     console.error('error in addToCart', error);
     throw error;
@@ -261,7 +261,7 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     
     //меняем количество в бд
     await axiosInstance.patch(`/users/${user.id}`, { cart });
-    return loadCartProducts(user.cart);// затем подгружаем корзину заного
+    return loadCartProducts(user.cart);// затем подгружаем корзину заново
   } catch (error: any) {
     console.error('error in updateCartItemQuantity', error);
     throw error;
