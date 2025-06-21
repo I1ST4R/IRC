@@ -78,6 +78,8 @@ export const Liked = () => {
     );
   }
 
+  console.log(items)
+
   return (
     <div className="cart container liked-page">
       <div className="cart__header">

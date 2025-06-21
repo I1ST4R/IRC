@@ -4,7 +4,7 @@ import {CartItem, CartItemDb} from '@/entity/cart/types'
 import { LikedItemDb } from '@/entity/liked/types'
 import { recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
-import { Product } from '@/entity/product/types';
+import { Product, ProductDb } from '@/entity/product/types';
 
 const API_URL = 'http://localhost:3001';
 
@@ -100,7 +100,7 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
     if (filter?.tagsId && filter.tagsId.length > 0) {
       console.log('Filtering by tags:', filter.tagsId);
 
-      filteredProducts = filteredProducts.filter((product : Product) => {
+      filteredProducts = filteredProducts.filter((product : ProductDb) => {
         return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
           return categoryTags.some(selectedTag => 
             product.tags.some((productTag: string) => productTag === selectedTag)
@@ -114,9 +114,12 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
     // Пагинация
     const paginatedProducts = filteredProducts.slice(0, page * 10);
     const hasMore = filteredProducts.length > page * 10;
+    
+    // Загружаем теги для всех продуктов
+    const productsWithTags = await getProductsWithTags(paginatedProducts)
 
     return {
-      products: paginatedProducts,
+      products: productsWithTags,
       hasMore: hasMore 
     };
   } catch (error: any) {
@@ -125,19 +128,39 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
   }
 };
 
+
+const getProductsWithTags = async (products: ProductDb[]) => {
+  try{
+    const productsWithTags = await Promise.all(
+      products.map(async (product: ProductDb) => {
+        const productTags = await getTagsById(product.tags);
+        return {
+          ...product,
+          tags: productTags
+        };
+      })
+    );
+    return productsWithTags;
+  }catch (error: any) {
+    console.error('error in getProductsWithTags', error);
+    throw error;
+  }
+}
+
 export const getProductById = async (productId: string) => {
   try{
     const response = await axiosInstance.get(`/products/${productId}`);
-    return response.data;
+    const productWithTags = await getProductsWithTags([response.data]);
+    return productWithTags[0];
   }catch (error: any) {
     console.error('error in getProductById', error);
     throw error;
   }
-};
+}; //возвращает продукт с подгруженными тэгами
 
 export const getProductsById = async (productsId: string[]) => {
   return Promise.all(productsId.map(productId => getProductById(productId)));
-};
+};  //возвращает продукт с подгруженными тэгами
 
 export const getTagById = async (tagId: string) => {
   try{
@@ -295,8 +318,8 @@ export const getLiked = async (userId: string) => {
       return [];
     }
     const productIds = user.liked.map((item: LikedItemDb) => item.productId);
-    const likedItems = await getProductsById(productIds)
-    return likedItems;
+    const products = await getProductsById(productIds)
+    return products;
   } catch (error: any) {
     console.error('error in getLiked', error);
     throw error;

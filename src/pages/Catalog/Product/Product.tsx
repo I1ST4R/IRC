@@ -6,6 +6,7 @@ import { addToCart, fetchCart } from "../../../entity/cart/slice";
 import { useNavigate, Link } from "react-router-dom";
 import { addItemToLiked, fetchLiked, removeItemFromLiked, } from "@/entity/liked/slice";
 import PersonalAccount from "../../../main/App/PersonalAccount/PersonalAccount";
+import { Tag } from "@/entity/tag/types";
 
 interface ProductProps {
   product: ProductType;
@@ -69,21 +70,15 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
     }
   };
 
-  const getTagName = (tagId: string) => {
-    if (!tagId) return "";
-    const tag = tags.find(t => t.id === tagId);
-    return tag?.name || "";
-  };
-
   return (
     <div className="product">
       <Link to={`/product/${product.id}`} className="product__link">
         <img src={product.img} alt={product.name} className="product__image" />
         <div className="product__info">
           <div className="product__tags">
-            {product.tags.map((tagString: string) => (
-              <span key={`${product.id}-${tagString}`} className="product__tag">
-                {getTagName(tagString)}
+            {product.tags.map((tag: Tag) => (
+              <span key={`${product.id}-${tag.id}`} className="product__tag">
+                {tag.name}
               </span>
             ))}
           </div>
