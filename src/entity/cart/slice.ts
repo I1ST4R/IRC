@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals} from '../../services/api';
+import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals, changeCheckCartItem} from '../../services/api';
 import { CartState } from './types';
 
 const initialState: CartState = {
@@ -17,6 +17,19 @@ export const fetchCart = createAsyncThunk(
       return response;
     } catch (error) {
       console.error('Error fetching cart:', error);
+      throw error;
+    }
+  }
+);
+
+export const changeCheckCart = createAsyncThunk(
+  'cart/changeCheckCart',
+  async ({ userId, productId }: { userId: string; productId: string }) => {
+    try {
+      const response = await changeCheckCartItem(userId, productId);
+      return response;
+    } catch (error) {
+      console.error('Error changing check cart:', error);
       throw error;
     }
   }
@@ -96,6 +109,19 @@ const cartSlice = createSlice({
         state.items = action.payload;
       })
       .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message || 'Failed to fetch cart';
+      })
+      // Change check cart
+      .addCase(changeCheckCart.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(changeCheckCart.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.items = action.payload;
+      })
+      .addCase(changeCheckCart.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message || 'Failed to fetch cart';
       })

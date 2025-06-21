@@ -215,9 +215,11 @@ export const loadCartProducts = async (cartItems: CartItemDb[]) => {
     
     const cartWithProducts = cartItems.map(cartItem => {
       const product = products.find(p => p.id === cartItem.productId);
+      if (!product) throw new Error(`Product with id ${cartItem.productId} not found`);
       return {
         product,
-        quantity: cartItem.quantity
+        quantity: cartItem.quantity,
+        isChecked: cartItem.isChecked
       };
     });
 
@@ -239,7 +241,7 @@ export const addToCart = async (userId: string, productId: string) => {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ productId, quantity: 1 });
+      cart.push({ productId, quantity: 1, isChecked: true });
     }
     
      await axiosInstance.patch(`/users/${user.id}`, { cart });//меняем количество в бд
@@ -301,6 +303,26 @@ export const calculateCartTotals = async (userId: string) => {
     return totals;
   } catch (error: any) {
     console.error('error in calculateCartTotals', error);
+    throw error;
+  }
+};
+
+export const changeCheckCartItem = async (userId: string, productId: string) => {
+  try {
+    const cart = await getCart(userId);
+    const updatedCart = cart.map((item: CartItem) => {
+      if (item.product.id === productId) {
+        return { 
+          ...item, 
+          isChecked: !item.isChecked
+        };
+      }
+      return item;
+    });
+    await axiosInstance.patch(`/users/${userId}`, { cart: updatedCart });
+    return updatedCart;
+  } catch (error) {
+    console.error('error in checkCartItem', error);
     throw error;
   }
 };

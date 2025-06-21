@@ -17,26 +17,26 @@ export const OrderMenu = () => {
   const user = useSelector((state: RootState) => state.user);
   const { totals, loading, error, items } = useSelector((state: RootState) => state.cart as CartState);
 
-  // useEffect(() => {
-  //   if (user.id) dispatch(fetchOrderTotals({
-  //     userId : user.id, 
-  //     promoCode : promoCode, 
-  //     certificateCode : certificateCode }));
-  // }, [dispatch, userId, promoCode, certificateCode]);
+  useEffect(() => {
+    if (user.id) dispatch(fetchOrderTotals({
+      userId : user.id, 
+      promoCode : promoCode, 
+      certificateCode : certificateCode }));
+  }, [dispatch, userId, promoCode, certificateCode]);
 
-  // const handlePromoSubmit = async () => {
-  //   if (!promoCode) {
-  //     return;
-  //   }
-  //   dispatch(validatePromoCode(promoCode));
-  // };
+  const handlePromoSubmit = async () => {
+    if (!promoCode) {
+      return;
+    }
+    dispatch(validatePromoCode(promoCode));
+  };
 
-  // const handleCertificateSubmit = async () => {
-  //   if (!certificateCode) {
-  //     return;
-  //   }
-  //   dispatch(validateCertificateCode(certificateCode));
-  // };
+  const handleCertificateSubmit = async () => {
+    if (!certificateCode) {
+      return;
+    }
+    dispatch(validateCertificateCode(certificateCode));
+  };
 
   const handleCheckout = () => {
     navigate('/order');
@@ -147,7 +147,7 @@ export const OrderMenu = () => {
       <div className="order-menu__item">
         <div
           className="order-menu__field"
-          // onClick={handlePromoSubmit}
+          onClick={handlePromoSubmit}
         >
           <div className="order-menu__item-name">
             <img src={promo} alt="promo" />
@@ -159,7 +159,7 @@ export const OrderMenu = () => {
       <div className="order-menu__item">
         <div
           className="order-menu__field"
-          // onClick={handleCertificateSubmit}
+          onClick={handleCertificateSubmit}
         >
           <div className="order-menu__item-name">
             <img src={certificate} alt="certificate" />
