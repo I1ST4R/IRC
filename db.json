@@ -9,15 +9,11 @@
       "cart": [
         {
           "productId": "1",
-          "quantity": 3
+          "quantity": 1
         },
         {
           "productId": "2",
           "quantity": 1
-        },
-        {
-          "productId": "3",
-          "quantity": 3
         }
       ],
       "liked": [
@@ -28,7 +24,16 @@
           "productId": "3"
         },
         {
-          "productId": "1"
+          "productId": "5"
+        },
+        {
+          "productId": "6"
+        },
+        {
+          "productId": "4"
+        },
+        {
+          "productId": "8"
         }
       ]
     },

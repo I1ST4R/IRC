@@ -8,10 +8,12 @@ import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
+import { fetchLiked } from "@/entity/liked/slice";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
+  const liked = useSelector((state: RootState) => state.liked)
   const cart = useSelector((state: RootState) => state.cart);
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
@@ -21,6 +23,7 @@ export const Cart: React.FC = () => {
       dispatch(fetchCart(userId)).then(() => {
         dispatch(fetchCartTotals(userId));
       });
+      dispatch(fetchLiked(user.id))
     }
   }, [dispatch, user.id]);
 
@@ -86,7 +89,7 @@ export const Cart: React.FC = () => {
         )}
         <div className="cart__list">
           {cart.items.map((item) => {
-            const isItemLiked = user.liked.some(likedItem => likedItem.productId === item.product.id);
+            const isItemLiked = liked.items.some(likedItem => likedItem.id === item.product.id);
             return (
               <CartItem
                 key={item.product.id}

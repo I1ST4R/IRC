@@ -4,7 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
 import { addToCart, fetchCart } from "../../../entity/cart/slice";
 import { useNavigate, Link } from "react-router-dom";
-import { addItemToLiked, fetchLiked, removeItemFromLiked, } from "@/entity/liked/slice";
+import {
+  addItemToLiked,
+  fetchLiked,
+  removeItemFromLiked,
+} from "@/entity/liked/slice";
 import PersonalAccount from "../../../main/App/PersonalAccount/PersonalAccount";
 import { Tag } from "@/entity/tag/types";
 
@@ -14,7 +18,11 @@ interface ProductProps {
   onAuthRequired?: () => void;
 }
 
-export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductProps) => {
+export const Product = ({
+  product,
+  onRemoveFromLiked,
+  onAuthRequired,
+}: ProductProps) => {
   const cart = useSelector((state: RootState) => state.cart);
   const liked = useSelector((state: RootState) => state.liked);
   const user = useSelector((state: RootState) => state.user);
@@ -23,33 +31,38 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
   const tags = useSelector((state: RootState) => state.tags.tags);
 
-  const isInCart = () =>{
-    if (cart.loading === 'succeeded'){
-      return cart.items.some((item) => item.product.id === product.id)
-    } 
-    return false
-  }
+  const isInCart = () => {
+    if (cart.loading === "succeeded") {
+      return cart.items.some((item) => item.product.id === product.id);
+    }
+    return false;
+  };
 
-  const isLiked = () =>{
-    if (liked.loading === 'succeeded') return liked.items.some((item) => item.id === product.id)
-    return
-  }
+  const isLiked = () => {
+    if (liked.loading === "succeeded")
+      return liked.items.some((item) => item.id === product.id);
+    return;
+  };
 
   const handleLike = async () => {
     if (!user.id) {
       onAuthRequired?.();
       return;
     }
-    
-    if (onRemoveFromLiked) {
-      onRemoveFromLiked();
+
+    if (isLiked()) {
+      await dispatch(
+        removeItemFromLiked({
+          userId: user.id.toString(),
+          productId: product.id,
+        })
+      );
     } else {
-      if (isLiked()) {
-        await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId: product.id }));
-      } else {
-        await dispatch(addItemToLiked({ userId: user.id.toString(), productId: product.id }));
-      }
-      await dispatch(fetchLiked(user.id));
+      await dispatch(
+        addItemToLiked({ 
+          userId: user.id.toString(), 
+          productId: product.id })
+      );
     }
   };
 
@@ -58,12 +71,14 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
       onAuthRequired?.();
       return;
     }
-    
+
     if (isInCart()) {
       navigate("/cart");
     } else {
       try {
-        await dispatch(addToCart({ userId: user.id.toString(), productId: product.id }));
+        await dispatch(
+          addToCart({ userId: user.id.toString(), productId: product.id })
+        );
       } catch (error) {
         console.error("Failed to add item to cart:", error);
       }
@@ -103,8 +118,12 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
         <svg
           width="20"
           height="20"
-          viewBox="0 0 20 20"
-          fill="none"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

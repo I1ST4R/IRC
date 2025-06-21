@@ -63,7 +63,7 @@
   } 
 
   &__empty {
-    margin-top: 100px;
+    margin: 150px 0 100px 0;
     text-align: center;
     font-size: 18px;
     display: flex;
@@ -139,6 +139,11 @@
     align-items: center;
     background: #fff;
     border-radius: 8px;
+
+    .product__like{
+      left:-90px;
+      right:0px;
+    }
 
     &-text{
       display:grid;
