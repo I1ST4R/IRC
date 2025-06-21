@@ -4,6 +4,7 @@ import { Menu } from "./Menu/Menu";
 import "./_catalog.scss";
 import { useState } from "react";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
+import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 
 export const Catalog = () => {
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
@@ -11,11 +12,12 @@ export const Catalog = () => {
   return (
     <div className="catalog container">
       <div className="catalog__header">
-        <div className="breadcrumb">
-          <Link to="/" className="breadcrumb__link">Главная</Link>
-          <span className="breadcrumb__separator">/</span>
-          <span className="breadcrumb__current">Каталог</span>
-        </div>
+      <BreadCrumb 
+      pageLinks={[
+        {name: "Главная", link: "/"},
+        {name: "Каталог", link: "/"},
+      ]}
+      />
       </div>
 
       <div className="catalog__content">

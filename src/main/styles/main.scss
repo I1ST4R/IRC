@@ -1,11 +1,14 @@
 // Import component styles
-@import '../../pages/Home/_general/general'; 
-@import '../../pages/Home/_general/normalize'; 
-@import '../../pages/Cart/_cart';
 @import '../App/Header/header';
 @import '../App/Footer/_footer';
 @import '../App/Navbar/_navbar';
 @import '../App/BottomMenu/_bottom-menu';
+@import '../App/PersonalAccount/personal-account';
+@import '../App/app';
+
+@import '../../pages/Home/_general/general'; 
+@import '../../pages/Home/_general/normalize'; 
+@import '../../pages/Cart/_cart';
 @import '../../pages/Home/MainBlock/main-block';
 @import '../../pages/Home/Categories/categories';
 @import '../../pages/Home/Advantages/advantages';
@@ -16,9 +19,7 @@
 @import '../../pages/Home/Founder/founder';
 @import '../../pages/Home/Press/press';
 @import '../../pages/Home/NewsLetter/newsletter';
-@import '../App/PersonalAccount/personal-account';
 @import '../../pages/Home/Blog/blog'; 
-
 @import '../../pages/Catalog/ProductList/productList';
 @import '../../pages/Catalog/Product/product';
 @import '../../pages/Catalog/catalog';
@@ -28,5 +29,4 @@
 @import '../../pages/Order/order';
 
 @import '../components/OrderMenu/order-menu';
-
-@import '../App/app';
+@import '../components/BreadCrumb/bread-crumb';

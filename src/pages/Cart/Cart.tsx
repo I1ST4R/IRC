@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
 import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
@@ -9,27 +9,34 @@ import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
 import { fetchLiked } from "@/entity/liked/slice";
+import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
-  const liked = useSelector((state: RootState) => state.liked)
+  const liked = useSelector((state: RootState) => state.liked);
   const cart = useSelector((state: RootState) => state.cart);
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
     if (user.id) {
-      const userId = user.id
+      const userId = user.id;
       dispatch(fetchCart(userId)).then(() => {
         dispatch(fetchCartTotals(userId));
       });
-      dispatch(fetchLiked(user.id))
+      dispatch(fetchLiked(user.id));
     }
   }, [dispatch, user.id]);
 
   if (!user.id) {
     return (
       <div className="cart container">
+        <BreadCrumb
+          pageLinks={[
+            { name: "Главная", link: "/" },
+            { name: "Корзина", link: "/" },
+          ]}
+        />
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__empty">
           <p className="cart__empty-message">
@@ -52,6 +59,12 @@ export const Cart: React.FC = () => {
   if (cart.items.length === 0) {
     return (
       <div className="cart__empty">
+        <BreadCrumb
+          pageLinks={[
+            { name: "Главная", link: "/" },
+            { name: "Корзина", link: "/" },
+          ]}
+        />
         <h2 className="cart__title">Корзина</h2>
         <img src={cartImg} alt="cart" />
         <div className="cart__empty-text">
@@ -65,10 +78,15 @@ export const Cart: React.FC = () => {
     );
   }
 
-
   return (
     <div className="cart container">
       <div className="cart__header">
+      <BreadCrumb
+          pageLinks={[
+            { name: "Главная", link: "/" },
+            { name: "Корзина", link: "/" },
+          ]}
+        />
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__info">
           <span className="cart__items-count">
@@ -89,13 +107,15 @@ export const Cart: React.FC = () => {
         )}
         <div className="cart__list">
           {cart.items.map((item) => {
-            const isItemLiked = liked.items.some(likedItem => likedItem.id === item.product.id);
+            const isItemLiked = liked.items.some(
+              (likedItem) => likedItem.id === item.product.id
+            );
             return (
               <CartItem
                 key={item.product.id}
-                cartItem = {item}
-                userId = {user.id}
-                isLiked = {isItemLiked}
+                cartItem={item}
+                userId={user.id}
+                isLiked={isItemLiked}
               />
             );
           })}
