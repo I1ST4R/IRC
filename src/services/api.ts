@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {FilterParams} from '@/entity/productFilter/types'
 import {CartItem, CartItemDb} from '@/entity/cart/types'
-import {LikedItem} from '@/entity/liked/types'
+import { LikedItemDb } from '@/entity/liked/types'
 import { recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
 import { Product } from '@/entity/product/types';
@@ -82,15 +82,12 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
     // Фильтрация по цене
     const priceMin = filter?.priceRange?.min
     const priceMax = filter?.priceRange?.max
-    console.log("API ", priceMin, priceMax)
 
     if (priceMin !== undefined) {
       filteredProducts = filteredProducts.filter((product: Product) => product.price >= priceMin);
-      console.log('After minPrice filter:', filteredProducts.length);
     }
     if (priceMax !== undefined) {
       filteredProducts = filteredProducts.filter((product: Product) => product.price <= priceMax);
-      console.log('After maxPrice filter:', filteredProducts.length);
     }
     const allTags = await getTagsById(filter?.tagsId || []);
     const tagsByCategory = allTags.reduce((acc: { [categoryId: string]: string[] }, tag) => {
@@ -297,7 +294,9 @@ export const getLiked = async (userId: string) => {
       await axiosInstance.patch(`/users/${user.id}`, { liked: [] });
       return [];
     }
-    return user.liked;
+    const productIds = user.liked.map((item: LikedItemDb) => item.productId);
+    const likedItems = await getProductsById(productIds)
+    return likedItems;
   } catch (error: any) {
     console.error('error in getLiked', error);
     throw error;
@@ -313,7 +312,7 @@ export const addToLiked = async (userId: string, productId: string) => {
     const user = response.data[0];
     const liked = user.liked || [];
     
-    const existingItem = liked.find((item: LikedItem) => item.productId === productId);
+    const existingItem = liked.find((item: LikedItemDb) => item.productId === productId);
     if (!existingItem) {
       liked.push({ productId });
     }
@@ -333,7 +332,7 @@ export const removeFromLiked = async (userId: string, productId: string) => {
       throw new Error('Пользователь не найден');
     }
     const user = response.data[0];
-    const liked = (user.liked || []).filter((item: LikedItem) => item.productId !== productId);
+    const liked = (user.liked || []).filter((item: LikedItemDb) => item.productId !== productId);
     
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
     return updateResponse.data.liked;

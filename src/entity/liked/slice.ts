@@ -19,7 +19,8 @@ export const addItemToLiked = createAsyncThunk(
   'liked/addItem',
   async ({ userId, productId }: { userId: string; productId: string }) => {
     try {
-      const liked = await addToLiked(userId, productId);
+      await addToLiked(userId, productId);
+      const liked = await getLiked(userId);
       return liked;
     } catch (error) {
       console.error('Error adding item to liked:', error);
@@ -32,7 +33,8 @@ export const removeItemFromLiked = createAsyncThunk(
   'liked/removeItem',
   async ({ userId, productId }: { userId: string; productId: string }) => {
     try {
-      const liked = await removeFromLiked(userId, productId);
+      await removeFromLiked(userId, productId);
+      const liked = await getLiked(userId);
       return liked;
     } catch (error) {
       console.error('Error removing item from liked:', error);

@@ -30,7 +30,7 @@ export const Product = ({ product, onRemoveFromLiked, onAuthRequired }: ProductP
   }
 
   const isLiked = () =>{
-    if (liked.loading === 'succeeded') return liked.items.some((item) => item.productId === product.id)
+    if (liked.loading === 'succeeded') return liked.items.some((item) => item.id === product.id)
     return
   }
 

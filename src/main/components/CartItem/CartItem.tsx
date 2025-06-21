@@ -126,16 +126,15 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
           {cartItem.product.prevPrice ? (
             <>
               <p className="cart__item-price cart__item-price--new">
-                {/* {item.product.total} ₽ */} item.product.total
+                {cartItem.product.price * cartItem.quantity} ₽
               </p>
               <p className="cart__item-price cart__item-price--old">
-                {/* {product.prevPrice * item.quantity} ₽ */} product.prevPrice
-                * item.quantity
+                {cartItem.product.prevPrice * cartItem.quantity} ₽
               </p>
             </>
           ) : (
             <div className="cart__item-price">
-              {/* {itemTotal} ₽ */} item.product.total ₽
+              {cartItem.product.price * cartItem.quantity} ₽
             </div>
           )}
         </div>

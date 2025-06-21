@@ -1,9 +1,11 @@
-export interface LikedItem {
+import { Product } from "../product/types";
+
+export interface LikedItemDb {
   productId: string;
 }
 
 export interface LikedState {
-  items: LikedItem[];
+  items: Product[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }
