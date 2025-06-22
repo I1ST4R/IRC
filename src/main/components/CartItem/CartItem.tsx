@@ -1,4 +1,4 @@
-import { fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
+import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
 import { CartItem as ICartItem } from "@/entity/cart/types";
 import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
 import { AppDispatch } from "@/main/store";
@@ -15,6 +15,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
 
   const handleQuantityChange = (productId: string, type: "increase" | "decrease") => {
     if ( userId ) {
+      console.log(cartItem)
       if (type === "decrease" && cartItem.quantity === 1) return
       const changes = type === "increase" ? 1 : -1
       dispatch(
@@ -37,10 +38,16 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
     }
   };
 
+  const handleChangeCheckCart = () => {
+    if(userId) {
+      dispatch(changeCheckCart({userId: userId, productId: cartItem.product.id}))
+    }
+  }
+
   return (
     <div key={cartItem.product.id} className="cart__item">
       <div className="cart__item-checkbox">
-        <input type="checkbox" />
+        <input type="checkbox" onChange= {handleChangeCheckCart} checked = {cartItem.isChecked}/>
       </div>
 
       <div className="cart__item-img-block">

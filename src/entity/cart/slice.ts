@@ -113,17 +113,8 @@ const cartSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch cart';
       })
       // Change check cart
-      .addCase(changeCheckCart.pending, (state) => {
-        state.loading = 'pending';
-        state.error = null;
-      })
       .addCase(changeCheckCart.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
         state.items = action.payload;
-      })
-      .addCase(changeCheckCart.rejected, (state, action) => {
-        state.loading = 'failed';
-        state.error = action.error.message || 'Failed to fetch cart';
       })
       // Fetch cart totals
       .addCase(fetchCartTotals.pending, (state) => {

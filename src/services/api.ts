@@ -309,9 +309,14 @@ export const calculateCartTotals = async (userId: string) => {
 
 export const changeCheckCartItem = async (userId: string, productId: string) => {
   try {
-    const cart = await getCart(userId);
-    const updatedCart = cart.map((item: CartItem) => {
-      if (item.product.id === productId) {
+    const response = await axiosInstance.get(`/users?id=${userId}`)
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const cart = user.cart || [];
+    const updatedCartDb = cart.map((item: CartItemDb) => {
+      if (item.productId === productId) {
         return { 
           ...item, 
           isChecked: !item.isChecked
@@ -319,8 +324,8 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
       }
       return item;
     });
-    await axiosInstance.patch(`/users/${userId}`, { cart: updatedCart });
-    return updatedCart;
+    await axiosInstance.patch(`/users/${userId}`, { cart: updatedCartDb });
+    return loadCartProducts(user.cart);
   } catch (error) {
     console.error('error in checkCartItem', error);
     throw error;
