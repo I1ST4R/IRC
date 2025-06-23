@@ -5,14 +5,11 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { store } from './main/store';
 import { router } from './services/routes';
-import { PersonalAccountProvider } from './context/PersonalAccountContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersonalAccountProvider>
-        <RouterProvider router={router} />
-      </PersonalAccountProvider>
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>,
 );

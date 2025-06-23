@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
-import { logout } from '../../../entity/users/slice';
+import { logout, openAccount } from '../../../entity/users/slice';
 import logo from './logo.svg';
 import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';
@@ -22,7 +22,6 @@ const Header: React.FC = () => {
   const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const totalLikedItems = likedItems.length;
-  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
@@ -54,10 +53,6 @@ const Header: React.FC = () => {
 
   const handleMenuClick = () => {
     setIsMenuActive(!isMenuActive);
-  };
-
-  const togglePersonalAccount = () => {
-    setIsPersonalAccountOpen(!isPersonalAccountOpen);
   };
 
   const handleLogout = () => {
@@ -134,7 +129,7 @@ const Header: React.FC = () => {
             ) : (
               <button
                 className="header__button"
-                onClick={togglePersonalAccount}
+                onClick={() => dispatch(openAccount())}
               >
                 <img src={personalAcc} alt="personal-acc" />
               </button>
@@ -160,7 +155,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      {isPersonalAccountOpen && <PersonalAccount onClose={togglePersonalAccount} />}
+      {user.isAccountOpen && <PersonalAccount/>}
     </>
   );
 };

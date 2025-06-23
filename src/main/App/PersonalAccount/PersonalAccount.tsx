@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../main/store';
-import { login, register, clearError } from '../../../entity/users/slice';
-import './_personal-account.scss';
-
-interface PersonalAccountProps {
-  onClose: () => void;
-}
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../main/store";
+import {
+  login,
+  register,
+  clearError,
+  closeAccount,
+} from "../../../entity/users/slice";
+import "./_personal-account.scss";
 
 interface FormData {
   login: string;
@@ -16,16 +17,16 @@ interface FormData {
   email?: string;
 }
 
-const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
+const PersonalAccount = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState<FormData>({
-    login: '',
-    password: '',
-    name: '',
-    email: '',
-    confirmPassword: ''
+    login: "",
+    password: "",
+    name: "",
+    email: "",
+    confirmPassword: "",
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -34,34 +35,29 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
     dispatch(clearError());
 
     if (isLogin) {
-      const resultAction = await dispatch(login({ login: formData.login, password: formData.password }));
-      if (login.fulfilled.match(resultAction)) {
-        onClose();
-      }
+      const resultAction = await dispatch(
+        login({ login: formData.login, password: formData.password })
+      );
+      if (login.fulfilled.match(resultAction)) dispatch(closeAccount())
     } else {
-      if (formData.password !== formData.confirmPassword) {
-        return;
-      }
-      if (!formData.email) {
-        return;
-      }
-      const resultAction = await dispatch(register({
-        login: formData.login,
-        password: formData.password,
-        email: formData.email,
-        type: 'client'
-      }));
-      if (register.fulfilled.match(resultAction)) {
-        onClose();
-      }
+      if (formData.password !== formData.confirmPassword || !formData.email) return;
+      const resultAction = await dispatch(
+        register({
+          login: formData.login,
+          password: formData.password,
+          email: formData.email,
+          type: "client",
+        })
+      );
+      if (register.fulfilled.match(resultAction)) dispatch(closeAccount())
     }
-  };
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -71,11 +67,11 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
     setTimeout(() => {
       setIsLogin(isLoginTab);
       setFormData({
-        login: '',
-        password: '',
-        name: '',
-        email: '',
-        confirmPassword: ''
+        login: "",
+        password: "",
+        name: "",
+        email: "",
+        confirmPassword: "",
       });
       setIsTransitioning(false);
     }, 300);
@@ -84,37 +80,66 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
   return (
     <div className="personal-account">
       <div className="personal-account__content">
-        <button className="personal-account__close" onClick={onClose}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M6 6L18 18" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <button
+          className="personal-account__close"
+          onClick={() => dispatch(closeAccount())}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 6L6 18"
+              stroke="#333"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M6 6L18 18"
+              stroke="#333"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
 
         <>
           <h2 className="personal-account__title">
-            {isLogin ? 'Вход в личный кабинет' : 'Регистрация'}
+            {isLogin ? "Вход в личный кабинет" : "Регистрация"}
           </h2>
-          
+
           <div className="personal-account__tabs">
-            <button 
-              className={`personal-account__tab ${isLogin ? 'personal-account__tab--active' : ''}`}
+            <button
+              className={`personal-account__tab ${
+                isLogin ? "personal-account__tab--active" : ""
+              }`}
               onClick={() => handleTabChange(true)}
             >
               Вход
             </button>
-            <button 
-              className={`personal-account__tab ${!isLogin ? 'personal-account__tab--active' : ''}`}
+            <button
+              className={`personal-account__tab ${
+                !isLogin ? "personal-account__tab--active" : ""
+              }`}
               onClick={() => handleTabChange(false)}
             >
               Регистрация
             </button>
           </div>
 
-          {user.error && <div className="personal-account__error">{user.error}</div>}
+          {user.error && (
+            <div className="personal-account__error">{user.error}</div>
+          )}
 
-          <form 
-            className={`personal-account__form ${isTransitioning ? 'personal-account__form--transitioning' : ''}`} 
+          <form
+            className={`personal-account__form ${
+              isTransitioning ? "personal-account__form--transitioning" : ""
+            }`}
             onSubmit={handleSubmit}
           >
             {!isLogin && (
@@ -186,12 +211,16 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
               </div>
             )}
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="personal-account__submit"
-              disabled={user.loading === 'pending'}
+              disabled={user.loading === "pending"}
             >
-              {user.loading === 'pending' ? 'Загрузка...' : (isLogin ? 'Войти' : 'Зарегистрироваться')}
+              {user.loading === "pending"
+                ? "Загрузка..."
+                : isLogin
+                ? "Войти"
+                : "Зарегистрироваться"}
             </button>
           </form>
         </>
@@ -200,4 +229,4 @@ const PersonalAccount: React.FC<PersonalAccountProps> = ({ onClose }) => {
   );
 };
 
-export default PersonalAccount; 
+export default PersonalAccount;

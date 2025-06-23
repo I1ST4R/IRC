@@ -1,5 +1,4 @@
 import React from 'react';
-import { usePersonalAccount } from '../../../context/PersonalAccountContext';
 import logo from './logo.svg';
 import phone from '../../../pages/Home/_general/img/phone.svg';
 import whatsapp from '../../../pages/Home/_general/img/whatsapp.svg';
@@ -10,8 +9,6 @@ import mail from './mail.svg';
 import clock from './clock.svg';
 
 const Footer: React.FC = () => {
-  const { toggleAccount } = usePersonalAccount();
-
   return (
     <footer className="footer">
       <div className="container">

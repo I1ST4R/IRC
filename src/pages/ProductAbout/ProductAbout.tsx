@@ -3,94 +3,56 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
 import { addToCart, fetchCart } from "@/entity/cart/slice.ts";
-import { addItemToLiked, fetchLiked } from "@/entity/liked/slice";
-import { fetchTagsById } from '../../entity/tag/slice';
-import { fetchProductById } from '@/entity/product/slice';
+import { addItemToLiked, fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { fetchProductById } from "@/entity/product/slice";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
+import { Tag } from "@/entity/tag/types";
+import { openAccount } from "@/entity/users/slice";
+import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 
-export const ProductAbout = ({
-  onRemoveFromLiked,
-}: {
-  onRemoveFromLiked?: () => void;
-}) => {
+export const ProductAbout = () => {
   const { id } = useParams();
   const product = useSelector((state: RootState) => state.products.currentProduct);
   const loading = useSelector((state: RootState) => state.products.loading);
   const error = useSelector((state: RootState) => state.products.error);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const likedItems = useSelector((state: RootState) => state.liked.items);
-  const { user } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-  const tags = useSelector((state: RootState) => state.tags.tags);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchProductById(id));
-    }
-  }, [dispatch, id]);
+  useEffect(() => { id ? dispatch(fetchProductById(id)) : ""}, [dispatch, id])
 
-  //tags dispatch
-  useEffect(() => {
-    if (product?.tags) {
-      dispatch(fetchTagsById(product.tags));
-    }
-  }, [dispatch, product?.tags]);
-
-  const isInCart = cartItems.some((item) => item.product.id === product?.id);
-  const isLiked = likedItems.some((item) => item.productId === product?.id);
+  const isInCart = () => cartItems.some((item) => item.product.id === product?.id);
+  const isLiked = () => likedItems.some((item) => item.id === product?.id);
 
   const handleCartClick = async () => {
-    if (!user?.id) {
-      togglePersonalAccount();
+    if (!product) return;
+    if (!user.id) {
+      dispatch(openAccount())
       return;
     }
 
-    if (!product) return
-
-    if (isInCart) {
-      navigate("/cart");
-    } else {
-      try {
-        await dispatch(addToCart({ userId: user.id.toString(), productId: product.id }));
-        await dispatch(fetchCart(user.id.toString()));
-      } catch (error) {
-        console.error("Failed to add item to cart:", error);
-      }
-    }
+    if (isInCart()) navigate("/cart") 
+    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
   };
 
-  const handleLike = async () => {
-    if (!user?.id) {
-      togglePersonalAccount();
-      return;
-    }
+  const switchLike = async (productId: string) => {
 
-    if (!product) return
-
-    if (onRemoveFromLiked) {
-      onRemoveFromLiked();
+    if (!product || !user || !user.id) return;
+    const isLiked = likedItems.some((item) => item.id === productId);
+    if (isLiked) {
+      await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId }));
+      await dispatch(fetchLiked(user.id.toString()));
     } else {
-      await dispatch(
-        addItemToLiked({ userId: user.id.toString(), productId: product.id })
-      );
+      await dispatch(addItemToLiked({ userId: user.id.toString(), productId }));
       await dispatch(fetchLiked(user.id.toString()));
     }
   };
 
-  const getTagName = (tagId: string) => {
-    if (!tagId) return "";
-    const tag = tags.find(t => t.id === tagId);
-    return tag?.name || "";
-  };
 
-  const togglePersonalAccount = () => {
-    setIsPersonalAccountOpen(!isPersonalAccountOpen);
-  };
-
-  if (loading === 'pending') {
+  if (loading === "pending") {
     return <div>Загрузка...</div>;
   }
 
@@ -104,18 +66,13 @@ export const ProductAbout = ({
 
   return (
     <div className="product-about container">
-      <div className="breadcrumb">
-        <Link to="/" className="breadcrumb__link">
-          Главная
-        </Link>
-        <span className="breadcrumbs__separator">/</span>
-        <Link to="/catalog" className="breadcrumb__link">
-          Каталог
-        </Link>
-        <span className="breadcrumb__separator">/</span>
-        <span className="breadcrumb__current">{product.name}</span>
-      </div>
-
+    <BreadCrumb
+      pageLinks={[
+        {name: "Главная", link: "/"},
+        {name: "Каталог", link: "/catalog"},
+        {name: product.name, link: "/catalog"},
+      ]}
+    />
       <div className="product-about__container">
         <div className="product-about__image-container">
           <img
@@ -125,9 +82,9 @@ export const ProductAbout = ({
           />
 
           <div className="product-about__tags">
-            {product.tags.map((tagString: string) => (
-              <span key={`${tagString}`} className="product__tag">
-                {getTagName(tagString)}
+            {product.tags.map((tag: Tag) => (
+              <span key={`${tag.name}-${product.id}`} className="product__tag">
+                {tag.name}
               </span>
             ))}
           </div>
@@ -147,69 +104,49 @@ export const ProductAbout = ({
               </span>
             </div>
 
-            {!user ? (
+            {!user.id ? (
               <div className="product-about__auth-block">
-                <button
-                  className="product-about__auth-btn"
-                  onClick={togglePersonalAccount}
-                >
-                  <img src={personalAcc} alt="personal-acc" />
-                  <span className="product-about__auth-text">
-                    <Link
-                      to="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        togglePersonalAccount();
-                      }}
-                    >
-                      Авторизуйся
-                    </Link>{" "}
-                    и получай бонусы и эксклюзивные скидки
-                  </span>
-                </button>
+                <img src={personalAcc} alt="personal-acc" />
+                <span className="product-about__auth-text">
+                  <button
+                    className="product-about__auth-btn"
+                    onClick={() => dispatch(openAccount())}
+                  >
+                    Авторизуйся
+                  </button>
+                  и получай бонусы и эксклюзивные скидки
+                </span>
               </div>
             ) : (
               <>
                 <button
                   className={`product__btn product-about__btn ${
-                    isInCart ? "product__btn--in-cart" : ""
+                    isInCart() ? "product__btn--in-cart" : ""
                   }`}
                   onClick={handleCartClick}
                 >
-                  {isInCart ? "В корзине" : "Добавить в корзину"}
+                  {isInCart() ? "В корзине" : "Добавить в корзину"}
                 </button>
 
                 <button
                   className={`product__like product-about__like ${
-                    isLiked ? " product__like--active" : ""
+                    isLiked() ? " product__like--active" : ""
                   }`}
-                  onClick={handleLike}
+                  onClick={() => switchLike(product.id)}
+                  title={isLiked() ? "Убрать из избранного" : "В избранное"}
                 >
                   <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
                   >
-                    <g clip-path="url(#clip0_219_4352)">
-                      <path
-                        id="heart-main"
-                        d="M14.5835 1.59766C13.6451 1.61225 12.7272 1.8742 11.9224 2.35705C11.1177 2.8399 10.4546 3.52655 10.0001 4.34766C9.54566 3.52655 8.88257 2.8399 8.07783 2.35705C7.27308 1.8742 6.35517 1.61225 5.41679 1.59766C3.92091 1.66265 2.51155 2.31703 1.49661 3.41785C0.481678 4.51867 -0.0563308 5.97643 0.000128002 7.47266C0.000128002 11.2618 3.98846 15.4002 7.33346 18.206C8.08031 18.8336 9.02459 19.1777 10.0001 19.1777C10.9757 19.1777 11.9199 18.8336 12.6668 18.206C16.0118 15.4002 20.0001 11.2618 20.0001 7.47266C20.0566 5.97643 19.5186 4.51867 18.5036 3.41785C17.4887 2.31703 16.0793 1.66265 14.5835 1.59766Z"
-                        fill="#CA354F"
-                      />
-
-                      <path
-                        id="heart-inner"
-                        d="M11.596 16.931C11.1493 17.3071 10.5841 17.5134 10.0001 17.5134C9.41617 17.5134 8.85098 17.3071 8.40429 16.931C4.12263 13.3385 1.66679 9.89182 1.66679 7.47266C1.60983 6.41825 1.9721 5.3841 2.6746 4.59574C3.37709 3.80738 4.36282 3.32878 5.41679 3.26432C6.47077 3.32878 7.45649 3.80738 8.15899 4.59574C8.86149 5.3841 9.22376 6.41825 9.16679 7.47266C9.16679 7.69367 9.25459 7.90563 9.41087 8.06191C9.56715 8.21819 9.77911 8.30599 10.0001 8.30599C10.2211 8.30599 10.4331 8.21819 10.5894 8.06191C10.7457 7.90563 10.8335 7.69367 10.8335 7.47266C10.7765 6.41825 11.1388 5.3841 11.8413 4.59574C12.5438 3.80738 13.5295 3.32878 14.5835 3.26432C15.6374 3.32878 16.6232 3.80738 17.3257 4.59574C18.0282 5.3841 18.3904 6.41825 18.3335 7.47266C18.3335 9.89182 15.8776 13.3385 11.596 16.9277V16.931Z"
-                        fill="#F2F2F2"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_219_4352">
-                        <rect width="20" height="20" fill="white" />
-                      </clipPath>
-                    </defs>
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                      fill={isLiked() ? '#CA354F' : '#ECECEC'}
+                      stroke="#CA354F"
+                      strokeWidth="1.5"
+                    />
                   </svg>
                 </button>
               </>
@@ -238,8 +175,8 @@ export const ProductAbout = ({
           </div>
         </div>
       </div>
-      {isPersonalAccountOpen && (
-        <PersonalAccount onClose={togglePersonalAccount} />
+      {user.isAccountOpen && (
+        <PersonalAccount/>
       )}
     </div>
   );

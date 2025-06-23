@@ -6,10 +6,8 @@ import { addToCart, fetchCart } from "../../../entity/cart/slice";
 import { useNavigate, Link } from "react-router-dom";
 import {
   addItemToLiked,
-  fetchLiked,
   removeItemFromLiked,
 } from "@/entity/liked/slice";
-import PersonalAccount from "../../../main/App/PersonalAccount/PersonalAccount";
 import { Tag } from "@/entity/tag/types";
 
 interface ProductProps {
@@ -20,7 +18,6 @@ interface ProductProps {
 
 export const Product = ({
   product,
-  onRemoveFromLiked,
   onAuthRequired,
 }: ProductProps) => {
   const cart = useSelector((state: RootState) => state.cart);
@@ -28,8 +25,6 @@ export const Product = ({
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-  const tags = useSelector((state: RootState) => state.tags.tags);
 
   const isInCart = () => {
     if (cart.loading === "succeeded") {
@@ -72,17 +67,8 @@ export const Product = ({
       return;
     }
 
-    if (isInCart()) {
-      navigate("/cart");
-    } else {
-      try {
-        await dispatch(
-          addToCart({ userId: user.id.toString(), productId: product.id })
-        );
-      } catch (error) {
-        console.error("Failed to add item to cart:", error);
-      }
-    }
+    if (isInCart()) navigate("/cart") 
+    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
   };
 
   return (
@@ -129,9 +115,6 @@ export const Product = ({
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
         </svg>
       </button>
-      {isPersonalAccountOpen && (
-        <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
-      )}
     </div>
   );
 };

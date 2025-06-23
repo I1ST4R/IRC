@@ -4,10 +4,12 @@ import catalog from './catalog.svg';
 import liked from '../../../pages/Home/_general/img/liked.svg';
 import basket from '../../../pages/Home/_general/img/basket.svg';
 import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
-import { usePersonalAccount } from '../../../context/PersonalAccountContext';
+import { AppDispatch, RootState } from '@/main/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { openAccount } from '@/entity/users/slice';
 
 const BottomMenu: React.FC = () => {
-  const { toggleAccount } = usePersonalAccount();
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div className="bottom-menu">
@@ -26,7 +28,7 @@ const BottomMenu: React.FC = () => {
         <p>Корзина</p>
       </button>
 
-      <button className="bottom-menu__button" onClick={toggleAccount}>
+      <button className="bottom-menu__button" onClick={() => dispatch(openAccount())}>
         <img src={personalAcc} alt="personal-acc" />
         <p>Профиль</p>
       </button>

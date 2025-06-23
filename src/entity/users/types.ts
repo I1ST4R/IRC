@@ -1,5 +1,6 @@
-import { LikedItem } from '../liked/types';
+
 import { CartItem } from '../cart/types'
+import { Product } from '../product/types';
 
 export interface User {
   id: string | null;
@@ -8,7 +9,7 @@ export interface User {
   password: string | null;
   type: "client" | "admin" | null;
   cart: CartItem[];
-  liked: LikedItem[];
+  liked: Product[];
 }
 
 export interface UserState {
@@ -18,7 +19,8 @@ export interface UserState {
   password: string | null;
   type: "client" | "admin" | null;
   cart: CartItem[];
-  liked: LikedItem[];
+  liked: Product[];
+  isAccountOpen: boolean;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }

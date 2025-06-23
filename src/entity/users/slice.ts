@@ -11,6 +11,7 @@ const initialState: UserState = {
   type: null,
   cart: [],
   liked: [],
+  isAccountOpen: false,
   loading: 'idle',
   error: null
 };
@@ -75,6 +76,12 @@ const usersSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    openAccount: (state) => {
+      state.isAccountOpen = true
+    },
+    closeAccount: (state) => {
+      state.isAccountOpen = false
     }
   },
   extraReducers: (builder) => {
@@ -126,5 +133,5 @@ const usersSlice = createSlice({
   }
 });
 
-export const { logout, clearError } = usersSlice.actions;
+export const { logout, clearError, openAccount, closeAccount } = usersSlice.actions;
 export default usersSlice.reducer;
