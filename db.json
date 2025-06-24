@@ -15,7 +15,7 @@
         {
           "productId": "3",
           "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         },
         {
           "productId": "2",
@@ -42,7 +42,8 @@
         {
           "productId": "1"
         }
-      ]
+      ],
+      "orders": []
     },
     {
       "id": "l2yj3zb",
@@ -73,7 +74,8 @@
           "productId": "5",
           "quantity": 1
         }
-      ]
+      ],
+      "orders": []
     },
     {
       "id": "b209",
@@ -82,7 +84,8 @@
       "email": "test-rega@mail.ru",
       "type": "client",
       "cart": [],
-      "liked": []
+      "liked": [],
+      "orders": []
     },
     {
       "id": "84b9",
@@ -91,7 +94,8 @@
       "email": "testRega@mail.ru",
       "type": "client",
       "liked": [],
-      "cart": []
+      "cart": [],
+      "orders": []
     }
   ],
   "products": [

@@ -10,13 +10,13 @@ import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
 import { fetchLiked } from "@/entity/liked/slice";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
+import { openAccount } from "@/entity/users/slice";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
   const liked = useSelector((state: RootState) => state.liked);
   const cart = useSelector((state: RootState) => state.cart);
-  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
 
   useEffect(() => {
     if (user.id) {
@@ -42,15 +42,15 @@ export const Cart: React.FC = () => {
           <p className="cart__empty-message">
             <button
               className="cart__login-btn"
-              onClick={() => setIsPersonalAccountOpen(true)}
+              onClick={() => dispatch(openAccount())}
             >
               ВОЙДИТЕ
             </button>
             , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ в корзину
           </p>
         </div>
-        {isPersonalAccountOpen && (
-          <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
+        {user.isAccountOpen && (
+          <PersonalAccount/>
         )}
       </div>
     );

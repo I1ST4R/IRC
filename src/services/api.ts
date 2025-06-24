@@ -2,7 +2,7 @@ import axios from 'axios';
 import {FilterParams} from '@/entity/productFilter/types'
 import {CartItem, CartItemDb} from '@/entity/cart/types'
 import { LikedItemDb } from '@/entity/liked/types'
-import { recipientInterface } from '@/entity/order/types';
+import { Order, OrderDb, OrderDbAdd, recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
 import { Product, ProductDb } from '@/entity/product/types';
 
@@ -73,7 +73,7 @@ export const checkAuth = async (userId: string) => {
   }
 };
 
-// Products
+// Product
 export const getProducts = async (page: number, filter?: FilterParams) => {
   try {
     const response = await axiosInstance.get('/products');
@@ -128,7 +128,6 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
   }
 };
 
-
 const getProductsWithTags = async (products: ProductDb[]) => {
   try{
     const productsWithTags = await Promise.all(
@@ -176,7 +175,7 @@ export const getTagsById = async (tagsId: string[]) => {
   return Promise.all(tagsId.map(tagId => getTagById(tagId)));
 };
 
-// Categories
+// Category
 export const getCategories = async () => {
   try{
     const response = await axiosInstance.get('/productCategories');
@@ -421,39 +420,72 @@ export const validateCertificate = async (code: string) => {
 };
 
 // Orders
-export const addOrder = async (userId: string, recipient: recipientInterface) => {
+export const addOrder = async (order: Order ) => {
   try {
-    const user = await axiosInstance.get(`/users/${userId}`);
-    const cart = user.data.cart || [];
-    
-    const newOrder = {
-      userId,
-      recipient,
-      cart,
-      createDate: new Date().toISOString(),
-      status: 'new'
+    const responseUser = await axiosInstance.get(`/users/${order.userId}`);
+    if (responseUser.data.length === 0) {
+      throw new Error('Пользователь не найден');
     }
-    
-    const response = await axiosInstance.post('/orders', newOrder);
-    return response.data;
+    const user = responseUser.data[0];
+    const cartItemsDb = order.cartItems.map((cartItem : CartItem) => {
+      return {
+        productId: cartItem.product.id,
+        isChecked: cartItem.isChecked,
+        quantity: cartItem.quantity
+      }
+    })
+    //use OrderDbAdd because json.server make unique id by himself
+    const newOrder: OrderDbAdd = {
+      userId: order.userId,
+      cartItems: cartItemsDb,
+      total: order.total,
+      totalWithDiscount: order.totalWithDiscount,
+      discount: order.discount,
+      promocodeDiscount: order.promocodeDiscount,
+      certificateDiscount: order.certificateDiscount,
+      recipient: order.recipient,
+    }
+    //make response that create order in orders/
+    const responseOrder = await axiosInstance.post('/orders', newOrder);
+    const createdOrderId  = responseOrder.data.id;
+
+    //make response that create order in users/{userId}/orders
+    //save id order only
+    const updatedOrders = Array.isArray(user.orders) ? [...user.orders, createdOrderId] : [createdOrderId];
+    await axiosInstance.patch(`/users/${user.id}`, { orders: updatedOrders });
+
+    //remove choosen cartItem from cart
+    const cartItemsDbId = cartItemsDb.map((cartItemDb: CartItemDb) => {
+      return cartItemDb.productId
+    })
+    await Promise.all(cartItemsDbId.map(async (cartItemDbId : string)=>{
+      await removeFromCart(order.userId, cartItemDbId)
+    }))
+
+    return responseOrder.data;
   } catch (error: any) {
     console.error('error in addOrder', error);
     throw error;
   }
 };
 
-export const getOrder = async (userId: string) => {
+export const getOrdersByUserId = async (userId: string) => {
   try {
-    const responseUser = await axiosInstance.get(`/users?id=${userId}`);
+    const responseUser = await axiosInstance.get(`/users/${userId}`);
     if (responseUser.data.length === 0) {
       throw new Error('Пользователь не найден');
     }
-    else {
-      const responseOrder = await axiosInstance.get(`/orders?userId=${userId}`)
-      return responseOrder.data;
-    }
+    const userOrdersId = responseUser.data[0].orders
+    if (!userOrdersId || userOrdersId.length === 0 ){
+      return [];
+    } 
+    const orders = await getOrders()
+    const userOrders = orders.filter((order: OrderDb)=>
+      userOrdersId.includes(order.id)
+    )
+    return userOrders
   } catch (error: any) {
-    console.error('error in getOrder', error);
+    console.error('error in getOrdersByUserId', error);
     throw error;
   }
 };
@@ -461,58 +493,18 @@ export const getOrder = async (userId: string) => {
 export const getOrders = async () => {
   try {
     const response = await axiosInstance.get(`/orders`)
-    return response.data;
+    const ordersWithCartItem = await Promise.all(
+      response.data.map(async (order: OrderDb) => {
+        const cartItems = await loadCartProducts(order.cartItems)
+        return {
+          ...order,
+          cartItems: cartItems
+        };
+      })
+    )
+    return ordersWithCartItem
   } catch (error: any) {
     console.error('error in getOrders', error);
     throw error;
   }
 };
-
-// export const calculateOrderTotals = async (userId: string, promoCode?: string, certificateCode?: string) => {
-//   try {
-//     const cartTotals = await calculateCartTotals(userId);
-
-//     if (!cartTotals) {
-//       throw new Error('error: cartTotals is undefined');
-//     }
-
-//     let finalTotal = cartTotals.total;
-//     let promoDiscount = 0;
-//     let certificateDiscount = 0;
-
-//     if (promoCode) {
-//       const promo = await validatePromo(promoCode);
-//       if (!promo) {
-//         throw new Error('error: promo is undefined');
-//       }
-//       if (promo.valid && promo.code) {
-//         promoDiscount = Math.round(finalTotal * (promo.discount / 100));
-//         finalTotal -= promoDiscount;
-//       }
-//     }
-
-//     if (certificateCode) {
-//       const certificate = await validateCertificate(certificateCode);
-//       if (!certificate) {
-//         throw new Error('error: promo is undefined');
-//       }
-//       console.log('Certificate validation result:', certificate);
-//       if (certificate.valid && certificate.code) {
-//         certificateDiscount = Math.min(certificate.amount, finalTotal);
-//         finalTotal -= certificateDiscount;
-//       }
-//     }
-
-//     const result = {
-//       ...cartTotals,
-//       promoDiscount,
-//       certificateDiscount,
-//       finalTotal: Math.max(0, finalTotal)
-//     };
-//     console.log('Final order totals:', result);
-//     return result;
-//   } catch (error: any) {
-//     console.error('error in calculateOrderTotals', error);
-//     throw error;
-//   }
-// }; 

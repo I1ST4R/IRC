@@ -1,5 +1,6 @@
 
 import { CartItem } from '../cart/types'
+import { Order } from '../order/types';
 import { Product } from '../product/types';
 
 export interface User {
@@ -10,6 +11,7 @@ export interface User {
   type: "client" | "admin" | null;
   cart: CartItem[];
   liked: Product[];
+  orders: Order[];
 }
 
 export interface UserState {

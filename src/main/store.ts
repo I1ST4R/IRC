@@ -11,6 +11,7 @@ import userReducer from '../entity/users/slice.ts';
 import promoReducer from '../entity/promo/slice.ts';
 import certificatesReducer from '../entity/certificate/slice.ts';
 import tagReducer from '../entity/tag/slice';
+import ordersReducer from '../entity/order/slice';
 //State Interface
 import { CartState } from '../entity/cart/types';
 import { UserState } from '../entity/users/types.ts'
@@ -21,6 +22,7 @@ import { FilterState } from '../entity/productFilter/types.ts'
 import { ProductsState } from '../entity/product/types.ts'
 import { PromoState } from '../entity/promo/types.ts'
 import { TagState } from '../entity/tag/types';
+import { OrdersState } from '../entity/order/types';
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +35,7 @@ export const store = configureStore({
     promo: promoReducer,
     certificates: certificatesReducer,
     tags: tagReducer,
+    orders: ordersReducer,
   }
 });
 
@@ -46,6 +49,7 @@ export type RootState = {
   promo: PromoState;
   certificates: CertificateState;
   tags: TagState;
+  orders: OrdersState;
 };
 
 export type AppDispatch = typeof store.dispatch;

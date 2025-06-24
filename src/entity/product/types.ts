@@ -6,7 +6,7 @@ export interface ProductDb {
   name: string;
   technology: string;
   price: number;
-  prevPrice?: number;
+  prevPrice: number;
   quantity: string;
   img: string;
   tags: string[];
@@ -22,7 +22,7 @@ export interface Product {
   name: string;
   technology: string;
   price: number;
-  prevPrice?: number;
+  prevPrice: number;
   quantity: string;
   img: string;
   tags: Tag[];
