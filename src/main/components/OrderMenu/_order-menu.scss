@@ -29,11 +29,50 @@
   }
 
   &__arrow {
-    transition: transform 0.3s ease;
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.2s;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+  }
 
-    &--open {
-      transform: rotate(180deg);
-    }
+  &__arrow.open {
+    transform: rotate(180deg);
+  }
+
+  &__dropdown {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 15px;
+    margin-left: 0;
+    min-width: 120px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  &__apply-btn {
+    padding: 6px 16px;
+    background: #ff6b6b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  &__apply-btn:hover {
+    background: #ff3b3b;
   }
 
   input {

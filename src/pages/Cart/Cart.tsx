@@ -107,7 +107,6 @@ export const Cart: React.FC = () => {
         )}
         <div className="cart__list">
           {cart.items.map((item) => {
-            console.log(item)
             const isItemLiked = liked.items.some(
               (likedItem) => likedItem.id === item.product.id
             );

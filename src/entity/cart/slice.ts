@@ -114,7 +114,9 @@ const cartSlice = createSlice({
       })
       // Change check cart
       .addCase(changeCheckCart.fulfilled, (state, action) => {
-        state.items = action.payload;
+        const updatedItem = action.payload;
+        const idx = state.items.findIndex(item => item.product.id === updatedItem.product.id);
+        if (idx !== -1) state.items[idx] = updatedItem;
       })
       // Fetch cart totals
       .addCase(fetchCartTotals.pending, (state) => {

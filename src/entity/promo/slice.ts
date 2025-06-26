@@ -3,9 +3,12 @@ import { validatePromo } from '@/services/api';
 import { PromoState } from '../promo/types'
 
 const initialState: PromoState = {
-  code: null,
-  discount: null,
-  loading: false,
+  promo: {
+    valid: false,
+    code: null,
+    discount: null,
+  },
+  loading: 'idle',
   error: null
 };
 
@@ -27,29 +30,26 @@ const promoSlice = createSlice({
   initialState,
   reducers: {
     clearPromo: (state) => {
-      state.code = null;
-      state.discount = null;
+      state.promo.code = null;
+      state.promo.discount = null;
       state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(validatePromoCode.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(validatePromoCode.fulfilled, (state, action) => {
-        state.loading = false;
-        if (action.payload.valid) {
-          state.code = action.payload.code;
-          state.discount = action.payload.discount;
+        state.loading = 'succeeded';
+          state.promo.valid = action.payload.valid
+          state.promo.code = action.payload.code;
+          state.promo.discount = action.payload.discount;
           state.error = null;
-        } else {
-          state.error = 'Неверный промокод';
-        }
       })
       .addCase(validatePromoCode.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.error.message || 'Ошибка при проверке промокода';
       });
   }

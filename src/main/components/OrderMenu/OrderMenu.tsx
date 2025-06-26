@@ -6,6 +6,7 @@ import { validatePromoCode, clearPromo } from '../../../entity/promo/slice';
 import { validateCertificateCode, clearCertificate } from '../../../entity/certificate/slice';
 import promoSvg from '../../../pages/Cart/promo.svg';
 import certificate from '../../../pages/Cart/certificate.svg';
+import arrowDown from '../../../main/App/Header/arrow-down-coral.svg';
 import './_order-menu.scss';
 import { CartItem, CartState } from '@/entity/cart/types';
 import { changeOrderInfo } from '@/entity/order/slice';
@@ -19,9 +20,10 @@ export const OrderMenu = () => {
   const certificates = useSelector((state: RootState) => state.certificates);
   const user = useSelector((state: RootState) => state.user);
   const {loading, error, items } = useSelector((state: RootState) => state.cart as CartState);
-  const [promocode, setPromocode] = useState(null)
-  const [sertificate, setSertificate] = useState(null)
-  
+  const [promocode, setPromocode] = useState<string | null>(null)
+  const [sertificate, setSertificate] = useState<string | null>(null)
+  const [promoTouched, setPromoTouched] = useState(false);
+  const [sertTouched, setSertTouched] = useState(false);
 
   useEffect(() => {
     if (!user.id || !items.filter(item => item.isChecked)) return
@@ -30,23 +32,33 @@ export const OrderMenu = () => {
     dispatch(changeOrderInfo({
       userId: user.id,
       cartItems: checkedCartItems,
-      promocodeDiscount: promo.discount, 
-      certificateDiscount: certificates.amount, 
+      promocodeDiscount: promo.promo.valid? promo.promo.discount : null, 
+      certificateDiscount: certificates.certificate.valid? certificates.certificate.amount : null, 
     }));
-  }, [dispatch, user.id, promocode, sertificate, items]);
+  }, [dispatch, user.id, promo.promo.valid, certificates.certificate.valid, items]);
 
-  const handlePromoSubmit = async () => {
-    if (!promocode) return
-    await dispatch(validatePromoCode(promocode));
+  const handleCheckout = () => navigate('/order')
+
+  const handlePromocodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPromocode(e.target.value);
   };
 
-  const handleCertificateSubmit = async () => {
-    if (!sertificate) return;
-    dispatch(validateCertificateCode(sertificate));
+  const handlePromocodeBlur = () => {
+    setPromoTouched(true);
+    if (promocode) {
+      dispatch(validatePromoCode(promocode));
+    }
   };
 
-  const handleCheckout = () => {
-    navigate('/order');
+  const handleSertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSertificate(e.target.value);
+  };
+
+  const handleSertificateBlur = () => {
+    setSertTouched(true);
+    if (sertificate) {
+      dispatch(validateCertificateCode(sertificate));
+    }
   };
 
   if (!user.id) {
@@ -148,26 +160,35 @@ export const OrderMenu = () => {
       </div>
 
       <div className="order-menu__item">
-        <div
-          className="order-menu__field"
-          onClick={handlePromoSubmit}
-        >
-          <div className="order-menu__item-name">
-            <img src={promoSvg} alt="promo" />
-            <span>Промокод</span>
-          </div>
+        <div className="order-menu__field">
+          <input
+            type="text"
+            value={promocode || ''}
+            onChange={handlePromocodeChange}
+            onBlur={handlePromocodeBlur}
+            placeholder="Промокод"
+            className="order-menu__input"
+          />
+          {promoTouched && promocode && !promo.promo.valid && (
+            <div style={{ color: 'red', fontSize: '13px', marginTop: '4px' }}>
+              {promo.error || 'Промокод недействителен'}
+            </div>
+          )}
         </div>
-      </div>
-
-      <div className="order-menu__item">
-        <div
-          className="order-menu__field"
-          onClick={handleCertificateSubmit}
-        >
-          <div className="order-menu__item-name">
-            <img src={certificate} alt="certificate" />
-            <span>Сертификат</span>
-          </div>
+        <div className="order-menu__field">
+          <input
+            type="text"
+            value={sertificate || ''}
+            onChange={handleSertificateChange}
+            onBlur={handleSertificateBlur}
+            placeholder="Сертификат"
+            className="order-menu__input"
+          />
+          {sertTouched && sertificate && !certificates.certificate.valid && (
+            <div style={{ color: 'red', fontSize: '13px', marginTop: '4px' }}>
+              {certificates.error || 'Сертификат недействителен'}
+            </div>
+          )}
         </div>
       </div>
 

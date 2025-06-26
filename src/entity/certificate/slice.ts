@@ -4,9 +4,12 @@ import { CertificateState } from './types'
 
 
 const initialState: CertificateState = {
-  code: null,
-  amount: null,
-  loading: false,
+  certificate: {
+    valid: false,
+    code: null,
+    amount: null,
+  },
+  loading: 'idle',
   error: null
 };
 
@@ -28,29 +31,26 @@ const certificatesSlice = createSlice({
   initialState,
   reducers: {
     clearCertificate: (state) => {
-      state.code = null;
-      state.amount = null;
+      state.certificate.code = null;
+      state.certificate.amount = null;
       state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(validateCertificateCode.pending, (state) => {
-        state.loading = true;
+        state.loading = 'pending';
         state.error = null;
       })
       .addCase(validateCertificateCode.fulfilled, (state, action) => {
-        state.loading = false;
-        if (action.payload.valid) {
-          state.code = action.payload.code;
-          state.amount = action.payload.amount;
-          state.error = null;
-        } else {
-          state.error = 'Неверный сертификат';
-        }
+        state.loading = 'succeeded';
+        state.certificate.valid = action.payload.valid;
+        state.certificate.code = action.payload.code;
+        state.certificate.amount = action.payload.amount;
+        state.error = null;
       })
       .addCase(validateCertificateCode.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = 'failed';
         state.error = action.error.message || 'Ошибка при проверке сертификата';
       });
   }

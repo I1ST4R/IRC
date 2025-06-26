@@ -5,6 +5,8 @@ import { LikedItemDb } from '@/entity/liked/types'
 import { Order, OrderDb, OrderDbAdd, recipientInterface } from '@/entity/order/types';
 import { User, LoginData, RegisterData } from '@/entity/users/types';
 import { Product, ProductDb } from '@/entity/product/types';
+import { Promo } from '@/entity/promo/types';
+import { Certificate } from '@/entity/certificate/types';
 
 const API_URL = 'http://localhost:3001';
 
@@ -324,7 +326,10 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
       return item;
     });
     await axiosInstance.patch(`/users/${userId}`, { cart: updatedCartDb });
-    return loadCartProducts(user.cart);
+    const updatedItem = updatedCartDb.find((item: CartItemDb) => item.productId === productId);
+    if (!updatedItem) throw new Error('Товар не найден в корзине');
+    const [cartItem] = await loadCartProducts([updatedItem]);
+    return cartItem;
   } catch (error) {
     console.error('error in checkCartItem', error);
     throw error;
@@ -394,11 +399,23 @@ export const removeFromLiked = async (userId: string, productId: string) => {
 // Promo
 export const validatePromo = async (code: string) => {
   try {
-    const response = await axiosInstance.get(`/promo?code=${code}`);
-    if (response.data && response.data.length > 0) {
-      return { valid: true, code: response.data[0].code, discount: response.data[0].discount };
+    const upperCode = code.toUpperCase();
+    
+    const response = await axiosInstance.get(`/promo?code=${upperCode}`);
+    let promo: Promo = {
+      valid: false, 
+      code: null, 
+      discount: null 
     }
-    return { valid: false };
+    if (response.data && response.data.length > 0) {
+      promo = {
+        valid: true, 
+        code: response.data[0].code, 
+        discount: response.data[0].discount 
+      }
+      return promo
+    }
+    return promo;
   } catch (error: any) {
     console.error('error in validatePromo', error);
     throw error;
@@ -408,11 +425,22 @@ export const validatePromo = async (code: string) => {
 // Certificates
 export const validateCertificate = async (code: string) => {
   try {
-    const response = await axiosInstance.get(`/certificates?code=${code}`);
+    const upperCode = code.toUpperCase();
+    const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
+    let certificate: Certificate = {
+      valid: false,
+      code: null,
+      amount: null
+    };
     if (response.data && response.data.length > 0) {
-      return { valid: true, code: response.data[0].code, amount: response.data[0].amount };
+      certificate = {
+        valid: true,
+        code: response.data[0].code,
+        amount: response.data[0].amount
+      };
+      return certificate;
     }
-    return { valid: false };
+    return certificate;
   } catch (error: any) {
     console.error('error in validateCertificate', error);
     throw error;

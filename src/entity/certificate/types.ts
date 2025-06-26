@@ -1,6 +1,11 @@
+export interface Certificate{
+  valid: boolean
+  code: string | null
+  amount: number | null
+}
+
 export interface CertificateState {
-  code: string | null;
-  amount: number | null;
-  loading: boolean;
-  error: string | null;
+  certificate: Certificate
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string | null
 }
