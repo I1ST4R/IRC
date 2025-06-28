@@ -5,6 +5,7 @@ import { CertificateState } from './types'
 
 const initialState: CertificateState = {
   certificate: {
+    id: null,
     valid: false,
     code: null,
     amount: null,
@@ -26,13 +27,15 @@ export const validateCertificateCode = createAsyncThunk(
   }
 );
 
-const certificatesSlice = createSlice({
+const certificateSlice = createSlice({
   name: 'certificates',
   initialState,
   reducers: {
     clearCertificate: (state) => {
+      state.certificate.id = null;
       state.certificate.code = null;
       state.certificate.amount = null;
+      state.certificate.valid = false;
       state.error = null;
     }
   },
@@ -45,6 +48,7 @@ const certificatesSlice = createSlice({
       .addCase(validateCertificateCode.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.certificate.valid = action.payload.valid;
+        state.certificate.id = action.payload.id;
         state.certificate.code = action.payload.code;
         state.certificate.amount = action.payload.amount;
         state.error = null;
@@ -56,5 +60,5 @@ const certificatesSlice = createSlice({
   }
 });
 
-export const { clearCertificate } = certificatesSlice.actions;
-export default certificatesSlice.reducer; 
+export const { clearCertificate } = certificateSlice.actions;
+export default certificateSlice.reducer; 

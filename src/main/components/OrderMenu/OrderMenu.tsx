@@ -2,16 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../main/store";
-import { validatePromoCode, clearPromo } from "../../../entity/promo/slice";
-import {
-  validateCertificateCode,
-  clearCertificate,
-} from "../../../entity/certificate/slice";
-import promoSvg from "../../../pages/Cart/promo.svg";
-import certificate from "../../../pages/Cart/certificate.svg";
-import arrowDown from "../../../main/App/Header/arrow-down-coral.svg";
+import { validatePromoCode } from "../../../entity/promo/slice";
+import {validateCertificateCode} from "../../../entity/certificate/slice";
 import "./_order-menu.scss";
-import { CartItem, CartState } from "@/entity/cart/types";
+import { CartState } from "@/entity/cart/types";
 import { changeOrderInfo } from "@/entity/order/slice";
 
 export const OrderMenu = () => {
@@ -20,7 +14,7 @@ export const OrderMenu = () => {
   const location = useLocation();
   const promo = useSelector((state: RootState) => state.promo);
   const order = useSelector((state: RootState) => state.orders.current);
-  const certificates = useSelector((state: RootState) => state.certificates);
+  const certificate = useSelector((state: RootState) => state.certificate);
   const user = useSelector((state: RootState) => state.user);
   const { loading, error, items } = useSelector(
     (state: RootState) => state.cart as CartState
@@ -38,17 +32,21 @@ export const OrderMenu = () => {
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodeDiscount: promo.promo.valid ? promo.promo.discount : null,
-        certificateDiscount: certificates.certificate.valid
-          ? certificates.certificate.amount
+        promocodeDiscount: promo.promo.valid 
+          ? promo.promo.discount 
           : null,
+        promocodeId: promo.promo.id,
+        certificateDiscount: certificate.certificate.valid
+          ? certificate.certificate.amount
+          : null,
+          certificateId: certificate.certificate.id,
       })
     );
   }, [
     dispatch,
     user.id,
     promo.promo.valid,
-    certificates.certificate.valid,
+    certificate.certificate.valid,
     items,
   ]);
 
@@ -60,10 +58,10 @@ export const OrderMenu = () => {
   }, [promo.promo.valid]);
 
   useEffect(() => {
-    if (certificates.certificate.valid) {
+    if (certificate.certificate.valid) {
       setSertTouched(false);
     }
-  }, [certificates.certificate.valid]);
+  }, [certificate.certificate.valid]);
 
   const handleCheckout = () => navigate("/order");
 
@@ -223,7 +221,7 @@ export const OrderMenu = () => {
             Promocode activated
           </div>
         )}
-        {!certificates.certificate.valid && (
+        {!certificate.certificate.valid && (
           <div className="order-menu__field">
             <input
               type="text"
@@ -231,16 +229,16 @@ export const OrderMenu = () => {
               onChange={handleSertificateChange}
               onBlur={handleSertificateBlur}
               placeholder="Сертификат"
-              className={`order-menu__input ${sertTouched && sertificate && !certificates.certificate.valid ? 'order-menu__input--error' : ''}`}
+              className={`order-menu__input ${sertTouched && sertificate && !certificate.certificate.valid ? 'order-menu__input--error' : ''}`}
             />
-            {sertTouched && sertificate && !certificates.certificate.valid && (
+            {sertTouched && sertificate && !certificate.certificate.valid && (
               <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-                {certificates.error || "Сертификат недействителен"}
+                {certificate.error || "Сертификат недействителен"}
               </div>
             )}
           </div>
         )}
-        {certificates.certificate.valid && (
+        {certificate.certificate.valid && (
           <div className="order-menu__field" style={{ color: '#CA354F' }}>
             Certificate activated
           </div>

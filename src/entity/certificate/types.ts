@@ -1,4 +1,5 @@
 export interface Certificate{
+  id: string | null
   valid: boolean
   code: string | null
   amount: number | null

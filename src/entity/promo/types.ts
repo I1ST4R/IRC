@@ -1,4 +1,5 @@
 export interface Promo {
+  id: string | null
   valid: boolean;
   code: string | null;
   discount: number | null;

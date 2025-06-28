@@ -11,39 +11,30 @@ export interface recipientInterface {
   comment?: string;
 }
 
-export interface OrderDbAdd {
-  userId: string,
-  cartItems: CartItemDb[],
-  total: number,
-  totalWithDiscount: number,
-  discount: number,
-  promocodeDiscount: number | null,
-  certificateDiscount: number | null,
-  recipient: recipientInterface,
+interface GeneralOrder {
+  userId: string;
+  total: number;
+  totalWithDiscount: number;
+  discount: number;
+  promocodeDiscount: number | null;
+  promocodeId: string | null;
+  certificateDiscount: number | null;
+  certificateId: string | null;
+  recipient: recipientInterface;
 }
 
-export interface OrderDb {
-  id: number,
-  userId: string,
-  cartItems: CartItemDb[],
-  total: number,
-  totalWithDiscount: number,
-  discount: number,
-  promocodeDiscount: number | null,
-  certificateDiscount: number | null,
-  recipient: recipientInterface,
+export interface OrderDbAdd extends GeneralOrder {
+  cartItems: CartItemDb[];
 }
 
-export interface Order {
-  id: number,
-  userId: string,
-  cartItems: CartItem[],
-  total: number,
-  totalWithDiscount: number,
-  discount: number,
-  promocodeDiscount: number | null,
-  certificateDiscount: number | null,
-  recipient: recipientInterface,
+export interface OrderDb extends GeneralOrder {
+  id: number;
+  cartItems: CartItemDb[];
+}
+
+export interface Order extends GeneralOrder {
+  id: number;
+  cartItems: CartItem[];
 }
 
 export interface OrdersState {

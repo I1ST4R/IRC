@@ -4,6 +4,7 @@ import { PromoState } from '../promo/types'
 
 const initialState: PromoState = {
   promo: {
+    id: null,
     valid: false,
     code: null,
     discount: null,
@@ -30,8 +31,10 @@ const promoSlice = createSlice({
   initialState,
   reducers: {
     clearPromo: (state) => {
+      state.promo.id = null;
       state.promo.code = null;
       state.promo.discount = null;
+      state.promo.valid = false;
       state.error = null;
     }
   },
@@ -44,6 +47,7 @@ const promoSlice = createSlice({
       .addCase(validatePromoCode.fulfilled, (state, action) => {
         state.loading = 'succeeded';
           state.promo.valid = action.payload.valid
+          state.promo.id = action.payload.id;
           state.promo.code = action.payload.code;
           state.promo.discount = action.payload.discount;
           state.error = null;

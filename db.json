@@ -9,7 +9,7 @@
       "cart": [
         {
           "productId": "1",
-          "quantity": 1,
+          "quantity": 9,
           "isChecked": true
         },
         {

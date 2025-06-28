@@ -403,16 +403,18 @@ export const validatePromo = async (code: string) => {
     
     const response = await axiosInstance.get(`/promo?code=${upperCode}`);
     let promo: Promo = {
+      id: null,
       valid: false, 
       code: null, 
       discount: null 
     }
-    if (response.data && response.data.length > 0) {
+    if (response.data && response.data.length > 0 && !response.data[0].used) {
       promo = {
+        id: response.data[0].id,
         valid: true, 
         code: response.data[0].code, 
         discount: response.data[0].discount 
-      }
+      } 
       return promo
     }
     return promo;
@@ -422,18 +424,32 @@ export const validatePromo = async (code: string) => {
   }
 };
 
-// Certificates
+export const changeUsedPromo = async (id: string) => {
+  try {
+    const response = await axiosInstance.get(`/promo?id=${id}`);
+    if (response.data && response.data.length > 0) {
+      await axiosInstance.patch(`/promo/${id}`, { used: true });
+    }
+  } catch (error: any) {
+    console.error('error in changeUsedPromo', error);
+    throw error;
+  }
+}
+
+// Certificate
 export const validateCertificate = async (code: string) => {
   try {
     const upperCode = code.toUpperCase();
     const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
     let certificate: Certificate = {
+      id: null,
       valid: false,
       code: null,
       amount: null
     };
-    if (response.data && response.data.length > 0) {
+    if (response.data && response.data.length > 0 && !response.data[0].used) {
       certificate = {
+        id: response.data[0].id,
         valid: true,
         code: response.data[0].code,
         amount: response.data[0].amount
@@ -446,6 +462,18 @@ export const validateCertificate = async (code: string) => {
     throw error;
   }
 };
+
+export const changeUsedCertificate = async (id: string) => {
+  try {
+    const response = await axiosInstance.get(`/certificates?id=${id}`);
+    if (response.data && response.data.length > 0) {
+      await axiosInstance.patch(`/certificates/${id}`, { used: true });
+    }
+  } catch (error: any) {
+    console.error('error in changeUsedCertificate', error);
+    throw error;
+  }
+}
 
 // Orders
 export const addOrder = async (order: Order ) => {
@@ -470,7 +498,9 @@ export const addOrder = async (order: Order ) => {
       totalWithDiscount: order.totalWithDiscount,
       discount: order.discount,
       promocodeDiscount: order.promocodeDiscount,
+      promocodeId: order.promocodeId,
       certificateDiscount: order.certificateDiscount,
+      certificateId: order.certificateId,
       recipient: order.recipient,
     }
     //make response that create order in orders/
@@ -489,6 +519,10 @@ export const addOrder = async (order: Order ) => {
     await Promise.all(cartItemsDbId.map(async (cartItemDbId : string)=>{
       await removeFromCart(order.userId, cartItemDbId)
     }))
+
+    //change field used for promo + sertificate if exist
+    if(order.promocodeId) await changeUsedPromo(order.promocodeId)
+    if(order.certificateId) await changeUsedCertificate(order.certificateId)
 
     return responseOrder.data;
   } catch (error: any) {

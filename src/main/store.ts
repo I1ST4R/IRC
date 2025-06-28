@@ -9,7 +9,7 @@ import cartReducer from '../entity/cart/slice.ts';
 import likedReducer from '../entity/liked/slice.ts';
 import userReducer from '../entity/users/slice.ts';
 import promoReducer from '../entity/promo/slice.ts';
-import certificatesReducer from '../entity/certificate/slice.ts';
+import certificateReducer from '../entity/certificate/slice.ts';
 import tagReducer from '../entity/tag/slice';
 import ordersReducer from '../entity/order/slice';
 //State Interface
@@ -33,7 +33,7 @@ export const store = configureStore({
     liked: likedReducer,
     user: userReducer,
     promo: promoReducer,
-    certificates: certificatesReducer,
+    certificate: certificateReducer,
     tags: tagReducer,
     orders: ordersReducer,
   }
@@ -47,7 +47,7 @@ export type RootState = {
   liked: LikedState;
   user: UserState;
   promo: PromoState;
-  certificates: CertificateState;
+  certificate: CertificateState;
   tags: TagState;
   orders: OrdersState;
 };
