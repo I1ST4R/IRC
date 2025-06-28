@@ -1,6 +1,8 @@
 import { CartItem, CartItemDb } from "../cart/types";
 
 export interface recipientInterface {
+  deliveryMethod: "courier" | "pickup"
+  paymentMethod: "SBP" | "bank card"
   fullName: string;
   phone: string;
   address: string;

@@ -12,6 +12,8 @@ const defaultOrder: Order = {
   promocodeDiscount: 0,
   certificateDiscount: 0,
   recipient: {
+    deliveryMethod: "courier",
+    paymentMethod: "SBP",
     fullName: "",
     phone: "",
     address: "",

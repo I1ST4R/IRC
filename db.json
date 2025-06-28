@@ -15,12 +15,12 @@
         {
           "productId": "2",
           "quantity": 1,
-          "isChecked": false
+          "isChecked": true
         },
         {
           "productId": "3",
           "quantity": 1,
-          "isChecked": false
+          "isChecked": true
         }
       ],
       "liked": [

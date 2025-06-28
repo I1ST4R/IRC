@@ -6,7 +6,7 @@ import './_order.scss';
 import { fetchCart } from "@/entity/cart/slice";
 
 export const Order: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const cart = useSelector((state: RootState) => state.cart);
 
   const [deliveryMethod, setDeliveryMethod] = useState<"courier" | "pickup">("courier");
@@ -172,7 +172,7 @@ export const Order: React.FC = () => {
           </div>
         </div>
 
-        <OrderMenu cartItems={cart.items} />
+        <OrderMenu/>
     </div>
   );
 };
