@@ -500,6 +500,7 @@ export const addOrder = async (order: Order ) => {
       promocodeDiscount: order.promocodeDiscount,
       promocodeId: order.promocodeId,
       certificateDiscount: order.certificateDiscount,
+      deliveryCost: order.deliveryCost,
       certificateId: order.certificateId,
       recipient: order.recipient,
     }

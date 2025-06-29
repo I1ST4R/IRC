@@ -10,7 +10,10 @@ const defaultOrder: Order = {
   totalWithDiscount: 0,
   discount: 0,
   promocodeDiscount: 0,
+  promocodeId: null,
   certificateDiscount: 0,
+  deliveryCost: 0,
+  certificateId: null,
   recipient: {
     deliveryMethod: "courier",
     paymentMethod: "SBP",
@@ -103,7 +106,7 @@ const ordersSlice = createSlice({
       }
 
       state.current.total = total;
-      state.current.totalWithDiscount = totalWithDiscount;
+      state.current.totalWithDiscount = totalWithDiscount + state.current.deliveryCost;
       state.current.discount = discount;
     }
   },

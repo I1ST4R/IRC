@@ -1,8 +1,12 @@
 import { CartItem, CartItemDb } from "../cart/types";
 
+export type DeliveryMethod = "courier" | "pickup";
+
+export type PaymentMethod = "SBP" | "bank card";
+
 export interface recipientInterface {
-  deliveryMethod: "courier" | "pickup"
-  paymentMethod: "SBP" | "bank card"
+  deliveryMethod: DeliveryMethod;
+  paymentMethod: PaymentMethod;
   fullName: string;
   phone: string;
   address: string;
@@ -19,6 +23,7 @@ interface GeneralOrder {
   promocodeDiscount: number | null;
   promocodeId: string | null;
   certificateDiscount: number | null;
+  deliveryCost: 0 | 500;
   certificateId: string | null;
   recipient: recipientInterface;
 }

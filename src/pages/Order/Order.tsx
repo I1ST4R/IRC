@@ -3,14 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../main/store';
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import './_order.scss';
-import { fetchCart } from "@/entity/cart/slice";
+import { DeliveryMethod, PaymentMethod } from "@/entity/order/types";
+import { changeOrderInfo } from "@/entity/order/slice";
 
 export const Order: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
-  const cart = useSelector((state: RootState) => state.cart);
+  const dispatch = useDispatch();
 
-  const [deliveryMethod, setDeliveryMethod] = useState<"courier" | "pickup">("courier");
   const [formData, setFormData] = useState({
+    deliveryMethod: "courier",
+    paymentMethod: "SBP",
     fullName: "",
     phone: "",
     address: "",
@@ -27,6 +29,23 @@ export const Order: React.FC = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      deliveryMethod: value,
+    }));
+
+    // Диспатч для изменения стоимости доставки
+    if (user.id) {
+      const deliveryCost = value === "courier" ? 500 : 0;
+      dispatch(changeOrderInfo({
+        userId: user.id,
+        deliveryCost: deliveryCost as 0 | 500,
+      }));
+    }
   };
 
   if (!user.id) {
@@ -51,12 +70,10 @@ export const Order: React.FC = () => {
               <label className="order__point-method">
                 <input
                   type="radio"
-                  name="delivery"
+                  name="deliveryMethod"
                   value="courier"
-                  checked={deliveryMethod === "courier"}
-                  onChange={(e) =>
-                    setDeliveryMethod(e.target.value as "courier" | "pickup")
-                  }
+                  checked={formData.deliveryMethod === "courier"}
+                  onChange={handleDeliveryChange}
                 />
                 <span>Доставка курьером</span>
               </label>
@@ -64,12 +81,10 @@ export const Order: React.FC = () => {
               <label className="order__point-method">
                 <input
                   type="radio"
-                  name="delivery"
+                  name="deliveryMethod"
                   value="pickup"
-                  checked={deliveryMethod === "pickup"}
-                  onChange={(e) =>
-                    setDeliveryMethod(e.target.value as "courier" | "pickup")
-                  }
+                  checked={formData.deliveryMethod === "pickup"}
+                  onChange={handleDeliveryChange}
                 />
                 <span>Самовывоз</span>
               </label>
@@ -80,11 +95,23 @@ export const Order: React.FC = () => {
             <h1 className="order__point-title">Оплата</h1>
             <div className="order__point-methods">
               <label className="order__point-method">
-                <input type="radio" name="payment" value="cash" />
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="SBP"
+                  checked={formData.paymentMethod === "SBP"}
+                  onChange={handleChange}
+                />
                 <span>СБП</span>
               </label>
               <label className="order__point-method">
-                <input type="radio" name="payment" value="card" />
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="bank card"
+                  checked={formData.paymentMethod === "bank card"}
+                  onChange={handleChange}
+                />
                 <span>Банковской картой</span>
               </label>
             </div>

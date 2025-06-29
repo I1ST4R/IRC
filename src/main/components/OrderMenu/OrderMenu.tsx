@@ -190,7 +190,7 @@ export const OrderMenu = () => {
         )}
         <div className="order-menu__text">
           <span className="order-menu__label">Доставка:</span>
-          <span className="order-menu__value">0 ₽</span>
+          <span className="order-menu__value">{order.deliveryCost} ₽</span>
         </div>
         <div className="order-menu__text">
           <span className="order-menu__label">Всего к оплате:</span>
