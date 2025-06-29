@@ -18,10 +18,11 @@ const Header: React.FC = () => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cart = useSelector((state: RootState) => state.cart);
   const likedItems = useSelector((state: RootState) => state.liked.items);
   const totalLikedItems = likedItems.length;
+
+  const totalCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
@@ -146,9 +147,9 @@ const Header: React.FC = () => {
 
             <Link to="/cart" className="header__button" id="basket__container1">
               <img src={basket} alt="basket" />
-              {totalCartItems > 0 && (
+              {totalCount > 0 && (
                 <div className="counter" id="basket-counter">
-                  {totalCartItems}
+                  {totalCount}
                 </div>
               )}
             </Link>

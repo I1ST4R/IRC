@@ -478,7 +478,7 @@ export const changeUsedCertificate = async (id: string) => {
 // Orders
 export const addOrder = async (order: Order ) => {
   try {
-    const responseUser = await axiosInstance.get(`/users/${order.userId}`);
+    const responseUser = await axiosInstance.get(`/users?id=${order.userId}`);
     if (responseUser.data.length === 0) {
       throw new Error('Пользователь не найден');
     }
@@ -517,9 +517,9 @@ export const addOrder = async (order: Order ) => {
     const cartItemsDbId = cartItemsDb.map((cartItemDb: CartItemDb) => {
       return cartItemDb.productId
     })
-    await Promise.all(cartItemsDbId.map(async (cartItemDbId : string)=>{
-      await removeFromCart(order.userId, cartItemDbId)
-    }))
+    for (const cartItemDbId of cartItemsDbId) {
+      await removeFromCart(order.userId, cartItemDbId);
+    }
 
     //change field used for promo + sertificate if exist
     if(order.promocodeId) await changeUsedPromo(order.promocodeId)

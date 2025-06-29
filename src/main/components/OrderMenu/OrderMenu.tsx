@@ -8,7 +8,11 @@ import "./_order-menu.scss";
 import { CartState } from "@/entity/cart/types";
 import { changeOrderInfo } from "@/entity/order/slice";
 
-export const OrderMenu = () => {
+interface OrderMenuProps {
+  handleSubmit?: () => void;
+}
+
+export const OrderMenu = (props: OrderMenuProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,7 +67,16 @@ export const OrderMenu = () => {
     }
   }, [certificate.certificate.valid]);
 
-  const handleCheckout = () => navigate("/order");
+  const isOrderPage = location.pathname === "/order";
+
+  const handleCheckout = () => {
+    if(!isOrderPage){
+      navigate("/order");
+      return
+    }
+    
+    if(props.handleSubmit) props.handleSubmit()
+  }
 
   const handlePromocodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromocode(e.target.value);
@@ -118,8 +131,6 @@ export const OrderMenu = () => {
       </div>
     );
   }
-
-  const isOrderPage = location.pathname === "/order";
 
   if (!order || !order.total) {
     return;

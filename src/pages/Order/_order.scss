@@ -3,6 +3,11 @@
   display:grid;
   grid-template-columns: auto 312px;
 
+  .breadcrumb{
+    position:absolute;
+    left:50px;
+  }
+
   .order-menu{
     margin-bottom: 30px;
   }
@@ -123,4 +128,12 @@
       color: #666;
     }
   }
+}
+
+.field-error {
+  color: #FF3B30;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  margin-top: 4px;
+  display: block;
 }

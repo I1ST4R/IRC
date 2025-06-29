@@ -9,10 +9,10 @@ const defaultOrder: Order = {
   total: 0,
   totalWithDiscount: 0,
   discount: 0,
-  promocodeDiscount: 0,
+  promocodeDiscount: null,
   promocodeId: null,
-  certificateDiscount: 0,
-  deliveryCost: 0,
+  certificateDiscount: null,
+  deliveryCost: 500,
   certificateId: null,
   recipient: {
     deliveryMethod: "courier",
@@ -58,6 +58,7 @@ export const createOrder = createAsyncThunk(
   "products/createOrder",
   async (order: Order ) => {
     try {
+      console.log(order)
       const response = await addOrder(order);
       return response;
     } catch (error) {
