@@ -20,7 +20,8 @@ interface GeneralOrder {
   total: number;
   totalWithDiscount: number;
   discount: number;
-  promocodeDiscount: number | null;
+  promocodeDiscount: number | null
+  promocodePercent: number | null
   promocodeId: string | null;
   certificateDiscount: number | null;
   deliveryCost: 0 | 500;

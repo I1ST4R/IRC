@@ -10,6 +10,7 @@ const defaultOrder: Order = {
   totalWithDiscount: 0,
   discount: 0,
   promocodeDiscount: null,
+  promocodePercent: null,
   promocodeId: null,
   certificateDiscount: null,
   deliveryCost: 500,
@@ -58,7 +59,6 @@ export const createOrder = createAsyncThunk(
   "products/createOrder",
   async (order: Order ) => {
     try {
-      console.log(order)
       const response = await addOrder(order);
       return response;
     } catch (error) {
@@ -95,8 +95,10 @@ const ordersSlice = createSlice({
 
       // Промокод — процент
       let promoDiscount = 0;
-      if (typeof state.current.promocodeDiscount === 'number' && state.current.promocodeDiscount > 0) {
-        promoDiscount = totalWithDiscount * (state.current.promocodeDiscount / 100);
+      if (
+        typeof state.current.promocodePercent === 'number' && state.current.promocodePercent > 0) {
+        promoDiscount = totalWithDiscount * state.current.promocodePercent
+        console.log(promoDiscount)
         totalWithDiscount -= promoDiscount;
         state.current.promocodeDiscount = promoDiscount;
       }

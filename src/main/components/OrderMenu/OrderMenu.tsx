@@ -28,15 +28,16 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const [promoTouched, setPromoTouched] = useState(false);
   const [sertTouched, setSertTouched] = useState(false);
 
+  const checkedCartItems = items.filter((item) => item.isChecked);
+
   useEffect(() => {
     if (!user.id || !items.filter((item) => item.isChecked)) return;
-    const checkedCartItems = items.filter((item) => item.isChecked);
 
     dispatch(
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodeDiscount: promo.promo.valid 
+        promocodePercent: promo.promo.valid 
           ? promo.promo.discount 
           : null,
         promocodeId: promo.promo.id,
@@ -140,9 +141,9 @@ export const OrderMenu = (props: OrderMenuProps) => {
     <div className="order-menu">
       <p className="order-menu__item">Ваш заказ</p>
 
-      {isOrderPage && items.length > 0 && (
+      {isOrderPage && checkedCartItems.length > 0 && (
         <div className="order-menu__items">
-          {items.map((item) => {
+          {checkedCartItems.map((item) => {
             return (
               <div key={item.product.id} className="order-menu__item-details">
                 <div className="order-menu__item-info">

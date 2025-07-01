@@ -28,6 +28,7 @@ export const Order: React.FC = () => {
   });
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [shouldCreateOrder, setShouldCreateOrder] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -46,9 +47,9 @@ export const Order: React.FC = () => {
       }));
     }
   };
-  
 
   const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(1)
     const { value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -56,8 +57,8 @@ export const Order: React.FC = () => {
     }));
 
     // Диспатч для изменения стоимости доставки
+    const deliveryCost = formData.deliveryMethod === "courier" ? 500 : 0;
     if (user.id) {
-      const deliveryCost = value === "courier" ? 500 : 0;
       dispatch(
         changeOrderInfo({
           userId: user.id,
@@ -97,7 +98,7 @@ export const Order: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (user.id && order) {
+    if (user.id) {
       const validation = validateForm();
 
       if (!validation.isValid) {
@@ -106,9 +107,6 @@ export const Order: React.FC = () => {
       }
 
       const deliveryCost = formData.deliveryMethod === "courier" ? 500 : 0;
-      console.log()
-      
-      // Сначала обновляем информацию о заказе
       dispatch(
         changeOrderInfo({
           userId: user.id,
@@ -122,17 +120,22 @@ export const Order: React.FC = () => {
             email: formData.email,
             deliveryDate: formData.deliveryDate,
             comment: formData.comment,
-          }
+          },
         })
       );
-
-      // Затем создаем заказ
-      dispatch(createOrder(order)).then(()=>{
-        user.id ? dispatch(fetchCart(user.id)): ""
-      })
-      navigate("/cart");
+      setShouldCreateOrder(true);
     }
   };
+
+  useEffect(() => {
+    if (shouldCreateOrder && order) {
+      dispatch(createOrder(order)).then(() => {
+        if (user.id) dispatch(fetchCart(user.id));
+        navigate("/cart");
+      });
+      setShouldCreateOrder(false);
+    }
+  }, [shouldCreateOrder, order, dispatch, user.id, navigate]);
 
   if (!user.id) {
     return (
@@ -141,7 +144,7 @@ export const Order: React.FC = () => {
           pageLinks={[
             { name: "Главная", link: "/" },
             { name: "Корзина", link: "/cart" },
-            { name: "Заказ", link: "/" }
+            { name: "Заказ", link: "/" },
           ]}
         />
         <h2 className="order__title">Оформление заказа</h2>
@@ -156,14 +159,14 @@ export const Order: React.FC = () => {
 
   return (
     <div className="order container">
-      <BreadCrumb 
+      <div className="order__form">
+        <BreadCrumb
           pageLinks={[
             { name: "Главная", link: "/" },
             { name: "Корзина", link: "/cart" },
-            { name: "Заказ", link: "/" }
+            { name: "Заказ", link: "/" },
           ]}
         />
-      <div className="order__form">
         <div className="order__point">
           <h1 className="order__point-title">Доставка</h1>
           <div className="order__point-methods">
