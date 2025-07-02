@@ -51,7 +51,9 @@ export const register = async (data: RegisterData) => {
       throw new Error('Такой email уже существует');
     }
 
-    const response = await axiosInstance.post<User>('/users', data);
+     const userData = { ...data, type: "client" };
+
+    const response = await axiosInstance.post<User>('/users', userData);
     const { password, ...userWithoutPassword } = response.data;
     return userWithoutPassword as User;
   } catch (error: any) {

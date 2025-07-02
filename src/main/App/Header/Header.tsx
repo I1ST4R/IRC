@@ -153,6 +153,12 @@ const Header: React.FC = () => {
                 </div>
               )}
             </Link>
+
+            {user.type === 'admin' && (
+              <Link to="/admin" className="header__button" id="admin__container1" title="Админка">
+                <span role="img" aria-label="admin" style={{fontSize: 22, color: '#CA354F', fontWeight: 700}}>⚙️</span>
+              </Link>
+            )}
           </div>
         </div>
       </header>

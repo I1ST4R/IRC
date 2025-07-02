@@ -5,16 +5,11 @@
       "login": "newUser",
       "password": "newUser",
       "email": "newUser",
-      "type": "user",
+      "type": "admin",
       "cart": [
         {
           "productId": "2",
-          "quantity": 1,
-          "isChecked": false
-        },
-        {
-          "productId": "3",
-          "quantity": 1,
+          "quantity": 7,
           "isChecked": true
         },
         {
@@ -64,7 +59,8 @@
         "1ce3",
         "3b7c",
         "77e3",
-        "c520"
+        "c520",
+        "7a9c"
       ]
     },
     {
@@ -72,12 +68,8 @@
       "login": "test",
       "password": "test",
       "email": "test",
-      "type": "user",
+      "type": "client",
       "cart": [
-        {
-          "productId": "2",
-          "quantity": 1
-        },
         {
           "productId": "3",
           "quantity": 1
@@ -97,7 +89,9 @@
           "quantity": 1
         }
       ],
-      "orders": []
+      "orders": [
+        "b0dd"
+      ]
     },
     {
       "id": "b209",
@@ -964,7 +958,7 @@
   "promo": [
     {
       "id": "1",
-      "used": false,
+      "used": true,
       "code": "PROMO10",
       "discount": 0.1
     },
@@ -978,7 +972,7 @@
   "certificates": [
     {
       "id": "1",
-      "used": false,
+      "used": true,
       "code": "SERTIFICATE1000",
       "amount": 1000
     },
@@ -1144,6 +1138,71 @@
         "email": "reshetilov-vanechka@mail.ru",
         "deliveryDate": "2025-08-05",
         "comment": "zz"
+      }
+    },
+    {
+      "id": "7a9c",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "3",
+          "isChecked": true,
+          "quantity": 10
+        },
+        {
+          "productId": "1",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 41500,
+      "totalWithDiscount": 33080,
+      "discount": 5300,
+      "promocodeDiscount": 3620,
+      "promocodePercent": 0.1,
+      "promocodeId": "1",
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "z",
+        "phone": "79190024147",
+        "address": "z",
+        "email": "reshetilov-vanechka@mail.ru",
+        "deliveryDate": "2025-08-04",
+        "comment": "sdfdf"
+      }
+    },
+    {
+      "id": "b0dd",
+      "userId": "l2yj3zb",
+      "cartItems": [
+        {
+          "productId": "2",
+          "isChecked": true,
+          "quantity": 6
+        }
+      ],
+      "total": 12000,
+      "totalWithDiscount": 10300,
+      "discount": 1200,
+      "promocodeDiscount": null,
+      "promocodePercent": null,
+      "promocodeId": null,
+      "certificateDiscount": 1000,
+      "deliveryCost": 500,
+      "certificateId": "1",
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "z",
+        "phone": "79190024147",
+        "address": "z",
+        "email": "reshetilov-vanechka@mail.ru",
+        "deliveryDate": "2025-08-04",
+        "comment": "zdzfvsdfv"
       }
     }
   ]

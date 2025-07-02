@@ -117,14 +117,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
     );
   }
 
-  if (loading === "pending") {
-    return (
-      <div className="order-menu">
-        <div className="order-menu__loading">Загрузка...</div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="order-menu">
