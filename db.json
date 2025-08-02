@@ -6,18 +6,7 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [
-        {
-          "productId": "2",
-          "quantity": 7,
-          "isChecked": true
-        },
-        {
-          "productId": "1",
-          "quantity": 1,
-          "isChecked": true
-        }
-      ],
+      "cart": [],
       "liked": [
         {
           "productId": "2"
@@ -60,7 +49,9 @@
         "3b7c",
         "77e3",
         "c520",
-        "7a9c"
+        "7a9c",
+        "bdf4",
+        "118c"
       ]
     },
     {
@@ -1203,6 +1194,66 @@
         "email": "reshetilov-vanechka@mail.ru",
         "deliveryDate": "2025-08-04",
         "comment": "zdzfvsdfv"
+      }
+    },
+    {
+      "id": "bdf4",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "2",
+          "isChecked": true,
+          "quantity": 7
+        }
+      ],
+      "total": 14000,
+      "totalWithDiscount": 13100,
+      "discount": 1400,
+      "promocodeDiscount": null,
+      "promocodePercent": null,
+      "promocodeId": null,
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "залупа",
+        "phone": "79190024147",
+        "address": "я",
+        "email": "reshetilov-vanechka@mail.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "я"
+      }
+    },
+    {
+      "id": "118c",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "1",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 1500,
+      "totalWithDiscount": 1700,
+      "discount": 300,
+      "promocodeDiscount": null,
+      "promocodePercent": null,
+      "promocodeId": null,
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "z",
+        "phone": "79190024147",
+        "address": "я",
+        "email": "reshetilov-vanechka@mail.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "я"
       }
     }
   ]

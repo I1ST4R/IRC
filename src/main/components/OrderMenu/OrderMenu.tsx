@@ -75,7 +75,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
       navigate("/order");
       return
     }
-    
     if(props.handleSubmit) props.handleSubmit()
   }
 

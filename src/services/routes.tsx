@@ -8,6 +8,7 @@ import App from '../main/App/App';
 import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
 import { Order } from '../pages/Order/Order';
 import Admin from '../pages/Admin/Admin';
+import Payment from '@/pages/Payment/Payment';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: '/order',
         element: <Order />,
+      },
+      {
+        path: '/payment',
+        element: <Payment />,
       },
       {
         path: '/admin',

@@ -123,19 +123,20 @@ export const Order: React.FC = () => {
           },
         })
       );
-      setShouldCreateOrder(true);
+      navigate("/payment")
+      // setShouldCreateOrder(true);
     }
   };
 
-  useEffect(() => {
-    if (shouldCreateOrder && order) {
-      dispatch(createOrder(order)).then(() => {
-        if (user.id) dispatch(fetchCart(user.id));
-        navigate("/cart");
-      });
-      setShouldCreateOrder(false);
-    }
-  }, [shouldCreateOrder, order, dispatch, user.id, navigate]);
+  // useEffect(() => {
+  //   if (shouldCreateOrder && order) {
+  //     dispatch(createOrder(order)).then(() => {
+  //       if (user.id) dispatch(fetchCart(user.id));
+  //       navigate("/cart");
+  //     });
+  //     setShouldCreateOrder(false);
+  //   }
+  // }, [shouldCreateOrder, order, dispatch, user.id, navigate]);
 
   if (!user.id) {
     return (
