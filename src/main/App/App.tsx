@@ -17,18 +17,18 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(checkAuth());
-    dispatch(fetchProducts({ page: 1 })).unwrap().catch((error: any) => console.error('Failed to load initial products:', error));
+    dispatch(fetchProducts(1))
   }, [dispatch]);
 
   useEffect(() => {
     if (user && user.id) {
       const userId = user.id.toString();
       console.log(`[App.tsx] User detected (ID: ${userId}), fetching cart and liked...`);
-      dispatch(fetchCart(userId)).unwrap().catch((error: any) => console.error('Failed to load cart:', error));
-      dispatch(fetchLiked(userId)).unwrap().catch((error: any) => console.error('Failed to load liked:', error));
+      dispatch(fetchCart(userId))
+      dispatch(fetchLiked(userId))
     } else {
       console.log('[App.tsx] User is null or has no ID, clearing cart and liked.');
-      dispatch(clearCart());
+      dispatch(clearCart(user.id));
       dispatch(clearLikedOnLogout());
     }
   }, [user, dispatch]);
