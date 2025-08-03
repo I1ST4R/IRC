@@ -6,11 +6,16 @@ import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
-import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
 import { fetchLiked } from "@/entity/liked/slice";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 import { openAccount } from "@/entity/users/slice";
+import { 
+  fetchCart, 
+  fetchCartTotals, 
+} from "@/entity/cart/actions";
+import { CartItem as ICartItem } from "@/entity/cart/types";
+import { Product } from "@/entity/product/types";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -106,9 +111,9 @@ export const Cart: React.FC = () => {
           </button>
         )}
         <div className="cart__list">
-          {cart.items.map((item) => {
+          {cart.items.map((item : ICartItem) => {
             const isItemLiked = liked.items.some(
-              (likedItem) => likedItem.id === item.product.id
+              (likedItem : Product) => likedItem.id === item.product.id
             );
             return (
               <CartItem
