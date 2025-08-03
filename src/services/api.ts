@@ -338,6 +338,16 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
   }
 };
 
+export const clearCart = async (userId: string) => {
+  try {
+    const response = await axiosInstance.put(`/users/${userId}/cart`, []);
+    return response.data;
+  } catch (error: any) {
+    console.error('error in clearCart', error);
+    throw error;
+  }
+};
+
 // Liked
 export const getLiked = async (userId: string) => {
   try {

@@ -5,7 +5,8 @@ import {
   updateCartItemQuantity,
   removeFromCart as removeFromCartApi,
   calculateCartTotals,
-  changeCheckCartItem
+  changeCheckCartItem as changeCheckCartItemApi,
+  clearCart as clearCartApi
 } from '../../services/api';
 import { CartItem } from './types';
 
@@ -91,11 +92,11 @@ export const removeFromCart = (userId: string, productId: string) => {
   };
 };
 
-export const toggleCheckCartItem = (userId: string, productId: string) => {
+export const changeCheckCart = (userId: string, productId: string) => {
   return async (dispatch: any) => {
     dispatch({ type: CartActionTypes.TOGGLE_CHECK_CART_ITEM_REQUEST });
     try {
-      const response = await changeCheckCartItem(userId, productId);
+      const response = await changeCheckCartItemApi(userId, productId);
       dispatch({
         type: CartActionTypes.TOGGLE_CHECK_CART_ITEM_SUCCESS,
         payload: response
@@ -109,21 +110,21 @@ export const toggleCheckCartItem = (userId: string, productId: string) => {
   };
 };
 
-// export const clearCart = (userId: string) => {
-//   return async (dispatch: any) => {
-//     dispatch({ type: CartActionTypes.CLEAR_CART_REQUEST });
-//     try {
-//       // Предполагаем, что есть API метод для очистки корзины
-//       await clearCartApi(userId);
-//       dispatch({ type: CartActionTypes.CLEAR_CART_SUCCESS });
-//     } catch (error) {
-//       dispatch({
-//         type: CartActionTypes.CLEAR_CART_FAILURE,
-//         payload: error instanceof Error ? error.message : 'Unknown error'
-//       });
-//     }
-//   };
-// };
+export const clearCart = (userId: string) => {
+  return async (dispatch: any) => {
+    dispatch({ type: CartActionTypes.CLEAR_CART_REQUEST });
+    try {
+      // Предполагаем, что есть API метод для очистки корзины
+      await clearCartApi(userId);
+      dispatch({ type: CartActionTypes.CLEAR_CART_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: CartActionTypes.CLEAR_CART_FAILURE,
+        payload: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  };
+};
 
 export const fetchCartTotals = (userId: string) => {
   return async (dispatch: any) => {
