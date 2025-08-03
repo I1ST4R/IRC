@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../entity/product/slice";
+import { fetchProducts } from "../../../entity/product/actions";
 import { RootState, AppDispatch } from "../../../main/store";
 import { Product as ProductComponent } from "../Product/Product";
 import type { Product } from "../../../entity/product/types";

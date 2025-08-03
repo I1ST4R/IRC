@@ -1,6 +1,6 @@
-import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/sliceOld";
+import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/actions";
 import { CartItem as ICartItem } from "@/entity/cart/types";
-import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/actions";
 import { AppDispatch } from "@/main/store";
 import { useDispatch } from "react-redux";
 

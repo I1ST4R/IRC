@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
-import { addToCart, fetchCart } from "../../../entity/cart/sliceOld";
+import { addToCart, fetchCart } from "../../../entity/cart/actions";
 import { useNavigate, Link } from "react-router-dom";
 import {
   addItemToLiked,
   removeItemFromLiked,
-} from "@/entity/liked/slice";
+} from "@/entity/liked/actions";
 import { Tag } from "@/entity/tag/types";
 
 interface ProductProps {

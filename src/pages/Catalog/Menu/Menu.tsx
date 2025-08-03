@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag, resetFilters } from "../../../entity/productFilter/slice";
+import { setPriceRange, toggleTag, resetFilters } from "../../../entity/productFilter/actions";
 import { AppDispatch, RootState } from "../../../main/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
-import { fetchCategories } from "@/entity/productCategory/slice";
-import { fetchTagsById } from "@/entity/tag/slice";
+import { fetchCategories } from "@/entity/productCategory/actions";
+import { fetchTagsById } from "@/entity/tag/actions";
 
 interface AccordionItemProps {
   title: string;

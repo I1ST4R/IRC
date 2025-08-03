@@ -7,9 +7,9 @@ import cartGarbageIcon from "./cartGarbageIcon.svg";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import { CartItem } from "@/main/components/CartItem/CartItem";
-import { fetchLiked } from "@/entity/liked/slice";
+import { fetchLiked } from "@/entity/liked/actions";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { openAccount } from "@/entity/users/slice";
+import { openAccount } from "@/entity/users/actions";
 import { 
   fetchCart, 
   fetchCartTotals, 

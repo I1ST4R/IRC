@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../main/store";
-import { validatePromoCode } from "../../../entity/promo/slice";
-import {validateCertificateCode} from "../../../entity/certificate/sliceOld";
+import { validatePromoCode } from "../../../entity/promo/actions";
+import {validateCertificateCode} from "../../../entity/certificate/actions";
 import "./_order-menu.scss";
 import { CartState } from "@/entity/cart/types";
-import { changeOrderInfo } from "@/entity/order/slice";
+import { changeOrderInfo } from "@/entity/order/actions";
 
 interface OrderMenuProps {
   handleSubmit?: () => void;

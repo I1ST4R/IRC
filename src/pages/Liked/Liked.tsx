@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../main/store";
-import { fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { fetchLiked, removeItemFromLiked } from "@/entity/liked/actions";
 import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 

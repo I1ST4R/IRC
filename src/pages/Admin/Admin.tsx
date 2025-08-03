@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "@/entity/order/slice";
+import { fetchOrders } from "@/entity/order/actions";
 import { AppDispatch, RootState } from "@/main/store";
 import { Order } from "@/entity/order/types";
 

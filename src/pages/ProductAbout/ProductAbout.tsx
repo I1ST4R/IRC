@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
-import { addToCart, fetchCart } from "@/entity/cart/sliceOld";
-import { addItemToLiked, fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
-import { fetchProductById } from "@/entity/product/slice";
+import { addToCart, fetchCart } from "@/entity/cart/actions";
+import { addItemToLiked, fetchLiked, removeItemFromLiked } from "@/entity/liked/actions";
+import { fetchProductById } from "@/entity/product/actions";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
 import { Tag } from "@/entity/tag/types";
-import { openAccount } from "@/entity/users/slice";
+import { openAccount } from "@/entity/users/actions";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 
 export const ProductAbout = () => {

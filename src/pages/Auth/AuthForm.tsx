@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../main/store';
-import { login } from '../../entity/users/slice';
+import { login } from '../../entity/users/actions';
 import styles from './AuthForm.module.css';
 
 export const AuthForm = () => {

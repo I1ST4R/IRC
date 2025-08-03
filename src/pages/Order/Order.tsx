@@ -4,11 +4,11 @@ import { RootState } from "../../main/store";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import "./_order.scss";
 import { DeliveryMethod, PaymentMethod } from "@/entity/order/types";
-import { changeOrderInfo, createOrder } from "@/entity/order/slice";
+import { changeOrderInfo, createOrder } from "@/entity/order/actions";
 import { AppDispatch } from "@/main/store";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { fetchCart, fetchCartTotals } from "@/entity/cart/sliceOld";
+import { fetchCart, fetchCartTotals } from "@/entity/cart/actions";
 
 export const Order: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);

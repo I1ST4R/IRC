@@ -1,5 +1,5 @@
 import { fetchCart } from "@/entity/cart/actions";
-import { createOrder } from "@/entity/order/slice";
+import { createOrder } from "@/entity/order/actions";
 import { AppDispatch, RootState } from "@/main/store";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

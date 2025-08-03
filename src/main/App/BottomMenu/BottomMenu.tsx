@@ -6,7 +6,7 @@ import basket from '../../../pages/Home/_general/img/basket.svg';
 import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
 import { AppDispatch, RootState } from '@/main/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { openAccount } from '@/entity/users/slice';
+import { openAccount } from '@/entity/users/actions';
 
 const BottomMenu: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
