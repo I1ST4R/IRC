@@ -9,6 +9,7 @@ import {
   removeItemFromLiked,
 } from "@/entity/liked/actions";
 import { Tag } from "@/entity/tag/types";
+import { CartItem } from "@/entity/cart/types";
 
 interface ProductProps {
   product: ProductType;
@@ -25,18 +26,20 @@ export const Product = ({
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [isInCart, setIsInCart] = useState(cart.items.find((item: CartItem) => item.product.id === product.id) ? true : false);
 
-  const isInCart = () => {
-    if (cart.loading === "succeeded") {
-      return cart.items.some((item) => item.product.id === product.id);
-    }
-    return false;
+  const isCartLoading = () => {
+    return cart.loading === "pending";
   };
 
   const isLiked = () => {
     if (liked.loading === "succeeded")
-      return liked.items.some((item) => item.id === product.id);
-    return;
+      return liked.items.some((item: any) => item.id === product.id);
+    return false;
+  };
+
+  const isLikedLoading = () => {
+    return liked.loading === "pending";
   };
 
   const handleLike = async () => {
@@ -47,16 +50,16 @@ export const Product = ({
 
     if (isLiked()) {
       await dispatch(
-        removeItemFromLiked({
-          userId: user.id.toString(),
-          productId: product.id,
-        })
+        removeItemFromLiked(
+          user.id.toString(),
+          product.id,
+        )
       );
     } else {
       await dispatch(
-        addItemToLiked({ 
-          userId: user.id.toString(), 
-          productId: product.id })
+        addItemToLiked(
+          user.id.toString(), 
+          product.id )
       );
     }
   };
@@ -67,8 +70,11 @@ export const Product = ({
       return;
     }
 
-    if (isInCart()) navigate("/cart") 
-    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
+    if (cart.items.some((item: any) => item.product.id === product.id)) navigate("/cart") 
+    else {
+      dispatch(addToCart(user.id.toString(),  product.id ))
+      setIsInCart(true);
+    }
   };
 
   return (
@@ -92,14 +98,16 @@ export const Product = ({
         </div>
       </Link>
       <button
-        className={`product__btn ${isInCart() ? "product__btn--in-cart" : ""}`}
+        className={`product__btn ${isInCart ? "product__btn--in-cart" : ""}`}
         onClick={handleCartClick}
+        disabled={isCartLoading()}
       >
-        {isInCart() ? "В корзине" : "Добавить в корзину"}
+        {isInCart? "В корзине" : "Добавить в корзину"}
       </button>
       <button
-        className={`product__like${isLiked() ? " product__like--active" : ""}`}
+        className={`product__like${isLiked() || isLikedLoading() ? " product__like--active" : ""}`}
         onClick={handleLike}
+        disabled={isLikedLoading()}
       >
         <svg
           width="20"

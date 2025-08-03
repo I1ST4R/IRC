@@ -19,11 +19,10 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
       if (type === "decrease" && cartItem.quantity === 1) return
       const changes = type === "increase" ? 1 : -1
       dispatch(
-        updateCartItem({
-          userId:  userId,
-          productId: productId,
-          quantity: cartItem.quantity + changes,
-        })
+        updateCartItem(userId,
+          productId,
+          cartItem.quantity + changes,
+        )
       ).then(() => {
         dispatch(fetchCartTotals(userId));
       });
@@ -32,7 +31,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
 
   const handleRemoveItem = (productId: string) => {
     if (userId) {
-      dispatch(removeFromCart({ userId: userId, productId: productId })).then(() => {
+      dispatch(removeFromCart(userId, productId)).then(() => {
         dispatch(fetchCartTotals(userId));
       });
     }
@@ -40,7 +39,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
 
   const handleChangeCheckCart = () => {
     if(userId) {
-      dispatch(changeCheckCart({userId: userId, productId: cartItem.product.id}))
+      dispatch(changeCheckCart( userId, cartItem.product.id))
     }
   }
 
@@ -66,17 +65,17 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
             if (userId) {
               if (isLiked) {
                 dispatch(
-                  removeItemFromLiked({
-                    userId: userId,
-                    productId: cartItem.product.id,
-                  })
+                  removeItemFromLiked(
+                    userId,
+                    cartItem.product.id,
+                  )
                 );
               } else {
                 dispatch(
-                  addItemToLiked({
-                    userId: userId,
-                    productId: cartItem.product.id,
-                  })
+                  addItemToLiked(
+                    userId,
+                    cartItem.product.id,
+                  )
                 );
               }
             }

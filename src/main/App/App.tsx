@@ -28,7 +28,6 @@ const App: React.FC = () => {
       dispatch(fetchLiked(userId))
     } else {
       console.log('[App.tsx] User is null or has no ID, clearing cart and liked.');
-      dispatch(clearCart(user.id));
       dispatch(clearLikedOnLogout());
     }
   }, [user, dispatch]);

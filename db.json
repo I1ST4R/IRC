@@ -6,7 +6,38 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [],
+      "cart": [
+        {
+          "productId": "1",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "2",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "3",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "6",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "5",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "4",
+          "quantity": 1,
+          "isChecked": true
+        }
+      ],
       "liked": [
         {
           "productId": "2"
@@ -21,10 +52,19 @@
           "productId": "4"
         },
         {
+          "productId": "1"
+        },
+        {
+          "productId": "9"
+        },
+        {
+          "productId": "7"
+        },
+        {
           "productId": "8"
         },
         {
-          "productId": "1"
+          "productId": "5"
         }
       ],
       "orders": [

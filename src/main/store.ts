@@ -14,6 +14,7 @@ import {userReducer} from '../entity/users/reducers';
 import {promoReducer} from '../entity/promo/reducers';
 import {certificateReducer} from '../entity/certificate/reducers';
 import {categoryReducer} from '../entity/productCategory/reducers';
+import {tagReducer} from '../entity/tag/reducers';
 import {orderReducer} from '../entity/order/reducers';
 
 // Комбинируем редьюсеры
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   promo: promoReducer,
   certificate: certificateReducer,
   categories: categoryReducer,
+  tags: tagReducer,
   orders: orderReducer,
 }) as any;
 
