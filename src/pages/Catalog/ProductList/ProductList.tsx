@@ -22,14 +22,14 @@ export const ProductList = ({ onAuthRequired }: ProductListProps) => {
 
   // При изменении фильтра сбрасываем страницу и загружаем заново
   useEffect(() => {
-    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
+    dispatch(fetchProducts(page, filter.filterParams ));
   }, [dispatch, filter]);
 
   // Загрузить ещё
   const handleLoadMore = () => {
     if (!hasMore || loading === 'pending') return;
     page ++
-    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
+    dispatch(fetchProducts( page, filter.filterParams ));
   };
 
   if (loading === 'pending' && currentPage === 1) {
