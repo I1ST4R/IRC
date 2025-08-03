@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
-import { addToCart, fetchCart } from "../../../entity/cart/slice";
+import { addToCart, fetchCart } from "../../../entity/cart/sliceOld";
 import { useNavigate, Link } from "react-router-dom";
 import {
   addItemToLiked,

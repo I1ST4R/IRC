@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
-import { addToCart, fetchCart } from "@/entity/cart/slice.ts";
+import { addToCart, fetchCart } from "@/entity/cart/sliceOld";
 import { addItemToLiked, fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
 import { fetchProductById } from "@/entity/product/slice";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";

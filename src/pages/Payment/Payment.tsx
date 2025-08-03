@@ -1,4 +1,4 @@
-import { fetchCart } from "@/entity/cart/slice";
+import { fetchCart } from "@/entity/cart/actions";
 import { createOrder } from "@/entity/order/slice";
 import { AppDispatch, RootState } from "@/main/store";
 import React, { useState, useEffect } from "react";

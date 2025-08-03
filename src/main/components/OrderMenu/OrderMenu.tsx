@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../main/store";
 import { validatePromoCode } from "../../../entity/promo/slice";
-import {validateCertificateCode} from "../../../entity/certificate/slice";
+import {validateCertificateCode} from "../../../entity/certificate/sliceOld";
 import "./_order-menu.scss";
 import { CartState } from "@/entity/cart/types";
 import { changeOrderInfo } from "@/entity/order/slice";

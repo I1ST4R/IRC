@@ -68,11 +68,11 @@ import { thunk } from 'redux-thunk';
 // Импорты редьюсеров (убедитесь, что пути правильные)
 import productsReducer from '../entity/product/reducer';
 import filterReducer from '../entity/productFilter/reducer';
-import { cartReducer } from '../entity/cart/reducer';
+import { cartReducer } from '../entity/cart/reducers';
 import likedReducer from '../entity/liked/reducer';
 import userReducer from '../entity/user/reducer';
 import promoReducer from '../entity/promo/reducer';
-import certificateReducer from '../entity/certificate/reducer';
+import {certificateReducer} from '../entity/certificate/reducers';
 import tagReducer from '../entity/tag/reducer';
 import ordersReducer from '../entity/order/reducer';
 

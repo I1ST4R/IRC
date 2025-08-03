@@ -1,4 +1,4 @@
-import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
+import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/sliceOld";
 import { CartItem as ICartItem } from "@/entity/cart/types";
 import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
 import { AppDispatch } from "@/main/store";

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store';
-import { fetchCart, clearCart } from '../../entity/cart/slice';
+import { fetchCart, clearCart } from '../../entity/cart/sliceOld';
 import { fetchLiked, clearLikedOnLogout } from '../../entity/liked/slice';
 import { checkAuth } from '../../entity/users/slice';
 import { fetchProducts } from '../../entity/product/slice';

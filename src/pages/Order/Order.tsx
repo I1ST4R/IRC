@@ -8,7 +8,7 @@ import { changeOrderInfo, createOrder } from "@/entity/order/slice";
 import { AppDispatch } from "@/main/store";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
+import { fetchCart, fetchCartTotals } from "@/entity/cart/sliceOld";
 
 export const Order: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
