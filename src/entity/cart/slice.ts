@@ -1,5 +1,12 @@
 import { createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import { getCart, addToCart as addToCartApi, updateCartItemQuantity, removeFromCart as removeFromCartApi, calculateCartTotals, changeCheckCartItem} from '../../services/api';
+import { 
+  getCart, 
+  addToCart as addToCartApi, 
+  updateCartItemQuantity, 
+  removeFromCart as removeFromCartApi, 
+  calculateCartTotals, 
+  changeCheckCartItem,
+  clearCart as clearCartApi} from '../../services/api'
 import { CartState } from './types';
 
 const initialState: CartState = {
@@ -87,15 +94,24 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
+export const clearCart = createAsyncThunk(
+  'cart/removeItem',
+  async ({ userId}: { userId: string}) => {
+    try {
+      const response = await clearCartApi(userId);
+      return response;
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+      throw error;
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    clearCart: (state) => {
-      state.items = [];
-      state.error = null;
-      state.itemsCount = 0;
-    },
+
   },
   extraReducers: (builder) => {
     builder
@@ -143,8 +159,11 @@ const cartSlice = createSlice({
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.items = state.items.filter(item => item.product.id !== action.payload);
       })
+      // Clear cart
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
   }
 });
 
-export const { clearCart} = cartSlice.actions;
 export default cartSlice.reducer; 

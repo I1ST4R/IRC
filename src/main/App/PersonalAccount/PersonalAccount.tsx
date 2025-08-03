@@ -6,7 +6,7 @@ import {
   register,
   clearError,
   closeAccount,
-} from "../../../entity/users/slice";
+} from "../../../entity/users/actions";
 import "./_personal-account.scss";
 
 interface FormData {
