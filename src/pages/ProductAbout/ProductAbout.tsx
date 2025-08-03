@@ -35,7 +35,7 @@ export const ProductAbout = () => {
     }
 
     if (isInCart()) navigate("/cart") 
-    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
+    else dispatch(addToCart(user.id.toString(), product.id))
   };
 
   const switchLike = async (productId: string) => {
@@ -43,10 +43,10 @@ export const ProductAbout = () => {
     if (!product || !user || !user.id) return;
     const isLiked = likedItems.some((item) => item.id === productId);
     if (isLiked) {
-      await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId }));
+      await dispatch(removeItemFromLiked(user.id.toString(), productId));
       await dispatch(fetchLiked(user.id.toString()));
     } else {
-      await dispatch(addItemToLiked({ userId: user.id.toString(), productId }));
+      await dispatch(addItemToLiked(user.id.toString(), productId));
       await dispatch(fetchLiked(user.id.toString()));
     }
   };

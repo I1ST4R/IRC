@@ -20,7 +20,7 @@ export const Liked = () => {
 
   const handleRemoveItem = (productId: string) => {
     if (user.id) {
-      dispatch(removeItemFromLiked({ userId: user.id, productId }));
+      dispatch(removeItemFromLiked(user.id, productId));
     }
   };
 

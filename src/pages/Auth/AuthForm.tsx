@@ -17,7 +17,7 @@ export const AuthForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await dispatch(login(formData)).unwrap();
+      await dispatch(login(formData));
       navigate('/');
     } catch (error) {
       console.error('Auth error:', error);

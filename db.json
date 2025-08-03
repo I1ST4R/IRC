@@ -8,34 +8,14 @@
       "type": "admin",
       "cart": [
         {
-          "productId": "1",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "2",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "3",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
           "productId": "6",
           "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         },
         {
           "productId": "5",
           "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "4",
-          "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         }
       ],
       "liked": [
@@ -43,10 +23,22 @@
           "productId": "2"
         },
         {
-          "productId": "7"
+          "productId": "5"
         },
         {
-          "productId": "5"
+          "productId": "1"
+        },
+        {
+          "productId": "3"
+        },
+        {
+          "productId": "6"
+        },
+        {
+          "productId": "4"
+        },
+        {
+          "productId": "7"
         }
       ],
       "orders": [
@@ -73,7 +65,8 @@
         "c520",
         "7a9c",
         "bdf4",
-        "118c"
+        "118c",
+        "8367"
       ]
     },
     {
@@ -977,7 +970,7 @@
     },
     {
       "id": "2",
-      "used": false,
+      "used": true,
       "code": "PROMO20",
       "discount": 0.2
     }
@@ -991,7 +984,7 @@
     },
     {
       "id": "2",
-      "used": false,
+      "used": true,
       "code": "SERTIFICATE2000",
       "amount": 2000
     }
@@ -1276,6 +1269,41 @@
         "email": "reshetilov-vanechka@mail.ru",
         "deliveryDate": "2025-08-25",
         "comment": "я"
+      }
+    },
+    {
+      "id": "8367",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "1",
+          "isChecked": true,
+          "quantity": 1
+        },
+        {
+          "productId": "4",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 6500,
+      "totalWithDiscount": 3060,
+      "discount": 800,
+      "promocodeDiscount": 1140,
+      "promocodePercent": 0.2,
+      "promocodeId": "2",
+      "certificateDiscount": 2000,
+      "deliveryCost": 500,
+      "certificateId": "2",
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "test",
+        "phone": "79190024147",
+        "address": "z",
+        "email": "sigmasvo@mail.ru",
+        "deliveryDate": "2025-08-30",
+        "comment": "sdasdasd"
       }
     }
   ]

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
@@ -26,17 +26,17 @@ export const Product = ({
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isInCart, setIsInCart] = useState(cart.items.find((item: CartItem) => item.product.id === product.id) ? true : false);
+  const [isInCart, setIsInCart] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const isCartLoading = () => {
     return cart.loading === "pending";
   };
 
-  const isLiked = () => {
-    if (liked.loading === "succeeded")
-      return liked.items.some((item: any) => item.id === product.id);
-    return false;
-  };
+  useEffect(() => {
+    setIsInCart(cart.items.find((item: CartItem) => item.product.id === product.id) ? true : false);
+    setIsLiked(liked.items.find((item: any) => item.id === product.id) ? true : false);
+  }, [cart.items, liked.items, product.id]);
 
   const isLikedLoading = () => {
     return liked.loading === "pending";
@@ -48,7 +48,7 @@ export const Product = ({
       return;
     }
 
-    if (isLiked()) {
+    if (isLiked) {
       await dispatch(
         removeItemFromLiked(
           user.id.toString(),
@@ -56,6 +56,7 @@ export const Product = ({
         )
       );
     } else {
+      setIsLiked(true);
       await dispatch(
         addItemToLiked(
           user.id.toString(), 
@@ -105,7 +106,7 @@ export const Product = ({
         {isInCart? "В корзине" : "Добавить в корзину"}
       </button>
       <button
-        className={`product__like${isLiked() || isLikedLoading() ? " product__like--active" : ""}`}
+        className={`product__like${isLiked? " product__like--active" : ""}`}
         onClick={handleLike}
         disabled={isLikedLoading()}
       >

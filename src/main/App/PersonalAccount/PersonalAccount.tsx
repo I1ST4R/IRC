@@ -35,21 +35,29 @@ const PersonalAccount = () => {
     dispatch(clearError());
 
     if (isLogin) {
-      const resultAction = await dispatch(
-        login({ login: formData.login, password: formData.password })
-      );
-      if (login.fulfilled.match(resultAction)) dispatch(closeAccount())
+      try {
+        await dispatch(
+          login({ login: formData.login, password: formData.password })
+        );
+        dispatch(closeAccount());
+      } catch (error) {
+        // Ошибка уже обработана в редьюсере
+      }
     } else {
       if (formData.password !== formData.confirmPassword || !formData.email) return;
-      const resultAction = await dispatch(
-        register({
-          login: formData.login,
-          password: formData.password,
-          email: formData.email,
-          type: "client",
-        })
-      );
-      if (register.fulfilled.match(resultAction)) dispatch(closeAccount())
+      try {
+        await dispatch(
+          register({
+            login: formData.login,
+            password: formData.password,
+            email: formData.email,
+            type: "client",
+          })
+        );
+        dispatch(closeAccount());
+      } catch (error) {
+        // Ошибка уже обработана в редьюсере
+      }
     }
   }
 
