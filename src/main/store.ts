@@ -14,6 +14,8 @@ import promoReducer from '../entity/promo/slice.ts';
 import certificateReducer from '../entity/certificate/slice.ts';
 import tagReducer from '../entity/tag/slice';
 import ordersReducer from '../entity/order/slice';
+// APIs
+import { cartApi } from '../entity/cart/api';
 //State Interface
 import { CartState } from '../entity/cart/types';
 import { UserState } from '../entity/users/types.ts'
@@ -38,7 +40,10 @@ export const store = configureStore({
     certificate: certificateReducer,
     tags: tagReducer,
     orders: ordersReducer,
-  }
+    [cartApi.reducerPath]: cartApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(cartApi.middleware),
 });
 
 export type RootState = {
