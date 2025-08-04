@@ -6,7 +6,18 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [],
+      "cart": [
+        {
+          "productId": "1",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "2",
+          "quantity": 1,
+          "isChecked": true
+        }
+      ],
       "liked": [
         {
           "productId": "2"
@@ -974,7 +985,5 @@
       "amount": 2000
     }
   ],
-  "orders": [
-
-  ]
+  "orders": []
 }

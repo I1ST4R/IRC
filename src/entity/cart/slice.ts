@@ -95,7 +95,7 @@ export const removeFromCart = createAsyncThunk(
 );
 
 export const clearCart = createAsyncThunk(
-  'cart/removeItem',
+  'cart/clearCart',
   async ({ userId}: { userId: string}) => {
     try {
       const response = await clearCartApi(userId);
