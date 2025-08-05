@@ -7,7 +7,6 @@ import { TypedUseSelectorHook } from 'react-redux';
 import productsReducer from '../entity/product/slice.ts';
 import filterReducer from '../entity/productFilter/slice.ts';
 import categoriesReducer from '../entity/productCategory/slice.ts';
-import cartReducer from '../entity/cart/slice.ts';
 import likedReducer from '../entity/liked/slice.ts';
 import userReducer from '../entity/users/slice.ts';
 import promoReducer from '../entity/promo/slice.ts';
@@ -17,7 +16,6 @@ import ordersReducer from '../entity/order/slice';
 // APIs
 import { cartApi } from '../entity/cart/api';
 //State Interface
-import { CartState } from '../entity/cart/types';
 import { UserState } from '../entity/users/types.ts'
 import { CertificateState } from '../entity/certificate/types.ts'
 import { CategoriesState } from '../entity/productCategory/types.ts'
@@ -33,7 +31,6 @@ export const store = configureStore({
     products: productsReducer,
     filter: filterReducer,
     categories: categoriesReducer,
-    cart: cartReducer,
     liked: likedReducer,
     user: userReducer,
     promo: promoReducer,
@@ -50,7 +47,6 @@ export type RootState = {
   products: ProductsState;
   filter: FilterState;
   categories: CategoriesState;
-  cart: CartState;
   liked: LikedState;
   user: UserState;
   promo: PromoState;

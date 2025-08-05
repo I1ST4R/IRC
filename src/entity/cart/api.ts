@@ -1,72 +1,60 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  getCart,
+  addToCart,
+  updateCartItemQuantity,
+  removeFromCart,
+  calculateCartTotals,
+  changeCheckCartItem,
+  clearCart
+} from '../../services/api';
 import { CartItem } from './types';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001' }),
-  tagTypes: ['Cart'],
+  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   endpoints: (build) => ({
-    // Получить корзину пользователя
     getCart: build.query<CartItem[], string>({
-      query: (userId) => ({
-        url: '/users',
-        params: { id: userId },
-      }),
-      // transformResponse: (response) => ... // если нужно преобразовать ответ
-      providesTags: ['Cart'],
+      queryFn: (userId) =>
+        getCart(userId)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
-    // Добавить товар в корзину
     addToCart: build.mutation<CartItem[], { userId: string; productId: string }>({
-      query: ({ userId, productId }) => ({
-        url: `/cart/add`,
-        method: 'POST',
-        body: { userId, productId },
-      }),
-      invalidatesTags: ['Cart'],
+      queryFn: ({ userId, productId }) =>
+        addToCart(userId, productId)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
-    // Обновить количество товара в корзине
     updateCartItemQuantity: build.mutation<CartItem[], { userId: string; productId: string; quantity: number }>({
-      query: ({ userId, productId, quantity }) => ({
-        url: `/cart/update`,
-        method: 'PUT',
-        body: { userId, productId, quantity },
-      }),
-      invalidatesTags: ['Cart'],
+      queryFn: ({ userId, productId, quantity }) =>
+        updateCartItemQuantity(userId, productId, quantity)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
-    // Удалить товар из корзины
     removeFromCart: build.mutation<void, { userId: string; productId: string }>({
-      query: ({ userId, productId }) => ({
-        url: `/cart/remove`,
-        method: 'DELETE',
-        body: { userId, productId },
-      }),
-      invalidatesTags: ['Cart'],
+      queryFn: ({ userId, productId }) =>
+        removeFromCart(userId, productId)
+          .then(() => ({ data: undefined }))
+          .catch((error) => ({ error })),
     }),
-    // Изменить статус выбора товара в корзине
     changeCheckCartItem: build.mutation<CartItem, { userId: string; productId: string }>({
-      query: ({ userId, productId }) => ({
-        url: `/cart/check`,
-        method: 'PATCH',
-        body: { userId, productId },
-      }),
-      invalidatesTags: ['Cart'],
+      queryFn: ({ userId, productId }) =>
+        changeCheckCartItem(userId, productId)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
-    // Очистить корзину
     clearCart: build.mutation<CartItem[], { userId: string }>({
-      query: ({ userId }) => ({
-        url: `/cart/clear`,
-        method: 'POST',
-        body: { userId },
-      }),
-      invalidatesTags: ['Cart'],
+      queryFn: ({ userId }) =>
+        clearCart(userId)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
-    // Получить количество товаров в корзине
     getCartTotals: build.query<number, string>({
-      query: (userId) => ({
-        url: '/cart/totals',
-        params: { userId },
-      }),
-      providesTags: ['Cart'],
+      queryFn: (userId) =>
+        calculateCartTotals(userId)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
     }),
   }),
 });

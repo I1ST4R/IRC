@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "../../main/store";
+import { RootState } from "../../main/store";
 import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
-import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 import { CartItem } from "@/main/components/CartItem/CartItem";
-import { fetchLiked } from "@/entity/liked/slice";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 import { openAccount } from "@/entity/users/slice";
+import {
+  useGetCartQuery,
+  useClearCartMutation,
+  useGetCartTotalsQuery
+} from '@/entity/cart/api';
 
 export const Cart: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const liked = useSelector((state: RootState) => state.liked);
-  const cart = useSelector((state: RootState) => state.cart);
 
-  useEffect(() => {
-    if (user.id) {
-      const userId = user.id;
-      dispatch(fetchCart(userId)).then(() => {
-        dispatch(fetchCartTotals(userId));
-      });
-      dispatch(fetchLiked(user.id));
-    }
-  }, [dispatch, user.id]);
+  // RTK Query хуки
+  const { data: cartItems = [], isLoading, error } = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const { data: itemsCount = 0 } = useGetCartTotalsQuery(user.id ?? '', { skip: !user.id });
+  const [clearCart] = useClearCartMutation();
 
   if (!user.id) {
     return (
@@ -56,7 +53,15 @@ export const Cart: React.FC = () => {
     );
   }
 
-  if (cart.items.length === 0) {
+  if (isLoading) {
+    return <div className="cart__empty">Загрузка корзины...</div>;
+  }
+
+  if (error) {
+    return <div className="cart__empty">Ошибка загрузки корзины</div>;
+  }
+
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="cart__empty">
         <BreadCrumb
@@ -81,7 +86,7 @@ export const Cart: React.FC = () => {
   return (
     <div className="cart container">
       <div className="cart__header">
-      <BreadCrumb
+        <BreadCrumb
           pageLinks={[
             { name: "Главная", link: "/" },
             { name: "Корзина", link: "/" },
@@ -90,14 +95,14 @@ export const Cart: React.FC = () => {
         <h2 className="cart__title">Корзина</h2>
         <div className="cart__info">
           <span className="cart__items-count">
-            В корзине <span>{cart.itemsCount}</span>
+            В корзине <span>{itemsCount}</span>
           </span>
         </div>
       </div>
       <div className="cart__body">
-        {cart.items.length > 0 && (
+        {cartItems.length > 0 && (
           <button
-            onClick={() => {}}
+            onClick={() => clearCart({ userId: user.id ?? '' })}
             title="Очистить корзину"
             className="cart__clear"
           >
@@ -106,7 +111,7 @@ export const Cart: React.FC = () => {
           </button>
         )}
         <div className="cart__list">
-          {cart.items.map((item) => {
+          {cartItems.map((item) => {
             const isItemLiked = liked.items.some(
               (likedItem) => likedItem.id === item.product.id
             );
@@ -114,13 +119,12 @@ export const Cart: React.FC = () => {
               <CartItem
                 key={item.product.id}
                 cartItem={item}
-                userId={user.id}
+                userId={user.id ?? ''}
                 isLiked={isItemLiked}
               />
             );
           })}
         </div>
-
         <OrderMenu />
       </div>
     </div>
