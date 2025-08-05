@@ -10,7 +10,6 @@ import likedReducer from '../entity/liked/slice.ts';
 import userReducer from '../entity/users/slice.ts';
 import promoReducer from '../entity/promo/slice.ts';
 import certificateReducer from '../entity/certificate/slice.ts';
-import tagReducer from '../entity/tag/slice';
 import ordersReducer from '../entity/order/slice';
 // APIs
 import { cartApi } from '../entity/cart/api';
@@ -20,6 +19,7 @@ import { orderApi } from '../entity/order/api';
 import { productApi } from '../entity/product/api';
 import { productCategoryApi } from '../entity/productCategory/api';
 import { promoApi } from '../entity/promo/api';
+import { tagApi } from '../entity/tag/api';
 //State Interface
 import { UserState } from '../entity/users/types.ts'
 import { CertificateState } from '../entity/certificate/types.ts'
@@ -27,7 +27,6 @@ import { LikedState } from '../entity/liked/types.ts'
 import { FilterState } from '../entity/productFilter/types.ts'
 import { ProductsState } from '../entity/product/types.ts'
 import { PromoState } from '../entity/promo/types.ts'
-import { TagState } from '../entity/tag/types';
 import { OrdersState } from '../entity/order/types';
 
 export const store = configureStore({
@@ -38,7 +37,6 @@ export const store = configureStore({
     user: userReducer,
     promo: promoReducer,
     certificate: certificateReducer,
-    tags: tagReducer,
     orders: ordersReducer,
     [cartApi.reducerPath]: cartApi.reducer,
     [certificateApi.reducerPath]: certificateApi.reducer,
@@ -47,6 +45,7 @@ export const store = configureStore({
     [productApi.reducerPath]: productApi.reducer,
     [productCategoryApi.reducerPath]: productCategoryApi.reducer,
     [promoApi.reducerPath]: promoApi.reducer,
+    [tagApi.reducerPath]: tagApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(cartApi.middleware)
@@ -55,7 +54,8 @@ export const store = configureStore({
     .concat(orderApi.middleware)
     .concat(productApi.middleware)
     .concat(productCategoryApi.middleware)
-    .concat(promoApi.middleware),
+    .concat(promoApi.middleware)
+    .concat(tagApi.middleware),
 });
 
 export type RootState = {
@@ -65,7 +65,6 @@ export type RootState = {
   user: UserState;
   promo: PromoState;
   certificate: CertificateState;
-  tags: TagState;
   orders: OrdersState;
 };
 
