@@ -20,6 +20,7 @@ import { productApi } from '../entity/product/api';
 import { productCategoryApi } from '../entity/productCategory/api';
 import { promoApi } from '../entity/promo/api';
 import { tagApi } from '../entity/tag/api';
+import { usersApi } from '../entity/users/api';
 //State Interface
 import { UserState } from '../entity/users/types.ts'
 import { CertificateState } from '../entity/certificate/types.ts'
@@ -46,6 +47,7 @@ export const store = configureStore({
     [productCategoryApi.reducerPath]: productCategoryApi.reducer,
     [promoApi.reducerPath]: promoApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
+    [usersApi.reducerPath]: usersApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(cartApi.middleware)
@@ -55,7 +57,8 @@ export const store = configureStore({
     .concat(productApi.middleware)
     .concat(productCategoryApi.middleware)
     .concat(promoApi.middleware)
-    .concat(tagApi.middleware),
+    .concat(tagApi.middleware)
+    .concat(usersApi.middleware),
 });
 
 export type RootState = {
