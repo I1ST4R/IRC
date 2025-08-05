@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../main/store";
 import {
-  login,
-  register,
   clearError,
   closeAccount,
 } from "../../../entity/users/slice";
+import { useLoginMutation, useRegisterMutation } from "../../../entity/users/api";
 import "./_personal-account.scss";
 
 interface FormData {
@@ -30,26 +29,34 @@ const PersonalAccount = () => {
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // RTK Query мутации
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
+  const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(clearError());
 
     if (isLogin) {
-      const resultAction = await dispatch(
-        login({ login: formData.login, password: formData.password })
-      );
-      if (login.fulfilled.match(resultAction)) dispatch(closeAccount())
+      try {
+        await login({ login: formData.login, password: formData.password }).unwrap();
+        dispatch(closeAccount());
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
     } else {
       if (formData.password !== formData.confirmPassword || !formData.email) return;
-      const resultAction = await dispatch(
-        register({
+      try {
+        await register({
           login: formData.login,
           password: formData.password,
           email: formData.email,
           type: "client",
-        })
-      );
-      if (register.fulfilled.match(resultAction)) dispatch(closeAccount())
+        }).unwrap();
+        dispatch(closeAccount());
+      } catch (error) {
+        console.error('Register failed:', error);
+      }
     }
   }
 
@@ -214,9 +221,9 @@ const PersonalAccount = () => {
             <button
               type="submit"
               className="personal-account__submit"
-              disabled={user.loading === "pending"}
+              disabled={isLoginLoading || isRegisterLoading}
             >
-              {user.loading === "pending"
+              {isLoginLoading || isRegisterLoading
                 ? "Загрузка..."
                 : isLogin
                 ? "Войти"

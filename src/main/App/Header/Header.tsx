@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
 import { logout, openAccount } from '../../../entity/users/slice';
+import { useGetCartQuery } from '../../../entity/cart/api';
+import { useGetLikedQuery } from '../../../entity/liked/api';
 import logo from './logo.svg';
 import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';
@@ -18,14 +20,16 @@ const Header: React.FC = () => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
-  const cart = useSelector((state: RootState) => state.cart);
-  const likedItems = useSelector((state: RootState) => state.liked.items);
-  const totalLikedItems = likedItems.length;
-
-  const totalCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
+
+  // RTK Query хуки
+  const { data: cartItems = [] } = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const { data: likedItems = [] } = useGetLikedQuery(user.id ?? '', { skip: !user.id });
+
+  const totalLikedItems = likedItems.length;
+  const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
