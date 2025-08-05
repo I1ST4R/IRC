@@ -6,7 +6,6 @@ import { TypedUseSelectorHook } from 'react-redux';
 //Reducers
 import productsReducer from '../entity/product/slice.ts';
 import filterReducer from '../entity/productFilter/slice.ts';
-import categoriesReducer from '../entity/productCategory/slice.ts';
 import likedReducer from '../entity/liked/slice.ts';
 import userReducer from '../entity/users/slice.ts';
 import promoReducer from '../entity/promo/slice.ts';
@@ -19,10 +18,10 @@ import { certificateApi } from '../entity/certificate/api';
 import { likedApi } from '../entity/liked/api';
 import { orderApi } from '../entity/order/api';
 import { productApi } from '../entity/product/api';
+import { productCategoryApi } from '../entity/productCategory/api';
 //State Interface
 import { UserState } from '../entity/users/types.ts'
 import { CertificateState } from '../entity/certificate/types.ts'
-import { CategoriesState } from '../entity/productCategory/types.ts'
 import { LikedState } from '../entity/liked/types.ts'
 import { FilterState } from '../entity/productFilter/types.ts'
 import { ProductsState } from '../entity/product/types.ts'
@@ -34,7 +33,6 @@ export const store = configureStore({
   reducer: {
     products: productsReducer,
     filter: filterReducer,
-    categories: categoriesReducer,
     liked: likedReducer,
     user: userReducer,
     promo: promoReducer,
@@ -46,19 +44,20 @@ export const store = configureStore({
     [likedApi.reducerPath]: likedApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
+    [productCategoryApi.reducerPath]: productCategoryApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(cartApi.middleware)
     .concat(certificateApi.middleware)
     .concat(likedApi.middleware)
     .concat(orderApi.middleware)
-    .concat(productApi.middleware),
+    .concat(productApi.middleware)
+    .concat(productCategoryApi.middleware),
 });
 
 export type RootState = {
   products: ProductsState;
   filter: FilterState;
-  categories: CategoriesState;
   liked: LikedState;
   user: UserState;
   promo: PromoState;
