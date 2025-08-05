@@ -17,6 +17,7 @@ import ordersReducer from '../entity/order/slice';
 import { cartApi } from '../entity/cart/api';
 import { certificateApi } from '../entity/certificate/api';
 import { likedApi } from '../entity/liked/api';
+import { orderApi } from '../entity/order/api';
 //State Interface
 import { UserState } from '../entity/users/types.ts'
 import { CertificateState } from '../entity/certificate/types.ts'
@@ -42,11 +43,13 @@ export const store = configureStore({
     [cartApi.reducerPath]: cartApi.reducer,
     [certificateApi.reducerPath]: certificateApi.reducer,
     [likedApi.reducerPath]: likedApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(cartApi.middleware)
     .concat(certificateApi.middleware)
-    .concat(likedApi.middleware),
+    .concat(likedApi.middleware)
+    .concat(orderApi.middleware),
 });
 
 export type RootState = {

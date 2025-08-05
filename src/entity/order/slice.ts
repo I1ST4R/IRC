@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { addOrder, getOrders, getOrdersByUserId } from "@/services/api";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order, OrdersState } from "./types";
 
 const defaultOrder: Order = {
@@ -34,40 +33,6 @@ const initialState: OrdersState = {
   error: null,
 };
 
-export const fetchOrders = createAsyncThunk(
-  "products/fetchOrders",
-  async () => {
-    const response = await getOrders();
-    return response;
-  }
-);
-
-export const fetchOrdersByUserId = createAsyncThunk(
-  "products/fetchOrdersByUserId",
-  async (userId: string) => {
-    try {
-      const response = await getOrdersByUserId(userId);
-      return response;
-    } catch (error) {
-      console.error("Error fetching product:", error);
-      throw error;
-    }
-  }
-);
-
-export const createOrder = createAsyncThunk(
-  "products/createOrder",
-  async (order: Order ) => {
-    try {
-      const response = await addOrder(order);
-      return response;
-    } catch (error) {
-      console.error("Error fetching product:", error);
-      throw error;
-    }
-  }
-);
-
 const ordersSlice = createSlice({
   name: "products",
   initialState,
@@ -98,7 +63,6 @@ const ordersSlice = createSlice({
       if (
         typeof state.current.promocodePercent === 'number' && state.current.promocodePercent > 0) {
         promoDiscount = totalWithDiscount * state.current.promocodePercent
-        console.log(promoDiscount)
         totalWithDiscount -= promoDiscount;
         state.current.promocodeDiscount = promoDiscount;
       }
@@ -112,39 +76,6 @@ const ordersSlice = createSlice({
       state.current.totalWithDiscount = totalWithDiscount + state.current.deliveryCost;
       state.current.discount = discount;
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      //fetchOrders
-      .addCase(fetchOrders.pending, (state) => {
-        state.loading = "pending";
-      })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.loading = "succeeded";
-        state.items = action.payload;
-      })
-      .addCase(fetchOrders.rejected, (state, action) => {
-        state.loading = "failed";
-        state.error = action.error.message || "Failed to fetch orders";
-      })
-      //fetchOrdersByUserId
-      .addCase(fetchOrdersByUserId.pending, (state) => {
-        state.loading = "pending";
-      })
-      .addCase(fetchOrdersByUserId.fulfilled, (state, action) => {
-        state.loading = "succeeded";
-        state.items = action.payload;
-      })
-      .addCase(fetchOrdersByUserId.rejected, (state, action) => {
-        state.loading = "failed";
-        state.error =
-          action.error.message || "Failed to fetch orders by user id";
-      })
-      //createOrder
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.loading = "succeeded";
-        state.items = action.payload;
-      });
   },
 });
 
