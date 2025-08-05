@@ -1,8 +1,6 @@
-import { changeCheckCart, fetchCart, fetchCartTotals, removeFromCart, updateCartItem } from "@/entity/cart/slice";
 import { CartItem as ICartItem } from "@/entity/cart/types";
-import { addItemToLiked, removeItemFromLiked } from "@/entity/liked/slice";
-import { AppDispatch } from "@/main/store";
-import { useDispatch } from "react-redux";
+import { useUpdateCartItemQuantityMutation, useRemoveFromCartMutation, useChangeCheckCartItemMutation } from "@/entity/cart/api";
+import { useAddToLikedMutation, useRemoveFromLikedMutation } from "@/entity/liked/api";
 
 interface CartItemProps {
   cartItem: ICartItem;
@@ -11,36 +9,34 @@ interface CartItemProps {
 }
 
 export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const [updateCartItemQuantity] = useUpdateCartItemQuantityMutation();
+  const [removeFromCart] = useRemoveFromCartMutation();
+  const [changeCheckCartItem] = useChangeCheckCartItemMutation();
+  const [addToLiked] = useAddToLikedMutation();
+  const [removeFromLiked] = useRemoveFromLikedMutation();
 
   const handleQuantityChange = (productId: string, type: "increase" | "decrease") => {
-    if ( userId ) {
+    if (userId) {
       console.log(cartItem)
       if (type === "decrease" && cartItem.quantity === 1) return
       const changes = type === "increase" ? 1 : -1
-      dispatch(
-        updateCartItem({
-          userId:  userId,
-          productId: productId,
-          quantity: cartItem.quantity + changes,
-        })
-      ).then(() => {
-        dispatch(fetchCartTotals(userId));
+      updateCartItemQuantity({
+        userId: userId,
+        productId: productId,
+        quantity: cartItem.quantity + changes,
       });
     }
   };
 
   const handleRemoveItem = (productId: string) => {
     if (userId) {
-      dispatch(removeFromCart({ userId: userId, productId: productId })).then(() => {
-        dispatch(fetchCartTotals(userId));
-      });
+      removeFromCart({ userId: userId, productId: productId });
     }
   };
 
   const handleChangeCheckCart = () => {
     if(userId) {
-      dispatch(changeCheckCart({userId: userId, productId: cartItem.product.id}))
+      changeCheckCartItem({userId: userId, productId: cartItem.product.id})
     }
   }
 
@@ -65,19 +61,15 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
           onClick={() => {
             if (userId) {
               if (isLiked) {
-                dispatch(
-                  removeItemFromLiked({
-                    userId: userId,
-                    productId: cartItem.product.id,
-                  })
-                );
+                removeFromLiked({
+                  userId: userId,
+                  productId: cartItem.product.id,
+                });
               } else {
-                dispatch(
-                  addItemToLiked({
-                    userId: userId,
-                    productId: cartItem.product.id,
-                  })
-                );
+                addToLiked({
+                  userId: userId,
+                  productId: cartItem.product.id,
+                });
               }
             }
           }}

@@ -1,37 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AppDispatch, RootState } from "../../../main/store";
-import { validatePromoCode } from "../../../entity/promo/slice";
-import {validateCertificateCode} from "../../../entity/certificate/slice";
+import { RootState } from "../../../main/store";
+import { useValidatePromoCodeMutation } from "../../../entity/promo/api";
+import { useValidateCertificateCodeMutation } from "../../../entity/certificate/api";
 import "./_order-menu.scss";
-import { CartState } from "@/entity/cart/types";
+import { useGetCartQuery } from "@/entity/cart/api";
 import { changeOrderInfo } from "@/entity/order/slice";
+import { useAppDispatch } from "@/main/store";
 
 interface OrderMenuProps {
   handleSubmit?: () => void;
 }
 
 export const OrderMenu = (props: OrderMenuProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const promo = useSelector((state: RootState) => state.promo);
   const order = useSelector((state: RootState) => state.orders.current);
   const certificate = useSelector((state: RootState) => state.certificate);
   const user = useSelector((state: RootState) => state.user);
-  const { loading, error, items } = useSelector(
-    (state: RootState) => state.cart as CartState
-  );
+  
+  // RTK Query хуки
+  const { data: cartItems = [] } = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const [validatePromo] = useValidatePromoCodeMutation();
+  const [validateCertificate] = useValidateCertificateCodeMutation();
+
   const [promocode, setPromocode] = useState<string | null>(null);
   const [sertificate, setSertificate] = useState<string | null>(null);
   const [promoTouched, setPromoTouched] = useState(false);
   const [sertTouched, setSertTouched] = useState(false);
 
-  const checkedCartItems = items.filter((item) => item.isChecked);
+  const checkedCartItems = cartItems.filter((item) => item.isChecked);
 
   useEffect(() => {
-    if (!user.id || !items.filter((item) => item.isChecked)) return;
+    if (!user.id || !cartItems.filter((item) => item.isChecked).length) return;
 
     dispatch(
       changeOrderInfo({
@@ -52,7 +56,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
     user.id,
     promo.promo.valid,
     certificate.certificate.valid,
-    items,
+    cartItems,
+    checkedCartItems,
   ]);
 
   // Сброс touched состояний когда промокод/сертификат становятся валидными
@@ -89,7 +94,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const handlePromocodeBlur = () => {
     if (promocode) {
       setPromoTouched(true);
-      dispatch(validatePromoCode(promocode));
+      validatePromo(promocode);
     }
   };
 
@@ -104,7 +109,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const handleSertificateBlur = () => {
     if (sertificate) {
       setSertTouched(true);
-      dispatch(validateCertificateCode(sertificate));
+      validateCertificate(sertificate);
     }
   };
 
@@ -112,14 +117,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
     return (
       <div className="order-menu">
         <div className="order-menu__error">Пожалуйста, войдите в систему</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="order-menu">
-        <div className="order-menu__error">{error}</div>
       </div>
     );
   }

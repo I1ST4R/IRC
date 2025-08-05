@@ -7,14 +7,16 @@ import { Certificate } from './types';
 export const certificateApi = createApi({
   reducerPath: 'certificateApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  tagTypes: ['Certificate'],
   endpoints: (build) => ({
-    validateCertificateCode: build.query<Certificate, string>({
+    validateCertificateCode: build.mutation<Certificate, string>({
       queryFn: (code) =>
         validateCertificate(code)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
+      invalidatesTags: ['Certificate'],
     }),
   }),
 });
 
-export const { useValidateCertificateCodeQuery } = certificateApi; 
+export const { useValidateCertificateCodeMutation } = certificateApi; 

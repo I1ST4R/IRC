@@ -7,14 +7,14 @@ export const promoApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Promo'],
   endpoints: (build) => ({
-    validatePromoCode: build.query<Promo, string>({
+    validatePromoCode: build.mutation<Promo, string>({
       queryFn: (code) =>
         validatePromo(code)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
-      providesTags: ['Promo'],
+      invalidatesTags: ['Promo'],
     }),
   }),
 });
 
-export const { useValidatePromoCodeQuery } = promoApi;
+export const { useValidatePromoCodeMutation } = promoApi;
