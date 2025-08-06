@@ -5,8 +5,8 @@ import { AppDispatch, RootState } from "../../../main/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
-import { fetchCategories } from "@/entity/productCategory/slice";
-import { fetchTagsById } from "@/entity/tag/slice";
+import { useGetCategoriesQuery } from "@/entity/productCategory/api";
+import { useGetTagsByIdQuery } from "@/entity/tag/api";
 
 interface AccordionItemProps {
   title: string;
@@ -47,10 +47,9 @@ export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
   const filter = useSelector((state: RootState) => state.filter);
 
-  const categories = useSelector((state: RootState) => state.categories.categories);
-  const loading = useSelector((state: RootState) => state.categories.loading);
-  const error = useSelector((state: RootState) => state.categories.error);
-  const tags = useSelector((state: RootState) => state.tags.tags);
+  const {data: categories = [], isLoading, error} = useGetCategoriesQuery();
+  const tagIds = categories.flatMap(category => category.tags);
+  const {data: tags = []} = useGetTagsByIdQuery(tagIds ?? [], { skip: !tagIds.length });
 
   const sliderRef = useRef<HTMLDivElement>(null);
   const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter.filterParams.priceRange || { min: 500, max: 10000 });
@@ -65,16 +64,7 @@ export const Menu = () => {
       sliderRef.current.style.setProperty('--range-width', `${maxPercent - minPercent}%`);
     }
   }, [localPriceRange]);
-
-
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchTagsById(categories.flatMap(category => category.tags)));
-  }, [categories]);
-
+  
   useEffect(() => {
     updateRangeHighlight();
   }, [localPriceRange, updateRangeHighlight]);
@@ -121,8 +111,8 @@ export const Menu = () => {
     return tag?.name || "";
   };
 
-  if (loading === "pending") return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (isLoading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка при загрузке категорий</div>;
   if (!filter || !categories) return null;
 
   return (

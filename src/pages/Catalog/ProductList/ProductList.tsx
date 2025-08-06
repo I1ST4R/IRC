@@ -1,56 +1,51 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../entity/product/slice";
 import { RootState, AppDispatch } from "../../../main/store";
 import { Product as ProductComponent } from "../Product/Product";
 import type { Product } from "../../../entity/product/types";
+import { useGetProductsQuery } from "@/entity/product/api";
 
 interface ProductListProps {
   onAuthRequired?: () => void;
 }
 
 export const ProductList = ({ onAuthRequired }: ProductListProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { 
-    items, 
-    loading, 
-    error, 
-    hasMore,
-    currentPage} = useSelector((state: RootState) => state.products);
   const filter = useSelector((state: RootState) => state.filter);
-  let page = 1
+  const [page, setPage] = useState(1);
+  
+  const { data, isLoading, error } = useGetProductsQuery({ 
+    page: page, 
+    filter: filter.filterParams 
+  });
 
-  // При изменении фильтра сбрасываем страницу и загружаем заново
-  useEffect(() => {
-    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
-  }, [dispatch, filter]);
+  const products = data?.products || [];
+  const hasMore = data?.hasMore || false;
 
   // Загрузить ещё
   const handleLoadMore = () => {
-    if (!hasMore || loading === 'pending') return;
-    page ++
-    dispatch(fetchProducts({ page: page, filter: filter.filterParams }));
+    if (!hasMore || isLoading) return;
+    setPage(prev => prev + 1);
   };
 
-  if (loading === 'pending' && currentPage === 1) {
+  if (isLoading && page === 1) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Ошибка при загрузке продуктов</div>;
   }
 
-  if (!items || items.length === 0) {
-    if (loading === 'pending') {
-      return <div>Loading...</div>;
+  if (!products || products.length === 0) {
+    if (isLoading) {
+      return <div>Загрузка...</div>;
     }
-    return <div>No products found</div>;
+    return <div>Продукты по запросу не найдены</div>;
   }
 
   return (
     <div className="product-list">
       <div className="product-list__container">
-        {items.map((product: Product) => (
+        {products.map((product: Product) => (
           <ProductComponent
             key={`product-${product.id}`}
             product={product}
@@ -62,9 +57,9 @@ export const ProductList = ({ onAuthRequired }: ProductListProps) => {
         <button 
           className="product-list__load-more" 
           onClick={handleLoadMore} 
-          disabled={loading === 'pending'}
+          disabled={isLoading}
         >
-          {loading === 'pending' ? 'Загрузка...' : 'Загрузить ещё'}
+          {isLoading ? 'Загрузка...' : 'Загрузить ещё'}
         </button>
       )}
     </div>

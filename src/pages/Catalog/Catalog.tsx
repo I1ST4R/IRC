@@ -1,7 +1,6 @@
 import { ProductList } from "./ProductList/ProductList";
 import { Menu } from "./Menu/Menu";
 import "./_catalog.scss";
-import { useState } from "react";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 import { useSelector } from "react-redux";

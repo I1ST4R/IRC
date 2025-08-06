@@ -1,14 +1,10 @@
-import { useState } from "react";
 import { Product as ProductType } from "../../../entity/product/types";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../main/store";
-import { addToCart, fetchCart } from "../../../entity/cart/slice";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  addItemToLiked,
-  removeItemFromLiked,
-} from "@/entity/liked/slice";
 import { Tag } from "@/entity/tag/types";
+import { useAddToCartMutation, useGetCartQuery } from "@/entity/cart/api";
+import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
 
 interface ProductProps {
   product: ProductType;
@@ -20,23 +16,22 @@ export const Product = ({
   product,
   onAuthRequired,
 }: ProductProps) => {
-  const cart = useSelector((state: RootState) => state.cart);
-  const liked = useSelector((state: RootState) => state.liked);
   const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch<AppDispatch>();
+  const {data: cartItems = [], isLoading: isCartLoading, error: cartError} = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const {data: likedItems = [], isLoading: isLikedLoading, error: likedError} = useGetLikedQuery(user.id ?? '', { skip: !user.id });
+  const [removeFromLiked] = useRemoveFromLikedMutation();
+  const [addToLiked] = useAddToLikedMutation();
+  const [addToCart] = useAddToCartMutation();
   const navigate = useNavigate();
 
   const isInCart = () => {
-    if (cart.loading === "succeeded") {
-      return cart.items.some((item) => item.product.id === product.id);
-    }
-    return false;
+    if (isCartLoading) return false
+    return cartItems.some((item) => item.product.id === product.id)
   };
 
   const isLiked = () => {
-    if (liked.loading === "succeeded")
-      return liked.items.some((item) => item.id === product.id);
-    return;
+    if (isLikedLoading) return false
+    return likedItems.some((item) => item.id === product.id)
   };
 
   const handleLike = async () => {
@@ -45,20 +40,9 @@ export const Product = ({
       return;
     }
 
-    if (isLiked()) {
-      await dispatch(
-        removeItemFromLiked({
-          userId: user.id.toString(),
-          productId: product.id,
-        })
-      );
-    } else {
-      await dispatch(
-        addItemToLiked({ 
-          userId: user.id.toString(), 
-          productId: product.id })
-      );
-    }
+    isLiked() ? removeFromLiked({ userId: user.id.toString(), productId: product.id })
+    : addToLiked({ userId:user.id.toString(), productId:product.id })
+    
   };
 
   const handleCartClick = async () => {
@@ -68,7 +52,7 @@ export const Product = ({
     }
 
     if (isInCart()) navigate("/cart") 
-    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
+    else addToCart({ userId: user.id.toString(), productId: product.id })
   };
 
   return (
@@ -118,3 +102,4 @@ export const Product = ({
     </div>
   );
 };
+
