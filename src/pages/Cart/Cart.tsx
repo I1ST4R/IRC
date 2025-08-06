@@ -14,14 +14,15 @@ import {
   useClearCartMutation,
   useGetCartTotalsQuery
 } from '@/entity/cart/api';
+import { useGetLikedQuery } from "@/entity/liked/api";
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const liked = useSelector((state: RootState) => state.liked);
+  const {data: likedItems = []} = useGetLikedQuery(user.id ?? '', { skip: !user.id });
 
   // RTK Query хуки
-  const { data: cartItems = [], isLoading, error } = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const { data: cartItems = [], isLoading: isCartLoading, error: cartError } = useGetCartQuery(user.id ?? '', { skip: !user.id });
   const { data: itemsCount = 0 } = useGetCartTotalsQuery(user.id ?? '', { skip: !user.id });
   const [clearCart] = useClearCartMutation();
 
@@ -53,11 +54,11 @@ export const Cart: React.FC = () => {
     );
   }
 
-  if (isLoading) {
+  if (isCartLoading) {
     return <div className="cart__empty">Загрузка корзины...</div>;
   }
 
-  if (error) {
+  if (cartError) {
     return <div className="cart__empty">Ошибка загрузки корзины</div>;
   }
 
@@ -112,7 +113,7 @@ export const Cart: React.FC = () => {
         )}
         <div className="cart__list">
           {cartItems.map((item) => {
-            const isItemLiked = liked.items.some(
+            const isItemLiked = likedItems.some(
               (likedItem) => likedItem.id === item.product.id
             );
             return (

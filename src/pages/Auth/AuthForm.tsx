@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../main/store';
-import { login } from '../../entity/users/slice';
+import { useLoginMutation } from '../../entity/users/api';
 import styles from './AuthForm.module.css';
 
 export const AuthForm = () => {
@@ -12,12 +11,12 @@ export const AuthForm = () => {
     email: '',
   });
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await dispatch(login(formData)).unwrap();
+      await login(formData).unwrap();
       navigate('/');
     } catch (error) {
       console.error('Auth error:', error);

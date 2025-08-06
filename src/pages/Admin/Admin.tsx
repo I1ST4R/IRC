@@ -1,21 +1,18 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "@/entity/order/slice";
-import { AppDispatch, RootState } from "@/main/store";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/main/store";
 import { Order } from "@/entity/order/types";
+import { useGetOrdersQuery } from "@/entity/order/api";
 
 const Admin: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const orders = useSelector((state: RootState) => state.orders.items);
+  const { data: orders = [], isLoading } = useGetOrdersQuery();
   const user = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {dispatch(fetchOrders())}, [dispatch]);
 
   if (user.type !== "admin") {
     return <div className="admin-no-access">У вас нет прав доступа</div>;
   }
 
-  if (!Array.isArray(orders)) return <div>Загрузка...</div>
+  if (isLoading || !Array.isArray(orders)) return <div>Загрузка...</div>
 
   const grouped = orders.reduce((acc: Record<string, Order[]>, order: Order) => {
     if (!acc[order.userId]) acc[order.userId] = [];
@@ -52,11 +49,11 @@ const Admin: React.FC = () => {
                       Скидка: <b>{order.discount} ₽</b>
                     </div>
                     <div>
-                      Скидка по промокоду:{" "}
+                      Скидка по промокоду: {" "}
                       <b>{order.promocodeDiscount ?? "-"}</b>
                     </div>
                     <div>
-                      Скидка по сертификату:{" "}
+                      Скидка по сертификату: {" "}
                       <b>{order.certificateDiscount ?? "-"}</b>
                     </div>
                     <div>
