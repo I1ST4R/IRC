@@ -34,5 +34,5 @@ export const orderApi = createApi({
 export const {
   useGetOrdersQuery,
   useGetOrdersByUserIdQuery,
-  useAddOrderMutation
+  useAddOrderMutation,
 } = orderApi;

@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "../../main/store";
-import { fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
+import { RootState } from "../../main/store";
 import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
+import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
 
 export const Liked = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
-  const { items, loading, error } = useSelector((state: RootState) => state.liked);
+  const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user.id ?? "",{skip: !user.id});
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-
-  useEffect(() => {
-    if (user.id) {
-      dispatch(fetchLiked(user.id));
-    }
-  }, [dispatch, user.id]);
+  const [removeFromLiked] = useRemoveFromLikedMutation();
 
   const handleRemoveItem = (productId: string) => {
-    if (user.id) {
-      dispatch(removeItemFromLiked({ userId: user.id, productId }));
-    }
+    if (user.id) removeFromLiked({ userId: user.id, productId })
   };
 
   const getTotalItems = () => {
-    return items.length;
+    return likedItems.length;
   };
 
   if (!user.id) {
@@ -44,13 +36,13 @@ export const Liked = () => {
           </p>
         </div>
         {isPersonalAccountOpen && (
-          <PersonalAccount onClose={() => setIsPersonalAccountOpen(false)} />
+          <PersonalAccount /* onClose={() => setIsPersonalAccountOpen(false)} */ />
         )}
       </div>
     );
   }
 
-  if (loading === "pending") {
+  if (isLoading) {
     return (
       <div className="cart">
         <h2 className="cart__title">Избранное</h2>
@@ -60,10 +52,10 @@ export const Liked = () => {
   }
 
   if (error) {
-    return <div className="cart__error">{error}</div>;
+    return <div className="cart__error">Ошибка при загрузке избранного</div>;
   }
 
-  if (items.length === 0) {
+  if (likedItems.length === 0) {
     return (
       <div className="cart__empty">
         <h2 className="cart__title">Избранное</h2>
@@ -78,8 +70,6 @@ export const Liked = () => {
     );
   }
 
-  console.log(items)
-
   return (
     <div className="cart container liked-page">
       <div className="cart__header">
@@ -89,7 +79,7 @@ export const Liked = () => {
         </span>
       </div>
       <div className="product-list__container liked-page__container">
-        {items.map((product) => (
+        {likedItems.map((product) => (
           <Product
             key={`product-${product.id}`}
             product={product}

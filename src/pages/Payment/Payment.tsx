@@ -1,5 +1,4 @@
-import { fetchCart } from "@/entity/cart/slice";
-import { createOrder } from "@/entity/order/slice";
+import { useAddOrderMutation } from "@/entity/order/api";
 import { AppDispatch, RootState } from "@/main/store";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +13,8 @@ export const Payment = () => {
   const [cardError, setCardError] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const [createOrder] = useAddOrderMutation();
 
   if (!order || !order.totalWithDiscount) {
     return (
@@ -61,10 +62,7 @@ export const Payment = () => {
     } else validateCard();
 
     if (!phoneError && !cardError) {
-      dispatch(createOrder(order)).then(() => {
-        if (user.id) dispatch(fetchCart(user.id));
-        navigate("/cart");
-      });
+      createOrder(order).then(() => navigate("/cart"));
       setPhoneError("");
       setCardError("");
     }

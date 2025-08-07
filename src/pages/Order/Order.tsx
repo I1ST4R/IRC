@@ -4,11 +4,10 @@ import { RootState } from "../../main/store";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import "./_order.scss";
 import { DeliveryMethod, PaymentMethod } from "@/entity/order/types";
-import { changeOrderInfo, createOrder } from "@/entity/order/slice";
+import { changeOrderInfo } from "@/entity/order/slice";
 import { AppDispatch } from "@/main/store";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { fetchCart, fetchCartTotals } from "@/entity/cart/slice";
 
 export const Order: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -28,7 +27,6 @@ export const Order: React.FC = () => {
   });
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [shouldCreateOrder, setShouldCreateOrder] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -124,19 +122,8 @@ export const Order: React.FC = () => {
         })
       );
       navigate("/payment")
-      // setShouldCreateOrder(true);
     }
   };
-
-  // useEffect(() => {
-  //   if (shouldCreateOrder && order) {
-  //     dispatch(createOrder(order)).then(() => {
-  //       if (user.id) dispatch(fetchCart(user.id));
-  //       navigate("/cart");
-  //     });
-  //     setShouldCreateOrder(false);
-  //   }
-  // }, [shouldCreateOrder, order, dispatch, user.id, navigate]);
 
   if (!user.id) {
     return (

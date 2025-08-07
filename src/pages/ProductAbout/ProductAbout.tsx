@@ -1,28 +1,26 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/main/store";
-import { addToCart, fetchCart } from "@/entity/cart/slice.ts";
-import { addItemToLiked, fetchLiked, removeItemFromLiked } from "@/entity/liked/slice";
-import { fetchProductById } from "@/entity/product/slice";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
 import { Tag } from "@/entity/tag/types";
 import { openAccount } from "@/entity/users/slice";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
+import { useAddToCartMutation, useGetCartQuery } from "@/entity/cart/api";
+import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
+import { useGetProductByIdQuery } from "@/entity/product/api";
 
 export const ProductAbout = () => {
   const { id } = useParams();
-  const product = useSelector((state: RootState) => state.products.currentProduct);
-  const loading = useSelector((state: RootState) => state.products.loading);
-  const error = useSelector((state: RootState) => state.products.error);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const likedItems = useSelector((state: RootState) => state.liked.items);
   const user = useSelector((state: RootState) => state.user);
+  const {data: product, isLoading, error} = useGetProductByIdQuery(id ?? "", {skip: !id});
+  const {data: cartItems = []} = useGetCartQuery(user.id ?? "", {skip: !user.id});
+  const {data: likedItems = []} = useGetLikedQuery(user.id ?? "", {skip: !user.id});
+  const [addToCart] = useAddToCartMutation();
+  const [removeFromLiked] = useRemoveFromLikedMutation();
+  const [addToLiked] = useAddToLikedMutation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  useEffect(() => { id ? dispatch(fetchProductById(id)) : ""}, [dispatch, id])
 
   const isInCart = () => cartItems.some((item) => item.product.id === product?.id);
   const isLiked = () => likedItems.some((item) => item.id === product?.id);
@@ -35,29 +33,24 @@ export const ProductAbout = () => {
     }
 
     if (isInCart()) navigate("/cart") 
-    else dispatch(addToCart({ userId: user.id.toString(), productId: product.id }))
+    else addToCart({ userId: user.id.toString(), productId: product.id })
   };
 
   const switchLike = async (productId: string) => {
 
     if (!product || !user || !user.id) return;
     const isLiked = likedItems.some((item) => item.id === productId);
-    if (isLiked) {
-      await dispatch(removeItemFromLiked({ userId: user.id.toString(), productId }));
-      await dispatch(fetchLiked(user.id.toString()));
-    } else {
-      await dispatch(addItemToLiked({ userId: user.id.toString(), productId }));
-      await dispatch(fetchLiked(user.id.toString()));
-    }
-  };
+    isLiked ? removeFromLiked({ userId: user.id.toString(), productId })
+    : addToLiked({ userId: user.id.toString(), productId });
+  }
 
 
-  if (loading === "pending") {
+  if (isLoading) {
     return <div>Загрузка...</div>;
   }
 
   if (error) {
-    return <div>Ошибка: {error}</div>;
+    return <div>Ошибка при загрузке продукта</div>;
   }
 
   if (!product) {

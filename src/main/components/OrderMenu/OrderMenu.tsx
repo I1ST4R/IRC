@@ -22,7 +22,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const certificate = useSelector((state: RootState) => state.certificate);
   const user = useSelector((state: RootState) => state.user);
   
-  // RTK Query хуки
   const { data: cartItems = [] } = useGetCartQuery(user.id ?? '', { skip: !user.id });
   const [validatePromo] = useValidatePromoCodeMutation();
   const [validateCertificate] = useValidateCertificateCodeMutation();
