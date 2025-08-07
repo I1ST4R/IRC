@@ -4,9 +4,11 @@ import { AppDispatch, RootState } from "../../../main/store";
 import {
   clearError,
   closeAccount,
+  setUser,
 } from "../../../entity/users/slice";
 import { useLoginMutation, useRegisterMutation } from "../../../entity/users/api";
 import "./_personal-account.scss";
+
 
 interface FormData {
   login: string;
@@ -33,17 +35,16 @@ const PersonalAccount = () => {
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
 
+  console.log(user)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(clearError());
 
     if (isLogin) {
-      try {
-        await login({ login: formData.login, password: formData.password }).unwrap();
-        dispatch(closeAccount());
-      } catch (error) {
-        console.error('Login failed:', error);
-      }
+      const user = await login({ login: formData.login, password: formData.password })
+      dispatch(setUser(user.data))
+      dispatch(closeAccount());
     } else {
       if (formData.password !== formData.confirmPassword || !formData.email) return;
       try {
@@ -236,4 +237,4 @@ const PersonalAccount = () => {
   );
 };
 
-export default PersonalAccount;
+export default PersonalAccount

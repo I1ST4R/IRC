@@ -1,4 +1,4 @@
-// features/user/userSlice.ts
+
 import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from './types';
 
@@ -28,6 +28,9 @@ const usersSlice = createSlice({
       state.liked = [];
       localStorage.removeItem('userId');
     },
+    setUser: (state, action) => {
+      Object.assign(state, action.payload);
+    },
     clearError: (state) => {
       state.error = null;
     },
@@ -40,5 +43,5 @@ const usersSlice = createSlice({
   },
 });
 
-export const { logout, clearError, openAccount, closeAccount } = usersSlice.actions;
+export const { logout, clearError, openAccount, closeAccount, setUser } = usersSlice.actions;
 export default usersSlice.reducer;

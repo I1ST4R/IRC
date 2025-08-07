@@ -23,17 +23,12 @@ export const login = async (data: LoginData) => {
     const response = await axiosInstance.get<User[]>('/users');
     const users = Object.values(response.data);
     const user = users.find(u => u.login === data.login);
+
+    if (!user) throw new Error('Пользователь не найден');
     
-    if (!user) {
-      throw new Error('Пользователь не найден');
-    }
-    
-    if (user.password !== data.password) {
-      throw new Error('Неверный пароль');
-    }
-    
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword as User;
+    if (user.password !== data.password) throw new Error('Неверный пароль');
+
+    return user as User;
   } catch (error: any) {
     console.error('error in login', error);
     throw error;
