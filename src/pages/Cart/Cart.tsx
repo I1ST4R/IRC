@@ -112,7 +112,7 @@ export const Cart: React.FC = () => {
             <img src={cartGarbageIcon} alt="cart-garbage-icon" />
             Очистить корзину
           </button>
-        )}
+        )} 
         <div className="cart__list">
           {cartItems.map((item) => {
             const isItemLiked = likedItems.some(

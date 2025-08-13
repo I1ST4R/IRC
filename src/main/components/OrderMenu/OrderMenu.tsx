@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../../../main/store";
@@ -22,8 +22,10 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const order = useSelector((state: RootState) => state.orders.current);
   const certificate = useSelector((state: RootState) => state.certificate);
   const { data: user } = useGetUserQuery();
-  
-  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+
+  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? "", {
+    skip: !user?.id,
+  });
   const [validatePromo] = useValidatePromoCodeMutation();
   const [validateCertificate] = useValidateCertificateCodeMutation();
 
@@ -32,35 +34,51 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const [promoTouched, setPromoTouched] = useState(false);
   const [sertTouched, setSertTouched] = useState(false);
 
-  const checkedCartItems = cartItems.filter((item) => item.isChecked);
+  const checkedCartItems = useMemo(
+    () => cartItems.filter((item) => item.isChecked),
+    [cartItems]
+  );
+
+  // Исключаем бесконечные диспатчи при одинаковом наборе данных
+  const lastPayloadSignatureRef = useRef<string>("");
 
   useEffect(() => {
-    if (!user?.id || !cartItems.filter((item) => item.isChecked).length) return;
+    if (!user?.id || checkedCartItems.length === 0) return;
+
+    const signature = JSON.stringify({
+      userId: user.id,
+      items: checkedCartItems.map((i) => ({ id: i.product.id, q: i.quantity })),
+      promoValid: promo.promo.valid,
+      promoId: promo.promo.id,
+      certValid: certificate.certificate.valid,
+      certId: certificate.certificate.id,
+    });
+
+    if (signature === lastPayloadSignatureRef.current) return;
+    lastPayloadSignatureRef.current = signature;
 
     dispatch(
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodePercent: promo.promo.valid 
-          ? promo.promo.discount 
-          : null,
+        promocodePercent: promo.promo.valid ? promo.promo.discount : null,
         promocodeId: promo.promo.id,
         certificateDiscount: certificate.certificate.valid
           ? certificate.certificate.amount
           : null,
-          certificateId: certificate.certificate.id,
+        certificateId: certificate.certificate.id,
       })
     );
   }, [
     dispatch,
     user?.id,
-    promo.promo.valid,
-    certificate.certificate.valid,
-    cartItems,
     checkedCartItems,
+    promo.promo.valid,
+    promo.promo.id,
+    certificate.certificate.valid,
+    certificate.certificate.id,
   ]);
 
-  // Сброс touched состояний когда промокод/сертификат становятся валидными
   useEffect(() => {
     if (promo.promo.valid) {
       setPromoTouched(false);
@@ -76,12 +94,12 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const isOrderPage = location.pathname === "/order";
 
   const handleCheckout = () => {
-    if(!isOrderPage){
+    if (!isOrderPage) {
       navigate("/order");
-      return
+      return;
     }
-    if(props.handleSubmit) props.handleSubmit()
-  }
+    if (props.handleSubmit) props.handleSubmit();
+  };
 
   const handlePromocodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromocode(e.target.value);
@@ -121,9 +139,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
     );
   }
 
-  if (!order || !order.total) {
-    return;
-  }
+  if (!order || !order.total) return;
 
   return (
     <div className="order-menu">
