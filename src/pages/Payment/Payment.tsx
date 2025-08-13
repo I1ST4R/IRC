@@ -1,17 +1,15 @@
 import { useAddOrderMutation } from "@/entity/order/api";
-import { AppDispatch, RootState } from "@/main/store";
+import { RootState } from "@/main/store";
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const Payment = () => {
   const order = useSelector((state: RootState) => state.orders.current);
-  const user = useSelector((state: RootState) => state.user);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [cardError, setCardError] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const [createOrder] = useAddOrderMutation();

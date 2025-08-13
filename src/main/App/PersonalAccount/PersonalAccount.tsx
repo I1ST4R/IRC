@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../main/store";
-import {
-  clearError,
-  closeAccount,
-  setUser,
-} from "../../../entity/users/slice";
-import { useLoginMutation, useRegisterMutation } from "../../../entity/users/api";
+// import {
+//   clearError,
+//   closeAccount
+// } from "../../../entity/users/slice";
+import { useGetUserQuery, useLoginMutation, useRegisterMutation } from "../../../entity/users/api";
 import "./_personal-account.scss";
+import { closeAccount } from "@/entity/account/slice";
 
 
 interface FormData {
@@ -20,7 +20,7 @@ interface FormData {
 
 const PersonalAccount = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((state: RootState) => state.user);
+  const {data: user, error} = useGetUserQuery();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     login: "",
@@ -35,15 +35,12 @@ const PersonalAccount = () => {
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, { isLoading: isRegisterLoading }] = useRegisterMutation();
 
-  console.log(user)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(clearError());
+    // dispatch(clearError());
 
     if (isLogin) {
-      const user = await login({ login: formData.login, password: formData.password })
-      dispatch(setUser(user.data))
+      login({ login: formData.login, password: formData.password })
       dispatch(closeAccount());
     } else {
       if (formData.password !== formData.confirmPassword || !formData.email) return;
@@ -70,7 +67,6 @@ const PersonalAccount = () => {
   };
 
   const handleTabChange = (isLoginTab: boolean) => {
-    dispatch(clearError());
     setIsTransitioning(true);
     setTimeout(() => {
       setIsLogin(isLoginTab);
@@ -140,8 +136,8 @@ const PersonalAccount = () => {
             </button>
           </div>
 
-          {user.error && (
-            <div className="personal-account__error">{user.error}</div>
+          {error && (
+            <div className="personal-account__error">ошибка</div>
           )}
 
           <form

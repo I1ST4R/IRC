@@ -8,9 +8,10 @@ import { changeOrderInfo } from "@/entity/order/slice";
 import { AppDispatch } from "@/main/store";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
+import { useGetUserQuery } from "@/entity/users/api";
 
 export const Order: React.FC = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const { data: user } = useGetUserQuery();
   const order = useSelector((state: RootState) => state.orders.current);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +57,7 @@ export const Order: React.FC = () => {
 
     // Диспатч для изменения стоимости доставки
     const deliveryCost = formData.deliveryMethod === "courier" ? 500 : 0;
-    if (user.id) {
+    if (user?.id) {
       dispatch(
         changeOrderInfo({
           userId: user.id,
@@ -96,7 +97,7 @@ export const Order: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (user.id) {
+    if (user?.id) {
       const validation = validateForm();
 
       if (!validation.isValid) {
@@ -125,7 +126,7 @@ export const Order: React.FC = () => {
     }
   };
 
-  if (!user.id) {
+  if (!user?.id) {
     return (
       <div className="order container">
         <BreadCrumb

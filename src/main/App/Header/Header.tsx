@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
-import { logout, openAccount } from '../../../entity/users/slice';
-import { useGetCartQuery } from '../../../entity/cart/api';
-import { useGetLikedQuery } from '../../../entity/liked/api';
+import { openAccount } from '../../../entity/account/slice';
+import { cartApi, useGetCartQuery } from '../../../entity/cart/api';
+import { likedApi, useGetLikedQuery } from '../../../entity/liked/api';
 import logo from './logo.svg';
 import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';
@@ -12,6 +12,7 @@ import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
 import liked from '../../../pages/Home/_general/img/liked.svg';
 import basket from '../../../pages/Home/_general/img/basket.svg';
 import PersonalAccount from "../PersonalAccount/PersonalAccount";
+import { useGetUserQuery, useLogoutMutation } from "@/entity/users/api";
 
 const Header: React.FC = () => {
   const [isMenuActive, setIsMenuActive] = useState(false);
@@ -20,13 +21,15 @@ const Header: React.FC = () => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
+  const {isAccountOpen} = useSelector((state: RootState) => state.account);
 
   const dispatch = useDispatch<AppDispatch>();
-  const user = useSelector((state: RootState) => state.user);
+  const {data: user} = useGetUserQuery();
 
   // RTK Query хуки
-  const { data: cartItems = [] } = useGetCartQuery(user.id ?? '', { skip: !user.id });
-  const { data: likedItems = [] } = useGetLikedQuery(user.id ?? '', { skip: !user.id });
+  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+  const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
+  const [logout] = useLogoutMutation();
 
   const totalLikedItems = likedItems.length;
   const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -61,7 +64,7 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
+    logout()
   };
 
   return (
@@ -122,7 +125,7 @@ const Header: React.FC = () => {
               <img src={search} alt="search" />
             </button>
 
-            {user.id ? (
+            {user?.id ? (
               <div className="header__user-info">
                 <button onClick={handleLogout} className="header__button header__logout" title="Выйти">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -158,7 +161,7 @@ const Header: React.FC = () => {
               )}
             </Link>
 
-            {user.type === 'admin' && (
+            {user?.type === 'admin' && (
               <Link to="/admin" className="header__button" id="admin__container1" title="Админка">
                 <span role="img" aria-label="admin" style={{fontSize: 22, color: '#CA354F', fontWeight: 700}}>⚙️</span>
               </Link>
@@ -166,7 +169,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      {user.isAccountOpen && <PersonalAccount/>}
+      {isAccountOpen && <PersonalAccount/>}
     </>
   );
 };

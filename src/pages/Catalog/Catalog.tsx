@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/main/store";
 
 export const Catalog = () => {
-  const user = useSelector((state: RootState) => state.user)
+  const { isAccountOpen } = useSelector((state: RootState) => state.account);
 
   return (
     <div className="catalog container">
@@ -25,7 +25,7 @@ export const Catalog = () => {
         <ProductList/>
       </div>
 
-      {user.isAccountOpen && (
+      {isAccountOpen && (
         <PersonalAccount/>
       )}
     </div>

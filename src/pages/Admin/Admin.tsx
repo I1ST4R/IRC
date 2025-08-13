@@ -1,14 +1,13 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/main/store";
 import { Order } from "@/entity/order/types";
 import { useGetOrdersQuery } from "@/entity/order/api";
+import { useGetUserQuery } from "@/entity/users/api";
 
 const Admin: React.FC = () => {
   const { data: orders = [], isLoading } = useGetOrdersQuery();
-  const user = useSelector((state: RootState) => state.user);
+  const { data: user } = useGetUserQuery();
 
-  if (user.type !== "admin") {
+  if (user?.type !== "admin") {
     return <div className="admin-no-access">У вас нет прав доступа</div>;
   }
 

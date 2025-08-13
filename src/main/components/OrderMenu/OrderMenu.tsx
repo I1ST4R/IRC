@@ -8,6 +8,7 @@ import "./_order-menu.scss";
 import { useGetCartQuery } from "@/entity/cart/api";
 import { changeOrderInfo } from "@/entity/order/slice";
 import { useAppDispatch } from "@/main/store";
+import { useGetUserQuery } from "@/entity/users/api";
 
 interface OrderMenuProps {
   handleSubmit?: () => void;
@@ -20,9 +21,9 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const promo = useSelector((state: RootState) => state.promo);
   const order = useSelector((state: RootState) => state.orders.current);
   const certificate = useSelector((state: RootState) => state.certificate);
-  const user = useSelector((state: RootState) => state.user);
+  const { data: user } = useGetUserQuery();
   
-  const { data: cartItems = [] } = useGetCartQuery(user.id ?? '', { skip: !user.id });
+  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
   const [validatePromo] = useValidatePromoCodeMutation();
   const [validateCertificate] = useValidateCertificateCodeMutation();
 
@@ -34,7 +35,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const checkedCartItems = cartItems.filter((item) => item.isChecked);
 
   useEffect(() => {
-    if (!user.id || !cartItems.filter((item) => item.isChecked).length) return;
+    if (!user?.id || !cartItems.filter((item) => item.isChecked).length) return;
 
     dispatch(
       changeOrderInfo({
@@ -52,7 +53,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
     );
   }, [
     dispatch,
-    user.id,
+    user?.id,
     promo.promo.valid,
     certificate.certificate.valid,
     cartItems,
@@ -112,7 +113,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
     }
   };
 
-  if (!user.id) {
+  if (!user?.id) {
     return (
       <div className="order-menu">
         <div className="order-menu__error">Пожалуйста, войдите в систему</div>

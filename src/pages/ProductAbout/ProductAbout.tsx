@@ -4,30 +4,32 @@ import { RootState, AppDispatch } from "@/main/store";
 import personalAcc from "@/pages/Home/_general/img/personal-acc.svg";
 import PersonalAccount from "@/main/App/PersonalAccount/PersonalAccount";
 import { Tag } from "@/entity/tag/types";
-import { openAccount } from "@/entity/users/slice";
+import { openAccount } from "@/entity/account/slice";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 import { useAddToCartMutation, useGetCartQuery } from "@/entity/cart/api";
 import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
 import { useGetProductByIdQuery } from "@/entity/product/api";
+import { useGetUserQuery } from "@/entity/users/api";
 
 export const ProductAbout = () => {
   const { id } = useParams();
-  const user = useSelector((state: RootState) => state.user);
+  const {data: user} = useGetUserQuery();
   const {data: product, isLoading, error} = useGetProductByIdQuery(id ?? "", {skip: !id});
-  const {data: cartItems = []} = useGetCartQuery(user.id ?? "", {skip: !user.id});
-  const {data: likedItems = []} = useGetLikedQuery(user.id ?? "", {skip: !user.id});
+  const {data: cartItems = []} = useGetCartQuery(user?.id ?? "", {skip: !user?.id});
+  const {data: likedItems = []} = useGetLikedQuery(user?.id ?? "", {skip: !user?.id});
   const [addToCart] = useAddToCartMutation();
   const [removeFromLiked] = useRemoveFromLikedMutation();
   const [addToLiked] = useAddToLikedMutation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const {isAccountOpen} = useSelector((state: RootState) => state.account);
 
   const isInCart = () => cartItems.some((item) => item.product.id === product?.id);
   const isLiked = () => likedItems.some((item) => item.id === product?.id);
 
   const handleCartClick = async () => {
     if (!product) return;
-    if (!user.id) {
+    if (!user?.id) {
       dispatch(openAccount())
       return;
     }
@@ -97,7 +99,7 @@ export const ProductAbout = () => {
               </span>
             </div>
 
-            {!user.id ? (
+            {!user?.id ? (
               <div className="product-about__auth-block">
                 <img src={personalAcc} alt="personal-acc" />
                 <span className="product-about__auth-text">
@@ -168,7 +170,7 @@ export const ProductAbout = () => {
           </div>
         </div>
       </div>
-      {user.isAccountOpen && (
+      {isAccountOpen && (
         <PersonalAccount/>
       )}
     </div>

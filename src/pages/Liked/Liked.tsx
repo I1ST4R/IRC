@@ -5,22 +5,23 @@ import { RootState } from "../../main/store";
 import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
+import { useGetUserQuery } from "@/entity/users/api";
 
 export const Liked = () => {
-  const user = useSelector((state: RootState) => state.user);
-  const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user.id ?? "",{skip: !user.id});
+  const { data: user } = useGetUserQuery();
+  const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user?.id ?? "",{skip: !user?.id});
   const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
   const [removeFromLiked] = useRemoveFromLikedMutation();
 
   const handleRemoveItem = (productId: string) => {
-    if (user.id) removeFromLiked({ userId: user.id, productId })
+    if (user?.id) removeFromLiked({ userId: user.id, productId })
   };
 
   const getTotalItems = () => {
     return likedItems.length;
   };
 
-  if (!user.id) {
+  if (!user?.id) {
     return (
       <div className="cart container">
         <h2 className="cart__title">Избранное</h2>

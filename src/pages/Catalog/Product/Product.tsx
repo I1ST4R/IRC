@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Tag } from "@/entity/tag/types";
 import { useAddToCartMutation, useGetCartQuery } from "@/entity/cart/api";
 import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
+import { useGetUserQuery } from "@/entity/users/api";
 
 interface ProductProps {
   product: ProductType;
@@ -16,9 +17,9 @@ export const Product = ({
   product,
   onAuthRequired,
 }: ProductProps) => {
-  const user = useSelector((state: RootState) => state.user);
-  const {data: cartItems = [], isLoading: isCartLoading, error: cartError} = useGetCartQuery(user.id ?? '', { skip: !user.id });
-  const {data: likedItems = [], isLoading: isLikedLoading, error: likedError} = useGetLikedQuery(user.id ?? '', { skip: !user.id });
+  const { data: user } = useGetUserQuery();
+  const {data: cartItems = [], isLoading: isCartLoading, error: cartError} = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+  const {data: likedItems = [], isLoading: isLikedLoading, error: likedError} = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
   const [removeFromLiked] = useRemoveFromLikedMutation();
   const [addToLiked] = useAddToLikedMutation();
   const [addToCart] = useAddToCartMutation();
@@ -35,7 +36,7 @@ export const Product = ({
   };
 
   const handleLike = async () => {
-    if (!user.id) {
+    if (!user?.id) {
       onAuthRequired?.();
       return;
     }
@@ -46,7 +47,7 @@ export const Product = ({
   };
 
   const handleCartClick = async () => {
-    if (!user.id) {
+    if (!user?.id) {
       onAuthRequired?.();
       return;
     }

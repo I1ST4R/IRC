@@ -4,9 +4,9 @@ import catalog from './catalog.svg';
 import liked from '../../../pages/Home/_general/img/liked.svg';
 import basket from '../../../pages/Home/_general/img/basket.svg';
 import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
-import { AppDispatch, RootState } from '@/main/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { openAccount } from '@/entity/users/slice';
+import { AppDispatch} from '@/main/store';
+import { useDispatch} from 'react-redux';
+import { openAccount } from '@/entity/account/slice';
 
 const BottomMenu: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

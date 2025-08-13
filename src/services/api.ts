@@ -17,6 +17,17 @@ const axiosInstance = axios.create({
   }
 });
 
+const initialUser: User = {
+  id: localStorage.getItem('userId'),
+  login: null,
+  email: null,
+  password: null,
+  type: null,
+  cart: [],
+  liked: [],
+  orders: []
+};
+
 // Auth
 export const login = async (data: LoginData) => {
   try {
@@ -27,13 +38,18 @@ export const login = async (data: LoginData) => {
     if (!user) throw new Error('Пользователь не найден');
     
     if (user.password !== data.password) throw new Error('Неверный пароль');
-
+    if( user.id ) localStorage.setItem('userId', user.id)
     return user as User;
   } catch (error: any) {
     console.error('error in login', error);
     throw error;
   }
 };
+
+export const logout = async () => {
+  localStorage.removeItem('userId');
+  return initialUser
+}
 
 export const register = async (data: RegisterData) => {
   try {
@@ -46,9 +62,10 @@ export const register = async (data: RegisterData) => {
       throw new Error('Такой email уже существует');
     }
 
-     const userData = { ...data, type: "client" };
+    const userData = { ...data, type: "client" };
 
     const response = await axiosInstance.post<User>('/users', userData);
+    if(response.data.id) localStorage.setItem('userId', response.data.id)
     const { password, ...userWithoutPassword } = response.data;
     return userWithoutPassword as User;
   } catch (error: any) {
@@ -71,6 +88,19 @@ export const checkAuth = async (userId: string) => {
     throw error;
   }
 };
+
+export const getUser = async () => {
+  const userId = localStorage.getItem("userId")
+  if(!userId) return initialUser
+  const response = await axiosInstance.get<User[]>(`/users?id=${userId}`);
+
+  if( response.data.length === 0){
+    localStorage.removeItem("userId")
+    return initialUser
+  } 
+
+  return response.data[0]
+}
 
 // Product
 export const getProducts = async (page: number, filter?: FilterParams) => {

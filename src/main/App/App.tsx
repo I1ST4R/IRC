@@ -7,17 +7,15 @@ import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
 import BottomMenu from './BottomMenu/BottomMenu';
 import './_app.scss';
+import { useGetUserQuery } from '@/entity/users/api';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
+  const {data: user} = useGetUserQuery()
 
-  useEffect(() => {
-    if (!user.id) {
-      console.log('[App.tsx] User is null or has no ID, clearing liked.');
-      dispatch(clearLikedOnLogout());
-    }
-  }, [user.id, dispatch]);
+  useEffect(()=>{
+    console.log(user)
+  },[user])
 
   return (
     <div className="app">

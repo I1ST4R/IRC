@@ -14,19 +14,6 @@ export interface User {
   orders: Order[];
 }
 
-export interface UserState {
-  id: string | null;
-  login: string | null;
-  email: string | null;
-  password: string | null;
-  type: "client" | "admin" | null;
-  cart: CartItem[];
-  liked: Product[];
-  isAccountOpen: boolean;
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error: string | null;
-}
-
 export interface AuthResponse {
   user: User;
   token: string;

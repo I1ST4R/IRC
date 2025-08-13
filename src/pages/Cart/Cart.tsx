@@ -1,32 +1,34 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { RootState } from "../../main/store";
 import cartImg from "./cart.svg";
 import cartGarbageIcon from "./cartGarbageIcon.svg";
 import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import OrderMenu from "../../main/components/OrderMenu/OrderMenu";
 import { CartItem } from "@/main/components/CartItem/CartItem";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { openAccount } from "@/entity/users/slice";
+import { openAccount } from "@/entity/account/slice";
 import {
   useGetCartQuery,
   useClearCartMutation,
   useGetCartTotalsQuery
 } from '@/entity/cart/api';
 import { useGetLikedQuery } from "@/entity/liked/api";
+import { useGetUserQuery } from "@/entity/users/api";
+import { RootState } from '@/main/store';
 
 export const Cart: React.FC = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
-  const {data: likedItems = []} = useGetLikedQuery(user.id ?? '', { skip: !user.id });
+  const {data: user} = useGetUserQuery();
+  const {data: likedItems = []} = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
+  const {isAccountOpen} = useSelector((state: RootState) => state.account);
 
   // RTK Query хуки
-  const { data: cartItems = [], isLoading: isCartLoading, error: cartError } = useGetCartQuery(user.id ?? '', { skip: !user.id });
-  const { data: itemsCount = 0 } = useGetCartTotalsQuery(user.id ?? '', { skip: !user.id });
+  const { data: cartItems = [], isLoading: isCartLoading, error: cartError } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+  const { data: itemsCount = 0 } = useGetCartTotalsQuery(user?.id ?? '', { skip: !user?.id });
   const [clearCart] = useClearCartMutation();
 
-  if (!user.id) {
+  if (!user?.id) {
     return (
       <div className="cart container">
         <BreadCrumb
@@ -47,7 +49,7 @@ export const Cart: React.FC = () => {
             , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ в корзину
           </p>
         </div>
-        {user.isAccountOpen && (
+        {isAccountOpen && (
           <PersonalAccount/>
         )}
       </div>
