@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../../../main/store";
-import { useValidatePromoCodeMutation } from "../../../entity/promo/api";
+import { useValidatePromoCodeMutation, useGetPromoCodeQuery } from "../../../entity/promo/api";
 import { useValidateCertificateCodeMutation } from "../../../entity/certificate/api";
 import "./_order-menu.scss";
 import { useGetCartQuery } from "@/entity/cart/api";
@@ -18,7 +18,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const promo = useSelector((state: RootState) => state.promo);
+  const { data: promo } = useGetPromoCodeQuery();
   const order = useSelector((state: RootState) => state.orders.current);
   const certificate = useSelector((state: RootState) => state.certificate);
   const { data: user } = useGetUserQuery();
@@ -48,8 +48,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
     const signature = JSON.stringify({
       userId: user.id,
       items: checkedCartItems.map((i) => ({ id: i.product.id, q: i.quantity })),
-      promoValid: promo.promo.valid,
-      promoId: promo.promo.id,
+      promoValid: promo?.valid,
+      promoId: promo?.id,
       certValid: certificate.certificate.valid,
       certId: certificate.certificate.id,
     });
@@ -61,8 +61,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodePercent: promo.promo.valid ? promo.promo.discount : null,
-        promocodeId: promo.promo.id,
+        promocodePercent: promo ? promo?.discount : null,
+        promocodeId: promo?.id,
         certificateDiscount: certificate.certificate.valid
           ? certificate.certificate.amount
           : null,
@@ -73,17 +73,17 @@ export const OrderMenu = (props: OrderMenuProps) => {
     dispatch,
     user?.id,
     checkedCartItems,
-    promo.promo.valid,
-    promo.promo.id,
+    promo?.valid,
+    promo?.id,
     certificate.certificate.valid,
     certificate.certificate.id,
   ]);
 
   useEffect(() => {
-    if (promo.promo.valid) {
+    if (promo?.valid) {
       setPromoTouched(false);
     }
-  }, [promo.promo.valid]);
+  }, [promo?.valid]);
 
   useEffect(() => {
     if (certificate.certificate.valid) {
@@ -140,6 +140,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
   }
 
   if (!order || !order.total) return;
+
+  console.log(promo)
 
   return (
     <div className="order-menu">
@@ -215,7 +217,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
       </div>
 
       <div className="order-menu__item">
-        {!promo.promo.valid && (
+        {!promo?.id && (
           <div className="order-menu__field">
             <input
               type="text"
@@ -223,16 +225,16 @@ export const OrderMenu = (props: OrderMenuProps) => {
               onChange={handlePromocodeChange}
               onBlur={handlePromocodeBlur}
               placeholder="Промокод"
-              className={`order-menu__input ${promoTouched && promocode && !promo.promo.valid ? 'order-menu__input--error' : ''}`}
+              className={`order-menu__input ${promoTouched && promocode && !promo?.valid ? 'order-menu__input--error' : ''}`}
             />
-            {promoTouched && promocode && !promo.promo.valid && (
+            {promoTouched && !promo && (
               <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-                {promo.error || "Промокод недействителен"}
+                {"Промокод недействителен"}
               </div>
             )}
           </div>
         )}
-        {promo.promo.valid && (
+        {promo?.id && (
           <div className="order-menu__field" style={{ color: '#CA354F' }}>
             Promocode activated
           </div>

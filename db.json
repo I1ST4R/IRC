@@ -25,17 +25,17 @@
         {
           "productId": "6",
           "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         },
         {
           "productId": "8",
           "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         },
         {
           "productId": "4",
           "quantity": 1,
-          "isChecked": true
+          "isChecked": false
         }
       ],
       "liked": [
@@ -980,7 +980,7 @@
   "promo": [
     {
       "id": "1",
-      "used": true,
+      "used": false,
       "code": "PROMO10",
       "discount": 0.1
     },
@@ -994,7 +994,7 @@
   "certificates": [
     {
       "id": "1",
-      "used": true,
+      "used": false,
       "code": "SERTIFICATE1000",
       "amount": 1000
     },

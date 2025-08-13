@@ -434,17 +434,19 @@ export const removeFromLiked = async (userId: string, productId: string) => {
 };
 
 // Promo
+
+const initialPromo : Promo = {
+  id: null,
+  valid: false,
+  code: null,
+  discount: null 
+}
 export const validatePromo = async (code: string) => {
   try {
     const upperCode = code.toUpperCase();
     
     const response = await axiosInstance.get(`/promo?code=${upperCode}`);
-    let promo: Promo = {
-      id: null,
-      valid: false, 
-      code: null, 
-      discount: null 
-    }
+    let promo = initialPromo
     if (response.data && response.data.length > 0 && !response.data[0].used) {
       promo = {
         id: response.data[0].id,
@@ -452,6 +454,7 @@ export const validatePromo = async (code: string) => {
         code: response.data[0].code, 
         discount: response.data[0].discount 
       } 
+      localStorage.setItem("promoId", promo.id ?? "")
       return promo
     }
     return promo;
@@ -466,11 +469,29 @@ export const changeUsedPromo = async (id: string) => {
     const response = await axiosInstance.get(`/promo?id=${id}`);
     if (response.data && response.data.length > 0) {
       await axiosInstance.patch(`/promo/${id}`, { used: true });
+      localStorage.removeItem("promoId")
     }
+    return initialPromo
   } catch (error: any) {
     console.error('error in changeUsedPromo', error);
     throw error;
   }
+}
+
+export const getPromo = async () => {
+  const promoId = localStorage.getItem("promoId")
+  if(!promoId){
+    console.log(1)
+    return initialPromo
+  } 
+  const response = await axiosInstance.get<Promo[]>(`/promo?id=${promoId}`)
+  if(response.data.length === 0) {
+    localStorage.removeItem("promoId")
+    console.log(1)
+    return initialPromo
+  }
+
+  return response.data[0]
 }
 
 // Certificate
