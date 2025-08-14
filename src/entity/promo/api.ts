@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { changeUsedPromo, getPromo, validatePromo } from '../../services/api';
+import { getPromo, validatePromo } from '../../services/api';
 import { Promo } from './types';
 
 export const promoApi = createApi({
@@ -10,13 +10,6 @@ export const promoApi = createApi({
     validatePromoCode: build.mutation<Promo, string>({
       queryFn: (code) =>
         validatePromo(code)
-          .then((data) => ({ data }))
-          .catch((error) => ({ error })),
-      invalidatesTags: ['Promo'],
-    }),
-    changeUsedPromoCode: build.mutation<Promo, string>({
-      queryFn: (id) =>
-        changeUsedPromo(id)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       invalidatesTags: ['Promo'],
@@ -33,6 +26,5 @@ export const promoApi = createApi({
 
 export const { 
   useValidatePromoCodeMutation,
-  useChangeUsedPromoCodeMutation,
   useGetPromoCodeQuery,
  } = promoApi;
