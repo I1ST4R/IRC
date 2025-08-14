@@ -70,8 +70,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
     certificate?.id,
   ]);
 
-  console.log(certificate)
-
   useEffect(() => { promo?.id ? setPromoTouched(false) : "" }, [promo?.id]);
   useEffect(() => { certificate?.id ? setSertTouched(false): "" }, [certificate?.id]);
 

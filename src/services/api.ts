@@ -584,14 +584,6 @@ export const addOrder = async (order: Order ) => {
     const updatedOrders = Array.isArray(user.orders) ? [...user.orders, createdOrderId] : [createdOrderId];
     await axiosInstance.patch(`/users/${user.id}`, { orders: updatedOrders });
 
-    //remove choosen cartItem from cart
-    const cartItemsDbId = cartItemsDb.map((cartItemDb: CartItemDb) => {
-      return cartItemDb.productId
-    })
-    for (const cartItemDbId of cartItemsDbId) {
-      await removeFromCart(order.userId, cartItemDbId);
-    }
-
     //change field used for promo + sertificate if exist
     if(order.promocodeId) await changeUsedPromo(order.promocodeId)
     if(order.certificateId) await changeUsedCertificate(order.certificateId)

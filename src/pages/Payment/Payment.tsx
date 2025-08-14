@@ -1,4 +1,7 @@
+import { useRemoveFromCartMutation } from "@/entity/cart/api";
+import { CartItem } from "@/entity/cart/types";
 import { useAddOrderMutation } from "@/entity/order/api";
+import { useGetUserQuery } from "@/entity/users/api";
 import { RootState } from "@/main/store";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -6,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Payment = () => {
   const order = useSelector((state: RootState) => state.orders.current);
+  const {data: user} = useGetUserQuery()
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -13,6 +17,8 @@ export const Payment = () => {
   const navigate = useNavigate();
 
   const [createOrder] = useAddOrderMutation();
+
+  const [removeFromCart] = useRemoveFromCartMutation()
 
   if (!order || !order.totalWithDiscount) {
     return (
@@ -54,13 +60,26 @@ export const Payment = () => {
     }
   };
 
+  const removeCartItems = async () => {
+    const cartItemsId = order.cartItems.map((cartItem: CartItem) => {
+      return cartItem.product.id
+    })
+    for (const cartItemId of cartItemsId) {
+      await removeFromCart({userId: user?.id! ,productId: cartItemId});
+    }
+  }
+
   const handlePaymentCreate = () => {
     if (order.recipient.paymentMethod === "SBP") {
       validatePhone();
     } else validateCard();
 
+
+    //() => navigate("/cart")
     if (!phoneError && !cardError) {
-      createOrder(order).then(() => navigate("/cart"));
+      createOrder(order).then(() => {
+        removeCartItems().then(() => navigate("/cart"))
+      })
       setPhoneError("");
       setCardError("");
     }

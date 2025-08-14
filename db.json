@@ -8,7 +8,7 @@
       "type": "admin",
       "cart": [
         {
-          "productId": "8",
+          "productId": "3",
           "quantity": 1,
           "isChecked": false
         },
@@ -64,7 +64,9 @@
         "bdf4",
         "118c",
         "d965",
-        "f272"
+        "f272",
+        "634e",
+        "6a0a"
       ]
     },
     {
@@ -1056,6 +1058,76 @@
         "email": "ewanreschetiloff@yandex.ru",
         "deliveryDate": "2025-08-25",
         "comment": "ываыва"
+      }
+    },
+    {
+      "id": "634e",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "8",
+          "isChecked": true,
+          "quantity": 1
+        },
+        {
+          "productId": "4",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 7500,
+      "totalWithDiscount": 7200,
+      "discount": 800,
+      "promocodeDiscount": null,
+      "promocodePercent": null,
+      "promocodeId": null,
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "zalupa zalupa",
+        "phone": "79190024147",
+        "address": "asx",
+        "email": "ewanreschetiloff@yandex.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "Asdcfcascas"
+      }
+    },
+    {
+      "id": "6a0a",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "1",
+          "isChecked": true,
+          "quantity": 1
+        },
+        {
+          "productId": "2",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 3500,
+      "totalWithDiscount": 3500,
+      "discount": 500,
+      "promocodeDiscount": null,
+      "promocodePercent": null,
+      "promocodeId": null,
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "zalupa zalupa",
+        "phone": "79190024147",
+        "address": "dcvsdv",
+        "email": "huesosob@yandex.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "sdvsdvs"
       }
     }
   ]

@@ -37,7 +37,7 @@ export const Liked = () => {
           </p>
         </div>
         {isPersonalAccountOpen && (
-          <PersonalAccount /* onClose={() => setIsPersonalAccountOpen(false)} */ />
+          <PersonalAccount/>
         )}
       </div>
     );
