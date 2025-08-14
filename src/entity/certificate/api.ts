@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
+  getCertificate,
   validateCertificate
 } from '../../services/api';
 import { Certificate } from './types';
@@ -16,7 +17,17 @@ export const certificateApi = createApi({
           .catch((error) => ({ error })),
       invalidatesTags: ['Certificate'],
     }),
+    getCertificateCode: build.query<Certificate, void>({
+      queryFn: () =>
+        getCertificate()
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
+      providesTags: ['Certificate'],
+    }),
   }),
 });
 
-export const { useValidateCertificateCodeMutation } = certificateApi; 
+export const { 
+  useValidateCertificateCodeMutation, 
+  useGetCertificateCodeQuery,
+} = certificateApi; 

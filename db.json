@@ -8,11 +8,6 @@
       "type": "admin",
       "cart": [
         {
-          "productId": "6",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
           "productId": "8",
           "quantity": 1,
           "isChecked": false
@@ -68,7 +63,8 @@
         "7a9c",
         "bdf4",
         "118c",
-        "d965"
+        "d965",
+        "f272"
       ]
     },
     {
@@ -972,7 +968,7 @@
     },
     {
       "id": "2",
-      "used": false,
+      "used": true,
       "code": "PROMO20",
       "discount": 0.2
     }
@@ -980,7 +976,7 @@
   "certificates": [
     {
       "id": "1",
-      "used": false,
+      "used": true,
       "code": "SERTIFICATE1000",
       "amount": 1000
     },
@@ -1030,6 +1026,36 @@
         "email": "ewanreschetiloff@yandex.ru",
         "deliveryDate": "2025-08-25",
         "comment": "фыасфыс"
+      }
+    },
+    {
+      "id": "f272",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "6",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 1800,
+      "totalWithDiscount": 700,
+      "discount": 300,
+      "promocodeDiscount": 300,
+      "promocodePercent": 0.2,
+      "promocodeId": "2",
+      "certificateDiscount": 1000,
+      "deliveryCost": 500,
+      "certificateId": "1",
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "этоя опять",
+        "phone": "79190024147",
+        "address": "ва",
+        "email": "ewanreschetiloff@yandex.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "ываыва"
       }
     }
   ]

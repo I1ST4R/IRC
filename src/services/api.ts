@@ -471,7 +471,6 @@ export const changeUsedPromo = async (id: string) => {
       await axiosInstance.patch(`/promo/${id}`, { used: true });
       localStorage.removeItem("promoId")
     }
-    return initialPromo
   } catch (error: any) {
     console.error('error in changeUsedPromo', error);
     throw error;
@@ -480,14 +479,10 @@ export const changeUsedPromo = async (id: string) => {
 
 export const getPromo = async () => {
   const promoId = localStorage.getItem("promoId")
-  if(!promoId){
-    console.log(1)
-    return initialPromo
-  } 
+  if(!promoId) return initialPromo
   const response = await axiosInstance.get<Promo[]>(`/promo?id=${promoId}`)
   if(response.data.length === 0) {
     localStorage.removeItem("promoId")
-    console.log(1)
     return initialPromo
   }
 
@@ -495,16 +490,18 @@ export const getPromo = async () => {
 }
 
 // Certificate
+
+const initialCertificate: Certificate = {
+  id: null,
+  valid: false,
+  code: null,
+  amount: null
+}
 export const validateCertificate = async (code: string) => {
   try {
     const upperCode = code.toUpperCase();
     const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
-    let certificate: Certificate = {
-      id: null,
-      valid: false,
-      code: null,
-      amount: null
-    };
+    let certificate = initialCertificate
     if (response.data && response.data.length > 0 && !response.data[0].used) {
       certificate = {
         id: response.data[0].id,
@@ -512,6 +509,7 @@ export const validateCertificate = async (code: string) => {
         code: response.data[0].code,
         amount: response.data[0].amount
       };
+      localStorage.setItem("certificateId", certificate.id ?? "")
       return certificate;
     }
     return certificate;
@@ -525,12 +523,26 @@ export const changeUsedCertificate = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/certificates?id=${id}`);
     if (response.data && response.data.length > 0) {
+      localStorage.removeItem("certificateId")
       await axiosInstance.patch(`/certificates/${id}`, { used: true });
     }
   } catch (error: any) {
     console.error('error in changeUsedCertificate', error);
     throw error;
   }
+}
+
+export const getCertificate = async () => {
+  const certificateId = localStorage.getItem("certificateId")
+  if(!certificateId) return initialCertificate
+  const response = await axiosInstance.get<Certificate[]>(`/certificates?id=${certificateId}`)
+
+  if(response.data.length === 0) {
+    localStorage.removeItem("certificateId")
+    return initialCertificate
+  }
+
+  return response.data[0]
 }
 
 // Orders

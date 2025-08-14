@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../../../main/store";
 import { useValidatePromoCodeMutation, useGetPromoCodeQuery } from "../../../entity/promo/api";
-import { useValidateCertificateCodeMutation } from "../../../entity/certificate/api";
+import { useGetCertificateCodeQuery, useValidateCertificateCodeMutation } from "../../../entity/certificate/api";
 import "./_order-menu.scss";
 import { useGetCartQuery } from "@/entity/cart/api";
 import { changeOrderInfo } from "@/entity/order/slice";
@@ -18,14 +18,11 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { data: promo } = useGetPromoCodeQuery();
   const order = useSelector((state: RootState) => state.orders.current);
-  const certificate = useSelector((state: RootState) => state.certificate);
   const { data: user } = useGetUserQuery();
-
-  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? "", {
-    skip: !user?.id,
-  });
+  const { data: certificate } = useGetCertificateCodeQuery()
+  const { data: promo } = useGetPromoCodeQuery();
+  const { data: cartItems = [] } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
   const [validatePromo] = useValidatePromoCodeMutation();
   const [validateCertificate] = useValidateCertificateCodeMutation();
 
@@ -48,10 +45,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
     const signature = JSON.stringify({
       userId: user.id,
       items: checkedCartItems.map((i) => ({ id: i.product.id, q: i.quantity })),
-      promoValid: promo?.valid,
       promoId: promo?.id,
-      certValid: certificate.certificate.valid,
-      certId: certificate.certificate.id,
+      certId: certificate?.id,
     });
 
     if (signature === lastPayloadSignatureRef.current) return;
@@ -61,35 +56,24 @@ export const OrderMenu = (props: OrderMenuProps) => {
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodePercent: promo ? promo?.discount : null,
+        promocodePercent: promo?.id ? promo?.discount : null,
         promocodeId: promo?.id,
-        certificateDiscount: certificate.certificate.valid
-          ? certificate.certificate.amount
-          : null,
-        certificateId: certificate.certificate.id,
+        certificateDiscount: certificate?.id ? certificate.amount : null,
+        certificateId: certificate?.id,
       })
     );
   }, [
     dispatch,
     user?.id,
     checkedCartItems,
-    promo?.valid,
     promo?.id,
-    certificate.certificate.valid,
-    certificate.certificate.id,
+    certificate?.id,
   ]);
 
-  useEffect(() => {
-    if (promo?.valid) {
-      setPromoTouched(false);
-    }
-  }, [promo?.valid]);
+  console.log(certificate)
 
-  useEffect(() => {
-    if (certificate.certificate.valid) {
-      setSertTouched(false);
-    }
-  }, [certificate.certificate.valid]);
+  useEffect(() => { promo?.id ? setPromoTouched(false) : "" }, [promo?.id]);
+  useEffect(() => { certificate?.id ? setSertTouched(false): "" }, [certificate?.id]);
 
   const isOrderPage = location.pathname === "/order";
 
@@ -140,8 +124,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
   }
 
   if (!order || !order.total) return;
-
-  console.log(promo)
 
   return (
     <div className="order-menu">
@@ -239,7 +221,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
             Promocode activated
           </div>
         )}
-        {!certificate.certificate.valid && (
+        {!certificate?.id && (
           <div className="order-menu__field">
             <input
               type="text"
@@ -247,16 +229,16 @@ export const OrderMenu = (props: OrderMenuProps) => {
               onChange={handleSertificateChange}
               onBlur={handleSertificateBlur}
               placeholder="Сертификат"
-              className={`order-menu__input ${sertTouched && sertificate && !certificate.certificate.valid ? 'order-menu__input--error' : ''}`}
+              className={`order-menu__input ${sertTouched && sertificate && !certificate?.id ? 'order-menu__input--error' : ''}`}
             />
-            {sertTouched && sertificate && !certificate.certificate.valid && (
+            {sertTouched && !certificate?.id && (
               <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
-                {certificate.error || "Сертификат недействителен"}
+                {"Сертификат недействителен"}
               </div>
             )}
           </div>
         )}
-        {certificate.certificate.valid && (
+        {certificate?.id && (
           <div className="order-menu__field" style={{ color: '#CA354F' }}>
             Certificate activated
           </div>

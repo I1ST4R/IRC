@@ -8,8 +8,6 @@ import productsReducer from '../entity/product/slice.ts';
 import filterReducer from '../entity/productFilter/slice.ts';
 import likedReducer from '../entity/liked/slice.ts';
 import accountReducer from '../entity/account/slice.ts';
-// import promoReducer from '../entity/promo/slice.ts';
-import certificateReducer from '../entity/certificate/slice.ts';
 import ordersReducer from '../entity/order/slice';
 // APIs
 import { cartApi } from '../entity/cart/api';
@@ -22,12 +20,9 @@ import { promoApi } from '../entity/promo/api';
 import { tagApi } from '../entity/tag/api';
 import { usersApi } from '../entity/users/api';
 //State Interface
-// import { UserState } from '../entity/users/types.ts'
-import { CertificateState } from '../entity/certificate/types.ts'
 import { LikedState } from '../entity/liked/types.ts'
 import { FilterState } from '../entity/productFilter/types.ts'
 import { ProductsState } from '../entity/product/types.ts'
-// import { PromoState } from '../entity/promo/types.ts'
 import { OrdersState } from '../entity/order/types';
 import { AccountState } from '@/entity/account/types.ts';
 
@@ -37,8 +32,6 @@ export const store = configureStore({
     filter: filterReducer,
     liked: likedReducer,
     account: accountReducer,
-    // promo: promoReducer,
-    certificate: certificateReducer,
     orders: ordersReducer,
     [cartApi.reducerPath]: cartApi.reducer,
     [certificateApi.reducerPath]: certificateApi.reducer,
@@ -67,7 +60,6 @@ export type RootState = {
   filter: FilterState;
   liked: LikedState;
   account: AccountState;
-  certificate: CertificateState;
   orders: OrdersState;
 };
 
