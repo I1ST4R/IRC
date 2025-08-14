@@ -8,24 +8,9 @@
       "type": "admin",
       "cart": [
         {
-          "productId": "1",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "2",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "3",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
           "productId": "6",
           "quantity": 1,
-          "isChecked": false
+          "isChecked": true
         },
         {
           "productId": "8",
@@ -82,7 +67,8 @@
         "c520",
         "7a9c",
         "bdf4",
-        "118c"
+        "118c",
+        "d965"
       ]
     },
     {
@@ -980,7 +966,7 @@
   "promo": [
     {
       "id": "1",
-      "used": false,
+      "used": true,
       "code": "PROMO10",
       "discount": 0.1
     },
@@ -1005,5 +991,46 @@
       "amount": 2000
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "d965",
+      "userId": "anpri65",
+      "cartItems": [
+        {
+          "productId": "1",
+          "isChecked": true,
+          "quantity": 1
+        },
+        {
+          "productId": "2",
+          "isChecked": true,
+          "quantity": 1
+        },
+        {
+          "productId": "3",
+          "isChecked": true,
+          "quantity": 1
+        }
+      ],
+      "total": 7500,
+      "totalWithDiscount": 6350,
+      "discount": 1000,
+      "promocodeDiscount": 650,
+      "promocodePercent": 0.1,
+      "promocodeId": "1",
+      "certificateDiscount": null,
+      "deliveryCost": 500,
+      "certificateId": null,
+      "recipient": {
+        "deliveryMethod": "courier",
+        "paymentMethod": "SBP",
+        "fullName": "мистер пипися",
+        "phone": "79190024147",
+        "address": "z",
+        "email": "ewanreschetiloff@yandex.ru",
+        "deliveryDate": "2025-08-25",
+        "comment": "фыасфыс"
+      }
+    }
+  ]
 }

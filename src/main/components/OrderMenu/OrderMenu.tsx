@@ -227,7 +227,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
               placeholder="Промокод"
               className={`order-menu__input ${promoTouched && promocode && !promo?.valid ? 'order-menu__input--error' : ''}`}
             />
-            {promoTouched && !promo && (
+            {promoTouched && !promo?.id && (
               <div style={{ color: "red", fontSize: "13px", marginTop: "4px" }}>
                 {"Промокод недействителен"}
               </div>
