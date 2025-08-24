@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { validatePromo } from '@/services/api';
-import { PromoState } from '../promo/types'
+// promo/slice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PromoState, Promo } from './types';
 
 const initialState: PromoState = {
   promo: {
@@ -13,19 +13,6 @@ const initialState: PromoState = {
   error: null
 };
 
-export const validatePromoCode = createAsyncThunk(
-  'promo/validate',
-  async (code: string) => {
-    try {
-      const result = await validatePromo(code);
-      return result;
-    } catch (error) {
-      console.error('Error validating promo:', error);
-      throw error;
-    }
-  }
-);
-
 const promoSlice = createSlice({
   name: 'promo',
   initialState,
@@ -36,28 +23,31 @@ const promoSlice = createSlice({
       state.promo.discount = null;
       state.promo.valid = false;
       state.error = null;
+    },
+    
+    validatePromoRequest: (state, action: PayloadAction<string>) => {
+      state.loading = 'pending';
+      state.error = null;
+    },
+    
+    validatePromoSuccess: (state, action: PayloadAction<Promo>) => {
+      state.loading = 'succeeded';
+      state.promo = action.payload;
+      state.error = null;
+    },
+    
+    validatePromoFailure: (state, action: PayloadAction<string>) => {
+      state.loading = 'failed';
+      state.error = action.payload;
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(validatePromoCode.pending, (state) => {
-        state.loading = 'pending';
-        state.error = null;
-      })
-      .addCase(validatePromoCode.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-          state.promo.valid = action.payload.valid
-          state.promo.id = action.payload.id;
-          state.promo.code = action.payload.code;
-          state.promo.discount = action.payload.discount;
-          state.error = null;
-      })
-      .addCase(validatePromoCode.rejected, (state, action) => {
-        state.loading = 'failed';
-        state.error = action.error.message || 'Ошибка при проверке промокода';
-      });
   }
 });
 
-export const { clearPromo } = promoSlice.actions;
-export default promoSlice.reducer; 
+export const { 
+  clearPromo, 
+  validatePromoRequest, 
+  validatePromoSuccess, 
+  validatePromoFailure 
+} = promoSlice.actions;
+
+export default promoSlice.reducer;

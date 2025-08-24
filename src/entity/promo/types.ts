@@ -10,3 +10,9 @@ export interface PromoState {
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }
+
+export interface ApiError {
+  message: string;
+  code?: number;
+  status?: string;
+}
