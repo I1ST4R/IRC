@@ -1,19 +1,16 @@
-// promo/saga.ts
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { validatePromo } from '@/services/api';
 import { 
   validatePromoSuccess, 
   validatePromoFailure 
 } from './slice';
-import type { Promo, ApiError } from './types';
+import type { Promo} from './types';
 
-// Тип для action
 interface ValidatePromoAction {
   type: string;
   payload: string;
 }
 
-// Вспомогательная функция для обработки ошибок
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -25,7 +22,6 @@ function getErrorMessage(error: unknown): string {
   return 'Неизвестная ошибка при проверке промокода';
 }
 
-// Worker saga
 function* validatePromoSaga(action: ValidatePromoAction): Generator<unknown, void, Promo> {
   try {
     const result: Promo = yield call(validatePromo, action.payload);
@@ -37,7 +33,6 @@ function* validatePromoSaga(action: ValidatePromoAction): Generator<unknown, voi
   }
 }
 
-// Watcher saga
 export function* promoSaga(): Generator<unknown, void, unknown> {
   yield takeEvery('promo/validatePromoRequest', validatePromoSaga);
 }
