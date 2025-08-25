@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, CallEffect, PutEffect, TakeEffect, ForkEffect } from 'redux-saga/effects';
 import { getTagsById } from '../../services/api';
 import { 
   fetchTagsSuccess, 
@@ -11,6 +11,15 @@ interface FetchTagsAction {
   payload: string[];
 }
 
+type FetchTagsEffects =
+  | CallEffect<Tag[]>
+  | PutEffect<{ type: string; payload: Tag[] }> 
+  | PutEffect<{ type: string; payload: string }>; 
+
+type FetchTagsSaga = Generator<FetchTagsEffects, void, Tag[]>;
+
+type TagsWatcherSaga = Generator<ForkEffect, void, unknown>;
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -22,7 +31,7 @@ function getErrorMessage(error: unknown): string {
   return 'Failed to fetch tags';
 }
 
-function* fetchTagsSaga(action: FetchTagsAction): Generator<unknown, void, Tag[]> {
+function* fetchTagsSaga(action: FetchTagsAction): FetchTagsSaga {
   try {
     const tags: Tag[] = yield call(getTagsById, action.payload);
     yield put(fetchTagsSuccess(tags));
@@ -33,6 +42,6 @@ function* fetchTagsSaga(action: FetchTagsAction): Generator<unknown, void, Tag[]
   }
 }
 
-export function* tagsSaga(): Generator<unknown, void, unknown> {
+export function* tagsSaga(): TagsWatcherSaga {
   yield takeEvery('tags/fetchTagsRequest', fetchTagsSaga);
 }

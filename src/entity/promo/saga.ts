@@ -1,15 +1,27 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, CallEffect, PutEffect, ForkEffect } from 'redux-saga/effects';
 import { validatePromo } from '@/services/api';
 import { 
   validatePromoSuccess, 
   validatePromoFailure 
 } from './slice';
-import type { Promo} from './types';
+import type { Promo } from './types';
 
 interface ValidatePromoAction {
   type: string;
   payload: string;
 }
+
+// Точные типы эффектов для worker саги
+type ValidatePromoEffects =
+  | CallEffect<Promo> // call возвращает Promo
+  | PutEffect<{ type: string; payload: Promo }> // для validatePromoSuccess
+  | PutEffect<{ type: string; payload: string }>; // для validatePromoFailure
+
+// Точный тип для worker саги
+type ValidatePromoSaga = Generator<ValidatePromoEffects, void, Promo>;
+
+// Точный тип для watcher саги
+type PromoWatcherSaga = Generator<ForkEffect, void, unknown>;
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -22,7 +34,7 @@ function getErrorMessage(error: unknown): string {
   return 'Неизвестная ошибка при проверке промокода';
 }
 
-function* validatePromoSaga(action: ValidatePromoAction): Generator<unknown, void, Promo> {
+function* validatePromoSaga(action: ValidatePromoAction): ValidatePromoSaga {
   try {
     const result: Promo = yield call(validatePromo, action.payload);
     yield put(validatePromoSuccess(result));
@@ -33,6 +45,6 @@ function* validatePromoSaga(action: ValidatePromoAction): Generator<unknown, voi
   }
 }
 
-export function* promoSaga(): Generator<unknown, void, unknown> {
+export function* promoSaga(): PromoWatcherSaga {
   yield takeEvery('promo/validatePromoRequest', validatePromoSaga);
 }

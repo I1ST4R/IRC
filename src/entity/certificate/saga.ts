@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, CallEffect, PutEffect, ForkEffect } from 'redux-saga/effects';
 import { validateCertificate } from '@/services/api';
 import { 
   validateCertificateSuccess, 
@@ -11,6 +11,18 @@ interface ValidateCertificateAction {
   payload: string;
 }
 
+// Точные типы эффектов для worker саги
+type ValidateCertificateEffects =
+  | CallEffect<Certificate> // call возвращает Certificate
+  | PutEffect<{ type: string; payload: Certificate }> // для validateCertificateSuccess
+  | PutEffect<{ type: string; payload: string }>; // для validateCertificateFailure
+
+// Точный тип для worker саги
+type ValidateCertificateSaga = Generator<ValidateCertificateEffects, void, Certificate>;
+
+// Точный тип для watcher саги
+type CertificateWatcherSaga = Generator<ForkEffect, void, unknown>;
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -22,7 +34,7 @@ function getErrorMessage(error: unknown): string {
   return 'Ошибка при проверке сертификата';
 }
 
-function* validateCertificateSaga(action: ValidateCertificateAction): Generator<unknown, void, Certificate> {
+function* validateCertificateSaga(action: ValidateCertificateAction): ValidateCertificateSaga {
   try {
     const result: Certificate = yield call(validateCertificate, action.payload);
     yield put(validateCertificateSuccess(result));
@@ -33,6 +45,6 @@ function* validateCertificateSaga(action: ValidateCertificateAction): Generator<
   }
 }
 
-export function* certificateSaga(): Generator<unknown, void, unknown> {
+export function* certificateSaga(): CertificateWatcherSaga {
   yield takeEvery('certificates/validateCertificateRequest', validateCertificateSaga);
 }

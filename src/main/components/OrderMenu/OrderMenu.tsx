@@ -55,7 +55,6 @@ export const OrderMenu = (props: OrderMenuProps) => {
     items,
   ]);
 
-  // Сброс touched состояний когда промокод/сертификат становятся валидными
   useEffect(() => {
     if (promo.promo.valid) {
       setPromoTouched(false);

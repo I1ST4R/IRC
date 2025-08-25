@@ -5,8 +5,8 @@ import { AppDispatch, RootState } from "../../../main/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
-import { fetchCategories } from "@/entity/productCategory/slice";
-import { fetchTagsById } from "@/entity/tag/slice";
+import { fetchCategoriesRequest } from "@/entity/productCategory/slice"; // Изменился импорт
+import { fetchTagsRequest } from "@/entity/tag/slice"; // Изменился импорт
 
 interface AccordionItemProps {
   title: string;
@@ -48,9 +48,12 @@ export const Menu = () => {
   const filter = useSelector((state: RootState) => state.filter);
 
   const categories = useSelector((state: RootState) => state.categories.categories);
-  const loading = useSelector((state: RootState) => state.categories.loading);
-  const error = useSelector((state: RootState) => state.categories.error);
+  const categoriesLoading = useSelector((state: RootState) => state.categories.loading);
+  const categoriesError = useSelector((state: RootState) => state.categories.error);
+  
   const tags = useSelector((state: RootState) => state.tags.tags);
+  const tagsLoading = useSelector((state: RootState) => state.tags.loading);
+  const tagsError = useSelector((state: RootState) => state.tags.error);
 
   const sliderRef = useRef<HTMLDivElement>(null);
   const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter.filterParams.priceRange || { min: 500, max: 10000 });
@@ -66,14 +69,20 @@ export const Menu = () => {
     }
   }, [localPriceRange]);
 
-
+  // Загрузка категорий через Saga
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(fetchCategoriesRequest());
   }, [dispatch]);
 
+  // Загрузка тегов через Saga (только когда категории загружены)
   useEffect(() => {
-    dispatch(fetchTagsById(categories.flatMap(category => category.tags)));
-  }, [categories]);
+    if (categories.length > 0) {
+      const allTagIds = categories.flatMap(category => category.tags);
+      if (allTagIds.length > 0) {
+        dispatch(fetchTagsRequest(allTagIds));
+      }
+    }
+  }, [dispatch, categories]);
 
   useEffect(() => {
     updateRangeHighlight();
@@ -121,9 +130,15 @@ export const Menu = () => {
     return tag?.name || "";
   };
 
-  if (loading === "pending") return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!filter || !categories) return null;
+  // Показываем загрузку если грузятся либо категории, либо теги
+  if (categoriesLoading || tagsLoading) return <div>Loading...</div>;
+  
+  // Показываем ошибку если есть ошибка либо в категориях, либо в тегах
+  if (categoriesError || tagsError) return (
+    <div>Error: {categoriesError || tagsError}</div>
+  );
+  
+  if (!filter) return null;
 
   return (
     <div className="menu">
@@ -170,15 +185,19 @@ export const Menu = () => {
       {categories.map((category: Category) => (
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
-            {category.tags.map((tag) => {
+            {category.tags.map((tagId) => {
+              // Показываем тег только если он загружен
+              const tag = tags.find(t => t.id === tagId);
+              if (!tag) return null;
+              
               return (
-                <label key={tag} className="menu__checkbox">
+                <label key={tagId} className="menu__checkbox">
                   <input 
                     type="checkbox"
-                    checked={isTagSelected(tag)}
-                    onChange={() => handleTagToggle(tag)}
+                    checked={isTagSelected(tagId)}
+                    onChange={() => handleTagToggle(tagId)}
                   />
-                  <span>{getTagName(tag)}</span>
+                  <span>{tag.name}</span>
                 </label>
               );
             })}
@@ -195,4 +214,4 @@ export const Menu = () => {
       </button>
     </div>
   );
-}; 
+};
