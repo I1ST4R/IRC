@@ -5,8 +5,8 @@ import { AppDispatch, RootState } from "../../../main/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
-import { fetchCategoriesRequest } from "@/entity/productCategory/slice"; // Изменился импорт
-import { fetchTagsRequest } from "@/entity/tag/slice"; // Изменился импорт
+import { fetchCategories } from "@/entity/productCategory/slice"; 
+import { fetchTagsRequest } from "@/entity/tag/slice"; 
 
 interface AccordionItemProps {
   title: string;
@@ -71,7 +71,7 @@ export const Menu = () => {
 
   // Загрузка категорий через Saga
   useEffect(() => {
-    dispatch(fetchCategoriesRequest());
+    dispatch(fetchCategories())
   }, [dispatch]);
 
   // Загрузка тегов через Saga (только когда категории загружены)
@@ -131,7 +131,8 @@ export const Menu = () => {
   };
 
   // Показываем загрузку если грузятся либо категории, либо теги
-  if (categoriesLoading || tagsLoading) return <div>Loading...</div>;
+  if (categoriesLoading === "pending" 
+    || tagsLoading === "pending") return <div>Loading...</div>;
   
   // Показываем ошибку если есть ошибка либо в категориях, либо в тегах
   if (categoriesError || tagsError) return (

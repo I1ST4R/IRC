@@ -6,18 +6,7 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [
-        {
-          "productId": "1",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "2",
-          "quantity": 1,
-          "isChecked": true
-        }
-      ],
+      "cart": [],
       "liked": [
         {
           "productId": "2"
@@ -62,7 +51,8 @@
         "c520",
         "7a9c",
         "bdf4",
-        "118c"
+        "118c",
+        "6bd8"
       ]
     },
     {
@@ -966,7 +956,7 @@
     },
     {
       "id": "2",
-      "used": false,
+      "used": true,
       "code": "PROMO20",
       "discount": 0.2
     }
@@ -985,5 +975,6 @@
       "amount": 2000
     }
   ],
-  "orders": []
+  "orders": [
+  ]
 }

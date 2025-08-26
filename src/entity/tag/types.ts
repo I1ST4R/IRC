@@ -6,6 +6,6 @@ export interface Tag {
 
 export interface TagState {
   tags: Tag[] | [];
-  loading: boolean;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
   error: string | null;
 } 

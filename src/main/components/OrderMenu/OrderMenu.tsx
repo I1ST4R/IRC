@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../main/store";
-import { validatePromoCode } from "../../../entity/promo/slice";
-import {validateCertificateCode} from "../../../entity/certificate/slice";
+import { validatePromoRequest } from "../../../entity/promo/slice"; // Изменился импорт
+import { validateCertificateRequest } from "../../../entity/certificate/slice"; // Изменился импорт
 import "./_order-menu.scss";
 import { CartState } from "@/entity/cart/types";
 import { changeOrderInfo } from "@/entity/order/slice";
@@ -44,7 +44,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
         certificateDiscount: certificate.certificate.valid
           ? certificate.certificate.amount
           : null,
-          certificateId: certificate.certificate.id,
+        certificateId: certificate.certificate.id,
       })
     );
   }, [
@@ -88,7 +88,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const handlePromocodeBlur = () => {
     if (promocode) {
       setPromoTouched(true);
-      dispatch(validatePromoCode(promocode));
+      // Используем сагу вместо thunk
+      dispatch(validatePromoRequest(promocode)); // Изменился вызов
     }
   };
 
@@ -103,7 +104,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const handleSertificateBlur = () => {
     if (sertificate) {
       setSertTouched(true);
-      dispatch(validateCertificateCode(sertificate));
+      // Используем сагу вместо thunk
+      dispatch(validateCertificateRequest(sertificate)); // Изменился вызов
     }
   };
 

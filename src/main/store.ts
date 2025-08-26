@@ -46,7 +46,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      thunk: false, 
+      thunk: true, 
       serializableCheck: {
         ignoredActions: ['redux-saga/effects'], 
       },
