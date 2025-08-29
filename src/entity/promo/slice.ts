@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { PromoState, Promo } from './types';
+import { createEntityModule } from '@/shared/entityFactory';
+import { validatePromo } from '@/services/api';
 
 const initialState: PromoState = {
   promo: {
@@ -12,41 +14,42 @@ const initialState: PromoState = {
   error: null
 };
 
-const promoSlice = createSlice({
-  name: 'promo',
+const promoModule = createEntityModule<string, Promo, PromoState>({
+  sliceName: 'promo',
   initialState,
-  reducers: {
-    clearPromo: (state) => {
-      state.promo.id = null;
-      state.promo.code = null;
-      state.promo.discount = null;
-      state.promo.valid = false;
-      state.error = null;
-    },
-    
-    validatePromoRequest: (state, action: PayloadAction<string>) => {
-      state.loading = 'pending';
-      state.error = null;
-    },
-    
-    validatePromoSuccess: (state, action: PayloadAction<Promo>) => {
-      state.loading = 'succeeded';
-      state.promo = action.payload;
-      state.error = null;
-    },
-    
-    validatePromoFailure: (state, action: PayloadAction<string>) => {
-      state.loading = 'failed';
-      state.error = action.payload;
-    }
-  }
+  requestActionName: 'validatePromoRequest',
+  actionNames: {
+    request: 'validatePromoRequest',
+    success: 'validatePromoSuccess',
+    failure: 'validatePromoFailure',
+    clear: 'clearPromo'
+  },
+  onRequest: (state, _action: PayloadAction<string>) => {
+    state.loading = 'pending';
+    state.error = null;
+  },
+  onSuccess: (state, action: PayloadAction<Promo>) => {
+    state.loading = 'succeeded';
+    state.promo = action.payload;
+    state.error = null;
+  },
+  onFailure: (state, action: PayloadAction<string>) => {
+    state.loading = 'failed';
+    state.error = action.payload;
+  },
+  onClear: (state) => {
+    state.promo.id = null;
+    state.promo.code = null;
+    state.promo.discount = null;
+    state.promo.valid = false;
+    state.error = null;
+  },
+  apiCall: validatePromo
 });
 
-export const { 
-  clearPromo, 
-  validatePromoRequest, 
-  validatePromoSuccess, 
-  validatePromoFailure 
-} = promoSlice.actions;
+const { request: validatePromoRequest, success: validatePromoSuccess, failure: validatePromoFailure, clear: clearPromo } = promoModule.actions;
 
-export default promoSlice.reducer;
+export { clearPromo, validatePromoRequest, validatePromoSuccess, validatePromoFailure };
+
+export default promoModule.reducer;
+export const promoSaga = promoModule.saga;

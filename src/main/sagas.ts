@@ -1,8 +1,8 @@
 // store/sagas.ts
 import { all } from 'redux-saga/effects';
-import { promoSaga } from '../entity/promo/saga';
-import { certificateSaga } from '../entity/certificate/saga';
-import { tagsSaga } from '../entity/tag/saga';
+import { promoSaga } from '../entity/promo/slice';
+import { certificateSaga } from '../entity/certificate/slice';
+import { tagsSaga } from '../entity/tag/slice';
 
 export function* rootSaga() {
   yield all([

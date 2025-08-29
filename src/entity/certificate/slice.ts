@@ -1,6 +1,8 @@
 // certificates/slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { CertificateState, Certificate } from './types';
+import { createEntityModule } from '@/shared/entityFactory';
+import { validateCertificate } from '@/services/api';
 
 const initialState: CertificateState = {
   certificate: {
@@ -13,42 +15,42 @@ const initialState: CertificateState = {
   error: null
 };
 
-const certificateSlice = createSlice({
-  name: 'certificates',
+const certificateModule = createEntityModule<string, Certificate, CertificateState>({
+  sliceName: 'certificates',
   initialState,
-  reducers: {
-    clearCertificate: (state) => {
-      state.certificate.id = null;
-      state.certificate.code = null;
-      state.certificate.amount = null;
-      state.certificate.valid = false;
-      state.error = null;
-    },
-    
-    // Экшены для саги
-    validateCertificateRequest: (state, action: PayloadAction<string>) => {
-      state.loading = 'pending';
-      state.error = null;
-    },
-    
-    validateCertificateSuccess: (state, action: PayloadAction<Certificate>) => {
-      state.loading = 'succeeded';
-      state.certificate = action.payload;
-      state.error = null;
-    },
-    
-    validateCertificateFailure: (state, action: PayloadAction<string>) => {
-      state.loading = 'failed';
-      state.error = action.payload;
-    }
-  }
+  requestActionName: 'validateCertificateRequest',
+  actionNames: {
+    request: 'validateCertificateRequest',
+    success: 'validateCertificateSuccess',
+    failure: 'validateCertificateFailure',
+    clear: 'clearCertificate'
+  },
+  onRequest: (state, _action: PayloadAction<string>) => {
+    state.loading = 'pending';
+    state.error = null;
+  },
+  onSuccess: (state, action: PayloadAction<Certificate>) => {
+    state.loading = 'succeeded';
+    state.certificate = action.payload;
+    state.error = null;
+  },
+  onFailure: (state, action: PayloadAction<string>) => {
+    state.loading = 'failed';
+    state.error = action.payload;
+  },
+  onClear: (state) => {
+    state.certificate.id = null;
+    state.certificate.code = null;
+    state.certificate.amount = null;
+    state.certificate.valid = false;
+    state.error = null;
+  },
+  apiCall: validateCertificate
 });
 
-export const { 
-  clearCertificate, 
-  validateCertificateRequest, 
-  validateCertificateSuccess, 
-  validateCertificateFailure 
-} = certificateSlice.actions;
+const { request: validateCertificateRequest, success: validateCertificateSuccess, failure: validateCertificateFailure, clear: clearCertificate } = certificateModule.actions;
 
-export default certificateSlice.reducer;
+export { clearCertificate, validateCertificateRequest, validateCertificateSuccess, validateCertificateFailure };
+
+export default certificateModule.reducer;
+export const certificateSaga = certificateModule.saga;

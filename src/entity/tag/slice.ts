@@ -1,49 +1,53 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { TagState, Tag } from './types';
+import { createEntityModule } from '@/shared/entityFactory';
+import { getTagsById } from '@/services/api';
 
 const initialState: TagState = {
   tags: [],
-  loading: false,
+  loading: "idle",
   error: null
 };
 
-const tagSlice = createSlice({
-  name: 'tags',
+const tagModule = createEntityModule<string[], Tag[], TagState>({
+  sliceName: 'tags',
   initialState,
-  reducers: {
-
-    fetchTagsRequest: (state, action: PayloadAction<string[]>) => {
-      state.loading = true;
-      state.error = null;
-    },
-    
-    fetchTagsSuccess: (state, action: PayloadAction<Tag[]>) => {
-      state.tags = action.payload;
-      state.loading = false;
-    },
-    
-    fetchTagsFailure: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    
-    clearTags: (state) => {
-      state.tags = [];
-      state.error = null;
-    },
-    
+  requestActionName: 'fetchTagsRequest',
+  actionNames: {
+    request: 'fetchTagsRequest',
+    success: 'fetchTagsSuccess',
+    failure: 'fetchTagsFailure',
+    clear: 'clearTags'
+  },
+  onRequest: (state, _action: PayloadAction<string[]>) => {
+    state.loading = 'pending';
+    state.error = null;
+  },
+  onSuccess: (state, action: PayloadAction<Tag[]>) => {
+    state.tags = action.payload;
+    state.loading = 'succeeded';
+  },
+  onFailure: (state, action: PayloadAction<string>) => {
+    state.loading = 'failed';
+    state.error = action.payload;
+  },
+  onClear: (state) => {
+    state.tags = [];
+    state.error = null;
+  },
+  extraReducers: {
     setTags: (state, action: PayloadAction<Tag[]>) => {
       state.tags = action.payload;
     }
-  }
+  },
+  apiCall: getTagsById
 });
 
-export const { 
-  fetchTagsRequest, 
-  fetchTagsSuccess, 
-  fetchTagsFailure,
-  clearTags,
-  setTags
-} = tagSlice.actions;
+const { request: fetchTagsRequest, success: fetchTagsSuccess, failure: fetchTagsFailure, clear: clearTags } = tagModule.actions;
 
-export default tagSlice.reducer;
+export const { setTags } = { setTags: (tagModule.actions as unknown as Record<string, unknown>).setTags as (payload: Tag[]) => PayloadAction<Tag[]> };
+
+export { fetchTagsRequest, fetchTagsSuccess, fetchTagsFailure, clearTags };
+
+export default tagModule.reducer;
+export const tagsSaga = tagModule.saga;
