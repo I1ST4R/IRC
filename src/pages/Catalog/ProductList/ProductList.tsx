@@ -27,11 +27,12 @@ export const ProductList = ({ onAuthRequired }: ProductListProps) => {
     setPage(prev => prev + 1);
   };
 
-  if (isLoading && page === 1) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
+    console.log(error);
     return <div>Ошибка при загрузке продуктов</div>;
   }
 

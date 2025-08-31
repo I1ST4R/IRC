@@ -48,7 +48,7 @@ export const Menu = () => {
   const filter = useSelector((state: RootState) => state.filter);
 
   const {data: categories = [], isLoading, error} = useGetCategoriesQuery();
-  const tagIds = categories.flatMap(category => category.tags);
+  const tagIds = categories && Array.isArray(categories) ? categories.flatMap(category => category.tags) : [];
   const {data: tags = []} = useGetTagsByIdQuery(tagIds ?? [], { skip: !tagIds.length });
 
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -157,10 +157,10 @@ export const Menu = () => {
         </div>
       </AccordionItem>
 
-      {categories.map((category: Category) => (
+      {categories && Array.isArray(categories) && categories.map((category: Category) => (
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
-            {category.tags.map((tag) => {
+            {category.tags && Array.isArray(category.tags) && category.tags.map((tag) => {
               return (
                 <label key={tag} className="menu__checkbox">
                   <input 
