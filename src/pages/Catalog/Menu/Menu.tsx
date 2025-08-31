@@ -179,8 +179,9 @@ export const Menu = () => {
       <button 
         className="menu__reset-btn"
         onClick={handleResetFilters}
+        aria-label="Очистить все фильтры"
       >
-        <img src={reset} alt="reset" />
+        <img src={reset} alt="Сбросить фильтры" />
         очистить
       </button>
     </div>

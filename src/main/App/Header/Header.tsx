@@ -76,11 +76,11 @@ const Header: React.FC = () => {
       >
         <div className="container">
           <button className="header__menu">
-            <img className="header__logo" src={logo} alt="logo" />
+            <img className="header__logo" src={logo} alt="Логотип компании" />
             <p>МЕНЮ</p>
           </button>
 
-          <div className="header__links">
+          <nav className="header__links" id="main-navigation">
             <Link to="/catalog" className="header__link">
               Каталог
             </Link>
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
               onClick={handleMenuClick}
             >
               <p>О бренде</p>
-              <img src={arrowDown} alt="arrow" />
+              <img src={arrowDown} alt="Раскрыть меню" />
 
               <ul className="header__list" style={{ display: isMenuActive ? "flex" : "none" }}>
                 <li>
@@ -118,11 +118,11 @@ const Header: React.FC = () => {
                 </li>
               </ul>
             </button>
-          </div>
+          </nav>
 
           <div className="header__buttons">
             <button className="header__button header__search">
-              <img src={search} alt="search" />
+              <img src={search} alt="Поиск" />
             </button>
 
             {user?.id ? (
@@ -139,12 +139,12 @@ const Header: React.FC = () => {
                 className="header__button"
                 onClick={() => dispatch(openAccount())}
               >
-                <img src={personalAcc} alt="personal-acc" />
+                <img src={personalAcc} alt="Личный кабинет" />
               </button>
             )}
 
             <Link to="/liked" className="header__button" id="liked__container1">
-              <img src={liked} alt="liked" />
+              <img src={liked} alt="Избранное" />
               {totalLikedItems > 0 && (
                 <div className="counter" id="liked__counter">
                   {totalLikedItems}
@@ -153,7 +153,7 @@ const Header: React.FC = () => {
             </Link>
 
             <Link to="/cart" className="header__button" id="basket__container1">
-              <img src={basket} alt="basket" />
+              <img src={basket} alt="Корзина" />
               {totalCount > 0 && (
                 <div className="counter" id="basket-counter">
                   {totalCount}

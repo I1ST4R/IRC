@@ -19,9 +19,12 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
+      {/* Skip link for accessibility */}
+      <a href="/catalog" className="skip-link">Перейти к каталогу товаров</a>
+      
       <Header />
       <Navbar />
-      <main className="app__content">
+      <main className="app__content" id="main-content">
         <Outlet />
       </main>
       <Footer />

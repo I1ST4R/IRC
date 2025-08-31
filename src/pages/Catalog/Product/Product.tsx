@@ -59,7 +59,7 @@ export const Product = ({
   return (
     <div className="product">
       <Link to={`/product/${product.id}`} className="product__link">
-        <img src={product.img} alt={product.name} className="product__image" />
+        <img src={product.img} alt={`Фотография товара ${product.name}`} className="product__image" />
         <div className="product__info">
           <div className="product__tags">
             {product.tags.map((tag: Tag) => (
