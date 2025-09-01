@@ -11,7 +11,7 @@ import search from './search.svg';
 import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
 import liked from '../../../pages/Home/_general/img/liked.svg';
 import basket from '../../../pages/Home/_general/img/basket.svg';
-import PersonalAccount from "../PersonalAccount/PersonalAccount";
+import PersonalAccount from "../../../old-version/main/App/PersonalAccount/PersonalAccount";
 import { useGetUserQuery, useLogoutMutation } from "@/entity/users/api";
 
 const Header: React.FC = () => {
