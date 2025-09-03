@@ -434,36 +434,6 @@ export const removeFromLiked = async (userId: string, productId: string) => {
 };
 
 // Promo
-
-const initialPromo : Promo = {
-  id: null,
-  valid: false,
-  code: null,
-  discount: null 
-}
-export const validatePromo = async (code: string) => {
-  try {
-    const upperCode = code.toUpperCase();
-    
-    const response = await axiosInstance.get(`/promo?code=${upperCode}`);
-    let promo = initialPromo
-    if (response.data && response.data.length > 0 && !response.data[0].used) {
-      promo = {
-        id: response.data[0].id,
-        valid: true, 
-        code: response.data[0].code, 
-        discount: response.data[0].discount 
-      } 
-      localStorage.setItem("promoId", promo.id ?? "")
-      return promo
-    }
-    return promo;
-  } catch (error: any) {
-    console.error('error in validatePromo', error);
-    throw error;
-  }
-};
-
 export const changeUsedPromo = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/promo?id=${id}`);
@@ -476,49 +446,7 @@ export const changeUsedPromo = async (id: string) => {
     throw error;
   }
 }
-
-export const getPromo = async () => {
-  const promoId = localStorage.getItem("promoId")
-  if(!promoId) return initialPromo
-  const response = await axiosInstance.get<Promo[]>(`/promo?id=${promoId}`)
-  if(response.data.length === 0) {
-    localStorage.removeItem("promoId")
-    return initialPromo
-  }
-
-  return response.data[0]
-}
-
 // Certificate
-
-const initialCertificate: Certificate = {
-  id: null,
-  valid: false,
-  code: null,
-  amount: null
-}
-export const validateCertificate = async (code: string) => {
-  try {
-    const upperCode = code.toUpperCase();
-    const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
-    let certificate = initialCertificate
-    if (response.data && response.data.length > 0 && !response.data[0].used) {
-      certificate = {
-        id: response.data[0].id,
-        valid: true,
-        code: response.data[0].code,
-        amount: response.data[0].amount
-      };
-      localStorage.setItem("certificateId", certificate.id ?? "")
-      return certificate;
-    }
-    return certificate;
-  } catch (error: any) {
-    console.error('error in validateCertificate', error);
-    throw error;
-  }
-};
-
 export const changeUsedCertificate = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/certificates?id=${id}`);
@@ -532,18 +460,7 @@ export const changeUsedCertificate = async (id: string) => {
   }
 }
 
-export const getCertificate = async () => {
-  const certificateId = localStorage.getItem("certificateId")
-  if(!certificateId) return initialCertificate
-  const response = await axiosInstance.get<Certificate[]>(`/certificates?id=${certificateId}`)
 
-  if(response.data.length === 0) {
-    localStorage.removeItem("certificateId")
-    return initialCertificate
-  }
-
-  return response.data[0]
-}
 
 // Orders
 export const addOrder = async (order: Order ) => {
