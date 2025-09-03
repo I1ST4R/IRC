@@ -1,7 +1,7 @@
 
 import { CartItem } from '../cart/types'
-import { Order } from '../order/types';
-import { Product } from '../product/types';
+import { Order } from '../order/orderTypes';
+import { Product } from '../productTypes';
 
 export interface User {
   id: string | null;

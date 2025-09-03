@@ -1,8 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { login, register, checkAuth, logout, getUser } from '../../services/api';
-import { cartApi } from '../cart/api';
-import { likedApi } from '../liked/api';
-import { User, LoginData, RegisterData } from './types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { getUser } from './api/getUser'
+import { login } from './api/login'
+import { logout } from './api/logout'
+import { register } from './api/register'
+import { cartApi } from '../cart/api'
+import { likedApi } from '../liked/api'
+import { User, LoginData, RegisterData } from './userTypes'
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -46,20 +49,12 @@ export const usersApi = createApi({
           .catch((error) => ({ error })),
       invalidatesTags: ['User'],
     }),
-    checkAuth: build.query<User, string>({
-      queryFn: (userId) =>
-        checkAuth(userId)
-          .then((data) => ({ data }))
-          .catch((error) => ({ error })),
-      providesTags: ['User'],
-    }),
   }),
 });
 
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useCheckAuthQuery,
   useLogoutMutation,
   useGetUserQuery
 } = usersApi;
