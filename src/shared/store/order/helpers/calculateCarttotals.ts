@@ -1,4 +1,4 @@
-import { CartItem } from "../../cart/types";
+import { CartItem } from "../../cart/cartTypes";
 
 type CartTotals = {
   total: number;

@@ -16,20 +16,20 @@ export const INITIAL_USER: User = {
   orders: []
 };
 
-const checkAuth = async (userId: string) => {
-  try {
-    const response = await axiosInstance.get<User[]>(`/users?id=${userId}`);
-    if (response.data.length === 0) {
-      throw new Error('Пользователь не найден');
-    }
-    const user = response.data[0];
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword as User;
-  } catch (error: any) {
-    console.error('error in checkAuth', error);
-    throw error;
-  }
-};
+// const checkAuth = async (userId: string) => {
+//   try {
+//     const response = await axiosInstance.get<User[]>(`/users?id=${userId}`);
+//     if (response.data.length === 0) {
+//       throw new Error('Пользователь не найден');
+//     }
+//     const user = response.data[0];
+//     const { password, ...userWithoutPassword } = user;
+//     return userWithoutPassword as User;
+//   } catch (error: any) {
+//     console.error('error in checkAuth', error);
+//     throw error;
+//   }
+// };
 
 export const getUser = async () => {
   const userId = localStorage.getItem("userId")

@@ -4,11 +4,10 @@ import {
   addToCart,
   updateCartItemQuantity,
   removeFromCart,
-  calculateCartTotals,
   changeCheckCartItem,
   clearCart
-} from '../../services/api';
-import { CartItem } from './types';
+} from './cartApi';
+import { CartItem } from './cartTypes';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -56,14 +55,7 @@ export const cartApi = createApi({
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       invalidatesTags: ['Cart'],
-    }),
-    getCartTotals: build.query<number, string>({
-      queryFn: (userId) =>
-        calculateCartTotals(userId)
-          .then((data) => ({ data }))
-          .catch((error) => ({ error })),
-      providesTags: ['Cart'],
-    }),
+    })
   }),
 });
 
@@ -73,6 +65,5 @@ export const {
   useUpdateCartItemQuantityMutation,
   useRemoveFromCartMutation,
   useChangeCheckCartItemMutation,
-  useClearCartMutation,
-  useGetCartTotalsQuery
+  useClearCartMutation
 } = cartApi; 

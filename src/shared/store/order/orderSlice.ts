@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order, OrderState } from "./orderTypes.ts";
-import { calculateCartTotals } from "./helpers/calculateCarttotals";
+import { calculateCartTotals } from "./helpers/calculateCartTotals.ts";
 
 const defaultOrder: Order = {
   id: 0,

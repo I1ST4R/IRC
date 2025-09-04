@@ -1,5 +1,5 @@
 
-import { CartItem } from '../cart/types'
+import { CartItem } from '../cart/cartTypes'
 import { Order } from '../order/orderTypes';
 import { Product } from '../productTypes';
 
