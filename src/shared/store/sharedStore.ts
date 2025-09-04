@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import orderReducer from "./order/orderSlice";
 import {OrderState} from "./order/orderTypes.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { usersApi } from "./user/userApi.ts";
+import { usersApi } from "./user/userApiSlice.ts";
 
 export const orderMenuStore = configureStore({
   reducer: {

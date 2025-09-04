@@ -1,4 +1,4 @@
-import { API_URL } from "./API_URL";
+export const API_URL = 'http://localhost:3001';
 
 export const API_CLIENT = {
   baseURL: API_URL,
