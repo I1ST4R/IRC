@@ -4,8 +4,14 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
+// Список разрешенных файлов
+const ALLOWED_FOR_AUTH = [
+  'src/modules/AuthForm/AuthForm.tsx',
+]
+
 export default tseslint.config(
   { ignores: ['dist'] },
+  
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -25,4 +31,27 @@ export default tseslint.config(
       ],
     },
   },
+  
+  {
+    files: ['**/*.{ts,tsx}'],
+    excludedFiles: ALLOWED_FOR_AUTH,
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/api/userApi',
+              importNames: [
+                'useLoginMutation',
+                'useRegisterMutation',
+                'useLogoutMutation'
+              ],
+              message: 'Эти хуки можно использовать только в: ' + ALLOWED_FOR_AUTH.join(', ')
+            }
+          ]
+        }
+      ]
+    }
+  }
 )
