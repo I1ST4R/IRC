@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { RootState } from "@/shared/store/sharedStore";
+import { RootState, useAppDispatch } from "@/shared/store/sharedStore";
 import { useValidatePromoCodeMutation, useGetPromoCodeQuery } from "./store/promo/api";
 import { useGetCertificateCodeQuery, useValidateCertificateCodeMutation } from "./store/certificate/api";
-import { useGetCartQuery } from "@/entity/cart/api";
-import { changeOrderInfo } from "@/entity/order/slice";
-import { useAppDispatch } from "@/main/store";
-import { useGetUserQuery } from "@/entity/users/api";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
+import { useGetCartQuery } from "@/shared/store/cart/cartApiSlice";
+import { changeOrderInfo } from "@/shared/store/order/orderSlice";
+import { OrderMenuList } from "./components/OrderMenuList";
+
 
 interface OrderMenuProps {
   handleSubmit?: () => void;
@@ -17,7 +18,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const order = useSelector((state: RootState) => state.orders.current);
+  const order = useSelector((state: RootState) => state.order.item);
   const { data: user } = useGetUserQuery();
   const { data: certificate } = useGetCertificateCodeQuery()
   const { data: promo } = useGetPromoCodeQuery();
@@ -55,9 +56,9 @@ export const OrderMenu = (props: OrderMenuProps) => {
       changeOrderInfo({
         userId: user.id,
         cartItems: checkedCartItems,
-        promocodePercent: promo?.id ? promo?.discount : null,
+        promocodePercent: promo && promo.discount ? promo.discount : 0,
         promocodeId: promo?.id,
-        certificateDiscount: certificate?.id ? certificate.amount : null,
+        certificateDiscount: certificate && certificate.amount ? certificate.amount : 0,
         certificateId: certificate?.id,
       })
     );
@@ -126,37 +127,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
     <div className="order-menu">
       <p className="order-menu__item">Ваш заказ</p>
 
-      {isOrderPage && checkedCartItems.length > 0 && (
-        <div className="order-menu__items">
-          {checkedCartItems.map((item) => {
-            return (
-              <div key={item.product.id} className="order-menu__item-details">
-                <div className="order-menu__item-info">
-                  <img
-                    src={item.product.img}
-                    alt={item.product.name}
-                    className="order-menu__item-image"
-                  />
-                  <div className="order-menu__item-text">
-                    <span className="order-menu__item-name">
-                      {item.product.name}
-                    </span>
-                    <span className="order-menu__item-technology">
-                      {item.product.technology}
-                    </span>
-                    <span className="order-menu__item-quantity">
-                      x{item.quantity}
-                    </span>
-                  </div>
-                </div>
-                <span className="order-menu__item-price">
-                  {item.product.price * item.quantity} ₽
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <OrderMenuList isOrderPage = {isOrderPage} checkedCartItems = {checkedCartItems}/>
 
       <div className="order-menu__item">
         <div className="order-menu__text">

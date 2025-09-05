@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getUser, login, logout, register} from './userApi'
 import { cartApi } from '../cart/cartApiSlice'
-import { likedApi } from '../liked/likedSliceApi'
+import { likedApi } from '../liked/likedApiSlice'
 import { User, LoginData, RegisterData } from './userTypes'
 
 export const usersApi = createApi({

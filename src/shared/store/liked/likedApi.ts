@@ -6,7 +6,7 @@ import { Product } from "../productTypes";
 
 const axiosInstance = axios.create(API_CLIENT);
 
-export const getLiked = async (userId: string) : Promise<Product[]> => {
+export const getLiked = async (userId: string) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
     if (response.data.length === 0) {
@@ -19,14 +19,14 @@ export const getLiked = async (userId: string) : Promise<Product[]> => {
     }
     const productIds = user.liked.map((item: LikedItemDb) => item.productId);
     const products = await getProductsById(productIds)
-    return products;
+    return products as Product[]
   } catch (error: any) {
     console.error('error in getLiked', error);
     throw error;
   }
 };
 
-export const addToLiked = async (userId: string, productId: string): Promise<Product[]> => {
+export const addToLiked = async (userId: string, productId: string) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
     if (response.data.length === 0) {
@@ -36,19 +36,17 @@ export const addToLiked = async (userId: string, productId: string): Promise<Pro
     const liked = user.liked || [];
     
     const existingItem = liked.find((item: LikedItemDb) => item.productId === productId);
-    if (!existingItem) {
-      liked.push({ productId });
-    }
+    if (!existingItem) liked.push({ productId })
     
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
-    return updateResponse.data.liked;
+    return updateResponse.data.liked as Product[]
   } catch (error: any) {
     console.error('error in addToLiked', error);
     throw error;
   }
 };
 
-export const removeFromLiked = async (userId: string, productId: string): Promise<Product[]> => {
+export const removeFromLiked = async (userId: string, productId: string) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
     if (response.data.length === 0) {
@@ -58,7 +56,7 @@ export const removeFromLiked = async (userId: string, productId: string): Promis
     const liked = (user.liked || []).filter((item: LikedItemDb) => item.productId !== productId);
     
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
-    return updateResponse.data.liked;
+    return updateResponse.data.liked as Product[];
   } catch (error: any) {
     console.error('error in removeFromLiked', error);
     throw error;
