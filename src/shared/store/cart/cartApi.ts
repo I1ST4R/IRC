@@ -6,20 +6,22 @@ import { getProductsById } from "@/_old-version/services/api";
 
 const axiosInstance = axios.create(API_CLIENT);
 
-export const getCart = async (userId: string) => {
+export const getCart = async (userId: string, isOnlyCheckedItems: boolean = false) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
     if (response.data.length === 0) {
       throw new Error('Пользователь не найден');
     }
     const user = response.data[0];
-    if (!user.cart) {
-      const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart: [] });
-      return updateResponse.data.cart;
-    }
+    if (!user.cart) return []
     const cartItems = await loadCartProducts(user.cart)
 
-    return cartItems;
+    if(isOnlyCheckedItems){
+      return cartItems.filter(el => el.isChecked === true)
+    } 
+
+    return cartItems
+
   } catch (error: any) {
     console.error('error in getCart', error);
     throw error;

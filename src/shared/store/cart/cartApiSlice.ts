@@ -21,6 +21,13 @@ export const cartApi = createApi({
           .catch((error) => ({ error })),
       providesTags: ['Cart'],
     }),
+    getCheckedCartItems: build.query<CartItem[], string>({
+      queryFn: (userId) =>
+        getCart(userId, true)
+          .then((data) => ({ data }))
+          .catch((error) => ({ error })),
+      providesTags: ['Cart'],
+    }),
     addToCart: build.mutation<CartItem[], { userId: string; productId: string }>({
       queryFn: ({ userId, productId }) =>
         addToCart(userId, productId)
@@ -61,6 +68,7 @@ export const cartApi = createApi({
 
 export const {
   useGetCartQuery,
+  useGetCheckedCartItemsQuery,
   useAddToCartMutation,
   useUpdateCartItemQuantityMutation,
   useRemoveFromCartMutation,
