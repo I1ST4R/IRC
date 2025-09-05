@@ -3,14 +3,20 @@ import orderReducer from "./order/orderSlice";
 import {OrderState} from "./order/orderTypes.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { usersApi } from "./user/userApiSlice.ts";
+import { cartApi } from "./cart/cartApiSlice.ts";
+import { likedApi } from "./liked/likedSliceApi.ts";
 
 export const orderMenuStore = configureStore({
   reducer: {
   order: orderReducer,
   [usersApi.reducerPath]: usersApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer,
+  [likedApi.reducerPath]: likedApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(usersApi.middleware)
+    .concat(cartApi.middleware)
+    .concat(likedApi.middleware)
 })
 
 export type RootState = {

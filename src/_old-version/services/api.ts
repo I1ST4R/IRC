@@ -133,65 +133,7 @@ export const getCategories = async () => {
 // Cart
 
 
-// Liked
-export const getLiked = async (userId: string) => {
-  try {
-    const response = await axiosInstance.get(`/users?id=${userId}`);
-    if (response.data.length === 0) {
-      throw new Error('Пользователь не найден');
-    }
-    const user = response.data[0];
-    if (!user.liked) {
-      await axiosInstance.patch(`/users/${user.id}`, { liked: [] });
-      return [];
-    }
-    const productIds = user.liked.map((item: LikedItemDb) => item.productId);
-    const products = await getProductsById(productIds)
-    return products;
-  } catch (error: any) {
-    console.error('error in getLiked', error);
-    throw error;
-  }
-};
 
-export const addToLiked = async (userId: string, productId: string) => {
-  try {
-    const response = await axiosInstance.get(`/users?id=${userId}`);
-    if (response.data.length === 0) {
-      throw new Error('Пользователь не найден');
-    }
-    const user = response.data[0];
-    const liked = user.liked || [];
-    
-    const existingItem = liked.find((item: LikedItemDb) => item.productId === productId);
-    if (!existingItem) {
-      liked.push({ productId });
-    }
-    
-    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
-    return updateResponse.data.liked;
-  } catch (error: any) {
-    console.error('error in addToLiked', error);
-    throw error;
-  }
-};
-
-export const removeFromLiked = async (userId: string, productId: string) => {
-  try {
-    const response = await axiosInstance.get(`/users?id=${userId}`);
-    if (response.data.length === 0) {
-      throw new Error('Пользователь не найден');
-    }
-    const user = response.data[0];
-    const liked = (user.liked || []).filter((item: LikedItemDb) => item.productId !== productId);
-    
-    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { liked });
-    return updateResponse.data.liked;
-  } catch (error: any) {
-    console.error('error in removeFromLiked', error);
-    throw error;
-  }
-};
 
 // Promo
 export const changeUsedPromo = async (id: string) => {

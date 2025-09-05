@@ -3,8 +3,8 @@ import {
   getLiked,
   addToLiked,
   removeFromLiked
-} from '../../services/api';
-import { Product } from '../product/types';
+} from './likedApi';
+import { Product } from '../productTypes';
 
 export const likedApi = createApi({
   reducerPath: 'likedApi',
