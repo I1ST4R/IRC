@@ -27,7 +27,8 @@ export const OrderMenu = (props: OrderMenuProps) => {
   return (
     <div className="order-menu">
       <p className="order-menu__item">Ваш заказ</p>
-      <OrderMenuList isOrderPage={isOrderPage} checkedCartItems={checkedCartItems}/>
+      <OrderMenuList isOrderPage={isOrderPage} 
+      checkedCartItems={checkedCartItems}/>
       <OrderMenuTotals order={order}/>
       <OrderMenuDiscountSection/>
       <button className="order-menu__button" onClick={handleCheckout}>
