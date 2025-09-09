@@ -6,6 +6,7 @@ import React from "react";
 // import BottomMenu from './components/BottomMenu/BottomMenu';
 // import PersonalAccount from './components/PersonalAccount/PersonalAccount';
 import "./app.css";
+import { Button } from "@/shared/ui/kit/button";
 
 const App: React.FC = () => {
   return (
@@ -76,7 +77,7 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <button
+        {/* <button
           className="bg-[var(--coral)] text-white font-bold text-xs uppercase flex items-center 
            justify-center w-[80%] h-16 box-content rounded-4xl m-auto mt-6 transition-colors duration-300
            hover:bg-[var(--coralDark)] hover:text-black"
@@ -84,7 +85,8 @@ const App: React.FC = () => {
           style={{ fontFamily: "Manrope" }}
         >
           Оформить заказ
-        </button>
+        </button> */}
+        <Button/>
       </div>
     </div>
   );

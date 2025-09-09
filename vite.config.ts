@@ -1,21 +1,24 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
 
-// https://vitejs.dev/config/
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 export default defineConfig({
-  root: './src/App/build', 
+  root: './src/App/build', // Vite теперь считает ЭТУ папку корнем
   plugins: [react()],
   resolve: {
-    alias: {
-      '@': '../../', // Путь к корню проекта из папки build
-    },
+    alias: [
+      { find: '@', replacement: resolve(__dirname, 'src') },
+    ],
   },
   server: {
     port: 3000,
   },
   build: {
-    outDir: '../../../dist', 
+    outDir: resolve(__dirname, 'dist'), // абсолютный путь к dist
     sourcemap: true,
   },
-  publicDir: '../../../public', 
+  publicDir: resolve(__dirname, 'public'), // абсолютный путь к public
 })
