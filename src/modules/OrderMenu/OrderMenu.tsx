@@ -3,6 +3,7 @@ import { OrderMenuList } from "./components/OrderMenuList";
 import { OrderMenuTotals } from "./components/OrderMenuTotals";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useOrderSync } from "./helpers/useOrderSync";
+import { Button } from "@/shared/ui/kit/button";
 
 interface OrderMenuProps {
   handleSubmit?: () => void;
@@ -31,9 +32,9 @@ export const OrderMenu = (props: OrderMenuProps) => {
       checkedCartItems={checkedCartItems}/>
       <OrderMenuTotals order={order}/>
       <OrderMenuDiscountSection/>
-      <button className="order-menu__button" onClick={handleCheckout}>
-        Оформить заказ
-      </button>
+      <Button onClick={handleCheckout}>
+       Оформить заказ
+      </Button>
     </div>
   );
 };
