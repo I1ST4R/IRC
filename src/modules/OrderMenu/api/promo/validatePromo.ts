@@ -1,6 +1,6 @@
 import axios from "axios";
 import { INITIAL_PROMO } from "./INITIAL_PROMO"
-import { API_CLIENT } from "@/shared/consts/API_CLIENT"
+import { API_CLIENT } from "@/shared/consts"
 
 const axiosInstance = axios.create(API_CLIENT);
 

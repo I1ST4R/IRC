@@ -8,8 +8,8 @@ import { cn } from "@/shared/lib/css";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 
 export const OrderMenuCertificate = () => {
-  const [validateCertificate] = useValidateCertificateCodeMutation();
   const { data: certificate } = useGetCertificateCodeQuery();
+  const [validateCertificate] = useValidateCertificateCodeMutation();
   const [certTouched, setCertTouched] = useState(false);
   const showError = certTouched && !certificate?.id;
 
@@ -18,7 +18,7 @@ export const OrderMenuCertificate = () => {
   };
 
   const handleSertificateBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (certificate) {
+    if (e.target.value) {
       setCertTouched(true);
       validateCertificate(e.target.value);
     }
@@ -36,13 +36,13 @@ export const OrderMenuCertificate = () => {
       <Alert variant="destructive">
         <AlertTitle>Сертификат недействителен</AlertTitle>
       </Alert>
-      <Input 
+      <Input
         type="text"
         onChange={handleSertificateChange}
         onBlur={handleSertificateBlur}
         placeholder="Сертификат"
-        className={cn(showError && "border-[var(--coral)] ")}>
-      </Input>
+        className={cn(showError && "border-[var(--coral)] ")}
+      ></Input>
     </div>
   );
 };
