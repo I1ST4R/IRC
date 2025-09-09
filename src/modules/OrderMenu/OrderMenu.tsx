@@ -1,6 +1,6 @@
-import { OrderMenuDiscountSection } from "./components/OrderMenuDiscountSection";
-import { OrderMenuList } from "./components/OrderMenuList";
-import { OrderMenuTotals } from "./components/OrderMenuTotals";
+import { OrderMenuDiscountSection } from "./components/OrderMenuDiscountSection/OrderMenuDiscountSection";
+import { OrderMenuList } from "./components/OrderMenuList/OrderMenuList";
+import { OrderMenuTotals } from "./components/OrderMenuTotals/OrderMenuTotals";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useOrderSync } from "./helpers/useOrderSync";
 import { Button } from "@/shared/ui/kit/button";
@@ -27,7 +27,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
 
   return (
     <div className="order-menu">
-      <p className="order-menu__item">Ваш заказ</p>
+      <p className="p-3 border-b border-gray-200">Ваш заказ</p>
       <OrderMenuList isOrderPage={isOrderPage} 
       checkedCartItems={checkedCartItems}/>
       <OrderMenuTotals order={order}/>

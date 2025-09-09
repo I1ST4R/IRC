@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   useGetCertificateCodeQuery,
   useValidateCertificateCodeMutation,
-} from "../store/certificate/certificateApiSlice";
+} from "@/modules/OrderMenu/store/certificate/certificateApiSlice";
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
