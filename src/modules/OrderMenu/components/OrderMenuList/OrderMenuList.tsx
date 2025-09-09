@@ -7,13 +7,13 @@ type OrderMenuProps = {
 }
 
 export const OrderMenuList = (props: OrderMenuProps) => {
+  if(!props.isOrderPage || props.checkedCartItems.length === 0) return <></>
+
   return (
-    <div className="order-menu__items">
-      {props.isOrderPage && props.checkedCartItems.length > 0 && 
-        props.checkedCartItems.map((item) => (
-          <OrderMenuItem key={item.product.id} item = {item} />
-        ))
-      } 
+    <div>
+      {props.checkedCartItems.map((item) => (
+        <OrderMenuItem key={item.product.id} item = {item} />
+      ))} 
     </div>
   );
 }
