@@ -1,4 +1,4 @@
-import { CartItem } from "../../cart/cartTypes";
+import { CartItem } from "../../../../modules/CartList/store/cart/cartTypes";
 
 type CartTotals = {
   total: number;

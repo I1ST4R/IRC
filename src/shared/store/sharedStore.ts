@@ -3,7 +3,7 @@ import orderReducer from "./order/orderSlice";
 import {OrderState} from "./order/orderTypes.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { usersApi } from "./user/userApiSlice.ts";
-import { cartApi } from "./cart/cartApiSlice.ts";
+import { cartApi } from "../../modules/CartList/store/cart/cartApiSlice.ts";
 import { likedApi } from "./liked/likedApiSlice.ts";
 
 export const orderMenuStore = configureStore({

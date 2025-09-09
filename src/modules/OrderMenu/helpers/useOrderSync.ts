@@ -2,7 +2,7 @@ import { RootState, useAppDispatch } from "@/shared/store/sharedStore";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { useGetCertificateCodeQuery } from "../store/certificate/certificateApiSlice";
 import { useGetPromoCodeQuery } from "../store/promo/promoApiSlice";
-import { useGetCheckedCartItemsQuery } from "@/shared/store/cart/cartApiSlice";
+import { useGetCheckedCartItemsQuery } from "@/modules/CartList/store/cart/cartApiSlice";
 import { useRef } from "react";
 import { changeOrderInfo } from "@/shared/store/order/orderSlice";
 import { useSelector } from "react-redux";
