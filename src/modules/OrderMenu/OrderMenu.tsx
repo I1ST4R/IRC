@@ -26,7 +26,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
   if (!user?.id || !order || !order.total) return null;
 
   return (
-    <div className="order-menu">
+    <div className="bg-[#F2F2F2] w-73">
       <p className="p-3 border-b border-gray-200">Ваш заказ</p>
       <OrderMenuList isOrderPage={isOrderPage} 
       checkedCartItems={checkedCartItems}/>
