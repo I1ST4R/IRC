@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { promoApi } from "./promo/api";
-import { certificateApi } from "./certificate/api";
+import { promoApi } from "./promo/promoApiSlice";
+import { certificateApi } from "./certificate/certificateApiSlice";
 
 export const orderMenuStore = configureStore({
   reducer: {

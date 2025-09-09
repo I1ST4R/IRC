@@ -1,7 +1,7 @@
 import { RootState, useAppDispatch } from "@/shared/store/sharedStore";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
-import { useGetCertificateCodeQuery } from "../store/certificate/api";
-import { useGetPromoCodeQuery } from "../store/promo/api";
+import { useGetCertificateCodeQuery } from "../store/certificate/certificateApiSlice";
+import { useGetPromoCodeQuery } from "../store/promo/promoApiSlice";
 import { useGetCheckedCartItemsQuery } from "@/shared/store/cart/cartApiSlice";
 import { useRef } from "react";
 import { changeOrderInfo } from "@/shared/store/order/orderSlice";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { 
   useGetPromoCodeQuery, 
   useValidatePromoCodeMutation 
-} from "../store/promo/api";
+} from "../store/promo/promoApiSlice";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";

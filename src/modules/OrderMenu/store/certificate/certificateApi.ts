@@ -1,8 +1,28 @@
 import axios from "axios";
-import { INITIAL_CERTIFICATE } from "./INITIAL_CERTIFICATE"
-import { API_CLIENT } from "@/shared/consts"
+import { Certificate } from "./certificateTypes";
+import { API_CLIENT } from "@/shared/consts";
+
+const INITIAL_CERTIFICATE: Certificate = {
+  id: null,
+  valid: false,
+  code: null,
+  amount: null
+}
 
 const axiosInstance = axios.create(API_CLIENT);
+
+export const getCertificate = async () => {
+  const certificateId = localStorage.getItem("certificateId")
+  if(!certificateId) return INITIAL_CERTIFICATE
+  const response = await axiosInstance.get<Certificate[]>(`/certificates?id=${certificateId}`)
+
+  if(response.data.length === 0) {
+    localStorage.removeItem("certificateId")
+    return INITIAL_CERTIFICATE
+  }
+
+  return response.data[0]
+}
 
 export const validateCertificate = async (code: string) => {
   try {

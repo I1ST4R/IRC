@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getPromo, validatePromo } from '../../services/api';
-import { Promo } from './types';
+import { getPromo, validatePromo } from './promoApi';
+import { Promo } from './promoTypes';
 
 export const promoApi = createApi({
   reducerPath: 'promoApi',
