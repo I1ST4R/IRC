@@ -76,17 +76,9 @@ const App: React.FC = () => {
             </div>
           )}
         </div>
-
-        {/* <button
-          className="bg-[var(--coral)] text-white font-bold text-xs uppercase flex items-center 
-           justify-center w-[80%] h-16 box-content rounded-4xl m-auto mt-6 transition-colors duration-300
-           hover:bg-[var(--coralDark)] hover:text-black"
-          onClick={() => alert("Заебись")}
-          style={{ fontFamily: "Manrope" }}
-        >
+        <Button>
           Оформить заказ
-        </button> */}
-        <Button/>
+        </Button>
       </div>
     </div>
   );
