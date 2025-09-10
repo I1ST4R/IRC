@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
-import { CartItemDb } from "./cartTypes";
+import { Cart, CartItemDb } from "./cartTypes";
 import { getProductsById } from "@/_old-version/services/api";
+import { getItemsCount } from "./getItemsCount";
 
 
 const axiosInstance = axios.create(API_CLIENT);
@@ -15,12 +16,18 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
     const user = response.data[0];
     if (!user.cart) return []
     const cartItems = await loadCartProducts(user.cart)
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(cartItems)
+    } as Cart
 
     if(isOnlyCheckedItems){
-      return cartItems.filter(el => el.isChecked === true)
-    } 
-
-    return cartItems
+      return{
+        ...cartItemsWithCount,
+        items: cartItemsWithCount.items.find((el) => el.isChecked === true),
+      } 
+    }
+    return cartItemsWithCount
 
   } catch (error: any) {
     console.error('error in getCart', error);
@@ -58,14 +65,18 @@ export const addToCart = async (userId: string, productId: string) => {
     const cart = user.cart || [];
     
     const existingItem = cart.find((item: CartItemDb) => item.productId === productId);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({ productId, quantity: 1, isChecked: true });
-    }
+    if (existingItem) existingItem.quantity += 1;
+    else cart.push({ productId, quantity: 1, isChecked: true })
     
-     await axiosInstance.patch(`/users/${user.id}`, { cart });//меняем количество в бд
-    return loadCartProducts(user.cart)// затем подгружаем корзину заново
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart })
+    const cartItems = await loadCartProducts(updateResponse.data.cart)
+
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(cartItems)
+    } as Cart
+
+    return cartItemsWithCount
   } catch (error: any) {
     console.error('error in addToCart', error);
     throw error;
@@ -82,7 +93,14 @@ export const removeFromCart = async (userId: string, productId: string) => {
     const cart = (user.cart || []).filter((item: CartItemDb) => item.productId !== productId);
     
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
-    return updateResponse.data.cart;
+    const cartItems = await loadCartProducts(updateResponse.data.cart)
+
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(updateResponse.data.cart)
+    } as Cart
+
+    return cartItemsWithCount
   } catch (error: any) {
     console.error('error in removeFromCart', error);
     throw error;
@@ -101,10 +119,15 @@ export const updateCartItemQuantity = async (userId: string, productId: string, 
     const item = cart.find((item: CartItemDb) => item.productId === productId);
     if (item) item.quantity = quantity
 
-    
-    //меняем количество в бд
-    await axiosInstance.patch(`/users/${user.id}`, { cart });
-    return loadCartProducts(user.cart);// затем подгружаем корзину заново
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
+    const cartItems = await loadCartProducts(updateResponse.data.cart)
+
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(cartItems)
+    } as Cart
+
+    return cartItemsWithCount
   } catch (error: any) {
     console.error('error in updateCartItemQuantity', error);
     throw error;
@@ -128,11 +151,16 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
       }
       return item;
     });
-    await axiosInstance.patch(`/users/${userId}`, { cart: updatedCartDb });
-    const updatedItem = updatedCartDb.find((item: CartItemDb) => item.productId === productId);
-    if (!updatedItem) throw new Error('Товар не найден в корзине');
-    const [cartItem] = await loadCartProducts([updatedItem]);
-    return cartItem;
+
+    const updateResponse = await axiosInstance.patch(`/users/${userId}`, { cart: updatedCartDb });
+    const cartItems = await loadCartProducts(updateResponse.data.cart)
+
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(cartItems)
+    } as Cart
+
+    return cartItemsWithCount
   } catch (error) {
     console.error('error in checkCartItem', error);
     throw error;
@@ -141,8 +169,11 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
 
 export const clearCart = async (userId: string) => {
   try {
-    const response = await axiosInstance.put(`/users/${userId}/cart`, []);
-    return response.data;
+    await axiosInstance.put(`/users/${userId}/cart`, []);
+    return {
+      items: [], 
+      itemsCount: 0
+    } as Cart
   } catch (error: any) {
     console.error('error in clearCart', error);
     throw error;

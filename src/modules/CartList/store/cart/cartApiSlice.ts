@@ -7,35 +7,35 @@ import {
   changeCheckCartItem,
   clearCart
 } from './cartApi';
-import { CartItem } from './cartTypes';
+import { Cart, CartItem } from './cartTypes';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Cart'],
   endpoints: (build) => ({
-    getCart: build.query<CartItem[], string>({
+    getCart: build.query<Cart[], string>({
       queryFn: (userId) =>
         getCart(userId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       providesTags: ['Cart'],
     }),
-    getCheckedCartItems: build.query<CartItem[], string>({
+    getCheckedCartItems: build.query<Cart[], string>({
       queryFn: (userId) =>
         getCart(userId, true)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       providesTags: ['Cart'],
     }),
-    addToCart: build.mutation<CartItem[], { userId: string; productId: string }>({
+    addToCart: build.mutation<Cart[], { userId: string; productId: string }>({
       queryFn: ({ userId, productId }) =>
         addToCart(userId, productId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       invalidatesTags: ['Cart'],
     }),
-    updateCartItemQuantity: build.mutation<CartItem[], { userId: string; productId: string; quantity: number }>({
+    updateCartItemQuantity: build.mutation<Cart[], { userId: string; productId: string; quantity: number }>({
       queryFn: ({ userId, productId, quantity }) =>
         updateCartItemQuantity(userId, productId, quantity)
           .then((data) => ({ data }))
@@ -49,14 +49,14 @@ export const cartApi = createApi({
           .catch((error) => ({ error })),
       invalidatesTags: ['Cart'],
     }),
-    changeCheckCartItem: build.mutation<CartItem, { userId: string; productId: string }>({
+    changeCheckCartItem: build.mutation<Cart[], { userId: string; productId: string }>({
       queryFn: ({ userId, productId }) =>
         changeCheckCartItem(userId, productId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       invalidatesTags: ['Cart'],
     }),
-    clearCart: build.mutation<CartItem[], { userId: string }>({
+    clearCart: build.mutation<Cart[], { userId: string }>({
       queryFn: ({ userId }) =>
         clearCart(userId)
           .then((data) => ({ data }))

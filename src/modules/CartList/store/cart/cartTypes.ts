@@ -1,13 +1,14 @@
-import { Product } from "../product/types";
+import { Product } from "@/shared/store/productTypes";
 
-export interface CartItemDb {
-  productId: string;
-  quantity: number;
-  isChecked: boolean;
-}
-
-export interface CartItem {
-  product: Product;
+type CartItemBase<T> = {
   isChecked: boolean;
   quantity: number;
+} & T;
+
+export type CartItemDb = CartItemBase<{ productId: string }>;
+export type CartItem = CartItemBase<{ product: Product }>;
+
+export type Cart = {
+  items:CartItem[]
+  itemsCount: number
 }
