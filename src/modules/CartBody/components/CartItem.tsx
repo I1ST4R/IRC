@@ -1,6 +1,16 @@
-import { CartItem as ICartItem } from "@/entity/cart/types";
-import { useUpdateCartItemQuantityMutation, useRemoveFromCartMutation, useChangeCheckCartItemMutation } from "@/entity/cart/api";
-import { useAddToLikedMutation, useRemoveFromLikedMutation } from "@/entity/liked/api";
+import { CartItem as ICartItem } from "@/modules/CartBody/store/cart/cartTypes";
+import {
+  useUpdateCartItemQuantityMutation,
+  useRemoveFromCartMutation,
+  useChangeCheckCartItemMutation,
+} from "@/modules/CartBody/store/cart/cartApiSlice";
+import {
+  useAddToLikedMutation,
+  useRemoveFromLikedMutation,
+} from "@/shared/store/liked/likedApiSlice";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import { Button } from "@/shared/ui/kit/button";
+import { cn } from "@/shared/lib/css";
 
 interface CartItemProps {
   cartItem: ICartItem;
@@ -8,18 +18,20 @@ interface CartItemProps {
   isLiked: boolean;
 }
 
-export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
+export const CartItem = ({ cartItem, userId, isLiked }: CartItemProps) => {
   const [updateCartItemQuantity] = useUpdateCartItemQuantityMutation();
   const [removeFromCart] = useRemoveFromCartMutation();
   const [changeCheckCartItem] = useChangeCheckCartItemMutation();
   const [addToLiked] = useAddToLikedMutation();
   const [removeFromLiked] = useRemoveFromLikedMutation();
 
-  const handleQuantityChange = (productId: string, type: "increase" | "decrease") => {
+  const handleQuantityChange = (
+    productId: string,
+    type: "increase" | "decrease"
+  ) => {
     if (userId) {
-      console.log(cartItem)
-      if (type === "decrease" && cartItem.quantity === 1) return
-      const changes = type === "increase" ? 1 : -1
+      if (type === "decrease" && cartItem.quantity === 1) return;
+      const changes = type === "increase" ? 1 : -1;
       updateCartItemQuantity({
         userId: userId,
         productId: productId,
@@ -35,31 +47,13 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
   };
 
   const handleChangeCheckCart = () => {
-    if(userId) {
-      changeCheckCartItem({userId: userId, productId: cartItem.product.id})
+    if (userId) {
+      changeCheckCartItem({ userId: userId, productId: cartItem.product.id });
     }
-  }
+  };
 
-  return (
-    <div key={cartItem.product.id} className="cart__item">
-      <div className="cart__item-checkbox">
-        <input type="checkbox" onChange= {handleChangeCheckCart} checked = {cartItem.isChecked}/>
-      </div>
-
-      <div className="cart__item-img-block">
-        <img
-          src={cartItem.product.img}
-          alt={cartItem.product.name}
-          className="cart__item-image"
-        />
-        <button
-          className={`product__like${
-            isLiked
-              ? " product__like--active"
-              : ""
-          }`}
-          onClick={() => {
-            if (userId) {
+  const handleLike = () => {
+    if (userId) {
               if (isLiked) {
                 removeFromLiked({
                   userId: userId,
@@ -72,23 +66,26 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
                 });
               }
             }
-          }}
-          title={
-            isLiked
-              ? "Убрать из избранного"
-              : "В избранное"
-          }
+  }
+
+  return (
+    <div key={cartItem.product.id} className="w-31 h-31 object-contain bg-[#f2f2f2] border border-[#ececec]">
+      <div className="mr-4 z-1">
+        <Checkbox onChange={handleChangeCheckCart} checked={cartItem.isChecked}/>
+      </div>
+
+      <div>
+        <img
+          src={cartItem.product.img}
+          alt={cartItem.product.name}
+          className="cart__item-image"
+        />
+        <Button 
+          variant = "liked"
+          onClick={handleLike}
+          title={isLiked ? "Убрать из избранного" : "В избранное"}
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-          >
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        </button>
+        </Button>
       </div>
 
       <div className="cart__item-text">
@@ -102,10 +99,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
             className="cart__item-quantity-btn"
             onClick={() => {
               console.log(11);
-              handleQuantityChange(
-                cartItem.product.id,
-                'decrease'
-              );
+              handleQuantityChange(cartItem.product.id, "decrease");
             }}
           >
             -
@@ -114,7 +108,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
           <button
             className="cart__item-quantity-btn"
             onClick={() =>
-              handleQuantityChange(cartItem.product.id, 'increase')
+              handleQuantityChange(cartItem.product.id, "increase")
             }
           >
             +
@@ -122,20 +116,12 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
         </div>
 
         <div className="cart__item-price-block">
-          {cartItem.product.prevPrice ? (
-            <>
-              <p className="cart__item-price cart__item-price--new">
-                {cartItem.product.price * cartItem.quantity} ₽
-              </p>
-              <p className="cart__item-price cart__item-price--old">
-                {cartItem.product.prevPrice * cartItem.quantity} ₽
-              </p>
-            </>
-          ) : (
-            <div className="cart__item-price">
-              {cartItem.product.price * cartItem.quantity} ₽
-            </div>
-          )}
+          <p className="cart__item-price cart__item-price--new">
+            {cartItem.product.price * cartItem.quantity} ₽
+          </p>
+          <p className="cart__item-price cart__item-price--old">
+            {cartItem.product.prevPrice * cartItem.quantity} ₽
+          </p>
         </div>
       </div>
 
@@ -144,28 +130,7 @@ export const CartItem = ({ cartItem, userId, isLiked}: CartItemProps) => {
         onClick={() => handleRemoveItem(cartItem.product.id)}
         title="Удалить из корзины"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M15 5L5 15"
-            stroke="#333"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M5 5L15 15"
-            stroke="#333"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <img src="./cartItemRemoveSvg" alt="Удалить из корзины" />
       </button>
     </div>
   );
