@@ -7,6 +7,11 @@ import { getItemsCount } from "./getItemsCount";
 
 const axiosInstance = axios.create(API_CLIENT);
 
+const initialCart : Cart = {
+  items: [],
+  itemsCount: 0
+} 
+
 export const getCart = async (userId: string, isOnlyCheckedItems: boolean = false) => {
   try {
     const response = await axiosInstance.get(`/users?id=${userId}`);
@@ -14,7 +19,7 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
       throw new Error('Пользователь не найден');
     }
     const user = response.data[0];
-    if (!user.cart) return []
+    if (!user.cart) return initialCart
     const cartItems = await loadCartProducts(user.cart)
     const cartItemsWithCount = {
       items: cartItems, 
@@ -24,8 +29,8 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
     if(isOnlyCheckedItems){
       return{
         ...cartItemsWithCount,
-        items: cartItemsWithCount.items.find((el) => el.isChecked === true),
-      } 
+        items: cartItemsWithCount.items.filter((el) => el.isChecked === true),
+      } as Cart
     }
     return cartItemsWithCount
 
@@ -169,11 +174,15 @@ export const changeCheckCartItem = async (userId: string, productId: string) => 
 
 export const clearCart = async (userId: string) => {
   try {
-    await axiosInstance.put(`/users/${userId}/cart`, []);
-    return {
-      items: [], 
-      itemsCount: 0
-    } as Cart
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    
+    await axiosInstance.patch(`/users/${user.id}`, { cart: [] });
+    
+    return initialCart
   } catch (error: any) {
     console.error('error in clearCart', error);
     throw error;

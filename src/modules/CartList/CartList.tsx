@@ -6,15 +6,14 @@ import cartGarbageIcon from "./cartGarbageIcon.svg";
 export const CartList = () => {
   const {data: user} = useGetUserQuery();
   const {data: likedItems = []} = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
-  const { data: itemsCount = 0 } = useGetCartTotalsQuery(user?.id ?? '', { skip: !user?.id });
-  const { data: cartItems = [], isLoading: isCartLoading, error: cartError } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+  const { data: cart = {items: [], itemsCount: 0}, isLoading: isCartLoading, error: cartError } = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
   const [clearCart] = useClearCartMutation();
 
   return (
     <div>
       <div className="cart__info">
         <span className="cart__items-count">
-          В корзине <span>{itemsCount}</span>
+          В корзине <span>{cart.itemsCount}</span>
         </span>
       </div>
       <div className="cart__body">
