@@ -7,7 +7,7 @@ import { getItemsCount } from "./getItemsCount";
 
 const axiosInstance = axios.create(API_CLIENT);
 
-const initialCart : Cart = {
+export const initialCart : Cart = {
   items: [],
   itemsCount: 0
 } 

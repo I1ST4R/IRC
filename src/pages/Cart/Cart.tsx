@@ -1,6 +1,6 @@
 import React from "react";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { CartList } from "@/modules/CartList/CartList";
+import { CartBody } from "@/modules/CartList/CartBody";
 import { OrderMenu } from "@/modules/OrderMenu";
 
 export const Cart: React.FC = () => {
@@ -16,7 +16,7 @@ export const Cart: React.FC = () => {
         <h2 className="cart__title">Корзина</h2>
       </div>
       <div>
-        <CartList />
+        <CartBody />
         <OrderMenu />
       </div>
     </div>
