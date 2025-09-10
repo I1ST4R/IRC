@@ -1,4 +1,4 @@
-import { CartItem } from "./CartItem";
+import { CartItem } from "./CartItem/CartItem";
 import { CartItemsAndLikedItems, getCartItemsWithLikedParam } from "./getCartItemsWithLikedParam";
 import { User } from "@/shared/store/user/userTypes";
 

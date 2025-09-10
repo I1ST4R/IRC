@@ -19,6 +19,8 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "ab",
         liked: "absolute right-[5px] top-[5px] z-20",
+        circle: "aspect-square w-[50px] border-none bg-gray-200 text-black text-[20px] rounded-full cursor-pointer transition-all duration-300 flex items-center justify-center font-bold bg-[var(--coral)] hover:text-white",
+        squareRemove: "h-[100%] w-7.5 bg-[#f2f2f2] transition-colors duration-300"
       },
       size: {
         default: "h-16 px-4 py-2",

@@ -7,7 +7,7 @@ import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { initialCart } from "./store/cart/cartApi";
 import { useAppDispatch } from "@/shared/store/sharedStore";
 import { openAccount } from "@/_old-version/entity/account/slice";
-import { CartList } from "./components/CartList";
+import { CartList } from "./components/CartList/CartList";
 
 export const CartBody = () => {
   const { data: user } = useGetUserQuery();
