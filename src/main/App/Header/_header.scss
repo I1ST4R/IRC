@@ -1,3 +1,23 @@
+.skipLink{
+  position: absolute;
+  left: 10px;
+  background: #000;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-family: 'Manrope';
+  opacity: 0;
+  font-size:0px;
+  z-index:100
+}
+
+.skipLink:focus {
+  top: 80px;
+  opacity: 1; 
+  font-size:16px;
+  padding: 8px;
+}
+
 .header{
   position:fixed;
   width: 100%;  

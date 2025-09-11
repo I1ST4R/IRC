@@ -5,6 +5,7 @@ import PersonalAccount from "../../main/App/PersonalAccount/PersonalAccount";
 import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
 import { useSelector } from "react-redux";
 import { RootState } from "@/main/store";
+import { useEffect } from "react";
 
 export const Catalog = () => {
   const { isAccountOpen } = useSelector((state: RootState) => state.account);

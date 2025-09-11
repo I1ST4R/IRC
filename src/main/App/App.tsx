@@ -1,30 +1,19 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../store';
-import { clearLikedOnLogout } from '../../entity/liked/slice';
+import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
 import BottomMenu from './BottomMenu/BottomMenu';
 import './_app.scss';
-import { useGetUserQuery } from '@/entity/users/api';
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const {data: user} = useGetUserQuery()
-
-  useEffect(()=>{
-    console.log(user)
-  },[user])
+  const location = useLocation();
 
   return (
     <div className="app">
-      {/* Skip link for accessibility */}
-      <a href="/catalog" className="skip-link">Перейти к каталогу товаров</a>
-      
-      <Header />
+      <Header key={location.pathname} />
       <Navbar />
-      <main className="app__content" id="main-content">
+      <main className="app__content" id="main-content" tabIndex={-1}>
         <Outlet />
       </main>
       <Footer />
