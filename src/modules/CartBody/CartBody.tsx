@@ -25,13 +25,13 @@ export const CartBody = () => {
   return (
     <div>
 
-      <div className="cart__info">
-        <span className="cart__items-count">
+      <div className="flex justify-between items-center font-extrabold text-xs mx-0 mb-5 ml-10 tracking-wide uppercase">
+        <span className="text-[var(--coral)]">
           В корзине <span>{cart.itemsCount}</span>
         </span>
       </div>
 
-      <div className="cart__body">
+      <div className="grid grid-cols-[auto_300px] gap-[50px]">
         <CartList
           cartAndLiked={{
             cartItems: cart.items,
@@ -40,7 +40,7 @@ export const CartBody = () => {
           user={user}
         />
       </div>
-      
+
     </div>
   );
 };

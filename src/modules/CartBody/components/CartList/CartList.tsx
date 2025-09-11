@@ -31,7 +31,7 @@ export const CartList = ({cartAndLiked, user}: CartListProps) => {
         </Button>
       )}
 
-      <div className="cart__list">
+      <div className="flex flex-col gap-[30px]">
         {cartItemsWithLikedParam.map((el) => {
           return (
             <CartItem
@@ -43,7 +43,7 @@ export const CartList = ({cartAndLiked, user}: CartListProps) => {
           );
         })}
       </div>
-      
+
     </div>
   );
 };

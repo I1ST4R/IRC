@@ -8,19 +8,19 @@ export type CartItemAndUserIdProps = {
 
 export const CartItemInfo = ({cartItem, userId}: CartItemAndUserIdProps) => {
   return (
-    <div className="cart__item-text">
-      <div className="cart__item-name-block">
-        <p className="cart__item-name">{cartItem.product.name}</p>
-        <p className="cart__item-technology">{cartItem.product.technology}</p>
+    <div className="grid grid-cols-auto">
+      <div>
+        <p className="font-semibold text-[10px] tracking-[0.15em] uppercase">{cartItem.product.name}</p>
+        <p className="font-europeext font-bold text-xl tracking-wide uppercase">{cartItem.product.technology}</p>
       </div>
 
       <CartItemQuantityChanger userId={userId} cartItem={cartItem} />
 
-      <div className="cart__item-price-block">
-        <p className="cart__item-price cart__item-price--new">
+      <div className="flex gap-2.5 px-2.5 items-end ml-4">
+        <p className="font-manrope whitespace-nowrap font-semibold text-xl">
           {cartItem.product.price * cartItem.quantity} ₽
         </p>
-        <p className="cart__item-price cart__item-price--old">
+        <p className="font-manrope whitespace-nowrap line-through text-gray-400 font-normal text-lg">
           {cartItem.product.prevPrice * cartItem.quantity} ₽
         </p>
       </div>

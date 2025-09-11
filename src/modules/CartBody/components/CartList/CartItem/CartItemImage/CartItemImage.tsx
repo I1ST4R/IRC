@@ -9,7 +9,7 @@ export const CartItemImage = ({ cartItem, userId, isLiked }: CartItemProps) => {
       <img
         src={cartItem.product.img}
         alt={cartItem.product.name}
-        className="cart__item-image"
+        className="w-[125px] h-[125px] object-contain bg-[#f2f2f2] border border-[#ececec]"
       />
       <Button
         variant="liked"
