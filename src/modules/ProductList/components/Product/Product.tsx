@@ -1,9 +1,9 @@
 import { Product as ProductType } from "../../store/product/productTypes";
-import { useNavigate, Link } from "react-router-dom";
-import { initialCart, useAddToCartMutation, useGetCartQuery } from "@/modules/CartBody/index";
-import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/shared/store/liked/likedApiSlice";
+import { Link } from "react-router-dom";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Tag } from "../../store/tag/tagTypes";
+import { useCart } from "./useCart";
+import { useLiked } from "./useLiked";
 
 type ProductProps = {
   product: ProductType;
@@ -11,48 +11,9 @@ type ProductProps = {
 
 export const Product = ({ product }: ProductProps) => {
   const { data: user } = useGetUserQuery();
-  const {
-    data: cart = initialCart,
-    isLoading: isCartLoading,
-    error: cartError,
-  } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
-  const {data: likedItems = [], isLoading: isLikedLoading, error: likedError} = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
-  const [removeFromLiked] = useRemoveFromLikedMutation();
-  const [addToLiked] = useAddToLikedMutation();
-  const [addToCart] = useAddToCartMutation();
-  const navigate = useNavigate();
-
-
-  const isInCart = () => {
-    if (isCartLoading) return false
-    return cart.items.some((item) => item.product.id === product.id)
-  };
-
-  const isLiked = () => {
-    if (isLikedLoading) return false
-    return likedItems.some((item) => item.id === product.id)
-  };
-
-  const handleLike = async () => {
-    if (!user?.id) {
-      // вызываем форму с регой
-      return 
-    }
-
-    isLiked() ? removeFromLiked({ userId: user.id.toString(), productId: product.id })
-    : addToLiked({ userId:user.id.toString(), productId:product.id })
-    
-  };
-
-  const handleCartClick = async () => {
-    if (!user?.id) {
-      // вызываем форму с регой
-      return;
-    }
-
-    if (isInCart()) navigate("/cart") 
-    else addToCart({ userId: user.id.toString(), productId: product.id })
-  };
+  if(!user?.id) return
+  const {isInCart, cartClick} = useCart(user?.id, product.id)
+  const {isLiked, likeClick} = useLiked(user?.id, product.id)
 
   return (
     <div className="product">
@@ -76,13 +37,13 @@ export const Product = ({ product }: ProductProps) => {
       </Link>
       <button
         className={`product__btn ${isInCart() ? "product__btn--in-cart" : ""}`}
-        onClick={handleCartClick}
+        onClick={cartClick}
       >
         {isInCart() ? "В корзине" : "Добавить в корзину"}
       </button>
       <button
         className={`product__like${isLiked() ? " product__like--active" : ""}`}
-        onClick={handleLike}
+        onClick={likeClick}
       >
         <svg
           width="20"
