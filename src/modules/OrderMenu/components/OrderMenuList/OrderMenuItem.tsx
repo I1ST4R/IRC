@@ -1,4 +1,4 @@
-import { CartItem } from "@/modules/CartList/store/cart/cartTypes";
+import { CartItem } from "@/modules/CartBody/store/cart/cartTypes";
 import { Card, CardDescription, CardHeader, CardTitle, CardAction } from "@/shared/ui/kit/card";
 
 type OrderMenuItemProps = {
