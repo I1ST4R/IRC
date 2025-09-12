@@ -1,3 +1,5 @@
+import { Tag } from "../tag/tagTypes";
+
 export interface ProductDb {
   id: string;
   name: string;
@@ -22,7 +24,7 @@ export interface Product {
   prevPrice: number;
   quantity: string;
   img: string;
-  tags: string[];
+  tags: Tag[];
   article: string;
   description: string;
   formula: string[];

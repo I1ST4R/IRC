@@ -1,33 +1,31 @@
-import { Product as ProductType } from "../../../_old-version/entity/product/types";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../../../_old-version/services/store";
+import { Product as ProductType } from "../../store/product/productTypes";
 import { useNavigate, Link } from "react-router-dom";
-import { Tag } from "@/entity/tag/types";
-import { useAddToCartMutation, useGetCartQuery } from "@/entity/cart/api";
-import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
-import { useGetUserQuery } from "@/entity/users/api";
+import { initialCart, useAddToCartMutation, useGetCartQuery } from "@/modules/CartBody/index";
+import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/shared/store/liked/likedApiSlice";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
+import { Tag } from "../../store/tag/tagTypes";
 
-interface ProductProps {
+type ProductProps = {
   product: ProductType;
-  onRemoveFromLiked?: () => void;
-  onAuthRequired?: () => void;
 }
 
-export const Product = ({
-  product,
-  onAuthRequired,
-}: ProductProps) => {
+export const Product = ({ product }: ProductProps) => {
   const { data: user } = useGetUserQuery();
-  const {data: cartItems = [], isLoading: isCartLoading, error: cartError} = useGetCartQuery(user?.id ?? '', { skip: !user?.id });
+  const {
+    data: cart = initialCart,
+    isLoading: isCartLoading,
+    error: cartError,
+  } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
   const {data: likedItems = [], isLoading: isLikedLoading, error: likedError} = useGetLikedQuery(user?.id ?? '', { skip: !user?.id });
   const [removeFromLiked] = useRemoveFromLikedMutation();
   const [addToLiked] = useAddToLikedMutation();
   const [addToCart] = useAddToCartMutation();
   const navigate = useNavigate();
 
+
   const isInCart = () => {
     if (isCartLoading) return false
-    return cartItems.some((item) => item.product.id === product.id)
+    return cart.items.some((item) => item.product.id === product.id)
   };
 
   const isLiked = () => {
@@ -37,8 +35,8 @@ export const Product = ({
 
   const handleLike = async () => {
     if (!user?.id) {
-      onAuthRequired?.();
-      return;
+      // вызываем форму с регой
+      return 
     }
 
     isLiked() ? removeFromLiked({ userId: user.id.toString(), productId: product.id })
@@ -48,7 +46,7 @@ export const Product = ({
 
   const handleCartClick = async () => {
     if (!user?.id) {
-      onAuthRequired?.();
+      // вызываем форму с регой
       return;
     }
 

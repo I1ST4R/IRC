@@ -1,4 +1,4 @@
-import { Product } from "@/shared/store/productTypes";
+import { Product } from "@/modules/ProductList/store/product/productTypes";
 
 type CartItemBase<T> = {
   isChecked: boolean;

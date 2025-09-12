@@ -45,7 +45,6 @@ export const ProductList = () => {
           <ProductComponent
             key={`product-${product.id}`}
             product={product}
-            onAuthRequired={onAuthRequired}
           />
         ))}
       </div>
