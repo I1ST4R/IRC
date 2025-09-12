@@ -5,8 +5,9 @@ import {
   useGetLikedQuery, 
   useRemoveFromLikedMutation 
 } from "@/shared/store/liked/likedApiSlice";
+import { UserIdProductIdType } from "../CartBtn/CartBtn";
 
-export const useLiked = (userId: string, productId: string) => {
+export const useLiked = ({userId, productId} : UserIdProductIdType) => {
   const {
     data: likedItems = [], 
     isLoading: isLikedLoading
