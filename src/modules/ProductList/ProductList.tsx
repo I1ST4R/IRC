@@ -5,11 +5,7 @@ import { Product as ProductComponent } from "../Product/Product";
 import type { Product } from "../../../_old-version/entity/product/types";
 import { useGetProductsQuery } from "@/entity/product/api";
 
-interface ProductListProps {
-  onAuthRequired?: () => void;
-}
-
-export const ProductList = ({ onAuthRequired }: ProductListProps) => {
+export const ProductList = () => {
   const filter = useSelector((state: RootState) => state.filter);
   const [page, setPage] = useState(1);
   

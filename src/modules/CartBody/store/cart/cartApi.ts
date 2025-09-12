@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
 import { Cart, CartItemDb } from "./cartTypes";
-import { getProductsById } from "@/_old-version/services/api";
+import { getProductById, getProductsById } from "@/_old-version/services/api";
 import { getItemsCount } from "./getItemsCount";
 
 
@@ -43,7 +43,7 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
 export const loadCartProducts = async (cartItems: CartItemDb[]) => {
   try {
     const productIds = cartItems.map(item => item.productId);
-    const products = await getProductsById(productIds);
+    const products = await Promise.all(productIds.map(productId => getProductById(productId)));
     
     const cartWithProducts = cartItems.map(cartItem => {
       const product = products.find(p => p.id === cartItem.productId);

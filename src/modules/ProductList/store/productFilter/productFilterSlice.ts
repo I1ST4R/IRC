@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FilterState } from './types';
+import { FilterState } from './productFilterTypes';
 
 const initialState: FilterState = {
   filterParams: {

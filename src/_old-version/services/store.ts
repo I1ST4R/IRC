@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TypedUseSelectorHook } from 'react-redux';
 //Reducers
 import productsReducer from '../entity/product/slice.ts';
-import filterReducer from '../entity/productFilter/slice.ts';
+import filterReducer from '../../modules/ProductList/store/productFilter/productFilterSlice.ts';
 import likedReducer from '../entity/liked/slice.ts';
 import accountReducer from '../entity/account/slice.ts';
 import ordersReducer from '../entity/order/slice.ts';
@@ -17,11 +17,11 @@ import { orderApi } from '../entity/order/api.ts';
 import { productApi } from '../entity/product/api.ts';
 import { productCategoryApi } from '../entity/productCategory/api.ts';
 import { promoApi } from '../entity/promo/api.ts';
-import { tagApi } from '../entity/tag/api.ts';
+import { tagApi } from '../../modules/ProductList/store/tag/tagApiSlice.ts';
 import { usersApi } from '../entity/users/api.ts';
 //State Interface
 import { LikedState } from '../entity/liked/types.ts'
-import { FilterState } from '../entity/productFilter/types.ts'
+import { FilterState } from '../../modules/ProductList/store/productFilter/productFilterTypes.ts'
 import { ProductsState } from '../entity/product/types.ts'
 import { OrdersState } from '../entity/order/types.ts';
 import { AccountState } from '@/entity/account/types.ts';

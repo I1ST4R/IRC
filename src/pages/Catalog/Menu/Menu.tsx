@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag, resetFilters } from "../../../_old-version/entity/productFilter/slice";
+import { setPriceRange, toggleTag, resetFilters } from "../../../modules/ProductList/store/productFilter/productFilterSlice";
 import { AppDispatch, RootState } from "../../../_old-version/services/store";
 import reset from "./reset.svg";
 import { PriceRange } from "@/entity/productFilter/types"

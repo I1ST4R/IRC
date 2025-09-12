@@ -34,7 +34,7 @@ const initialState: OrderState = {
 };
 
 const orderSlice = createSlice({
-  name: "products",
+  name: "order",
   initialState,
   reducers: {
     changeOrderInfo(state, action: PayloadAction<Partial<Order> & { userId: string } | undefined>) {

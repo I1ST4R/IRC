@@ -22,7 +22,7 @@ export interface Product {
   prevPrice: number;
   quantity: string;
   img: string;
-  tags: Tag[];
+  tags: string[];
   article: string;
   description: string;
   formula: string[];

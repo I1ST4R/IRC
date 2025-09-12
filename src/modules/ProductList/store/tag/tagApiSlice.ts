@@ -1,13 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getTagsById } from '../../services/api';
-import { Tag } from './types';
+import { getTagsById } from './tagApi';
 
 export const tagApi = createApi({
   reducerPath: 'tagApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Tag'],
   endpoints: (build) => ({
-    getTagsById: build.query<Tag[], string[]>({
+    getTagsById: build.query<string[], string[]>({
       queryFn: (tagsId) =>
         getTagsById(tagsId)
           .then((data) => ({ data }))
