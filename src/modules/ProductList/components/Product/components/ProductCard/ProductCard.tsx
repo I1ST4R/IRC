@@ -1,6 +1,7 @@
 import { Product } from "@/modules/ProductList/store/product/productTypes";
-import { Tag } from "@/modules/ProductList/store/tag/tagTypes";
+import { Card, CardContent, CardDescription, CardTitle } from "@/shared/ui/kit/card";
 import { Link } from "react-router-dom";
+import { ProductTags } from "./ProductTags";
 
 type ProductCardProps = {
   product: Product
@@ -9,22 +10,20 @@ type ProductCardProps = {
 export const ProductCard = ({product}: ProductCardProps) => {
   return (
     <Link to={`/product/${product.id}`} className="product__link">
-      <img src={product.img} alt={product.name} className="product__image" />
-      <div className="product__info">
-        <div className="product__tags">
-          {product.tags.map((tag: Tag) => (
-            <span key={`${product.id}-${tag.id}`} className="product__tag">
-              {tag.name}
-            </span>
-          ))}
-        </div>
-        <h3 className="product__name">{product.name}</h3>
-        <h3 className="product__technology">{product.technology}</h3>
-        <div className="product__prices">
+      <Card>
+        <img src={product.img} alt={product.name} className="w-full h-[270px] object-contain object-center" />
+        <ProductTags productTags = {product.tags}/>
+        <CardTitle className="font-manrope font-semibold text-xs uppercase tracking-wide m-0">
+          {product.name}
+        </CardTitle>
+        <CardDescription className="font-europe-ext font-medium text-xl uppercase tracking-wide pb-2.5 m-0">
+          {product.technology}
+        </CardDescription>
+        <CardContent className="absolute bottom-[50px] left-[30px] flex items-center gap-2.5 font-manrope text-xl font-bold">
           <span>{product.price} ₽</span>
-          <span className="product__prev-price">{product.prevPrice} ₽</span>
-        </div>
-      </div>
+          <span className="font-manrope font-medium text-lg line-through text-black/50">{product.prevPrice} ₽</span>
+        </CardContent>
+      </Card>
     </Link>
   );
 };
