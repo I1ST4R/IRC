@@ -96,16 +96,16 @@
     transition: all 0.2s;
 
     &:hover {
-      background: #CA354F;
+      background: var(--coral);
       color: white
     }
 
     &--in-cart {
-      background: #CA354F;
+      background: var(--coral);
       color: white;
       
       &:hover {
-        background: #a02b3e;
+        background: var(--coralDark);
       }
     }
   }
