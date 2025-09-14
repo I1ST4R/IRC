@@ -13,5 +13,6 @@ export interface FilterParams {
 export interface FilterState {
   filterParams: FilterParams;
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  isInitial: boolean,
   error: string | null;
 }

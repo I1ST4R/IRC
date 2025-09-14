@@ -14,7 +14,7 @@ export const Product = ({ product }: ProductProps) => {
   if(!user?.id) return
 
   return (
-    <div className="product">
+    <div className="relative w-[312px] flex flex-col bg-[#F2F2F2] overflow-hidden transition-transform duration-200 hover:-translate-y-[5px]">
       <ProductCard product = {product}/>
       <CartBtn userId = {user.id} productId = {product.id}/>
       <LikeBtn userId = {user.id} productId = {product.id}/>

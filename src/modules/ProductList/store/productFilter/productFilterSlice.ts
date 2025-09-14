@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './productFilterTypes';
+import { checkIsInitial } from './checkIsInitial';
 
-const initialState: FilterState = {
+export const initialState: FilterState = {
   filterParams: {
     priceRange: {
       min: 500,
@@ -10,6 +11,7 @@ const initialState: FilterState = {
     tagsId: [],
   },
   loading: 'idle',
+  isInitial: true,
   error: null
 };
 
@@ -19,6 +21,7 @@ const filterSlice = createSlice({
   reducers: {
     setPriceRange: (state, action: PayloadAction<{ min: number; max: number }>) => {
       state.filterParams.priceRange = action.payload;
+      if(checkIsInitial(state)) state.isInitial = true
     },
     toggleTag: (state, action) => {
       const index = state.filterParams.tagsId.indexOf(action.payload);
@@ -27,10 +30,12 @@ const filterSlice = createSlice({
       } else {
         state.filterParams.tagsId.splice(index, 1);
       }
+      if(checkIsInitial(state)) state.isInitial = true
     },
     resetFilters: (state) => {
       state.filterParams.priceRange = initialState.filterParams.priceRange;
       state.filterParams.tagsId = initialState.filterParams.tagsId;
+      state.isInitial = true
     }
   }
 });
