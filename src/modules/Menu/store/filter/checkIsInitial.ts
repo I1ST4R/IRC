@@ -1,5 +1,5 @@
-import { initialState } from "./productFilterSlice";
-import { FilterState } from "./productFilterTypes";
+import { initialState } from "./filterSlice";
+import { FilterState } from "./filterTypes";
 
 
 const initialJSON = JSON.stringify(initialState);

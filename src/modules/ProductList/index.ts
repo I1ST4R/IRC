@@ -1,3 +1,4 @@
+import { Tag } from "./store/tag/tagTypes";
 import { CartBtn } from "./components/Product/components/CartBtn/CartBtn";
 import { LikeBtn } from "./components/Product/components/LikeBtn/LikeBtn";
 import { ProductList } from "./ProductList";
@@ -7,5 +8,6 @@ export {
   ProductList, 
   CartBtn,
   LikeBtn,
-  useGetProductByIdQuery
+  useGetProductByIdQuery,
+  type Tag
 }

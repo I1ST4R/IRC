@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { productApi } from "./product/productApiSlice.ts";
 import { tagApi } from "./tag/tagApiSlice.ts";
-import { FilterState } from "../../Menu/store/productFilter/productFilterTypes.ts";
+import { FilterState } from "../../Menu/store/filter/filterTypes.ts";
 
 export const orderMenuStore = configureStore({
   reducer: {

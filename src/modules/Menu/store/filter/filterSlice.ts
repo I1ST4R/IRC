@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FilterState } from './productFilterTypes';
+import { FilterState } from './filterTypes';
 import { checkIsInitial } from './checkIsInitial';
 import { RootState } from '../../../ProductList/store/productListStore';
 
@@ -20,8 +20,8 @@ const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setPriceRange: (state, action: PayloadAction<{ min: number; max: number }>) => {
-      state.filterParams.priceRange = action.payload;
+    setPriceRange: (state, action: PayloadAction<number>) => {
+      state.filterParams.priceRange.min = action.payload;
       if(checkIsInitial(state)) state.isInitial = true
     },
     toggleTag: (state, action) => {
@@ -41,6 +41,13 @@ const filterSlice = createSlice({
   }
 });
 
-export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions;
-export const selectFilter = (state: RootState) => state.filter;
+export const selectFilter = (state: RootState) => state.filter
+export const selectPriceRangeMin = (state: RootState) => state.filter.filterParams.priceRange.min
+export const selectPriceRangeMax = (state: RootState) => state.filter.filterParams.priceRange.max
+export const selectTagsId = (state: RootState) => state.filter.filterParams.tagsId
+export const selectFilterLoading = (state: RootState) => state.filter.loading
+export const selectIsInitial = (state: RootState) => state.filter.isInitial
+export const selectFilterError = (state: RootState) => state.filter.error
+
+export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions
 export default filterSlice.reducer; 

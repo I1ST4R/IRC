@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPriceRange, toggleTag, resetFilters } from "../../../modules/ProductList/store/productFilter/productFilterSlice";
-import { AppDispatch, RootState } from "../../../_old-version/services/store";
+import { setPriceRange, toggleTag, resetFilters } from "./store/filter/filterSlice";
+import { AppDispatch, RootState } from "./store/menuStore";
 import reset from "./reset.svg";
-import { PriceRange } from "@/entity/productFilter/types"
-import { Category } from "@/entity/productCategory/types"
-import { useGetCategoriesQuery } from "@/entity/productCategory/api";
-import { useGetTagsByIdQuery } from "@/entity/tag/api";
+import { useGetCategoriesQuery } from "@/modules/Menu/store/category/categoryApiSlice";
+import { useGetTagsByIdQuery } from "@/modules/ProductList/store/tag/tagApiSlice";
 import { Slider } from "@/shared/ui/kit/slider";
+import { selectPriceRangeMax, selectPriceRangeMin } from "./store/filter/filterSlice";
 
 interface AccordionItemProps {
   title: string;
@@ -52,48 +51,6 @@ export const Menu = () => {
   const tagIds = categories.flatMap(category => category.tags);
   const {data: tags = []} = useGetTagsByIdQuery(tagIds ?? [], { skip: !tagIds.length });
 
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter.filterParams.priceRange || { min: 500, max: 10000 });
-  const debounceTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const [price, setPrice] = useState()
-
-  const updateRangeHighlight = useCallback(() => {
-    if (sliderRef.current && localPriceRange) {
-      const minPercent = ((localPriceRange.min - 500) / (10000 - 500)) * 100;
-      const maxPercent = ((localPriceRange.max - 500) / (10000 - 500)) * 100;
-      
-      sliderRef.current.style.setProperty('--range-left', `${minPercent}%`);
-      sliderRef.current.style.setProperty('--range-width', `${maxPercent - minPercent}%`);
-    }
-  }, [localPriceRange]);
-  
-  useEffect(() => {
-    updateRangeHighlight();
-  }, [localPriceRange, updateRangeHighlight]);
-
-  const debouncedPriceChange = useCallback((type: 'min' | 'max', value: number) => {
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-
-    setLocalPriceRange(prev => ({
-      ...prev,
-      [type]: value
-    }));
-
-    debounceTimer.current = setTimeout(() => {
-      dispatch(setPriceRange({
-        ...localPriceRange,
-        [type]: value
-      }));
-    }, 300);
-  }, [dispatch, localPriceRange]);
-
-  const handlePriceChange = useCallback((type: 'min' | 'max', value: number) => {
-    if (!filter) return;
-    debouncedPriceChange(type, value);
-  }, [filter, debouncedPriceChange]);
-
   const handleTagToggle = useCallback((tagId: string) => {
     dispatch(toggleTag(tagId));
   }, [dispatch]);
@@ -104,7 +61,6 @@ export const Menu = () => {
 
   const handleResetFilters = useCallback(() => {
     dispatch(resetFilters());
-    setLocalPriceRange({ min: 500, max: 10000 });
   }, [dispatch]);
 
   const getTagName = (tagId: string) => {
@@ -120,52 +76,16 @@ export const Menu = () => {
   return (
     <div className="menu">
       <AccordionItem title="Цена">
-        <div className="menu__price-range">
-          <div className="menu__price-inputs">
-            <input 
-              type="number" 
-              min="500" 
-              max="10000" 
-              value={localPriceRange.min}
-              onChange={(e) => handlePriceChange('min', Number(e.target.value))}
-            />
-            <span className="menu__price-separator">-</span>
-            <input 
-              type="number" 
-              min="500" 
-              max="10000" 
-              value={localPriceRange.max}
-              onChange={(e) => handlePriceChange('max', Number(e.target.value))}
-            />
-          </div>
-          <div className="menu__price-slider" ref={sliderRef}>
-            <input
-              type="range"
-              min="500"
-              max="10000"
-              value={localPriceRange.min}
-              onChange={(e) => handlePriceChange('min', Number(e.target.value))}
-              className="menu__range menu__range--min"
-            />
-            <input
-              type="range"
-              min="500"
-              max="10000"
-              value={localPriceRange.max}
-              onChange={(e) => handlePriceChange('max', Number(e.target.value))}
-              className="menu__range menu__range--max"
-            />
-          </div>
-        </div>
-
         <Slider
-          value={price}
-          min={500}
-          max={10000}
+          className="menu__price-range"
+          min={useSelector(selectPriceRangeMin)}
+          onValueChange={(value) => dispatch(setPriceRange(value[0]))}
+          max={useSelector(selectPriceRangeMax)}
+          step={1}
         />
       </AccordionItem>
 
-      {categories.map((category: Category) => (
+      {categories.map((category) => (
         <AccordionItem key={category.id} title={category.name}>
           <div className="menu__checkboxes">
             {category.tags.map((tag) => {

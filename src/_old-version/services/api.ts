@@ -1,12 +1,6 @@
 import axios from 'axios';
-import {FilterParams} from '@/entity/productFilter/types'
 import {CartItem, CartItemDb} from '@/entity/cart/types'
-import { LikedItemDb } from '@/entity/liked/types'
 import { Order, OrderDb, OrderDbAdd, recipientInterface } from '@/entity/order/types';
-import { User, LoginData, RegisterData } from '@/entity/users/types';
-import { Product, ProductDb } from '@/entity/product/types';
-import { Promo } from '@/entity/promo/types';
-import { Certificate } from '@/entity/certificate/types';
 
 const API_URL = 'http://localhost:3001';
 
@@ -16,25 +10,6 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json'
   }
 });
-
-// Product
-
-
-// Category
-export const getCategories = async () => {
-  try{
-    const response = await axiosInstance.get('/productCategories');
-    return response.data;
-  } catch (error: any) {
-    console.error('error in getCategories', error);
-    throw error;
-  }
-};
-
-// Cart
-
-
-
 
 // Promo
 export const changeUsedPromo = async (id: string) => {
@@ -62,8 +37,6 @@ export const changeUsedCertificate = async (id: string) => {
     throw error;
   }
 }
-
-
 
 // Orders
 export const addOrder = async (order: Order ) => {

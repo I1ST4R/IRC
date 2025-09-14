@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
-import { FilterParams } from "../../../Menu/store/productFilter/productFilterTypes";
+import { FilterParams } from "../../../Menu/store/filter/filterTypes";
 import { Product, ProductDb } from "./productTypes";
 import { getTagsById } from "../tag/tagApi";
 
