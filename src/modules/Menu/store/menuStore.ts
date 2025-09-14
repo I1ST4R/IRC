@@ -1,17 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import filterReducer from "../../Menu/store/productFilter/productFilterSlice.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { productApi } from "./product/productApiSlice.ts";
-import { tagApi } from "./tag/tagApiSlice.ts";
 import { FilterState } from "../../Menu/store/productFilter/productFilterTypes.ts";
 
 export const orderMenuStore = configureStore({
-  reducer: {
-  [productApi.reducerPath]: productApi.reducer,
-  [tagApi.reducerPath]: tagApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(productApi.middleware)
-    .concat(tagApi.middleware)
+  reducer: {filter: filterReducer},
 })
 
 export type RootState = {

@@ -7,6 +7,7 @@ import { PriceRange } from "@/entity/productFilter/types"
 import { Category } from "@/entity/productCategory/types"
 import { useGetCategoriesQuery } from "@/entity/productCategory/api";
 import { useGetTagsByIdQuery } from "@/entity/tag/api";
+import { Slider } from "@/shared/ui/kit/slider";
 
 interface AccordionItemProps {
   title: string;
@@ -54,6 +55,7 @@ export const Menu = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [localPriceRange, setLocalPriceRange] = useState<PriceRange>(filter.filterParams.priceRange || { min: 500, max: 10000 });
   const debounceTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [price, setPrice] = useState()
 
   const updateRangeHighlight = useCallback(() => {
     if (sliderRef.current && localPriceRange) {
@@ -155,6 +157,12 @@ export const Menu = () => {
             />
           </div>
         </div>
+
+        <Slider
+          value={price}
+          min={500}
+          max={10000}
+        />
       </AccordionItem>
 
       {categories.map((category: Category) => (

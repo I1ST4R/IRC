@@ -8,7 +8,7 @@ import { ProductListError } from "./components/ProductError/ProductListError";
 import { NoProductsWithFilter } from "./components/NoProductsWithFilter/NoProductsWithFilter";
 import { Button } from "@/shared/ui/kit/button";
 import { cn } from "@/shared/lib/css";
-import { selectFilter } from "./store/productFilter/productFilterSlice";
+import { selectFilter } from "../Menu/store/productFilter/productFilterSlice";
 
 export const ProductList = () => {
   const filter = useSelector(selectFilter);
