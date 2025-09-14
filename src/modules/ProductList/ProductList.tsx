@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/modules/ProductList/store/productListStore";
 import { Product as ProductComponent } from "./components/Product/Product";
 import type { Product } from "@/modules/ProductList/store/product/productTypes";
 import { useGetProductsQuery } from "@/modules/ProductList/store/product/productApiSlice";
@@ -9,9 +8,10 @@ import { ProductListError } from "./components/ProductError/ProductListError";
 import { NoProductsWithFilter } from "./components/NoProductsWithFilter/NoProductsWithFilter";
 import { Button } from "@/shared/ui/kit/button";
 import { cn } from "@/shared/lib/css";
+import { selectFilter } from "./store/productFilter/productFilterSlice";
 
 export const ProductList = () => {
-  const filter = useSelector((state: RootState) => state.filter);
+  const filter = useSelector(selectFilter);
   const [page, setPage] = useState(1);
   const { data, isLoading, error } = useGetProductsQuery({
     page: page,

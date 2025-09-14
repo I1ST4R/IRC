@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './productFilterTypes';
 import { checkIsInitial } from './checkIsInitial';
+import { RootState } from '../productListStore';
 
 export const initialState: FilterState = {
   filterParams: {
@@ -41,4 +42,5 @@ const filterSlice = createSlice({
 });
 
 export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions;
+export const selectFilter = (state: RootState) => state.filter;
 export default filterSlice.reducer; 
