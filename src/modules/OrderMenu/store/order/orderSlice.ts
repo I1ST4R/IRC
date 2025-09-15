@@ -1,7 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order, OrderState, recipientInterface } from "./orderTypes.ts";
-import { calculateCartTotals } from "./calculateCarttotals.ts";
-import {RootState} from "../orderMenuStore.ts"
+import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
+import {AppDispatch, RootState} from "../orderMenuStore.ts"
+import { useDispatch, useSelector } from "react-redux";
+import { addOrder } from "./orderApi.ts";
+import { useNavigate } from "react-router-dom";
+
+export const createOrder = createAsyncThunk(
+  'orders/createOrder', 
+  async () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    
+    try {
+      const curOrder = useSelector(selectCurrentOrder);
+      await addOrder(curOrder);
+      navigate("/payment");
+    } catch (error) {
+      dispatch(addErrorOnOrderCreate());
+      throw new Error("Error when creating an order");
+    }
+  }
+);
 
 const defaultRecipient: recipientInterface = {
   deliveryMethod: "courier",
@@ -61,10 +81,15 @@ const orderSlice = createSlice({
           cartTotals.totalWithDiscount + state.item.deliveryCost,
       });
     },
+    addErrorOnOrderCreate(
+      state
+    ) {
+      state.error = "Ошибка при создании заказа"
+    }
   },
 });
 
 export const selectCurrentOrder = (state: RootState) => state.order.item
 
-export const { changeOrderInfo } = orderSlice.actions;
+export const { changeOrderInfo, addErrorOnOrderCreate } = orderSlice.actions;
 export default orderSlice.reducer;
