@@ -1,6 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Order, OrderState } from "./orderTypes.ts";
+import { Order, OrderState, recipientInterface } from "./orderTypes.ts";
 import { calculateCartTotals } from "./calculateCarttotals.ts";
+import {RootState} from "../orderMenuStore.ts"
+
+const defaultRecipient: recipientInterface = {
+  deliveryMethod: "courier",
+  paymentMethod: "SBP",
+  fullName: "",
+  phone: "",
+  address: "",
+  email: "",
+  deliveryDate: "",
+  comment: "",
+};
 
 const defaultOrder: Order = {
   id: 0,
@@ -15,16 +27,7 @@ const defaultOrder: Order = {
   certificateDiscount: 0,
   deliveryCost: 500,
   certificateId: null,
-  recipient: {
-    deliveryMethod: "courier",
-    paymentMethod: "SBP",
-    fullName: "",
-    phone: "",
-    address: "",
-    email: "",
-    deliveryDate: "",
-    comment: "",
-  },
+  recipient: defaultRecipient,
 };
 
 const initialState: OrderState = {
@@ -37,8 +40,10 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    changeOrderInfo(state, action: PayloadAction<Partial<Order> & { userId: string } | undefined>) {
-
+    changeOrderInfo(
+      state,
+      action: PayloadAction<(Partial<Order> & { userId: string }) | undefined>
+    ) {
       if (action.payload) {
         state.item.userId = action.payload.userId;
         const { userId, ...rest } = action.payload;
@@ -52,11 +57,14 @@ const orderSlice = createSlice({
       );
 
       Object.assign(state.item, cartTotals, {
-        totalWithDiscount: cartTotals.totalWithDiscount + state.item.deliveryCost
+        totalWithDiscount:
+          cartTotals.totalWithDiscount + state.item.deliveryCost,
       });
-    }
+    },
   },
 });
 
+export const selectCurrentOrder = (state: RootState) => state.order.item
+
 export const { changeOrderInfo } = orderSlice.actions;
-export default orderSlice.reducer; 
+export default orderSlice.reducer;

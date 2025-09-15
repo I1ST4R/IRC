@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { FilterState } from "./filter/filterTypes.ts";
 import { categoryApi } from "./category/categoryApiSlice.ts";
 
-export const orderMenuStore = configureStore({
+export const menuStore = configureStore({
   reducer: {
     filter: filterReducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
@@ -17,7 +17,7 @@ export type RootState = {
   filter: FilterState;
 };
 
-export type AppDispatch = typeof orderMenuStore.dispatch;
+export type AppDispatch = typeof menuStore.dispatch;
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

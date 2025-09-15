@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './filterTypes';
 import { checkIsInitial } from './checkIsInitial';
-import { RootState } from '../../../ProductList/store/productListStore';
+import { RootState } from '../menuStore';
 
 export const initialState: FilterState = {
   filterParams: {
