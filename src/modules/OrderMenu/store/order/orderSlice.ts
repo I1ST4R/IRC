@@ -23,7 +23,7 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-const defaultRecipient: recipientInterface = {
+export const defaultRecipient: recipientInterface = {
   deliveryMethod: "courier",
   paymentMethod: "SBP",
   fullName: "",

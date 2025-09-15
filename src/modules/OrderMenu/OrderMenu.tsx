@@ -28,13 +28,13 @@ export const OrderMenu = (props: OrderMenuProps) => {
   return (
     <div className="bg-[#F2F2F2] w-73">
       <p className="p-3 border-b border-gray-200">Ваш заказ</p>
-      <OrderMenuList isOrderPage={isOrderPage} 
-      checkedCartItems={checkedCartItems}/>
-      <OrderMenuTotals order={order}/>
-      <OrderMenuDiscountSection/>
-      <Button onClick={handleCheckout}>
-       Оформить заказ
-      </Button>
+      <OrderMenuList
+        isOrderPage={isOrderPage}
+        checkedCartItems={checkedCartItems}
+      />
+      <OrderMenuTotals order={order} />
+      <OrderMenuDiscountSection />
+      <Button onClick={handleCheckout}>Оформить заказ</Button>
     </div>
   );
 };

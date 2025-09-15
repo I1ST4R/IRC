@@ -1,8 +1,12 @@
 import { CartItem, CartItemDb } from "@/modules/CartBody/index";
 
-export type DeliveryMethod = "courier" | "pickup";
+// Определяем константы для значений
+export const DELIVERY_METHODS = ["courier", "pickup"] as const;
+export const PAYMENT_METHODS = ["SBP", "bank card"] as const;
 
-export type PaymentMethod = "SBP" | "bank card";
+// Создаем типы
+export type DeliveryMethod = typeof DELIVERY_METHODS[number];
+export type PaymentMethod = typeof PAYMENT_METHODS[number];
 
 export interface recipientInterface {
   deliveryMethod: DeliveryMethod;
