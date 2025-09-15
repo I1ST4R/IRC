@@ -1,3 +1,2 @@
-import { OrderMenu } from "./OrderMenu";
 
-export { OrderMenu}
+export { OrderMenu} from "./OrderMenu";
