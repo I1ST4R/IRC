@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
+import { Tag } from "./tagTypes";
 
 const axiosInstance = axios.create(API_CLIENT);
 
@@ -13,6 +14,13 @@ export const getTagById = async (tagId: string) => {
   }
 }
 
-export const getTagsById = async (tagsId: string[]) => {
-  return Promise.all(tagsId.map(tagId => getTagById(tagId)));
+export const getTagsById = async (tagsId: string[]): Promise<Record<string, Tag>> => {
+  const tagsArray = await Promise.all(tagsId.map(tagId => getTagById(tagId)));
+
+  return tagsArray.reduce((record, tag) => {
+    if (tag) {
+      record[tag.id] = tag;
+    }
+    return record;
+  }, {} as Record<string, Tag>);
 };

@@ -12,17 +12,14 @@ export type CartListProps = {
   user: User;
 };
 
-export const CartList = ({cartAndLiked, user}: CartListProps) => {
-  const cartItemsWithLikedParam = getCartItemsWithLikedParam(
-    cartAndLiked
-  );
+export const CartList = ({ cartAndLiked, user }: CartListProps) => {
+  const cartItemsWithLikedParam = getCartItemsWithLikedParam(cartAndLiked);
   const [clearCart] = useClearCartMutation();
 
   return (
     <div>
-
       {cartAndLiked.cartItems.length > 0 && (
-        <Button 
+        <Button
           asChild
           onClick={() => clearCart({ userId: user?.id ?? "" })}
           variant="squareRemove"
@@ -43,7 +40,6 @@ export const CartList = ({cartAndLiked, user}: CartListProps) => {
           );
         })}
       </div>
-
     </div>
   );
 };

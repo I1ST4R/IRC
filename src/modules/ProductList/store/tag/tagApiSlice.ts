@@ -7,7 +7,7 @@ export const tagApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Tag'],
   endpoints: (build) => ({
-    getTagsById: build.query<Tag[], string[]>({
+    getTagsById: build.query<Record<string, Tag>, string[]>({
       queryFn: (tagsId) =>
         getTagsById(tagsId)
           .then((data) => ({ data }))

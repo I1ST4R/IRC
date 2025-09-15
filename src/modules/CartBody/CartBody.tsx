@@ -24,7 +24,6 @@ export const CartBody = () => {
 
   return (
     <div>
-
       <div className="flex justify-between items-center font-extrabold text-xs mx-0 mb-5 ml-10 tracking-wide uppercase">
         <span className="text-[var(--coral)]">
           В корзине <span>{cart.itemsCount}</span>
@@ -40,7 +39,6 @@ export const CartBody = () => {
           user={user}
         />
       </div>
-
     </div>
   );
 };
