@@ -4,7 +4,7 @@ import { FieldConfigType } from "./fieldConfigTypes";
 import { UseFormReturn } from "react-hook-form";
 import { RecipientFormData } from "../../helpers/recepientSchema";
 
-export const OrderMenuField = (props : FieldConfigType) => {
+export const OrderFormField = (props : FieldConfigType) => {
   
 
   return (

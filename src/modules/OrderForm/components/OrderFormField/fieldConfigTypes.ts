@@ -16,12 +16,12 @@ type FieldOptionType = {
   label: string
 }
 
-type SelectorConfig = {
+export type SelectorConfig = {
   fieldType: FieldTypes.Selector;
   options: Array<FieldOptionType>;
 } & GeneralConfig
 
-type OtherFieldsConfig = {
+export type OtherFieldsConfig = {
   fieldType: FieldTypes.TextArea | FieldTypes.Input | FieldTypes.Date;
   placeholder?: string;
 } & GeneralConfig
