@@ -1,6 +1,6 @@
 import { OtherFieldsConfig } from "../fieldConfigTypes";
 
-export const OrderFormImput = ({
+export const OrderFormInput = ({
   name,
   label,
   className,

@@ -1,6 +1,6 @@
 import { SelectorConfig } from "../fieldConfigTypes";
 
-export const OrderFormSelect = ({
+export const OrderFormSelector = ({
   name,
   label,
   className,

@@ -1,30 +1,14 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
-import { Textarea } from "@/shared/ui/kit/textarea";
-import { FieldConfigType } from "./fieldConfigTypes";
-import { UseFormReturn } from "react-hook-form";
-import { RecipientFormData } from "../../helpers/recepientSchema";
+import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
+import { OrderFormInput } from "./components/OrderFormInput"
+import { OrderFormSelector } from "./components/OrderFormSelector";
+import { OrderFormTextarea } from "./components/OrderFormTextarea";
+import { OrderFormDate } from "./components/OrderFormDate";
 
 export const OrderFormField = (props : FieldConfigType) => {
-  
-
-  return (
-    <></>
-    // <FormField
-    //   control={form.control}
-    //   name="comment"
-    //   render={({ field }) => (
-    //     <FormItem>
-    //       <FormLabel>Комментарий (необязательно)</FormLabel>
-    //       <FormControl>
-    //         <Textarea
-    //           placeholder="Дополнительная информация для курьера"
-    //           className="resize-none"
-    //           {...field}
-    //         />
-    //       </FormControl>
-    //       <FormMessage />
-    //     </FormItem>
-    //   )}
-    // />
-  );
+  switch (props.fieldType){
+    case FieldTypes.Input: return <OrderFormInput {...props}/>
+    case FieldTypes.Selector: return <OrderFormSelector {...props}/>
+    case FieldTypes.TextArea: return <OrderFormTextarea {...props}/>
+    case FieldTypes.Date: return <OrderFormDate {...props}/>
+  }
 };
