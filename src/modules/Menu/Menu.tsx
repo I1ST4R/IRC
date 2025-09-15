@@ -22,7 +22,7 @@ export const Menu = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <div className="menu">
+    <div className="w-[300px] min-w-[300px] bg-white rounded shadow-sm">
       <Accordion type="single">
         <AccordionItem value="0">
           <AccordionTrigger>Цена</AccordionTrigger>

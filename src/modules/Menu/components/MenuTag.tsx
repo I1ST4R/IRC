@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store/menuStore";
 import { selectTagsId, toggleTag } from "../store/filter/filterSlice";
 import { useCallback } from "react";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import { Label } from "@radix-ui/react-label";
 
 type MenuTagProps = {
   tagId: string
@@ -21,13 +23,13 @@ export const MenuTag = ({tagId, tagName} : MenuTagProps) => {
   );
 
   return (
-    <label key={tagId} className="menu__checkbox">
-      <input
-        type="checkbox"
-        checked={isTagSelected(tagId)}
+    <label key={tagId} className="flex items-center gap-2 cursor-pointer font-manrope text-sm text-[#333]">
+      <Checkbox 
+        id={tagId} 
+        checked={isTagSelected(tagId)} 
         onChange={() => dispatch(toggleTag(tagId))}
       />
-      <span>{tagName}</span>
+      <Label htmlFor="terms">{tagId}</Label>
     </label>
   );
 };

@@ -12,7 +12,7 @@ export const CategoryCheckboxes = ({ category }: CategoryCheckboxes) => {
   if (!tagsRecord) return;
 
   return (
-    <div className="menu__checkboxes">
+    <div className="flex flex-col gap-3">
       {category.tags.map((tagId) => {
         return <MenuTag tagId = {tagId} tagName={tagsRecord[tagId].name}/>
       })}
