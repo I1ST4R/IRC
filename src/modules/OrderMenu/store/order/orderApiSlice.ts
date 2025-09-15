@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getOrders, getOrdersByUserId, addOrder } from '../../services/api';
-import { Order } from './types';
+import { getOrders, getOrdersByUserId, addOrder } from './orderApi';
+import { Order } from './orderTypes';
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',

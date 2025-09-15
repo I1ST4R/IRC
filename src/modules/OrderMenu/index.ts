@@ -1,3 +1,4 @@
 
-export { OrderMenu} from "./OrderMenu";
-export { Change} from "./OrderMenu";
+export {OrderMenu} from "./OrderMenu";
+export {changeOrderInfo} from "./store/order/orderSlice"
+export {useGetOrdersQuery} from "./store/order/orderApiSlice"

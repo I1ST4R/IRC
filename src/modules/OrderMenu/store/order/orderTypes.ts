@@ -1,4 +1,4 @@
-import { CartItem, CartItemDb } from "../../../modules/CartList/store/cart/cartTypes";
+import { CartItem, CartItemDb } from "@/modules/CartBody/index";
 
 export type DeliveryMethod = "courier" | "pickup";
 

@@ -1,17 +1,10 @@
-import axios from 'axios';
-import {CartItem, CartItemDb} from '@/entity/cart/types'
-import { Order, OrderDb, OrderDbAdd, recipientInterface } from '@/entity/order/types';
+import axios from "axios";
+import { API_CLIENT } from "@/shared/consts";
+import { Order, OrderDb, OrderDbAdd } from "./orderTypes";
+import { CartItem, loadCartProducts } from "@/modules/CartBody/index";
 
-const API_URL = 'http://localhost:3001';
+const axiosInstance = axios.create(API_CLIENT);
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-// Promo
 export const changeUsedPromo = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/promo?id=${id}`);
