@@ -6,7 +6,6 @@ import { Input } from "@/shared/ui/kit/input";
 export const OrderFormInput = ({
   name,
   label,
-  className,
   fieldType,
   placeholder,
 }: OtherFieldsConfig) => {
@@ -17,7 +16,7 @@ export const OrderFormInput = ({
       name = {name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>ФИО</FormLabel>
+          <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input placeholder="Иванов Иван Иванович" {...field} />
           </FormControl>

@@ -7,13 +7,7 @@ import { OrderFormDate } from "./components/OrderFormDate";
 export const OrderFormField = (props: FieldConfigType) => {
   switch (props.fieldType) {
     case FieldTypes.Input:
-      return <OrderFormInput 
-        name={props.name}
-        label = {props.label}
-        className = {props.className}
-        fieldType = {props.fieldType}
-        placeholder = {props.placeholder}
-      />;
+      return <OrderFormInput {...props}/>;
     case FieldTypes.Selector:
       return <OrderFormSelector {...props} />;
     case FieldTypes.TextArea:

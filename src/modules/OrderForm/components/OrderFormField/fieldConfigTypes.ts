@@ -19,7 +19,6 @@ export type FieldName =
 type GeneralConfig = {
   name: FieldName
   label: string
-  className: string
 }
 
 type FieldOptionType = {
