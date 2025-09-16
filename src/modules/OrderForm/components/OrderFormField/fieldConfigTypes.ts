@@ -5,8 +5,19 @@ export const enum FieldTypes {
   Date = "Date"
 }
 
+export type FieldName = 
+| "deliveryMethod" 
+| "paymentMethod" 
+| "fullName" 
+| "phone" 
+| "address" 
+| "email" 
+| "deliveryDate" 
+| "comment"
+
+
 type GeneralConfig = {
-  name: string
+  name: FieldName
   label: string
   className: string
 }

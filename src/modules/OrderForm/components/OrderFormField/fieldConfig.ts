@@ -1,9 +1,9 @@
-import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
+import { FieldConfigType, FieldName, FieldTypes } from "./fieldConfigTypes";
 
 export const fieldConfig : FieldConfigType[] = [
   {
     fieldType: FieldTypes.Selector,
-    name: "deliveryMethod",
+    name: FieldName.deliveryMethod,
     label: "Способ доставки",
     className: "",
     options: [
@@ -13,7 +13,7 @@ export const fieldConfig : FieldConfigType[] = [
   },
   {
     fieldType: FieldTypes.Selector,
-    name: "paymentMethod",
+    name: FieldName.paymentMethod,
     label: "Способ оплаты",
     className: "",
     options: [
@@ -23,41 +23,41 @@ export const fieldConfig : FieldConfigType[] = [
   },
   {
     fieldType: FieldTypes.Input,
-    name: "fullName",
+    name: FieldName.fullName,
     label: "ФИО",
     className: "",
     placeholder: "Иванов Иван Иванович"
   },
   {
     fieldType: FieldTypes.Input,
-    name: "phone",
+    name: FieldName.phone,
     label: "Телефон",
     className: "",
     placeholder: "+7 (999) 123-45-67"
   },
   {
     fieldType: FieldTypes.Input,
-    name: "email",
+    name: FieldName.email,
     label: "Email",
     className: "",
     placeholder: "your@email.com"
   },
   {
     fieldType: FieldTypes.Input,
-    name: "address",
+    name: FieldName.address,
     label: "Адрес",
     className: "",
     placeholder: "г. Москва, ул. Примерная, д. 1"
   },
   {
     fieldType: FieldTypes.Date,
-    name: "deliveryDate",
+    name: FieldName.deliveryDate,
     label: "Дата доставки",
     className: "flex flex-col"
   },
   {
     fieldType: FieldTypes.TextArea,
-    name: "comment",
+    name: FieldName.comment,
     label: "Комментарий (необязательно)",
     className: "",
     placeholder: "Дополнительная информация для курьера"
