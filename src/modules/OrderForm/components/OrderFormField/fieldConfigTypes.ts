@@ -33,7 +33,11 @@ export type SelectorConfig = {
 
 export type OtherFieldsConfig = {
   fieldType: FieldTypes.TextArea | FieldTypes.Input | FieldTypes.Date;
-  placeholder?: string;
+  placeholder: string;
 } & GeneralConfig
 
 export type FieldConfigType = SelectorConfig | OtherFieldsConfig
+
+export type OtherFieldsType = Omit<OtherFieldsConfig, 'fieldType'>
+export type SelectorType = Omit<SelectorConfig, 'fieldType'>
+ 
