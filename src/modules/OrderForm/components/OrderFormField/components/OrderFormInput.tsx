@@ -8,7 +8,6 @@ export const OrderFormInput = ({
   label,
   placeholder,
 }: OtherFieldsType) => {
-
   return (
     <FormField
       control = {form.control}

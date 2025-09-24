@@ -1,12 +1,11 @@
-import { SelectorConfig } from "../fieldConfigTypes";
+import { SelectorType } from "../fieldConfigTypes";
 
 export const OrderFormSelector = ({
   name,
   label,
   className,
-  fieldType,
   options
-} : SelectorConfig) => {
+} : SelectorType) => {
 
   return (
     <></>

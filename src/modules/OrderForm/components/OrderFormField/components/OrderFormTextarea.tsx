@@ -1,12 +1,11 @@
-import { OtherFieldsConfig } from "../fieldConfigTypes"
+import { OtherFieldsType } from "../fieldConfigTypes"
 
 export const OrderFormTextarea = ({
   name,
   label,
   className,
-  fieldType,
   placeholder
-} : OtherFieldsConfig) => {
+} : OtherFieldsType) => {
 
   return (
     <></>
