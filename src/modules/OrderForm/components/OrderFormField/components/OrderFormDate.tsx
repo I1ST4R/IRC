@@ -1,14 +1,12 @@
-import { OtherFieldsConfig } from "../fieldConfigTypes";
+import { OtherFieldsType } from "../fieldConfigTypes";
 
 export const OrderFormDate = ({
   name,
   label,
   className,
-  fieldType,
   placeholder
-} : OtherFieldsConfig) => {
+} : OtherFieldsType) => {
 
-  console.log()
 
   return (
     <></>
