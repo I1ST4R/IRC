@@ -28,27 +28,7 @@ export const OrderFormField = (props: FieldConfigType) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Способ доставки */}
-        <FormField
-          control={form.control}
-          name="deliveryMethod"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Способ доставки</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите способ доставки" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="courier">Курьером</SelectItem>
-                  <SelectItem value="pickup">Самовывоз</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        
 
         {/* Способ оплаты */}
         <FormField
