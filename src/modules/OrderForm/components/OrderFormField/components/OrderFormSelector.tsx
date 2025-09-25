@@ -6,7 +6,7 @@ import {
   FormMessage
 } from "@/shared/ui/kit/form";
 import { SelectorType } from "../fieldConfigTypes";
-import { form } from "@/modules/OrderForm/helpers/formConfig";
+import { formControl } from "@/modules/OrderForm/helpers/formConfig";
 import { 
   Select, 
   SelectContent, 
@@ -22,7 +22,7 @@ export const OrderFormSelector = ({
 }: SelectorType) => {
   return (
     <FormField
-      control={form.control}
+      control={formControl}
       name={name}
       render={({ field }) => (
         <FormItem>

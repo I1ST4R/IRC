@@ -1,6 +1,6 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { OtherFieldsType } from "../fieldConfigTypes";
-import { form } from "@/modules/OrderForm/helpers/formConfig";
+import { formControl } from "@/modules/OrderForm/helpers/formConfig";
 import { Input } from "@/shared/ui/kit/input";
 
 export const OrderFormInput = ({
@@ -10,7 +10,7 @@ export const OrderFormInput = ({
 }: OtherFieldsType) => {
   return (
     <FormField
-      control = {form.control}
+      control = {formControl}
       name = {name}
       render={({ field }) => (
         <FormItem>

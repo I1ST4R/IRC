@@ -31,27 +31,6 @@ export const OrderFormField = (props: FieldConfigType) => {
         
 
         {/* Способ оплаты */}
-        <FormField
-          control={form.control}
-          name="paymentMethod"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Способ оплаты</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите способ оплаты" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="SBP">СБП</SelectItem>
-                  <SelectItem value="bank card">Банковская карта</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         {/* ФИО */}
         
@@ -146,23 +125,7 @@ export const OrderFormField = (props: FieldConfigType) => {
         />
 
         {/* Комментарий */}
-        <FormField
-          control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Комментарий (необязательно)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Дополнительная информация для курьера"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        
 
         <Button type="submit" className="w-full" size="lg">
           Подтвердить заказ
