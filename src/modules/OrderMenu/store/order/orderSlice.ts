@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Order, OrderState, recipientInterface } from "./orderTypes.ts";
+import { DELIVERY_METHODS, DeliveryMethodName, Order, OrderState, recipientInterface } from "./orderTypes.ts";
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
 import {AppDispatch, RootState} from "../orderMenuStore.ts"
 import { useDispatch, useSelector } from "react-redux";
@@ -76,20 +76,30 @@ const orderSlice = createSlice({
         state.item.certificateDiscount
       );
 
-      Object.assign(state.item, cartTotals, {
-        totalWithDiscount:
-          cartTotals.totalWithDiscount + state.item.deliveryCost,
-      });
+      Object.assign(state.item, cartTotals);
     },
     addErrorOnOrderCreate(
       state
     ) {
       state.error = "Ошибка при создании заказа"
+    },
+    changeDeliveryMethod(
+      state,
+      action:PayloadAction<DeliveryMethodName> 
+    ){
+      const deliveryMethod = DELIVERY_METHODS.find((el) => {
+        el.name === action.payload
+      })
+      if(deliveryMethod){
+        state.item.deliveryCost = deliveryMethod.cost
+        state.item.recipient.deliveryMethod = action.payload
+        state.item.totalWithDiscount += deliveryMethod.cost
+      } 
     }
   },
 });
 
 export const selectCurrentOrder = (state: RootState) => state.order.item
 
-export const { changeOrderInfo, addErrorOnOrderCreate } = orderSlice.actions;
+export const { changeOrderInfo, addErrorOnOrderCreate, changeDeliveryMethod  } = orderSlice.actions;
 export default orderSlice.reducer;

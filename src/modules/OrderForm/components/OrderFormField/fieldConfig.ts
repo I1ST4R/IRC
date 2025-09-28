@@ -1,23 +1,37 @@
+import { changeDeliveryMethod, DELIVERY_METHODS, PAYMENT_METHODS, AppDispatch } from "@/modules/OrderMenu";
 import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
 
-export const fieldConfig : FieldConfigType[] = [
+const DeliveryMethodOptions = DELIVERY_METHODS.map((el) => {
+  return {
+    name: el.name,
+    label: el.label
+  }
+})
+
+const PaymentMethodOptions = PAYMENT_METHODS.map((el) => {
+  return {
+    name: el.name,
+    label: el.label
+  }
+})
+
+export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
     fieldType: FieldTypes.Selector,
     name: "deliveryMethod",
     label: "Способ доставки",
-    options: [
-      { value: "courier", label: "Курьером" },
-      { value: "pickup", label: "Самовывоз" }
-    ]
+    options: DeliveryMethodOptions,
+    actions: {
+      onBlur: (value) => { 
+        dispatch(changeDeliveryMethod(value))
+      }
+    } 
   },
   {
     fieldType: FieldTypes.Selector,
     name: "paymentMethod",
     label: "Способ оплаты",
-    options: [
-      { value: "SBP", label: "СБП" },
-      { value: "bank card", label: "Банковская карта" }
-    ]
+    options: PaymentMethodOptions
   },
   {
     fieldType: FieldTypes.Input,

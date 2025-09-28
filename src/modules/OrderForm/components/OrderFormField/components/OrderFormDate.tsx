@@ -11,6 +11,7 @@ export const OrderFormDate = ({
   name,
   label,
   placeholder,
+  actions
 }: OtherFieldsType) => {
   return ( 
     <FormField
@@ -28,6 +29,10 @@ export const OrderFormDate = ({
                     "w-full pl-3 text-left font-normal",
                     !field.value && "text-muted-foreground"
                   )}
+                  onBlur={() => {
+                    field.onBlur(); 
+                    if(field.value) actions?.onBlur?.(field.value); 
+                  }}
                 >
 {/*                   
                   {field.value ? (

@@ -16,79 +16,7 @@ export const Order: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [formData, setFormData] = useState({
-    deliveryMethod: "courier",
-    paymentMethod: "SBP",
-    fullName: "",
-    phone: "",
-    address: "",
-    email: "",
-    deliveryDate: "",
-    comment: "",
-  });
-
-  const validateForm = (): {
-    isValid: boolean;
-    errors: Record<string, string>;
-  } => {
-    const errors: Record<string, string> = {};
-
-    // Проверка всех полей кроме comment
-    Object.entries(formData).forEach(([field, value]) => {
-      if (field === "comment") return; // Пропускаем необязательное поле
-
-      if (!value || !value.toString().trim()) {
-        errors[field] = "Обязательное поле";
-      }
-    });
-
-    // Дополнительная проверка email на корректность
-    if (
-      formData.email.trim() &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      errors.email = "Введите корректный email";
-    }
-
-    return {
-      isValid: Object.keys(errors).length === 0,
-      errors,
-    };
-  };
-
   
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  
-
-  const handleSubmit = () => {
-    if (user?.id) {
-      const validation = validateForm();
-
-      if (!validation.isValid) {
-        setFieldErrors(validation.errors);
-        return;
-      }
-
-      const deliveryCost = formData.deliveryMethod === "courier" ? 500 : 0;
-      dispatch(
-        changeOrderInfo({
-          userId: user.id,
-          deliveryCost: deliveryCost,
-          recipient: {
-            deliveryMethod: formData.deliveryMethod as DeliveryMethod,
-            paymentMethod: formData.paymentMethod as PaymentMethod,
-            fullName: formData.fullName,
-            phone: formData.phone,
-            address: formData.address,
-            email: formData.email,
-            deliveryDate: formData.deliveryDate,
-            comment: formData.comment,
-          },
-        })
-      );
-      navigate("/payment")
-    }
-  };
 
   if (!user?.id) {
     return (

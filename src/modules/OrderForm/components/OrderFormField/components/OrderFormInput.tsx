@@ -7,6 +7,7 @@ export const OrderFormInput = ({
   name,
   label,
   placeholder,
+  actions
 }: OtherFieldsType) => {
   return (
     <FormField
@@ -16,7 +17,18 @@ export const OrderFormInput = ({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} />
+            <Input
+             placeholder={placeholder} 
+             {...field} 
+             onBlur={(e) => {
+              field.onBlur(); 
+              actions?.onBlur?.(e.target.value); 
+            }}
+            onChange={(e) => {
+              field.onChange(e); 
+              actions?.onChange?.(e.target.value); 
+            }}
+             />
           </FormControl>
           <FormMessage />
         </FormItem>

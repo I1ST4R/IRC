@@ -20,7 +20,7 @@ export const OrderMenu = (props: OrderMenuProps) => {
       navigate("/order");
       return;
     }
-    props.handleSubmit?.();
+    handleSubmit.();
   };
 
   if (!user?.id || !order || !order.total) return null;

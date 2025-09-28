@@ -1,16 +1,51 @@
 import { CartItem, CartItemDb } from "@/modules/CartBody/index";
 
-// Определяем константы для значений
-export const DELIVERY_METHODS = ["courier", "pickup"] as const;
-export const PAYMENT_METHODS = ["SBP", "bank card"] as const;
+export type DeliveryMethodName = "courier" | "pickup" 
+type DeliveryMethodLabel = "Курьером" | "Самовывоз"
+type DeliveryMethodCost = 500 | 0
 
-// Создаем типы
-export type DeliveryMethod = typeof DELIVERY_METHODS[number];
-export type PaymentMethod = typeof PAYMENT_METHODS[number];
+export type DeliveyMethod = {
+  name: DeliveryMethodName,
+  label: DeliveryMethodLabel,
+  cost: DeliveryMethodCost
+}
+
+export const DELIVERY_METHODS: DeliveyMethod[] = [
+  {
+    name: "courier",
+    label: "Курьером",
+    cost: 500
+  },
+  {
+    name: "pickup",
+    label: "Самовывоз",
+    cost: 0
+  }
+] as const;
+
+export type PaymentMethodName = "SBP" | "bank card"
+type PaymentMethodLabel = "СБП" | "Банковская карта"
+
+export type PaymentMethod = {
+  name: PaymentMethodName,
+  label: PaymentMethodLabel,
+}
+
+export const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    name: "SBP",
+    label: "СБП",
+  },
+  {
+    name: "bank card",
+    label: "Банковская карта",
+  }
+] as const;
+
 
 export interface recipientInterface {
-  deliveryMethod: DeliveryMethod;
-  paymentMethod: PaymentMethod;
+  deliveryMethod: DeliveryMethodName;
+  paymentMethod: PaymentMethodName;
   fullName: string;
   phone: string;
   address: string;
@@ -28,7 +63,7 @@ interface GeneralOrder {
   promocodePercent: number
   promocodeId: string | null;
   certificateDiscount: number
-  deliveryCost: 0 | 500;
+  deliveryCost: DeliveryMethodCost;
   certificateId: string | null;
   recipient: recipientInterface;
 }

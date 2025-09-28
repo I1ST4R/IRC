@@ -1,3 +1,5 @@
+import {DeliveryMethodName} from "@/modules/OrderMenu/index"
+import { DeliveyMethod, PaymentMethod } from "@/modules/OrderMenu/store/order/orderTypes";
 export const enum FieldTypes {
   Selector = "Selector",
   TextArea = "TextArea", 
@@ -16,25 +18,56 @@ export type FieldName =
 | "comment"
 
 
-type GeneralConfig = {
-  name: FieldName
-  label: string
+// type GeneralConfig = {
+//   name: FieldName
+//   label: string
+// }
+
+// type FieldOptionType = {
+//   value: string
+//   label: string
+// }
+
+// Для каждого поля свой тип значения
+type FieldValue<T extends FieldName> = 
+  T extends "deliveryMethod" ? DeliveryMethodName :
+  string;
+
+// Теперь FieldAction знает КАКОЕ значение ожидать
+export type FieldAction<T extends FieldName = FieldName> = {
+  onBlur?: (value: FieldValue<T>) => void;
+  onChange?: (value: FieldValue<T>) => void;
 }
 
-type FieldOptionType = {
-  value: string
-  label: string
-}
+export type FieldOptions<T extends FieldName = FieldName> = 
+  T extends "deliveryMethod" ? Array<Omit<DeliveyMethod, "cost">>:
+  T extends "paymentMethod" ? PaymentMethod[]:
+  Array<{value: string, label: string}>
+
 
 export type SelectorConfig = {
   fieldType: FieldTypes.Selector;
-  options: Array<FieldOptionType>;
-} & GeneralConfig
+  options: FieldOptions<"deliveryMethod" | "paymentMethod" >
+  name: FieldName
+  label: string
+  // actions?: FieldAction<"deliveryMethod">
+  actions?: {
+    onBlur?: (value: string) => void;
+    onChange?: (value: string) => void;
+  }
+} 
 
 export type OtherFieldsConfig = {
   fieldType: FieldTypes.TextArea | FieldTypes.Input | FieldTypes.Date;
   placeholder: string;
-} & GeneralConfig
+  name: FieldName
+  label: string
+  // actions?: FieldAction<FieldName>
+  actions?: {
+    onBlur?: (value: string) => void;
+    onChange?: (value: string) => void;
+  }
+} 
 
 export type FieldConfigType = SelectorConfig | OtherFieldsConfig
 

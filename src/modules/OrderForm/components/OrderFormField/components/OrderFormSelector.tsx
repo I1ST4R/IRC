@@ -14,11 +14,13 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/shared/ui/kit/select";
+import { type DeliveryMethodName, type PaymentMethodName} from "@/modules/OrderMenu";
 
 export const OrderFormSelector = ({
   name,
   label,
   options,
+  actions
 }: SelectorType) => {
   return (
     <FormField
@@ -27,7 +29,13 @@ export const OrderFormSelector = ({
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select 
+            defaultValue={field.value}
+            onValueChange={(value) => {
+              field.onChange(value); 
+              actions?.onChange?.(value); 
+            }}
+            >
             {/* <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Выберите способ доставки" />
@@ -36,7 +44,7 @@ export const OrderFormSelector = ({
             <SelectContent>
               {
                 options.map((el) => {
-                  return  <SelectItem value={el.value}>{el.label}</SelectItem>
+                  return <SelectItem value={el.name}>{el.label}</SelectItem>
                 })
               }
             </SelectContent>
