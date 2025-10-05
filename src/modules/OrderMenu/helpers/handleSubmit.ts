@@ -2,7 +2,7 @@ import { RootState } from "@reduxjs/toolkit/query";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/orderMenuStore";
-import { selectCurrentOrder } from "../store/order/orderSlice";
+import { selectCurrentOrder } from "../store/cartTotals/cartTotalsSlice";
 
 const handleSubmit = () => {
   const order = useSelector(selectCurrentOrder);

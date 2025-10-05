@@ -1,15 +1,11 @@
 export {OrderMenu} from "./OrderMenu";
 export {
-  changeOrderInfo,
-  defaultRecipient,
+  changeCartTotals,
   changeDeliveryMethod
-} from "./store/order/orderSlice"
-export {useGetOrdersQuery} from "./store/order/orderApiSlice"
-export { 
-  PAYMENT_METHODS, 
+} from "./store/cartTotals/cartTotalsSlice"
+export {useGetOrdersQuery} from "../OrderForm/store/order/orderApiSlice"
+export {  
   DELIVERY_METHODS,
-  type recipientInterface, 
   type DeliveryMethodName,
-  type PaymentMethodName,
-} from "./store/order/orderTypes";
+} from "./store/cartTotals/cartTotalsTypes";
 export {useAppDispatch, type AppDispatch} from "./store/orderMenuStore"

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { promoApi } from "./promo/promoApiSlice";
 import { certificateApi } from "./certificate/certificateApiSlice";
-import { OrderState } from "./order/orderTypes";
-import orderReducer from "./order/orderSlice"
+import { OrderState } from "./cartTotals/cartTotalsTypes";
+import orderReducer from "./cartTotals/cartTotalsSlice"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const orderMenuStore = configureStore({

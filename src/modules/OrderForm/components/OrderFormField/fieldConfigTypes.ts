@@ -1,5 +1,5 @@
 import {DeliveryMethodName} from "@/modules/OrderMenu/index"
-import { DeliveyMethod, PaymentMethod } from "@/modules/OrderMenu/store/order/orderTypes";
+import { DeliveyMethod, PaymentMethod } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
 export const enum FieldTypes {
   Selector = "Selector",
   TextArea = "TextArea", 

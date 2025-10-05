@@ -11,7 +11,3 @@ export const form = useForm<RecipientFormData>({
 
 export const formControl = form.control
 
-export const onSubmit = (data: RecipientFormData) => {
-  console.log("Данные формы:", data);
-  // Здесь отправка данных на сервер
-}

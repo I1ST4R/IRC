@@ -1,6 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getOrders, getOrdersByUserId, addOrder } from './orderApi';
-import { Order } from './orderTypes';
+import { Order } from '../../../OrderMenu/store/cartTotals/cartTotalsTypes';
+
+export const createOrder = createAsyncThunk(
+  'orders/createOrder', 
+  async () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    
+    try {
+      const curOrder = useSelector(selectCurrentOrder);
+      await addOrder(curOrder);
+      navigate("/payment");
+    } catch (error) {
+      dispatch(addErrorOnOrderCreate());
+      throw new Error("Error when creating an order");
+    }
+  }
+);
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',

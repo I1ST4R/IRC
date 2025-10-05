@@ -1,15 +1,16 @@
 import axios from "axios";
-import { Promo } from "./promoTypes";
+import { Promo } from "../cartTotalsTypes";
 import { API_CLIENT } from "@/shared/consts";
+
+const axiosInstance = axios.create(API_CLIENT);
 
 export const INITIAL_PROMO : Promo = {
   id: null,
   valid: false,
   code: null,
-  discount: null 
-}
-
-const axiosInstance = axios.create(API_CLIENT);
+  discount: 0,
+  percent: 0 
+} as const
 
 export const getPromo = async () => {
   const promoId = localStorage.getItem("promoId")
@@ -19,7 +20,6 @@ export const getPromo = async () => {
     localStorage.removeItem("promoId")
     return INITIAL_PROMO
   }
-
   return response.data[0]
 }
 
@@ -34,7 +34,8 @@ export const validatePromo = async (code: string) => {
         id: response.data[0].id,
         valid: true, 
         code: response.data[0].code, 
-        discount: response.data[0].discount 
+        percent: response.data[0].discount,
+        discount: 0
       } 
       localStorage.setItem("promoId", promo.id ?? "")
       return promo

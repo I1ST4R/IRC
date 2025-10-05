@@ -2,17 +2,25 @@ import { OrderMenuDiscountSection } from "./components/OrderMenuDiscountSection/
 import { OrderMenuList } from "./components/OrderMenuList/OrderMenuList";
 import { OrderMenuTotals } from "./components/OrderMenuTotals/OrderMenuTotals";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useOrderSync } from "./helpers/useOrderSync";
+import { useGetCheckedCartItemsQuery } from "@/modules/CartBody/store/cart/cartApiSlice";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Button } from "@/shared/ui/kit/button";
+import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "./store/orderMenuStore";
+import { changeCartTotals } from ".";
+import { useGetCertificateCodeQuery } from "./store/certificate/certificateApiSlice";
+import { useGetPromoCodeQuery } from "./store/promo/promoApiSlice";
 
-interface OrderMenuProps {
-  handleSubmit?: () => void;
-}
-
-export const OrderMenu = (props: OrderMenuProps) => {
+export const OrderMenu = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const { user, checkedCartItems, order } = useOrderSync();
+  const { data: user } = useGetUserQuery();
+  const { data: checkedCartItems } = useGetCheckedCartItemsQuery(user?.id ?? "", { skip: !user?.id });
+  const { data: certificate } = useGetCertificateCodeQuery();
+  const { data: promo } = useGetPromoCodeQuery();
+  const order = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/order";
 
   const handleCheckout = () => {
@@ -20,17 +28,25 @@ export const OrderMenu = (props: OrderMenuProps) => {
       navigate("/order");
       return;
     }
-    handleSubmit.();
+    // handleSubmit.();
   };
 
-  if (!user?.id || !order || !order.total) return null;
+  if (!user?.id || !order || !order.total || !checkedCartItems || checkedCartItems.items.length === 0) return null;
+
+  dispatch(changeCartTotals({
+    cartItems: checkedCartItems?.items || [],
+    promocodePercent: promo?.discount ?? 0,
+    promocodeId: promo?.id || "",
+    certificateDiscount: certificate?.amount ?? 0,
+    certificateId: certificate?.id || "",
+  }))
 
   return (
     <div className="bg-[#F2F2F2] w-73">
       <p className="p-3 border-b border-gray-200">Ваш заказ</p>
       <OrderMenuList
         isOrderPage={isOrderPage}
-        checkedCartItems={checkedCartItems}
+        checkedCartItems={checkedCartItems.items}
       />
       <OrderMenuTotals order={order} />
       <OrderMenuDiscountSection />
