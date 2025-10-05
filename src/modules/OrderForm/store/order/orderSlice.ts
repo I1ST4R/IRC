@@ -6,17 +6,6 @@ import { AppDispatch } from '@/modules/OrderMenu';
 import { makeCertificateUsed, makePromocodeUsed, selectCartTotals } from '@/modules/OrderMenu/store/cartTotals/cartTotalsSlice';
 import { Recepient } from './orderTypes';
 
-// export const defaultRecipient: recipientInterface = {
-//   deliveryMethod: "courier",
-//   paymentMethod: "SBP",
-//   fullName: "",
-//   phone: "",
-//   address: "",
-//   email: "",
-//   deliveryDate: "",
-//   comment: "",
-// };
-
 export const createOrder = createAsyncThunk(
   'orders/createOrder', 
   async (recepient: Recepient) => {
