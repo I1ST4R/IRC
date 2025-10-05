@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
 import { Order } from "../cartTotalsTypes";
-import { CartItem, loadCartProducts } from "@/modules/CartBody/index";
+import { loadCartProducts } from "@/modules/CartBody/index";
 
 const axiosInstance = axios.create(API_CLIENT);
 

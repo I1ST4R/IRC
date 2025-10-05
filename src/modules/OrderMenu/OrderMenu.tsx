@@ -20,7 +20,7 @@ export const OrderMenu = () => {
   const { data: checkedCartItems } = useGetCheckedCartItemsQuery(user?.id ?? "", { skip: !user?.id });
   const { data: certificate } = useGetCertificateCodeQuery();
   const { data: promo } = useGetPromoCodeQuery();
-  const order = useSelector(selectCartTotals);
+  const cartTotals = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/order";
 
   const handleCheckout = () => {
@@ -31,7 +31,9 @@ export const OrderMenu = () => {
     // handleSubmit.();
   };
 
-  if (!user?.id || !order || !order.total || !checkedCartItems || checkedCartItems.items.length === 0) return null;
+  cartTotals.
+
+  if (!user?.id || !order || !order.item. || !checkedCartItems || checkedCartItems.items.length === 0) return null;
 
   dispatch(changeCartTotals({
     cartItems: checkedCartItems?.items || [],

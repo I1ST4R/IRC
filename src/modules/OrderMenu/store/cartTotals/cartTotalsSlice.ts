@@ -72,7 +72,7 @@ export const createOrder = createAsyncThunk(
       const state = getState() as RootState;
       const cartTotals = selectCartTotals(state);
 
-      const cartItemsDb = cartTotals.item.cartItems.map((el) => {
+      const cartItemsDb = cartTotals.cartItems.map((el) => {
         return {
           ...el,
           productId: el.product.id
@@ -81,7 +81,7 @@ export const createOrder = createAsyncThunk(
 
       const order : Order = {
         cartTotals: {
-          ...cartTotals.item,
+          ...cartTotals,
           cartItems: cartItemsDb
         },
         recipient: recipient,
@@ -89,13 +89,13 @@ export const createOrder = createAsyncThunk(
       
       await addOrder(order, userId);
 
-      const promoId = cartTotals.item.promo.id;
+      const promoId = cartTotals.promo.id;
       if(promoId){
         await makePromocodeUsedApi(promoId);
         dispatch(changeCartTotals({ promo: INITIAL_PROMO }));
       } 
 
-      const certificateId = cartTotals.item.certificate.id;
+      const certificateId = cartTotals.certificate.id;
       if(certificateId){
         await makeCertificateUsedApi(certificateId);
         dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
@@ -158,7 +158,7 @@ const cartTotalsSlice = createSlice({
   }
 });
 
-export const selectCartTotals = (state: RootState) => state.cartTotals;
+export const selectCartTotals = (state: RootState) => state.cartTotals.item;
 
 export const { 
   changeCartTotals, 
