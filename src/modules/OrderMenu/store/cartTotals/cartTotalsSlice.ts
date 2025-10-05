@@ -2,11 +2,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   CartTotals,
   CartTotalsState,
-} from "./cartTotalsTypes.ts";
-import { 
   DELIVERY_METHODS,
-  DeliveryMethodName
-} from "@/modules/OrderForm"
+  DeliveryMethodName,
+  Order,
+  Recipient,
+} from "./cartTotalsTypes.ts";
+
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
 import { RootState } from "../orderMenuStore.ts";
 import {
@@ -21,6 +22,8 @@ import {
   makeCertificateUsed as  makeCertificateUsedApi,
   INITIAL_CERTIFICATE,
 } from "./api/certificateApi.ts";
+import { addOrder } from "./api/orderApi.ts";
+
 
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
@@ -37,14 +40,6 @@ export const validatePromocode = createAsyncThunk(
     dispatch(changeCartTotals({ promo: promo }))
   }
 );
-
-export const makePromocodeUsed = createAsyncThunk(
-  "cartTotals/makePromocodeUsed",
-  async (id: string, { dispatch }) => {
-    await makePromocodeUsedApi(id);
-    dispatch(changeCartTotals({ promo:  INITIAL_PROMO}))
-  }
-)
 
 export const getCertificate = createAsyncThunk(
   "cartTotals/getCertificate",
@@ -69,6 +64,50 @@ export const makeCertificateUsed = createAsyncThunk(
     dispatch(changeCartTotals({ certificate:  INITIAL_CERTIFICATE}))
   }
 )
+
+export const createOrder = createAsyncThunk(
+  'cartTotals/createOrder', 
+  async ({ recipient, navigate, userId }: { recipient: Recipient; navigate: any; userId: string }, { dispatch, getState }) => {
+    try {
+      const state = getState() as RootState;
+      const cartTotals = selectCartTotals(state);
+
+      const cartItemsDb = cartTotals.item.cartItems.map((el) => {
+        return {
+          ...el,
+          productId: el.product.id
+        }
+      })
+
+      const order : Order = {
+        cartTotals: {
+          ...cartTotals.item,
+          cartItems: cartItemsDb
+        },
+        recipient: recipient,
+      }
+      
+      await addOrder(order, userId);
+
+      const promoId = cartTotals.item.promo.id;
+      if(promoId){
+        await makePromocodeUsedApi(promoId);
+        dispatch(changeCartTotals({ promo: INITIAL_PROMO }));
+      } 
+
+      const certificateId = cartTotals.item.certificate.id;
+      if(certificateId){
+        await makeCertificateUsedApi(certificateId);
+        dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
+      } 
+
+      navigate("/payment");
+      
+    } catch (error) {
+      throw new Error("Error when creating an order");
+    }
+  }
+);
 
 
 
