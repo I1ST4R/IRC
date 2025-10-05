@@ -2,32 +2,33 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   CartTotals,
   CartTotalsState,
-  DELIVERY_METHODS,
-  DeliveryMethodName,
 } from "./cartTotalsTypes.ts";
+import { 
+  DELIVERY_METHODS,
+  DeliveryMethodName
+} from "@/modules/OrderForm"
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
 import { RootState } from "../orderMenuStore.ts";
 import {
   getPromo as getPromoApi,
-  INITIAL_PROMO,
   validatePromo as validatePromocodeApi,
+  makePromocodeUsed as makePromocodeUsedApi,
+  INITIAL_PROMO,
 } from "./api/promoApi.ts";
 import {
   getCertificate as getCertificateApi,
   validateCertificate as validateCertificateApi,
+  makeCertificateUsed as  makeCertificateUsedApi,
   INITIAL_CERTIFICATE,
 } from "./api/certificateApi.ts";
 
-// export const defaultRecipient: recipientInterface = {
-//   deliveryMethod: "courier",
-//   paymentMethod: "SBP",
-//   fullName: "",
-//   phone: "",
-//   address: "",
-//   email: "",
-//   deliveryDate: "",
-//   comment: "",
-// };
+export const getPromocode = createAsyncThunk(
+  "cartTotals/getPromocode",
+  async (_, { dispatch }) => {
+    const promo = await getPromoApi();
+    dispatch(changeCartTotals({ promo: promo }))
+  }
+);
 
 export const validatePromocode = createAsyncThunk(
   "cartTotals/validatePromocode",
@@ -37,13 +38,13 @@ export const validatePromocode = createAsyncThunk(
   }
 );
 
-export const getPromocode = createAsyncThunk(
-  "cartTotals/getPromocode",
-  async (_, { dispatch }) => {
-    const promo = await getPromoApi();
-    dispatch(changeCartTotals({ promo: promo }))
+export const makePromocodeUsed = createAsyncThunk(
+  "cartTotals/makePromocodeUsed",
+  async (id: string, { dispatch }) => {
+    await makePromocodeUsedApi(id);
+    dispatch(changeCartTotals({ promo:  INITIAL_PROMO}))
   }
-);
+)
 
 export const getCertificate = createAsyncThunk(
   "cartTotals/getCertificate",
@@ -60,6 +61,16 @@ export const validateCertificate = createAsyncThunk(
     dispatch(changeCartTotals({ certificate: certificate }))
   }
 )
+
+export const makeCertificateUsed = createAsyncThunk(
+  "cartTotals/makeCertificateUsed",
+  async (id: string, { dispatch }) => {
+    await  makeCertificateUsedApi(id);
+    dispatch(changeCartTotals({ certificate:  INITIAL_CERTIFICATE}))
+  }
+)
+
+
 
 const defaultCartTotals: CartTotals = {
   cartItems: [],

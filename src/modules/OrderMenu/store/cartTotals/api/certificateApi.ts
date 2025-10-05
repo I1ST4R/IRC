@@ -7,7 +7,7 @@ export const INITIAL_CERTIFICATE: Certificate = {
   valid: false,
   code: null,
   discount: 0
-}
+} as const
 
 const axiosInstance = axios.create(API_CLIENT);
 
@@ -41,3 +41,13 @@ export const validateCertificate = async (code: string) => {
     throw error;
   }
 };
+
+export const makeCertificateUsed = async (id: string) => {
+  try{
+    await axiosInstance.patch(`/certificate${id}`, {used: true})
+    localStorage.removeItem("certificateId")
+  } catch (error: any){
+    console.error("error in makeCertificateUsed")
+    throw error
+  }
+}

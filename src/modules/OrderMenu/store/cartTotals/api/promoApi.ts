@@ -42,3 +42,13 @@ export const validatePromo = async (code: string) => {
   }
 };
 
+export const makePromocodeUsed = async (id: string) => {
+  try {
+    await axiosInstance.patch(`/promo/${id}`, { used: true });
+    localStorage.removeItem("promoId");
+  } catch (error: any) {
+    console.error('error in makePromocodeUsed', error);
+    throw error;
+  }
+};
+
