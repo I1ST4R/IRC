@@ -4,15 +4,19 @@ import {
   CartTotalsState,
   DELIVERY_METHODS,
   DeliveryMethodName,
-  Promo,
 } from "./cartTotalsTypes.ts";
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
 import { RootState } from "../orderMenuStore.ts";
 import {
-  getPromo,
+  getPromo as getPromoApi,
   INITIAL_PROMO,
   validatePromo as validatePromocodeApi,
 } from "./api/promoApi.ts";
+import {
+  getCertificate as getCertificateApi,
+  validateCertificate as validateCertificateApi,
+  INITIAL_CERTIFICATE,
+} from "./api/certificateApi.ts";
 
 // export const defaultRecipient: recipientInterface = {
 //   deliveryMethod: "courier",
@@ -36,10 +40,26 @@ export const validatePromocode = createAsyncThunk(
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
   async (_, { dispatch }) => {
-    const promo = await getPromo();
+    const promo = await getPromoApi();
     dispatch(changeCartTotals({ promo: promo }))
   }
 );
+
+export const getCertificate = createAsyncThunk(
+  "cartTotals/getCertificate",
+  async (_, {dispatch}) => {
+    const certificate = await getCertificateApi()
+    dispatch(changeCartTotals({ certificate: certificate }))
+  }
+)
+
+export const validateCertificate = createAsyncThunk(
+  "cartTotals/validateCertificate",
+  async (code: string, {dispatch}) => {
+    const certificate = await validateCertificateApi(code)
+    dispatch(changeCartTotals({ certificate: certificate }))
+  }
+)
 
 const defaultCartTotals: CartTotals = {
   cartItems: [],
@@ -47,12 +67,7 @@ const defaultCartTotals: CartTotals = {
   totalWithDiscount: 0,
   discount: 0,
   promo: INITIAL_PROMO,
-  certificate: {
-    id: null,
-    valid: false,
-    code: null,
-    discount: 0,
-  },
+  certificate: INITIAL_CERTIFICATE,
   deliveryCost: 0,
 };
 
@@ -93,8 +108,10 @@ const cartTotalsSlice = createSlice({
   }
 });
 
-export const selectCartTotals = (state: RootState) => state.order.item;
+export const selectCartTotals = (state: RootState) => state.cartTotals;
 
-export const { changeCartTotals, changeDeliveryMethod } =
-  cartTotalsSlice.actions;
+export const { 
+  changeCartTotals, 
+  changeDeliveryMethod 
+} = cartTotalsSlice.actions;
 export default cartTotalsSlice.reducer;

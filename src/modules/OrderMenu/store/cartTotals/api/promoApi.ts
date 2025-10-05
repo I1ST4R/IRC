@@ -30,13 +30,8 @@ export const validatePromo = async (code: string) => {
     const response = await axiosInstance.get(`/promo?code=${upperCode}`);
     let promo = INITIAL_PROMO
     if (response.data && response.data.length > 0 && !response.data[0].used) {
-      promo = {
-        id: response.data[0].id,
-        valid: true, 
-        code: response.data[0].code, 
-        percent: response.data[0].discount,
-        discount: 0
-      } 
+      Object.assign(promo, response.data[0], { valid: true })
+
       localStorage.setItem("promoId", promo.id ?? "")
       return promo
     }

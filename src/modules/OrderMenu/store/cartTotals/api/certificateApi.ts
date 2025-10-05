@@ -1,12 +1,12 @@
 import axios from "axios";
-import { Certificate } from "./certificateTypes";
+import { Certificate } from "../cartTotalsTypes";
 import { API_CLIENT } from "@/shared/consts";
 
-const INITIAL_CERTIFICATE: Certificate = {
+export const INITIAL_CERTIFICATE: Certificate = {
   id: null,
   valid: false,
   code: null,
-  amount: null
+  discount: 0
 }
 
 const axiosInstance = axios.create(API_CLIENT);
@@ -30,12 +30,8 @@ export const validateCertificate = async (code: string) => {
     const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
     let certificate = INITIAL_CERTIFICATE
     if (response.data && response.data.length > 0 && !response.data[0].used) {
-      certificate = {
-        id: response.data[0].id,
-        valid: true,
-        code: response.data[0].code,
-        amount: response.data[0].amount
-      };
+      Object.assign(certificate, response.data[0], {valid: true})
+
       localStorage.setItem("certificateId", certificate.id ?? "")
       return certificate;
     }

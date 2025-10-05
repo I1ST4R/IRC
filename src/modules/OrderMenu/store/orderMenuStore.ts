@@ -1,23 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { promoApi } from "./promo/promoApiSlice";
-import { certificateApi } from "./certificate/certificateApiSlice";
-import { OrderState } from "./cartTotals/cartTotalsTypes";
-import orderReducer from "./cartTotals/cartTotalsSlice"
+import { CartTotalsState } from "./cartTotals/cartTotalsTypes";
+import cartTotalsReducer from "./cartTotals/cartTotalsSlice"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const orderMenuStore = configureStore({
   reducer: {
-    order: orderReducer,
-    [promoApi.reducerPath]: promoApi.reducer,
-    [certificateApi.reducerPath]: certificateApi.reducer, 
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(promoApi.middleware)
-    .concat(certificateApi.middleware),
+    cartTotals: cartTotalsReducer,
+  }
 })
 
 export type RootState = {
-  order: OrderState;
+  cartTotals: CartTotalsState;
 };
 
 export type AppDispatch = typeof orderMenuStore.dispatch;
