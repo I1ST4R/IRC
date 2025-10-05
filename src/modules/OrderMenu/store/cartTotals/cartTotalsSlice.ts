@@ -159,6 +159,8 @@ const cartTotalsSlice = createSlice({
 });
 
 export const selectCartTotals = (state: RootState) => state.cartTotals.item;
+export const selectPromocode = (state: RootState) => state.cartTotals.item.promo;
+export const selectCertificate = (state: RootState) => state.cartTotals.item.certificate;
 
 export const { 
   changeCartTotals, 

@@ -1,13 +1,13 @@
-import { Order } from "@/_old-version/entity/order/types";
 import { OrderMenuTotalsPoint } from "./OrderMenuTotalsPoint";
 import { getOrderMenuTotalsItems } from "./getOrderMenuTotalsItems";
+import { CartTotals } from "../../store/cartTotals/cartTotalsTypes";
 
 type OrderMenuTotalsProps = {
-  order: Order;
+  cartTotals: CartTotals;
 };
 
-export const OrderMenuTotals = (props: OrderMenuTotalsProps) => {
-  const items = getOrderMenuTotalsItems(props.order);
+export const OrderMenuTotals = ({cartTotals}: OrderMenuTotalsProps) => {
+  const items = getOrderMenuTotalsItems(cartTotals);
   return (
     <div className="p-3 border-b border-gray-200">
       {items.map((el) => {

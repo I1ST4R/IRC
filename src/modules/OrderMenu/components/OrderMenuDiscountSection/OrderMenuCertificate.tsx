@@ -1,30 +1,25 @@
 import { useState } from "react";
-import {
-  useGetCertificateCodeQuery,
-  useValidateCertificateCodeMutation,
-} from "@/modules/OrderMenu/store/certificate/certificateApiSlice";
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
+import { selectCertificate, validateCertificate } from "../../store/cartTotals/cartTotalsSlice";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/orderMenuStore";
 
 export const OrderMenuCertificate = () => {
-  const { data: certificate } = useGetCertificateCodeQuery();
-  const [validateCertificate] = useValidateCertificateCodeMutation();
   const [certTouched, setCertTouched] = useState(false);
-  const showError = certTouched && !certificate?.id;
-
-  const handleSertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) setCertTouched(false);
-  };
+  const certificate = useSelector(selectCertificate)
+  const showError = certTouched && !certificate.valid;
+  const dispatch = useAppDispatch();
 
   const handleSertificateBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
       setCertTouched(true);
-      validateCertificate(e.target.value);
+      dispatch(validateCertificate(e.target.value));
     }
   };
 
-  if (certificate?.id)
+  if (certificate.valid)
     return (
       <Alert>
         <AlertTitle>Сертификат активирован</AlertTitle>
@@ -38,7 +33,6 @@ export const OrderMenuCertificate = () => {
       </Alert>
       <Input
         type="text"
-        onChange={handleSertificateChange}
         onBlur={handleSertificateBlur}
         placeholder="Сертификат"
         className={cn(showError && "border-[var(--coral)] ")}

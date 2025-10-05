@@ -9,17 +9,16 @@ import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./store/orderMenuStore";
 import { changeCartTotals } from ".";
-import { useGetCertificateCodeQuery } from "./store/certificate/certificateApiSlice";
-import { useGetPromoCodeQuery } from "./store/promo/promoApiSlice";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { data: user } = useGetUserQuery();
-  const { data: checkedCartItems } = useGetCheckedCartItemsQuery(user?.id ?? "", { skip: !user?.id });
-  const { data: certificate } = useGetCertificateCodeQuery();
-  const { data: promo } = useGetPromoCodeQuery();
+  const { data: checkedCartItems } = useGetCheckedCartItemsQuery(
+    user?.id ?? "",
+    { skip: !user?.id }
+  );
   const cartTotals = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/order";
 
@@ -31,17 +30,9 @@ export const OrderMenu = () => {
     // handleSubmit.();
   };
 
-  cartTotals.
+  if (!user?.id || !checkedCartItems || checkedCartItems.items.length === 0) return null;
 
-  if (!user?.id || !order || !order.item. || !checkedCartItems || checkedCartItems.items.length === 0) return null;
-
-  dispatch(changeCartTotals({
-    cartItems: checkedCartItems?.items || [],
-    promocodePercent: promo?.discount ?? 0,
-    promocodeId: promo?.id || "",
-    certificateDiscount: certificate?.amount ?? 0,
-    certificateId: certificate?.id || "",
-  }))
+  dispatch(changeCartTotals({ cartItems: checkedCartItems?.items || [] }));
 
   return (
     <div className="bg-[#F2F2F2] w-73">
@@ -50,7 +41,7 @@ export const OrderMenu = () => {
         isOrderPage={isOrderPage}
         checkedCartItems={checkedCartItems.items}
       />
-      <OrderMenuTotals order={order} />
+      <OrderMenuTotals cartTotals={cartTotals} />
       <OrderMenuDiscountSection />
       <Button onClick={handleCheckout}>Оформить заказ</Button>
     </div>

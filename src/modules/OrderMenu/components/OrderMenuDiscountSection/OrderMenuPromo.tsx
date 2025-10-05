@@ -1,30 +1,26 @@
 import { useState } from "react";
-import { 
-  useGetPromoCodeQuery, 
-  useValidatePromoCodeMutation 
-} from "@/modules/OrderMenu/store/promo/promoApiSlice";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
+import { useSelector } from "react-redux";
+import { selectPromocode, validatePromocode } from "../../store/cartTotals/cartTotalsSlice";
+import { useAppDispatch } from "../../store/orderMenuStore";
+
 
 export const OrderMenuPromo = () => {
-  const { data: promo } = useGetPromoCodeQuery();
-  const [validatePromo] = useValidatePromoCodeMutation()
   const [promoTouched, setPromoTouched] = useState(false);
-  const showError = promoTouched && !promo?.id;
-
-  const handlePromocodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.value) setPromoTouched(false);
-  };
+  const promo = useSelector(selectPromocode)
+  const showError = promoTouched && !promo.valid;
+  const dispatch = useAppDispatch();
 
   const handlePromocodeBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
       setPromoTouched(true);
-      validatePromo(e.target.value);
+      dispatch(validatePromocode(e.target.value))
     }
   };
 
-  if (promo?.id)
+  if (promo.valid)
     return (
       <Alert>
         <AlertTitle>Промокод активирован</AlertTitle>
@@ -38,9 +34,8 @@ export const OrderMenuPromo = () => {
       </Alert>
       <Input
         type="text"
-        onChange={handlePromocodeChange}
         onBlur={handlePromocodeBlur}
-        placeholder="Сертификат"
+        placeholder="Промокод"
         className={cn(showError && "border-[var(--coral)] ")}
       ></Input>
     </div>

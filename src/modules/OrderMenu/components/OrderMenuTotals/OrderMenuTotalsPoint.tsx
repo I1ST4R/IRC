@@ -1,9 +1,6 @@
-type OrderMenuTotalsPointProps = {
-  name: string,
-  value: number
-}
+import { OrderMenuTotalsItem } from "./getOrderMenuTotalsItems";
 
-export const OrderMenuTotalsPoint = (props: OrderMenuTotalsPointProps) => {
+export const OrderMenuTotalsPoint = (props: OrderMenuTotalsItem) => {
   return (
     <div className="flex justify-between items-center">
       <span>{props.name}</span>

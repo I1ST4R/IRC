@@ -1,35 +1,35 @@
-import { Order } from "@/_old-version/entity/order/types";
+import { CartTotals } from "../../store/cartTotals/cartTotalsTypes";
 
 export type OrderMenuTotalsItem = {
   name: string,
   value: number | null,
 }
 
-export const getOrderMenuTotalsItems = (order: Order) => {
+export const getOrderMenuTotalsItems = (cartTotals: CartTotals) => {
   return [
     {
       name: "Товары на сумму:",
-      value: order.total
+      value: cartTotals.total
     },
     {
       name: "Скидка:",
-      value: order.discount
+      value: cartTotals.discount
     },
     {
       name: "Скидка по промокоду:",
-      value: order.promocodeDiscount
+      value: cartTotals.promo.discount
     },
     {
       name: "Скидка по сертификату:",
-      value: order.certificateDiscount
+      value: cartTotals.certificate.discount
     },
     {
       name: "Доставка:",
-      value: order.deliveryCost
+      value: cartTotals.deliveryCost
     },
     {
       name: "Всего к оплате:",
-      value: order.totalWithDiscount
+      value: cartTotals.totalWithDiscount
     },
   ] as OrderMenuTotalsItem[]
 }
