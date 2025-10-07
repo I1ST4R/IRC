@@ -1,22 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../_old-version/services/store";
-import OrderMenu from "../../_old-version/main/components/OrderMenu/OrderMenu";
 import "./_order.scss";
-import { DeliveryMethod, PaymentMethod } from "@/entity/order/types";
-import { changeOrderInfo } from "@/entity/order/slice";
-import { AppDispatch } from "@/main/store";
-import { useNavigate } from "react-router-dom";
-import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { useGetUserQuery } from "@/entity/users/api";
+import { OrderForm } from "@/modules/OrderForm";
+import { OrderMenu } from "@/modules/OrderMenu";
+import BreadCrumb from "@/shared/BreadCrumb/BreadCrumb";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 
 export const Order: React.FC = () => {
   const { data: user } = useGetUserQuery();
-  const order = useSelector((state: RootState) => state.orders.current);
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-
-  
 
   if (!user?.id) {
     return (
@@ -40,9 +29,8 @@ export const Order: React.FC = () => {
 
   return (
     <div className="order container">
-      
-
-      <OrderMenu handleSubmit={handleSubmit} />
+      <OrderForm/>
+      <OrderMenu/>
     </div>
   );
 };
