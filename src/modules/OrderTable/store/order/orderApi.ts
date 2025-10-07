@@ -5,14 +5,18 @@ import { loadCartProducts } from "@/modules/CartBody";
 
 const axiosInstance = axios.create(API_CLIENT);
 
-type OrderWithUserId = Order & {userId: string}
-export type OrderRecord = Record<string, OrderWithUserId[]>
+export type FullOrder<T extends "DB" | "default" = "default"> = 
+& Order<T> 
+& {userId: string} 
+& {id: string}
+
+export type OrderRecord = Record<string, FullOrder[]>
 
 export const getOrders = async () => {
   try {
     const ordersResponse = await axiosInstance.get(`/orders`)
     const ordersWithCartItem = await Promise.all(
-      ordersResponse.data.map(async (order: Order<"DB">): Promise<Order> => {
+      ordersResponse.data.map(async (order: FullOrder<"DB">): Promise<Order> => {
         const cartItems = await loadCartProducts(order.cartTotals.cartItems)
         return {
           ...order,
@@ -22,10 +26,10 @@ export const getOrders = async () => {
           } 
         }
       })
-    ) as OrderWithUserId[]
+    ) as FullOrder[]
 
     const groupedOrders = ordersWithCartItem.reduce(
-      (acc: Record<string, OrderWithUserId[]>, order: OrderWithUserId) => {
+      (acc: Record<string, FullOrder[]>, order: FullOrder) => {
         if (!acc[order.userId]) acc[order.userId] = [];
         acc[order.userId].push(order);
         return acc;
