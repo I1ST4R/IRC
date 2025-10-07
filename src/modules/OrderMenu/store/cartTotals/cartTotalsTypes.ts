@@ -31,52 +31,37 @@ export type CartTotalsState = {
   error: string | null;
 }
 
-export type PaymentMethodName = "SBP" | "bank card"
-type PaymentMethodLabel = "СБП" | "Банковская карта"
-
-export type PaymentMethod = {
-  name: PaymentMethodName,
-  label: PaymentMethodLabel,
-}
-
-export type DeliveryMethodName = "courier" | "pickup" 
-export type DeliveryMethodCost = 500 | 0
-
-export const PAYMENT_METHODS: PaymentMethod[] = [
-  {
-    name: "SBP",
-    label: "СБП",
-  },
-  {
-    name: "bank card",
-    label: "Банковская карта",
-  }
+export type PaymentMethod = "СБП" | "Банковская карта"
+export const PAYMENT_METHODS = [
+  "СБП",
+  "Банковская карта",
 ] as const;
 
-type DeliveryMethodLabel = "Курьером" | "Самовывоз"
-
+export type DeliveryMethodName = "Курьером" | "Самовывоз" 
+export type DeliveryMethodCost = 500 | 0
 export type DeliveyMethod = {
   name: DeliveryMethodName,
-  label: DeliveryMethodLabel,
   cost: DeliveryMethodCost
 }
+export const DELIVERY_METHOD_NAMES = [
+  "Курьером", 
+  "Самовывоз"
+] as const
 
-export const DELIVERY_METHODS: DeliveyMethod[] = [
+export const DELIVERY_METHODS = [
   {
-    name: "courier",
-    label: "Курьером",
+    name: "Курьером",
     cost: 500
   },
   {
-    name: "pickup",
-    label: "Самовывоз",
+    name: "Самовывоз",
     cost: 0
   }
 ] as const;
 
 export type Recipient = {
   deliveryMethod: DeliveryMethodName;
-  paymentMethod: PaymentMethodName;
+  paymentMethod: PaymentMethod;
   fullName: string;
   phone: string;
   address: string;
@@ -85,9 +70,18 @@ export type Recipient = {
   comment?: string;
 }
 
+export const DEFAULT_RECEPIENT = {
+  deliveryMethod: "pickup",
+  paymentMethod: "SBP",
+  fullName: "",
+  phone: "",
+  address: "",
+  email: "",
+  deliveryDate: "",
+  comment: ""
+}
+
 export type Order = {
   recipient: Recipient,
   cartTotals: CartTotals<"DB">,
 }
-
-

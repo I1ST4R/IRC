@@ -1,9 +1,8 @@
 import z from "zod";
-import { DELIVERY_METHODS, PAYMENT_METHODS } from "../../OrderMenu/index";
-import { recipientInterface } from "../../OrderMenu/index";
+import { DELIVERY_METHOD_NAMES, PAYMENT_METHODS, Recipient } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
 
 export const recipientSchema = z.object({
-  deliveryMethod: z.enum(DELIVERY_METHODS, {
+  deliveryMethod: z.enum(DELIVERY_METHOD_NAMES, {
     errorMap: () => ({ message: "Выберите способ доставки" }),
   }),
   paymentMethod: z.enum(PAYMENT_METHODS, {
@@ -50,4 +49,4 @@ export const recipientSchema = z.object({
 export type RecipientFormData = z.infer<typeof recipientSchema>;
 
 //Check for matching types of zod scheme and type
-const typeCheck: recipientInterface = {} as RecipientFormData;
+const typeCheck: Recipient = {} as RecipientFormData;
