@@ -8,7 +8,8 @@ import { Button } from "@/shared/ui/kit/button";
 import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./store/orderMenuStore";
-import { changeCartTotals } from ".";
+import { changeCartTotals } from "."
+import { onSubmit } from "../OrderForm";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const OrderMenu = () => {
       navigate("/order");
       return;
     }
-    // handleSubmit.();
+    onSubmit(dispatch, navigate, user?.id ?? "")
   };
 
   if (!user?.id || !checkedCartItems || checkedCartItems.items.length === 0) return null;
