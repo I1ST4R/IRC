@@ -1,13 +1,12 @@
-import { Order } from '@/modules/OrderMenu';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getOrders } from './orderApi';
+import { getOrders, OrderRecord } from './orderApi';
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Order'],
   endpoints: (build) => ({
-    getOrders: build.query<Order[], void>({
+    getOrders: build.query<OrderRecord, void>({
       queryFn: () =>
         getOrders()
           .then((data) => ({ data }))

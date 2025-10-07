@@ -5,11 +5,14 @@ import { loadCartProducts } from "@/modules/CartBody";
 
 const axiosInstance = axios.create(API_CLIENT);
 
+type OrderWithUserId = Order & {userId: string}
+export type OrderRecord = Record<string, OrderWithUserId[]>
+
 export const getOrders = async () => {
   try {
-    const response = await axiosInstance.get(`/orders`)
+    const ordersResponse = await axiosInstance.get(`/orders`)
     const ordersWithCartItem = await Promise.all(
-      response.data.map(async (order: Order<"DB">): Promise<Order> => {
+      ordersResponse.data.map(async (order: Order<"DB">): Promise<Order> => {
         const cartItems = await loadCartProducts(order.cartTotals.cartItems)
         return {
           ...order,
@@ -19,8 +22,18 @@ export const getOrders = async () => {
           } 
         }
       })
-    ) as Order[]
-    return ordersWithCartItem
+    ) as OrderWithUserId[]
+
+    const groupedOrders = ordersWithCartItem.reduce(
+      (acc: Record<string, OrderWithUserId[]>, order: OrderWithUserId) => {
+        if (!acc[order.userId]) acc[order.userId] = [];
+        acc[order.userId].push(order);
+        return acc;
+      },
+      {}
+    );
+
+    return groupedOrders
   } catch (error: any) {
     console.error('error in getOrders', error);
     throw error;
