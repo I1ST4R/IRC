@@ -70,9 +70,9 @@ export type Recipient = {
   comment?: string;
 }
 
-export const DEFAULT_RECEPIENT = {
-  deliveryMethod: "pickup",
-  paymentMethod: "SBP",
+export const DEFAULT_RECEPIENT: Recipient = {
+  deliveryMethod: "Курьером",
+  paymentMethod: "СБП",
   fullName: "",
   phone: "",
   address: "",
