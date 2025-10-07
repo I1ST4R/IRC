@@ -81,7 +81,7 @@ export const DEFAULT_RECEPIENT: Recipient = {
   comment: ""
 }
 
-export type Order = {
+export type Order<T extends "DB" | "default" = "default"> = {
   recipient: Recipient,
-  cartTotals: CartTotals<"DB">,
+  cartTotals: CartTotals<T>,
 }

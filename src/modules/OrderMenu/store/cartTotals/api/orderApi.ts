@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
 import { Order } from "../cartTotalsTypes";
-import { loadCartProducts } from "@/modules/CartBody/index";
 
 const axiosInstance = axios.create(API_CLIENT);
 
@@ -31,25 +30,6 @@ export const addOrder = async (order: Order, userId: string) => {
     return responseOrder.data;
   } catch (error: any) {
     console.error("error in addOrder", error);
-    throw error;
-  }
-};
-
-export const getOrders = async () => {
-  try {
-    const response = await axiosInstance.get(`/orders`);
-    const ordersWithCartItem = await Promise.all(
-      response.data.map(async (order: Order & { userId: string }) => {
-        const cartItems = await loadCartProducts(order.cartTotals.cartItems);
-        return {
-          ...order,
-          cartItems: cartItems,
-        };
-      })
-    );
-    return ordersWithCartItem;
-  } catch (error: any) {
-    console.error("error in getOrders", error);
     throw error;
   }
 };

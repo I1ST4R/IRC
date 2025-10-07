@@ -3,3 +3,4 @@ export { CartBtn } from "./components/Product/components/CartBtn/CartBtn";
 export { LikeBtn } from "./components/Product/components/LikeBtn/LikeBtn";
 export { ProductList } from "./ProductList";
 export { useGetProductByIdQuery } from "./store/product/productApiSlice";
+export { getProductById } from "./store/product/productApi"

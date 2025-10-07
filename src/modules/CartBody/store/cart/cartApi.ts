@@ -1,8 +1,9 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
-import { Cart, CartItemDb } from "./cartTypes";
-import { getProductById, getProductsById } from "@/_old-version/services/api";
+import { Cart, CartItem, CartItemDb } from "./cartTypes";
+
 import { getItemsCount } from "./getItemsCount";
+import { getProductById } from "@/modules/ProductList";
 
 
 const axiosInstance = axios.create(API_CLIENT);
@@ -21,9 +22,10 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
     const user = response.data[0];
     if (!user.cart) return initialCart
     const cartItems = await loadCartProducts(user.cart)
+    cartItems[0]
     const cartItemsWithCount = {
-      items: cartItems, 
-      itemsCount: getItemsCount(cartItems)
+      items: cartItems,
+      itemsCount: 3
     } as Cart
 
     if(isOnlyCheckedItems){
@@ -52,7 +54,7 @@ export const loadCartProducts = async (cartItems: CartItemDb[]) => {
         product,
         quantity: cartItem.quantity,
         isChecked: cartItem.isChecked
-      };
+      } as CartItem
     });
 
     return cartWithProducts;
