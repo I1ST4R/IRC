@@ -1,8 +1,15 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui/kit/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/ui/kit/table";
 import { useGetOrdersQuery } from "./store/order/orderApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { OrderTableCell } from "./components/OrderTableCell";
-import { Order } from "../OrderMenu";
+import { FullOrder } from "./store/order/orderApi";
 
 export const OrderTable = () => {
   const { data: orders = {}, isLoading } = useGetOrdersQuery();
@@ -24,15 +31,13 @@ export const OrderTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-        {Object.entries(orders).map(([userId, userOrders]) => (
-            <tr key={userId}>
-              <td>{userId}</td>
-              <td>
-                {userOrders.map((order: Order & {userId: string}) => (
-                  <OrderTableCell order = {order}/>
-                ))}
-              </td>
-            </tr>
+          {Object.entries(orders).map(([userId, userOrders]) => (
+            <TableRow key={userId}>
+              <TableCell>{userId}</TableCell>
+              {userOrders.map((order: FullOrder) => (
+                <OrderTableCell order={order} />
+              ))}
+            </TableRow>
           ))}
         </TableBody>
       </Table>

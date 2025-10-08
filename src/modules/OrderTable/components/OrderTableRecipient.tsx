@@ -1,0 +1,19 @@
+import { Recipient } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+
+type OrderTableRecipient = {
+  recipient: Recipient
+}
+export const OrderTableRecipient = ({recipient} : OrderTableRecipient) => {
+  return (
+    <ul>
+      <li>ФИО: {recipient.fullName}</li>
+      <li>Телефон: {recipient.phone}</li>
+      <li>Адрес: {recipient.address}</li>
+      <li>Email: {recipient.email}</li>
+      <li>Дата доставки: {recipient.deliveryDate}</li>
+      <li>Комментарий: {recipient.comment || "-"}</li>
+      <li>Доставка: {recipient.deliveryMethod}</li>
+      <li>Оплата: {recipient.paymentMethod}</li>
+    </ul>
+  );
+};
