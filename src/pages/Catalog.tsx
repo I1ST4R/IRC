@@ -1,10 +1,11 @@
-import { ProductList } from "./ProductList/ProductList";
-import { Menu } from "./Menu/Menu";
-import "./_catalog.scss";
-import PersonalAccount from "../../_old-version/main/components/PersonalAccount/PersonalAccount";
-import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
+import { RootState } from "@/_old-version/services/store";
+import PersonalAccount from "@/App/components/PersonalAccount/PersonalAccount";
+import { ProductList } from "@/modules/ProductList";
+import BreadCrumb from "@/shared/BreadCrumb/BreadCrumb";
+
+import { Menu } from "lucide-react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/main/store";
+
 
 export const Catalog = () => {
   const { isAccountOpen } = useSelector((state: RootState) => state.account);

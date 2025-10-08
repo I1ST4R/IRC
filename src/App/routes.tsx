@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Home } from '../pages/Home/Home';
-import { Catalog } from '../pages/Catalog/Catalog';
+import { Catalog } from '../pages/Catalog';
 import { AuthForm } from '../pages/Auth/AuthForm';
-import { Cart } from '../pages/Cart/Cart';
+import { Cart } from '../pages/Cart';
 import { Liked } from '../pages/Liked/Liked';
 import App from './App';  
 import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
-import { Order } from '../pages/Order/Order';
-import Admin from '../pages/Admin/Admin';
+import { Order } from '../pages/Order';
+import Admin from '../pages/Admin';
 import Payment from '@/pages/Payment/Payment';
 
 export const router = createBrowserRouter([
