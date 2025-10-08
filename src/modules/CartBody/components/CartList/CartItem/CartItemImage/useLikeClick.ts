@@ -1,7 +1,7 @@
 import { 
   useAddToLikedMutation, 
   useRemoveFromLikedMutation 
-} from "@/shared/store/liked/likedApiSlice";
+} from "@/modules/LikedBody/store/liked/likedApiSlice";
 import { CartItemProps } from "@/modules/CartBody/components/CartList/CartItem/CartItem";
 
 export const uselikeClick = (props: CartItemProps) => {

@@ -1,5 +1,5 @@
 import { useGetCartQuery } from "@/modules/CartBody/store/cart/cartApiSlice";
-import { useGetLikedQuery } from "@/shared/store/liked/likedApiSlice";
+import { useGetLikedQuery } from "@/modules/LikedBody/store/liked/likedApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { initialCart } from "./store/cart/cartApi";
 import { CartList } from "./components/CartList/CartList";

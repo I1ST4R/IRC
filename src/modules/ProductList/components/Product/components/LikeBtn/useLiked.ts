@@ -4,7 +4,7 @@ import {
   useAddToLikedMutation, 
   useGetLikedQuery, 
   useRemoveFromLikedMutation 
-} from "@/shared/store/liked/likedApiSlice";
+} from "@/modules/LikedBody/store/liked/likedApiSlice";
 import { UserIdProductIdType } from "../CartBtn/CartBtn";
 
 export const useLiked = ({userId, productId} : UserIdProductIdType) => {

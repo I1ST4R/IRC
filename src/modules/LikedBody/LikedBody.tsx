@@ -2,25 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../_old-version/services/store";
-import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../_old-version/main/components/PersonalAccount/PersonalAccount";
 import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
 import { useGetUserQuery } from "@/entity/users/api";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
+import { Product } from "../ProductList";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
   const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user?.id ?? "",{skip: !user?.id});
-  const [isPersonalAccountOpen, setIsPersonalAccountOpen] = useState(false);
-  const [removeFromLiked] = useRemoveFromLikedMutation();
-
-  const handleRemoveItem = (productId: string) => {
-    if (user?.id) removeFromLiked({ userId: user.id, productId })
-  };
-
-  const getTotalItems = () => {
-    return likedItems.length;
-  };
 
   if (!user?.id) return <Unauthorized />;
 
@@ -57,7 +47,7 @@ export const LikedBody = () => {
       <div className="cart__header">
         <h2 className="cart__title liked-page__title">Избранное</h2>
         <span className="cart__items-count">
-            В избранном <span>{getTotalItems()}</span>
+            В избранном <span>{likedItems.length}</span>
         </span>
       </div>
       <div className="product-list__container liked-page__container">
@@ -65,7 +55,7 @@ export const LikedBody = () => {
           <Product
             key={`product-${product.id}`}
             product={product}
-            onRemoveFromLiked={() => handleRemoveItem(product.id)}
+            onRemoveFromLiked={() => removeFromLiked({ userId: user.id, product.id })}
           />
         ))}
       </div>
@@ -73,4 +63,3 @@ export const LikedBody = () => {
   );
 };
 
-export default LikedBody;
