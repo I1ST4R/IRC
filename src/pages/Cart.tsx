@@ -1,7 +1,7 @@
 import React from "react";
-import BreadCrumb from "@/main/components/BreadCrumb/BreadCrumb";
-import { CartBody } from "@/modules/CartList/CartBody";
 import { OrderMenu } from "@/modules/OrderMenu";
+import { CartBody } from "@/modules/CartBody";
+import BreadCrumb from "@/shared/BreadCrumb/BreadCrumb";
 
 export const Cart: React.FC = () => {
   return (
