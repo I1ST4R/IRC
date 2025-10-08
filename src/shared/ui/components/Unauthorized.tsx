@@ -1,8 +1,9 @@
-import { openAccount } from "@/_old-version/entity/account/slice";
+// type UnauthorizedProps = {
+//   text: string,
+//   dispatch: 
+// }
 
-
-export const CartBodyAnauthorized = () => {
-  // const dispatch = useAppDispatch();
+export const Unauthorized = () => {
 
   return (
     <div className="my-[150px_0_100px_0] text-center text-lg flex flex-col items-center gap-10">
@@ -13,8 +14,8 @@ export const CartBodyAnauthorized = () => {
         >
           ВОЙДИТЕ
         </button>
-        , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ в корзину
+        , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ в избранное
       </p>
     </div>
   );
-};
+}

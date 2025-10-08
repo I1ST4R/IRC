@@ -3,9 +3,9 @@ import { useGetLikedQuery } from "@/shared/store/liked/likedApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { initialCart } from "./store/cart/cartApi";
 import { CartList } from "./components/CartList/CartList";
-import { CartBodyAnauthorized } from "./components/CartBodyAnauthorized/CartBodyAnauthorized";
 import { CartBodyLoading } from "./components/CartBodyLoading/CartBodyLoading";
 import { CartBodyError } from "./components/CartBodyError/CartBodyError";
+import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 
 export const CartBody = () => {
   const { data: user } = useGetUserQuery();
@@ -18,7 +18,7 @@ export const CartBody = () => {
     error: cartError,
   } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
 
-  if (!user?.id) return <CartBodyAnauthorized />;
+  if (!user?.id) return <Unauthorized />;
   if (isCartLoading) return <CartBodyLoading />;
   if (cartError) return <CartBodyError />;
 

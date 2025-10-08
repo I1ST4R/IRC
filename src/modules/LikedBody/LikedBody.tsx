@@ -6,6 +6,7 @@ import { Product } from "../Catalog/Product/Product";
 import PersonalAccount from "../../_old-version/main/components/PersonalAccount/PersonalAccount";
 import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
 import { useGetUserQuery } from "@/entity/users/api";
+import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
@@ -21,11 +22,7 @@ export const LikedBody = () => {
     return likedItems.length;
   };
 
-  if (!user?.id) {
-    return (
-      
-    );
-  }
+  if (!user?.id) return <Unauthorized />;
 
   if (isLoading) {
     return (
