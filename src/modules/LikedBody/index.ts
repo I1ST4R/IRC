@@ -1,0 +1,1 @@
+export {LikedBody} from "./LikedBody"
