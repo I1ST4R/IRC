@@ -1,8 +1,7 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
 import { LikedItemDb } from "./likedTypes";
-import { getProductsById } from "@/_old-version/services/api";
-import { ProductT } from "@/modules/ProductList";
+import { getProductById, ProductT } from "@/modules/ProductList";
 
 
 const axiosInstance = axios.create(API_CLIENT);
@@ -18,14 +17,25 @@ export const getLiked = async (userId: string) => {
       await axiosInstance.patch(`/users/${user.id}`, { liked: [] });
       return [];
     }
-    const productIds = user.liked.map((item: LikedItemDb) => item.productId);
-    const products = await getProductsById(productIds)
-    return products as ProductT[]
+    const products = await loadProducts(user.liked)
+    return products 
   } catch (error: any) {
     console.error('error in getLiked', error);
     throw error;
   }
 };
+
+const loadProducts = (liked: LikedItemDb[]) => {
+  try{
+    const productIds = liked.map((item: LikedItemDb) => item.productId);
+    const products = Promise.all(
+      productIds.map((el) => getProductById(el))
+    )
+    return products
+  } catch (error: any){
+    throw error
+  }
+}
 
 export const addToLiked = async (userId: string, productId: string) => {
   try {

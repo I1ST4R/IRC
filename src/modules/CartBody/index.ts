@@ -6,4 +6,3 @@ export {
 } from "@/modules/CartBody/store/cart/cartApiSlice"
 export {type CartItem} from "./store/cart/cartTypes"
 export {type CartItemDb} from "./store/cart/cartTypes"
-export {loadCartProducts} from "./store/cart/cartApi"

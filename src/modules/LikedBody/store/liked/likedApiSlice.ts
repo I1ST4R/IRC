@@ -4,28 +4,29 @@ import {
   addToLiked,
   removeFromLiked
 } from './likedApi';
-import { Product } from '../productTypes';
+import { ProductT } from '@/modules/ProductList';
+
 
 export const likedApi = createApi({
   reducerPath: 'likedApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Liked'],
   endpoints: (build) => ({
-    getLiked: build.query<Product[], string>({
+    getLiked: build.query<ProductT[], string>({
       queryFn: (userId) =>
         getLiked(userId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       providesTags: ['Liked'],
     }),
-    addToLiked: build.mutation<Product[], { userId: string; productId: string }>({
+    addToLiked: build.mutation<ProductT[], { userId: string; productId: string }>({
       queryFn: ({ userId, productId }) =>
         addToLiked(userId, productId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       invalidatesTags: ['Liked'],
     }),
-    removeFromLiked: build.mutation<Product[], { userId: string; productId: string }>({
+    removeFromLiked: build.mutation<ProductT[], { userId: string; productId: string }>({
       queryFn: ({ userId, productId }) =>
         removeFromLiked(userId, productId)
           .then((data) => ({ data }))
