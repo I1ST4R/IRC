@@ -7,5 +7,7 @@ export {
 export {useAppDispatch, type AppDispatch} from "./store/orderMenuStore"
 export {
   DEFAULT_RECEPIENT,
+  PAYMENT_METHODS,
+  DELIVERY_METHOD_NAMES,
   type Order
 } from "./store/cartTotals/cartTotalsTypes"

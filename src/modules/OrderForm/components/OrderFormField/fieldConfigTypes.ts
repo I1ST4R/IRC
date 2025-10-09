@@ -1,5 +1,5 @@
-import {DeliveryMethodName} from "@/modules/OrderMenu/index"
-import { DeliveyMethod, PaymentMethod } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import {DELIVERY_METHOD_NAMES} from "@/modules/OrderMenu"
+import { PAYMENT_METHODS } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
 export const enum FieldTypes {
   Selector = "Selector",
   TextArea = "TextArea", 
@@ -28,20 +28,20 @@ export type FieldName =
 //   label: string
 // }
 
-// Для каждого поля свой тип значения
-type FieldValue<T extends FieldName> = 
-  T extends "deliveryMethod" ? DeliveryMethodName :
-  string;
+// // Для каждого поля свой тип значения
+// type FieldValue<T extends FieldName> = 
+//   T extends "deliveryMethod" ? DeliveryMethodName :
+//   string;
 
-// Теперь FieldAction знает КАКОЕ значение ожидать
-export type FieldAction<T extends FieldName = FieldName> = {
-  onBlur?: (value: FieldValue<T>) => void;
-  onChange?: (value: FieldValue<T>) => void;
-}
+// // Теперь FieldAction знает КАКОЕ значение ожидать
+// type FieldAction<T extends FieldName = FieldName> = {
+//   onBlur?: (value: FieldValue<T>) => void;
+//   onChange?: (value: FieldValue<T>) => void;
+// }
 
 export type FieldOptions<T extends FieldName = FieldName> = 
-  T extends "deliveryMethod" ? Array<Omit<DeliveyMethod, "cost">>:
-  T extends "paymentMethod" ? PaymentMethod[]:
+  T extends "deliveryMethod" ? typeof DELIVERY_METHOD_NAMES:
+  T extends "paymentMethod" ? typeof PAYMENT_METHODS:
   Array<{value: string, label: string}>
 
 
@@ -50,7 +50,6 @@ export type SelectorConfig = {
   options: FieldOptions<"deliveryMethod" | "paymentMethod" >
   name: FieldName
   label: string
-  // actions?: FieldAction<"deliveryMethod">
   actions?: {
     onBlur?: (value: string) => void;
     onChange?: (value: string) => void;
@@ -62,7 +61,6 @@ export type OtherFieldsConfig = {
   placeholder: string;
   name: FieldName
   label: string
-  // actions?: FieldAction<FieldName>
   actions?: {
     onBlur?: (value: string) => void;
     onChange?: (value: string) => void;

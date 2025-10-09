@@ -1,29 +1,30 @@
-import { changeDeliveryMethod, DELIVERY_METHODS, PAYMENT_METHODS, AppDispatch } from "@/modules/OrderMenu";
+import { changeDeliveryMethod, DELIVERY_METHOD_NAMES, PAYMENT_METHODS, AppDispatch } from "@/modules/OrderMenu";
 import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
+import { DeliveryMethodName } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
 
-const DeliveryMethodOptions = DELIVERY_METHODS.map((el) => {
-  return {
-    name: el.name,
-    label: el.label
-  }
-})
+// const DeliveryMethodOptions = DELIVERY_METHODS.map((el) => {
+//   return {
+//     name: el.name,
+//     label: el.label
+//   }
+// })
 
-const PaymentMethodOptions = PAYMENT_METHODS.map((el) => {
-  return {
-    name: el.name,
-    label: el.label
-  }
-})
+// const PaymentMethodOptions = PAYMENT_METHODS.map((el) => {
+//   return {
+//     name: el.name,
+//     label: el.label
+//   }
+// })
 
 export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
     fieldType: FieldTypes.Selector,
     name: "deliveryMethod",
     label: "Способ доставки",
-    options: DeliveryMethodOptions,
+    options: DELIVERY_METHOD_NAMES,
     actions: {
       onBlur: (value) => { 
-        dispatch(changeDeliveryMethod(value))
+        dispatch(changeDeliveryMethod(value as DeliveryMethodName))
       }
     } 
   },
@@ -31,7 +32,7 @@ export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
     fieldType: FieldTypes.Selector,
     name: "paymentMethod",
     label: "Способ оплаты",
-    options: PaymentMethodOptions
+    options: PAYMENT_METHODS
   },
   {
     fieldType: FieldTypes.Input,

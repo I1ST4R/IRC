@@ -11,7 +11,7 @@ export const OrderForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form className="space-y-6">
         {fieldConfig.map((el) => (
           <OrderFormField {...el} key={el.name} />
         ))}
