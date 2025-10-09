@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getUser, login, logout, register} from './userApi'
-import { cartApi } from '../../../modules/CartList/store/cart/cartApiSlice'
 import { likedApi } from '../../../modules/LikedBody/store/liked/likedApiSlice'
 import { User, LoginData, RegisterData } from './userTypes'
+import { cartApi } from '@/modules/CartBody/store/cart/cartApiSlice';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',

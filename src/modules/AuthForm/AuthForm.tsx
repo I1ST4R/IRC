@@ -3,8 +3,10 @@ import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
 import { loginForm, registerForm } from './helpers/formConfig';
-import { LoginForm } from './components/LoginForm';
+;
 import { RegisterForm } from './components/RegisterForm';
+import { Button } from '@/shared/ui/kit/button';
+import { LoginForm } from './components/LoginForm';
 
 export const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(false) 
@@ -20,7 +22,7 @@ export const AuthForm = () => {
   if (isAccountOpen) return (
     <div className="relative">
       {/* Крестик для закрытия */}
-      <button
+      <Button
         type="button"
         onClick={() => dispatch(closeAccount())}
         className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
@@ -28,7 +30,7 @@ export const AuthForm = () => {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
-      </button>
+      </Button>
 
       {
         isLogin ? ( <LoginForm form={loginForm}/>) 
