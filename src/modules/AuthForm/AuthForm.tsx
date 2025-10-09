@@ -1,29 +1,20 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGetUserQuery, useLoginMutation } from '@/shared/store/user/userApiSlice';
 import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
+import { loginForm, registerForm } from './helpers/formConfig';
+import { LoginForm } from './components/LoginForm';
+import { RegisterForm } from './components/RegisterForm';
 
 export const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(false) 
-  const [formData, setFormData] = useState({
-    login: '',
-    password: '',
-    email: '',
-  });
-  const [login] = useLoginMutation();
-  const {data: user} = useGetUserQuery()
   const isAccountOpen = useSelector(selectIsFormOpen)
   const dispatch = useAppDispatch()
-  if(user) setIsLogin(true)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    loginForm.reset();
+    registerForm.reset();
   };
 
   if (isAccountOpen) return (
@@ -39,58 +30,10 @@ export const AuthForm = () => {
         </svg>
       </button>
 
-      <form onSubmit={() => login(formData)} >
-        <h2>{isLogin ? 'Вход' : 'Регистрация'}</h2>
-        
-        <div >
-          <label htmlFor="login">Логин</label>
-          <input
-            type="text"
-            id="login"
-            name="login"
-            value={formData.login}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {!isLogin && (
-          <div >
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
-
-        <div >
-          <label htmlFor="password">Пароль</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button type="submit" >
-          {isLogin ? 'Войти' : 'Зарегистрироваться'}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setIsLogin(!isLogin)}
-        >
-          {isLogin ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
-        </button>
-      </form>
+      {
+        isLogin ? ( <LoginForm form={loginForm}/>) 
+        : ( <RegisterForm form={registerForm}/>)
+      }
     </div>
   );
 };

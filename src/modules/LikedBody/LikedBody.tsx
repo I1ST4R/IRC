@@ -4,14 +4,19 @@ import { EmptyList } from "@/shared/ui/components/EmptyList";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { useGetLikedQuery } from "./store/liked/likedApiSlice";
 import { LikedList } from "./components/LikedList";
+import { openAccount, useAppDispatch } from "../AuthForm";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
   const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user?.id ?? "", { skip: !user?.id });
+  const dispatch = useAppDispatch()
 
-  if (!user?.id) return <Unauthorized />;
-  if (isLoading) return <Loader title="Избранное" />;
-  if (error) return <div className="text-red-500 text-center py-8">Ошибка при загрузке избранного</div>;
+  if (!user?.id) 
+    return <Unauthorized text="чтобы доабвлять товары в избранное" handleClick={() => dispatch(openAccount())}/>;
+  if (isLoading) 
+    return <Loader title="Избранное" />;
+  if (error) 
+    return <div className="text-red-500 text-center py-8">Ошибка при загрузке избранного</div>;
   if (likedItems.length === 0) 
     return <EmptyList title="Избранное" message="Ваш список избранного пуст"/>;
 

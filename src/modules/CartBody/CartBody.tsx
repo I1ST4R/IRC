@@ -7,6 +7,7 @@ import { CartBodyError } from "./components/CartBodyError/CartBodyError";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Loader } from "@/shared/ui/components/Loader";
 import { EmptyList } from "@/shared/ui/components/EmptyList";
+import { openAccount, useAppDispatch } from "../AuthForm";
 
 export const CartBody = () => {
   const { data: user } = useGetUserQuery();
@@ -18,8 +19,9 @@ export const CartBody = () => {
     isLoading: isCartLoading,
     error: cartError,
   } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
+  const dispatch = useAppDispatch()
 
-  if (!user?.id) return <Unauthorized />;
+  if (!user?.id) return <Unauthorized text="чтобы добавлять товары в корзину" handleClick={() => dispatch(openAccount())}/>
   if (isCartLoading) return <Loader title="Корзина" />;
   if (cartError) return <CartBodyError />;
   if (cart.itemsCount === 0)

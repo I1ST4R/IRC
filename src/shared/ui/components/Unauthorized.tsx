@@ -1,20 +1,20 @@
-// type UnauthorizedProps = {
-//   text: string,
-//   dispatch: 
-// }
+type UnauthorizedProps = {
+  text: string,
+  handleClick: () => {}
+}
 
-export const Unauthorized = () => {
+export const Unauthorized = ({text, handleClick} : UnauthorizedProps) => {
 
   return (
     <div className="my-[150px_0_100px_0] text-center text-lg flex flex-col items-center gap-10">
       <p className="font-europeext font-black text-xl tracking-wide uppercase text-center">
         <button
           className="text-[var(--coral)] bg-transparent border-none font-black text-xl tracking-wide uppercase cursor-pointer p-0 mt-2.5 underline transition-colors duration-300 hover:text-[var(--coralDark)]"
-          onClick={() => /*dispatch(openAccount())*/ {}}
+          onClick={() => handleClick()}
         >
           ВОЙДИТЕ
         </button>
-        , ЧТОБЫ ДОБАВЛЯТЬ ТОВАРЫ в избранное
+        , {text}
       </p>
     </div>
   );

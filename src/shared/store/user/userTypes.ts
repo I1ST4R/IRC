@@ -1,16 +1,17 @@
+import { CartItem } from "@/modules/CartBody";
+import { Order } from "@/modules/OrderMenu";
+import { ProductT } from "@/modules/ProductList";
 
-import { CartItem } from '../../../modules/CartList/store/cart/cartTypes'
-import { Order } from '../order/orderTypes';
-import { Product } from '../productTypes';
 
-export interface User {
+
+export type User = {
   id: string | null;
   login: string | null;
   email: string | null;
   password: string | null;
   type: "client" | "admin" | null;
   cart: CartItem[];
-  liked: Product[];
+  liked: ProductT[];
   orders: Order[];
 }
 
@@ -19,14 +20,13 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface LoginData {
+export type LoginData = {
   login: string;
   password: string;
 }
 
-export interface RegisterData {
+export type RegisterData<T extends "form" | "default" = "default"> = {
   login: string;
   email: string;
   password: string;
-  type: 'client'; 
-}
+} & (T extends "default" ? { type: 'client' } : {})

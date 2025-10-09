@@ -1,31 +1,16 @@
+import { openAccount, useAppDispatch } from "@/modules/AuthForm";
 import "./_order.scss";
 import { OrderForm } from "@/modules/OrderForm";
 import { OrderMenu } from "@/modules/OrderMenu";
-import BreadCrumb from "@/shared/BreadCrumb/BreadCrumb";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
+import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 
 export const Order: React.FC = () => {
   const { data: user } = useGetUserQuery();
+  const dispatch = useAppDispatch()
 
-  if (!user?.id) {
-    return (
-      <div className="order container">
-        <BreadCrumb
-          pageLinks={[
-            { name: "Главная", link: "/" },
-            { name: "Корзина", link: "/cart" },
-            { name: "Заказ", link: "/" },
-          ]}
-        />
-        <h2 className="order__title">Оформление заказа</h2>
-        <div className="order__empty">
-          <p className="order__empty-message">
-            Авторизуйтесь, чтобы оформить заказ
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (!user?.id) 
+    return <Unauthorized text="чтобы иметь возможность заказывать продукцию магазина" handleClick={() => dispatch(openAccount())}/>;
 
   return (
     <div className="order container">
