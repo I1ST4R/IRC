@@ -1,40 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { RootState } from "../../_old-version/services/store";
-import PersonalAccount from "../../_old-version/main/components/PersonalAccount/PersonalAccount";
-import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api";
-import { useGetUserQuery } from "@/entity/users/api";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Product } from "../ProductList";
 import { Loader } from "@/shared/ui/components/Loader";
+import { EmptyList } from "@/shared/ui/components/EmptyList";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
+import { useGetLikedQuery } from "./store/liked/likedApiSlice";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
   const { data: likedItems = [], isLoading, error } = useGetLikedQuery(user?.id ?? "",{skip: !user?.id});
 
   if (!user?.id) return <Unauthorized />;
-
   if (isLoading) return <Loader title = "Избранное"/>
-
-  if (error) {
-    return <div className="cart__error">Ошибка при загрузке избранного</div>;
-  }
-
-  if (likedItems.length === 0) {
-    return (
-      <div className="cart__empty">
-        <h2 className="cart__title">Избранное</h2>
-        <div className="cart__empty-text">
-          <p className="cart__empty-message">Ваша список избранного пуст</p>
-          <p className="cart__empty-link">
-            <Link to="/catalog">Нажмите здесь,</Link>
-            чтобы перейти в каталог
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (error) return <div className="cart__error">Ошибка при загрузке избранного</div>
+  if (likedItems.length === 0) 
+    return <EmptyList title = "Избранное" message = "Ваш список избранного пуст"/>
 
   return (
     <div className="cart container liked-page">

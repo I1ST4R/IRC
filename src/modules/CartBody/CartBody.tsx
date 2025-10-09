@@ -6,6 +6,7 @@ import { CartList } from "./components/CartList/CartList";
 import { CartBodyError } from "./components/CartBodyError/CartBodyError";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Loader } from "@/shared/ui/components/Loader";
+import { EmptyList } from "@/shared/ui/components/EmptyList";
 
 export const CartBody = () => {
   const { data: user } = useGetUserQuery();
@@ -19,8 +20,10 @@ export const CartBody = () => {
   } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
 
   if (!user?.id) return <Unauthorized />;
-  if (isCartLoading) return <Loader title="Корзина"/>;
+  if (isCartLoading) return <Loader title="Корзина" />;
   if (cartError) return <CartBodyError />;
+  if (cart.itemsCount === 0)
+    return <EmptyList title="Корзина" message="Ваша корзина пуста" />;
 
   return (
     <div>
