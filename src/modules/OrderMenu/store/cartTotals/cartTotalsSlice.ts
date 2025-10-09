@@ -128,7 +128,7 @@ const initialState: CartTotalsState = {
 };
 
 const cartTotalsSlice = createSlice({
-  name: "order",
+  name: "cartTotals",
   initialState,
   reducers: {
     changeCartTotals(state, action: PayloadAction<Partial<CartTotals>>) {
