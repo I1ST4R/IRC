@@ -1,4 +1,4 @@
-import { Product as ProductType } from "../../store/product/productTypes";
+import { Product as ProductT } from "../../store/product/productTypes";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 
 import { CartBtn } from "./components/CartBtn/CartBtn";
@@ -6,7 +6,7 @@ import { LikeBtn } from "./components/LikeBtn/LikeBtn";
 import { ProductCard } from "./components/ProductCard/ProductCard";
 
 type ProductProps = {
-  product: ProductType;
+  product: ProductT;
 }
 
 export const Product = ({ product }: ProductProps) => {

@@ -3,7 +3,7 @@ import { Home } from '../pages/Home/Home';
 import { Catalog } from '../pages/Catalog';
 import { AuthForm } from '../pages/Auth/AuthForm';
 import { Cart } from '../pages/Cart';
-import { Liked } from '../pages/Liked/Liked';
+import { Liked } from '../pages/Liked';
 import App from './App';  
 import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
 import { Order } from '../pages/Order';
