@@ -1,26 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '@/shared/store/user/userApiSlice';
+import { useGetUserQuery, useLoginMutation } from '@/shared/store/user/userApiSlice';
+import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from './store/authFormStore';
 
 export const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false) 
   const [formData, setFormData] = useState({
     login: '',
     password: '',
     email: '',
   });
-  const navigate = useNavigate();
   const [login] = useLoginMutation();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(formData).unwrap();
-      navigate('/');
-    } catch (error) {
-      console.error('Auth error:', error);
-    }
-  };
+  const {data: user} = useGetUserQuery()
+  const isAccountOpen = useSelector(selectIsFormOpen)
+  const dispatch = useAppDispatch()
+  if(user) setIsLogin(true)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,9 +26,20 @@ export const AuthForm = () => {
     }));
   };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit} >
+  if (isAccountOpen) return (
+    <div className="relative">
+      {/* Крестик для закрытия */}
+      <button
+        type="button"
+        onClick={() => dispatch(closeAccount())}
+        className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <form onSubmit={() => login(formData)} >
         <h2>{isLogin ? 'Вход' : 'Регистрация'}</h2>
         
         <div >
@@ -86,4 +93,4 @@ export const AuthForm = () => {
       </form>
     </div>
   );
-}; 
+};
