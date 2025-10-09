@@ -10,18 +10,21 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "./store/orderMenuStore";
 import { changeCartTotals } from "."
 import { onSubmit } from "../OrderForm";
+import { Loader } from "@/shared/ui/components/Loader";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { data: user } = useGetUserQuery();
-  const { data: checkedCartItems } = useGetCheckedCartItemsQuery(
+  const { data: checkedCartItems, isLoading: isCartItemsLoading } = useGetCheckedCartItemsQuery(
     user?.id ?? "",
     { skip: !user?.id }
   );
   const cartTotals = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/order";
+
+  if(isCartItemsLoading) return <Loader title="Корзина"/>
 
   const handleCheckout = () => {
     if (!isOrderPage) {

@@ -10,6 +10,7 @@ import { useGetOrdersQuery } from "./store/order/orderApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { OrderTableCell } from "./components/OrderTableCell";
 import { FullOrder } from "./store/order/orderApi";
+import { Loader } from "@/shared/ui/components/Loader";
 
 export const OrderTable = () => {
   const { data: orders = {}, isLoading } = useGetOrdersQuery();
@@ -19,7 +20,7 @@ export const OrderTable = () => {
     return <div className="admin-no-access">У вас нет прав доступа</div>;
   }
 
-  if (isLoading || !Array.isArray(orders)) return <div>Загрузка...</div>;
+  if (isLoading) return  <Loader title="Заказы"/>
 
   return (
     <>

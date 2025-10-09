@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { Product as ProductComponent } from "./components/Product/Product";
 import type { Product } from "@/modules/ProductList/store/product/productTypes";
 import { useGetProductsQuery } from "@/modules/ProductList/store/product/productApiSlice";
-import { ProductListPending } from "./components/ProductListPending/ProductListPending";
 import { ProductListError } from "./components/ProductError/ProductListError";
 import { NoProductsWithFilter } from "./components/NoProductsWithFilter/NoProductsWithFilter";
 import { Button } from "@/shared/ui/kit/button";
 import { cn } from "@/shared/lib/css";
 import { selectFilter } from "../Menu/store/filter/filterSlice";
+import { Loader } from "@/shared/ui/components/Loader";
 
 export const ProductList = () => {
   const filter = useSelector(selectFilter);
@@ -25,7 +25,7 @@ export const ProductList = () => {
     setPage((prev) => prev + 1);
   };
 
-  if (isLoading && page === 1) return <ProductListPending />;
+  if (isLoading && page === 1) return <Loader title="Каталог"/>;
   if (!data?.products && filter.isInitial) return <NoProductsWithFilter />;
   if (error || !data || !data.products) return <ProductListError />;
 
