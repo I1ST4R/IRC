@@ -7,6 +7,7 @@ import { useGetLikedQuery, useRemoveFromLikedMutation } from "@/entity/liked/api
 import { useGetUserQuery } from "@/entity/users/api";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Product } from "../ProductList";
+import { Loader } from "@/shared/ui/components/Loader";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
@@ -14,14 +15,7 @@ export const LikedBody = () => {
 
   if (!user?.id) return <Unauthorized />;
 
-  if (isLoading) {
-    return (
-      <div className="cart">
-        <h2 className="cart__title">Избранное</h2>
-        <div className="cart__loading">Загрузка...</div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loader title = "Избранное"/>
 
   if (error) {
     return <div className="cart__error">Ошибка при загрузке избранного</div>;
