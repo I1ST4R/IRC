@@ -20,7 +20,7 @@ export const cardPaymentForm = useForm<cardPaymentData>({
   mode: "onChange"
 })
 
-export const onSubmit = (
+export const onСardPaymentSubmit = (
   dispatch: AppDispatch,
   navigate: NavigateFunction,
   userId: string

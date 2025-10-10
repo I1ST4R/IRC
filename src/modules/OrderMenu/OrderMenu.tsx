@@ -9,8 +9,8 @@ import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./store/orderMenuStore";
 import { changeCartTotals } from "."
-import { onSubmit } from "../OrderForm";
 import { Loader } from "@/shared/ui/components/Loader";
+import { onSubmit } from "../OrderForm";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export const OrderMenu = () => {
       navigate("/order");
       return;
     }
-    onSubmit(dispatch, navigate, user?.id ?? "")
+    onSubmit(navigate)
   };
 
   if (!user?.id || !checkedCartItems || checkedCartItems.items.length === 0) return null;

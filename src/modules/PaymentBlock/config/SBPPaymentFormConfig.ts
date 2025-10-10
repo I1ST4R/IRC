@@ -23,7 +23,7 @@ export const SBPPaymentForm = useForm<SBPPaymentData>({
   mode: "onChange"
 })
 
-export const onSubmit = (
+export const onSBPPaymentSubmit = (
   dispatch: AppDispatch,
   navigate: NavigateFunction,
   userId: string

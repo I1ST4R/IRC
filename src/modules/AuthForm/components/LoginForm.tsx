@@ -1,14 +1,11 @@
 import { Form, UseFormReturn } from "react-hook-form";
-import { LoginFormData } from "../config/formConfig";
 import { useLoginMutation } from "@/shared/store/user/userApiSlice";
-
-
-// Добавляем тип для field
 import { ControllerRenderProps } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
+import { LoginFormData } from "../config/loginFormConfig";
 
 type LoginFormProps = {
   form: UseFormReturn<LoginFormData>;
