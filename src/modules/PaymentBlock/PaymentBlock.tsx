@@ -1,31 +1,41 @@
-import { useRemoveFromCartMutation } from "@/entity/cart/api";
-import { CartItem } from "@/entity/cart/types";
-
-import { useGetUserQuery } from "@/entity/users/api";
-import { RootState } from "@/main/store";
-import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
+import { Unauthorized } from "@/shared/ui/components/Unauthorized";
+import { openAccount, useAppDispatch } from "../AuthForm";
+import { selectCartTotals } from "../OrderMenu/store/cartTotals/cartTotalsSlice";
+import { Link } from "react-router-dom";
+import { CardPaymentForm } from "./components/CardPaymentForm/CardPaymentForm";
+import { SBPPaymentForm } from "./components/SBPPaymentForm/SBPPaymentForm";
+import { selectPaymentMethod } from "../OrderForm/store/recipientSlice";
+
 
 export const PaymentBlock = () => {
-  const order = useSelector((state: RootState) => state.orders.current);
-  const {data: user} = useGetUserQuery()
-  const navigate = useNavigate();
+  const deliveryMethod = useSelector(selectPaymentMethod);
+  const { data: user } = useGetUserQuery();
+  const dispatch = useAppDispatch();
+  const cartTotals = useSelector(selectCartTotals);
 
-  const [removeFromCart] = useRemoveFromCartMutation()
-
-  if (!order || !order.totalWithDiscount) {
+  if (!user)
     return (
-      <div className="payment container">
-        <p>Ошибка при оплате товаров</p>
+      <Unauthorized
+        text="Чтобы иметь возможность заказывать, нужно пройти регистрацию"
+        handleClick={() => dispatch(openAccount())}
+      />
+    );
+
+  if (cartTotals.cartItems.length === 0)
+    return (
+      <div>
+        Чтобы оплатить заказ его надо сначала создать (как бы это ни было
+        странно), перейдите в <Link to="/catatlog">каталог</Link> и выберите
+        что-нибудь.
       </div>
     );
-  }
 
   return (
     <div className="payment container">
-      {}
+    { deliveryMethod === "Банковская карта" ? <CardPaymentForm/> : <SBPPaymentForm/> }
     </div>
-  );
+  )
+  
 };
-
