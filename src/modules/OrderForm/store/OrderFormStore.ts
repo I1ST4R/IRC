@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import recipientReducer from "./recipientSlice"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { CartTotalsState } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { RecipientState } from "./recipientTypes";
 
 export const orderMenuStore = configureStore({
   reducer: {
@@ -10,7 +10,7 @@ export const orderMenuStore = configureStore({
 })
 
 export type RootState = {
-  cartTotals: CartTotalsState;
+  recipient: RecipientState;
 };
 
 export type AppDispatch = typeof orderMenuStore.dispatch;

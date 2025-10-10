@@ -20,4 +20,6 @@ export const registerForm = useForm<RegisterFormData>({
   },
   mode: "onBlur",
 });
+
 const typeRegisterCheck: RegisterData<"form"> = {} as RegisterFormData;
+

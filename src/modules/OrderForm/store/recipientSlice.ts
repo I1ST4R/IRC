@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Recipient, RecipientState } from "./recipientTypes";
+import { RootState } from "./OrderFormStore";
+
 
 
 export const defaultRecipient: Recipient = {
@@ -20,7 +22,7 @@ const initialState: RecipientState = {
 };
 
 const recipientSlice = createSlice({
-  name: "cartTotals",
+  name: "recipient",
   initialState,
   reducers: {
     changeRecipientInfo(state, action: PayloadAction<Partial<Recipient>>) {
@@ -28,6 +30,8 @@ const recipientSlice = createSlice({
     }
   }
 });
+
+export const selectRecipient = (state: RootState) => state.recipient.item
 
 export const { changeRecipientInfo } = recipientSlice.actions;
 export default recipientSlice.reducer;
