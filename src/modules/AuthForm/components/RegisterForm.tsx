@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { RegisterFormData } from "../helpers/formConfig";
+import { RegisterFormData } from "../formConfig";
 import { register } from "@/shared/store/user/userApi";
 import { useRegisterMutation } from "@/shared/store/user/userApiSlice";
 

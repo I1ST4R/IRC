@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
-import { loginForm, registerForm } from './helpers/formConfig';
+import { loginForm, registerForm } from './formConfig';
 ;
 import { RegisterForm } from './components/RegisterForm';
 import { Button } from '@/shared/ui/kit/button';
