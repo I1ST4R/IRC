@@ -32,21 +32,6 @@ export type CartTotalsState = {
   error: string | null;
 }
 
-
-
-
-
-export const DEFAULT_RECEPIENT: Recipient = {
-  deliveryMethod: "Курьером",
-  paymentMethod: "СБП",
-  fullName: "",
-  phone: "",
-  address: "",
-  email: "",
-  deliveryDate: "",
-  comment: ""
-}
-
 export type Order<T extends "DB" | "default" = "default"> = {
   recipient: Recipient,
   cartTotals: CartTotals<T>,

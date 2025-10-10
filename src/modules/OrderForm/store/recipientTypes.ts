@@ -42,6 +42,12 @@ export type Recipient = {
   comment?: string
 }
 
+export type RecipientState = {
+  item: Recipient
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string | null
+}
+
 
 
 
