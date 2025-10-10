@@ -1,5 +1,5 @@
 import { Form, UseFormReturn } from "react-hook-form";
-import { LoginFormData } from "../formConfig";
+import { LoginFormData } from "../config/formConfig";
 import { useLoginMutation } from "@/shared/store/user/userApiSlice";
 
 

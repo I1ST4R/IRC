@@ -1,26 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { LoginData, RegisterData } from "@/shared/store/user/userTypes";
-
-
-const loginSchema = z.object({
-  login: z.string().min(6, 'Логин должен содержать минимум 6 символов'),
-  password: z.string().min(8, 'Пароль должен содержать минимум 8 символов')
-})
-
-export type LoginFormData = z.infer<typeof loginSchema>;
-
-export const loginForm = useForm<LoginFormData>({
-  resolver: zodResolver(loginSchema),
-  defaultValues: {
-    login: "",
-    password: ""
-  },
-  mode: "onBlur",
-});
-const typeLoginCheck: LoginData = {} as LoginFormData;
-
+import { RegisterData } from "@/shared/store/user/userTypes";
 
 const registerSchema = z.object({
   login: z.string().min(6, 'Логин должен содержать минимум 6 символов'),

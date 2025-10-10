@@ -5,7 +5,9 @@ import { useAppDispatch } from './store/authFormStore';
 import { RegisterForm } from './components/RegisterForm';
 import { Button } from '@/shared/ui/kit/button';
 import { LoginForm } from './components/LoginForm';
-import { loginForm, registerForm } from './formConfig';
+import { loginForm } from './config/loginFormConfig';
+import { registerForm } from './config/registerFormConfig';
+
 
 export const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(false) 
