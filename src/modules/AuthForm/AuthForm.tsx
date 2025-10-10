@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
-import { RegisterForm } from './components/RegisterForm';
+import { RegisterForm } from './components/RegisterForm/RegisterForm';
 import { Button } from '@/shared/ui/kit/button';
-import { LoginForm } from './components/LoginForm';
-import { loginForm } from './config/loginFormConfig';
-import { registerForm } from './config/registerFormConfig';
+import { LoginForm } from './components/LoginForm/LoginForm';
+import { loginForm } from './components/LoginForm/loginFormConfig';
+import { registerForm } from './components/RegisterForm/registerFormConfig';
 
 
 export const AuthForm = () => {
@@ -34,7 +34,7 @@ export const AuthForm = () => {
       </Button>
 
       {
-        isLogin ? ( <LoginForm form={loginForm}/>) 
+        isLogin ? ( <LoginForm/>) 
         : ( <RegisterForm form={registerForm}/>)
       }
     </div>

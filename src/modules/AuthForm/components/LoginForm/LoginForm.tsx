@@ -1,18 +1,19 @@
-import { Form, UseFormReturn } from "react-hook-form";
+import { Form } from "react-hook-form";
 import { useLoginMutation } from "@/shared/store/user/userApiSlice";
 import { ControllerRenderProps } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
-import { LoginFormData } from "../config/loginFormConfig";
+import { loginForm, LoginFormData } from "./loginFormConfig";
 
-type LoginFormProps = {
-  form: UseFormReturn<LoginFormData>;
-}
-
-export const LoginForm = ({ form }: LoginFormProps) => {
+export const LoginForm = () => {
   const [login, { isLoading }] = useLoginMutation();
+
+  const {
+    handleSubmit,
+    control,
+  } = loginForm
 
   return (
     <Card className="w-full max-w-md">
@@ -20,11 +21,11 @@ export const LoginForm = ({ form }: LoginFormProps) => {
         <CardTitle className="text-2xl text-center">Вход</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit((data) => login(data))} className="space-y-6">
+        <Form {...loginForm}>
+          <form onSubmit={handleSubmit((data) => login(data))} className="space-y-6">
             {/* Поле логина */}
             <FormField
-              control={form.control}
+              control={control}
               name="login"
               render={({ field }: { field: ControllerRenderProps<LoginFormData, "login"> }) => (
                 <FormItem>
@@ -42,7 +43,7 @@ export const LoginForm = ({ form }: LoginFormProps) => {
 
             {/* Поле пароля */}
             <FormField
-              control={form.control}
+              control={control}
               name="password"
               render={({ field }: { field: ControllerRenderProps<LoginFormData, "password"> }) => (
                 <FormItem>

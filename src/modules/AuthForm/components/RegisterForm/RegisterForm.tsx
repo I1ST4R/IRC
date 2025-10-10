@@ -1,19 +1,13 @@
-import { UseFormReturn } from "react-hook-form";
-import { RegisterFormData } from "../config/formConfig";
-import { register } from "@/shared/store/user/userApi";
 import { useRegisterMutation } from "@/shared/store/user/userApiSlice";
+import { registerForm } from "./registerFormConfig";
 
-type RegisterFormProps = {
-  form: UseFormReturn<RegisterFormData>
-}
-
-export const RegisterForm = ({form} : RegisterFormProps) => {
+export const RegisterForm = () => {
 
   const {
     register: registerField,
     handleSubmit,
     formState: { errors }
-  } = form
+  } = registerForm
 
   const [register] = useRegisterMutation()
 
