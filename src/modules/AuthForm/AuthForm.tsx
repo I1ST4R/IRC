@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
-import { loginForm, registerForm } from './formConfig';
-;
 import { RegisterForm } from './components/RegisterForm';
 import { Button } from '@/shared/ui/kit/button';
 import { LoginForm } from './components/LoginForm';
+import { loginForm, registerForm } from './formConfig';
 
 export const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(false) 
