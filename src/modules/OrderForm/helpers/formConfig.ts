@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AppDispatch,
   createOrder,
-  DEFAULT_RECEPIENT,
 } from "@/modules/OrderMenu";
 import { NavigateFunction } from "react-router-dom";
+import { defaultRecipient } from "../store/recipientSlice";
 
 export const form = useForm<RecipientFormData>({
   resolver: zodResolver(recipientSchema),
-  defaultValues: DEFAULT_RECEPIENT,
+  defaultValues: defaultRecipient,
   mode: "onBlur",
 });
 

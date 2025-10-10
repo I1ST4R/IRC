@@ -1,5 +1,6 @@
 import z from "zod";
-import { DELIVERY_METHOD_NAMES, PAYMENT_METHODS, Recipient } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { DELIVERY_METHOD_NAMES, PAYMENT_METHODS, Recipient } from "../store/recipientTypes";
+
 
 export const recipientSchema = z.object({
   deliveryMethod: z.enum(DELIVERY_METHOD_NAMES, {
