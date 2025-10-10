@@ -4,13 +4,12 @@ import React from "react";
 // import Footer from './components/Footer/Footer';
 // import Navbar from './components/Navbar/Navbar';
 // import BottomMenu from './components/BottomMenu/BottomMenu';
-// import PersonalAccount from './components/PersonalAccount/PersonalAccount';
 import "./app.css";
-import { Button } from "@/shared/ui/kit/button";
+import { AuthForm } from "@/modules/AuthForm/AuthForm";
 
 const App: React.FC = () => {
   return (
-    
+    <AuthForm/>
   );
 
   // return (
