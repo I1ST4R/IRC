@@ -1,72 +1,93 @@
 import { useRegisterMutation } from "@/shared/store/user/userApiSlice";
 import { registerForm } from "./registerFormConfig";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
+import { Input } from "@/shared/ui/kit/input";
+import { Button } from "@/shared/ui/kit/button";
 
 export const RegisterForm = () => {
 
   const {
-    register: registerField,
     handleSubmit,
-    formState: { errors }
+    control
   } = registerForm
 
   const [register] = useRegisterMutation()
 
   return (
-    <form onSubmit={handleSubmit((data) => register({...data, type: "client"}))} className="space-y-4">
-      <h2 className="text-2xl font-bold text-center text-gray-900">Вход</h2>
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">Регистрация</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...registerForm}>
+          <form onSubmit={handleSubmit((data) => register({...data, type: "client"}))} className="space-y-4">
+            
+            {/* Поле логина */}
+            <FormField
+              control={control}
+              name="login"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Логин</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Введите ваш логин"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <div>
-        <label htmlFor="login" className="block text-sm font-medium text-gray-700 mb-1">
-          Логин
-        </label>
-        <input
-          type="text"
-          id="login"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-          placeholder="логин"
-          {...registerField('login')}
-        />
-        {errors.login && (
-          <p className="text-red-500 text-sm mt-1">{errors.login.message}</p>
-        )}
-      </div>
-      <div>
-        <label htmlFor="login" className="block text-sm font-medium text-gray-700 mb-1">
-          Пароль
-        </label>
-        <input
-          type="password"
-          id="password"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-          placeholder="пароль"
-          {...registerField('password')}
-        />
-        {errors.password && (
-          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-        )}
-      </div>
-      <div>
-        <label htmlFor="login" className="block text-sm font-medium text-gray-700 mb-1">
-          Почта
-        </label>
-        <input
-          type="text"
-          id="mail"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-          placeholder="пароль"
-          {...registerField('password')}
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-        )}
-      </div>
+            {/* Поле пароля */}
+            <FormField
+              control={control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Пароль</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Введите ваш пароль"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-      >
-        Зарегистрироваться
-      </button>
-    </form>
+            {/* Поле почты */}
+            <FormField
+              control={control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Почта</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Введите вашу почту"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+            >
+              Зарегистрироваться
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 };

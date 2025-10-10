@@ -8,7 +8,7 @@ import { Button } from "@/shared/ui/kit/button";
 import { loginForm, LoginFormData } from "./loginFormConfig";
 
 export const LoginForm = () => {
-  const [login, { isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const {
     handleSubmit,
@@ -63,9 +63,8 @@ export const LoginForm = () => {
             <Button
               type="submit"
               className="w-full"
-              disabled={isLoading}
             >
-              {isLoading ? "Вход..." : "Войти"}
+              Войти
             </Button>
           </form>
         </Form>
