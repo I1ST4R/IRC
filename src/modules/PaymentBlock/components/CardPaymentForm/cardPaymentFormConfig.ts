@@ -10,9 +10,9 @@ const cardPaymentSchema = z.object({
   number: z.string().regex(/^\d+$/, "Номер банковской карты должен содержать только цифры")
 })
 
-export type cardPaymentData = z.infer<typeof cardPaymentSchema>
+export type CardPaymentData = z.infer<typeof cardPaymentSchema>
 
-export const cardPaymentForm = useForm<cardPaymentData>({
+export const cardPaymentForm = useForm<CardPaymentData>({
   resolver: zodResolver(cardPaymentSchema),
   defaultValues: {
     number: ""

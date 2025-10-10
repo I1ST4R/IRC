@@ -33,10 +33,7 @@ export const AuthForm = () => {
         </svg>
       </Button>
 
-      {
-        isLogin ? ( <LoginForm/>) 
-        : ( <RegisterForm form={registerForm}/>)
-      }
+      { isLogin ? ( <LoginForm/>) : ( <RegisterForm/>) }
     </div>
   );
 };

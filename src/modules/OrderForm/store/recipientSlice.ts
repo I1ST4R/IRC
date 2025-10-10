@@ -30,6 +30,7 @@ const recipientSlice = createSlice({
 });
 
 export const selectRecipient = (state: RootState) => state.recipient.item
+export const selectPaymentMethod = (state: RootState) => state.recipient.item.paymentMethod
 
 export const { changeRecipientInfo } = recipientSlice.actions;
 export default recipientSlice.reducer;
