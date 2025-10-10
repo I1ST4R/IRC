@@ -1,5 +1,9 @@
+import { selectRecipient } from "@/modules/OrderForm";
+import { AppDispatch, createOrder } from "@/modules/OrderMenu";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { NavigateFunction } from "react-router-dom";
 import z from "zod";
 
 const SBPPaymentSchema = z.object({
@@ -18,3 +22,21 @@ export const SBPPaymentForm = useForm<SBPPaymentData>({
   },
   mode: "onChange"
 })
+
+export const onSubmit = (
+  dispatch: AppDispatch,
+  navigate: NavigateFunction,
+  userId: string
+) => {
+  SBPPaymentForm.handleSubmit((validData) => {
+    const recipient = useSelector(selectRecipient)
+    dispatch(createOrder({ 
+      recipient: {
+        ...recipient,
+        paymentPhone: validData.phone
+      }, 
+      navigate, 
+      userId 
+    }));
+  })()
+};

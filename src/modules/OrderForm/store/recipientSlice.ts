@@ -2,8 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Recipient, RecipientState } from "./recipientTypes";
 import { RootState } from "./OrderFormStore";
 
-
-
 export const defaultRecipient: Recipient = {
   deliveryMethod: "Курьером",
   paymentMethod: "СБП",
