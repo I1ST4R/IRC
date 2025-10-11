@@ -7,14 +7,15 @@ import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Button } from "@/shared/ui/kit/button";
 import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "./store/orderMenuStore";
+import { useAppDispatch as useCartTotalsDispatch} from "./store/orderMenuStore";
 import { changeCartTotals } from "."
 import { Loader } from "@/shared/ui/components/Loader";
 import { onSubmit } from "../OrderForm";
+import { useAppDispatch as useRecipientDispatch } from "../OrderForm";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const cartTotalsDispatch = useCartTotalsDispatch();
   const location = useLocation();
   const { data: user } = useGetUserQuery();
   const { data: checkedCartItems, isLoading: isCartItemsLoading } = useGetCheckedCartItemsQuery(
@@ -31,12 +32,12 @@ export const OrderMenu = () => {
       navigate("/order");
       return;
     }
-    onSubmit(navigate)
+    onSubmit(useRecipientDispatch(), navigate)
   };
 
   if (!user?.id || !checkedCartItems || checkedCartItems.items.length === 0) return null;
 
-  dispatch(changeCartTotals({ cartItems: checkedCartItems?.items || [] }));
+  cartTotalsDispatch(changeCartTotals({ cartItems: checkedCartItems?.items || [] }));
 
   return (
     <div className="bg-[#F2F2F2] w-73">
