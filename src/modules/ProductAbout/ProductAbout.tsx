@@ -8,6 +8,7 @@ import { ProductPrices } from "./components/ProductPrices";
 import { ProductCartBtn } from "./components/ProductCartBtn";
 import { ProductLikeBtn } from "./components/ProductLikeBtn";
 import { ProductTags } from "./components/ProductTags";
+import { ProductFormula } from "./components/ProductFormula";
 
 export const ProductAbout = () => {
   const { id } = useParams();
@@ -16,7 +17,6 @@ export const ProductAbout = () => {
     skip: !id,
   });
   const dispatch = useAppDispatch();
-
   if (error) return <div>Ошибка при загрузке продукта</div>;
   if (!product) return <div>Товар не найден</div>;
   if (!user?.id)
@@ -55,16 +55,7 @@ export const ProductAbout = () => {
             <ProductLikeBtn userId={user.id} productId={product.id} />
           </div>
 
-          <div className="product-about__point product-about__point--first">
-            <h3 className="product-about__point-title">Формула</h3>
-            <div className="product-about__point-list">
-              {product.formula.map((item: string, index: number) => (
-                <p key={index} className="product-about__formula-item">
-                  {item}
-                </p>
-              ))}
-            </div>
-          </div>
+          <ProductFormula formula={product.formula}/>
 
           <div className="product-about__point">
             <h3 className="product-about__point-title">Для чего</h3>
