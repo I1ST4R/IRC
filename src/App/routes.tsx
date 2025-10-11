@@ -15,35 +15,41 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/',
+        index: true,
         element: <Home />,
       },
       {
-        path: '/catalog',
+        path: 'catalog',
         element: <Catalog />,
+        children : [
+          {
+            path: 'product/:id',
+            element: <ProductAbout />
+          }
+        ]
       },
       {
-        path: '/cart',
+        path: 'cart',
         element: <Cart />,
+        children: [
+          {
+            path: "order",
+            element: <Order/>,
+            children: [
+              {
+                path: 'payment',
+                element: <Payment/>
+              }
+            ]
+          }
+        ]
       },
       {
-        path: '/liked',
+        path: 'liked',
         element: <Liked />,
       },
       {
-        path: '/product/:id',
-        element: <ProductAbout />,
-      },
-      {
-        path: '/order',
-        element: <Order />,
-      },
-      {
-        path: '/payment',
-        element: <Payment />,
-      },
-      {
-        path: '/admin',
+        path: 'admin',
         element: <Admin />,
       },
     ],
