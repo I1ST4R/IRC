@@ -1,5 +1,13 @@
 import { LikedBody } from "@/modules/LikedBody";
+import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 
- const Liked = () => { return <LikedBody/> }
+ const Liked = () => { 
+  return(
+    <div>
+      <BreadCrumb/>
+      <LikedBody/>
+    </div>
+  )  
+}
 
  export default Liked

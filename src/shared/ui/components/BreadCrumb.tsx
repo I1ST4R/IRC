@@ -22,7 +22,7 @@ const BREADCRUMB_NAMES: Record<string, string> = {
   "/admin": "Админка",
 };
 
-export const SmartBreadCrumb = () => {
+export const BreadCrumb = () => {
   const location = useLocation();
   const pathnames = location.pathname
     .split("/")

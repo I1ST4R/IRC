@@ -4,6 +4,7 @@ import { OrderForm } from "@/modules/OrderForm";
 import { OrderMenu } from "@/modules/OrderMenu";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
+import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 
 export const Order: React.FC = () => {
   const { data: user } = useGetUserQuery();
@@ -14,6 +15,7 @@ export const Order: React.FC = () => {
 
   return (
     <div className="order container">
+      <BreadCrumb/>
       <OrderForm/>
       <OrderMenu/>
     </div>

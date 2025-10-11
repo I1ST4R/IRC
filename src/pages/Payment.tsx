@@ -1,5 +1,13 @@
 import { PaymentBlock } from "@/modules/PaymentBlock/PaymentBlock";
+import {BreadCrumb} from "@/shared/ui/components/BreadCrumb";
 
-const Payment = () => { return (<PaymentBlock/>)}
+const Payment = () => {
+  return (
+    <div>
+      <BreadCrumb/>
+      <PaymentBlock />
+    </div>
+  );
+};
 
-export default Payment
+export default Payment;
