@@ -1,69 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
-import phone from '../../../pages/Home/_general/img/phone.svg';
-import whatsapp from '../../../pages/Home/_general/img/whatsapp.svg';
-import vk from '../../../pages/Home/_general/img/vk.svg';
-import instagram from '../../../pages/Home/_general/img/instagram.svg';
-import youtube from '../../../pages/Home/_general/img/youtube.svg';
-import mail from './mail.svg';
-import clock from './clock.svg';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer">
-      <div className="container">
-
-        <div className="footer__info-block"> 
-          <img src={logo} alt="" />
-          <a href="#" className="footer__point">Соглашение с политикой конфиденциальности</a>
-          <a href="#" className="footer__point">Пользовательское соглашение</a>
-          <a href="#" className="footer__point">Карта сайта</a>
-          <a href="#" className="footer__point">Правила акций при техническом сбое</a>
+    <footer className="bg-[#E1E7F0] py-12">
+      <div className="grid grid-cols-4 justify-between max-w-6xl mx-auto px-4 md:grid-cols-2 md:justify-center md:gap-14 md:pb-10 sm:grid-cols-1">
+        
+        <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
+          <img src={'./logo.svg'} alt="" className="mb-14" />
+          <a href="#" className="flex gap-2 items-center">Соглашение с политикой конфиденциальности</a>
+          <a href="#" className="flex gap-2 items-center">Пользовательское соглашение</a>
+          <a href="#" className="flex gap-2 items-center">Карта сайта</a>
+          <a href="#" className="flex gap-2 items-center">Правила акций при техническом сбое</a>
         </div>
 
-        <div className="footer__info-block footer__info-block--2">
-          <p className="footer__info-block-title">информация</p>
-          <a href="#" className="footer__point">Контакты</a>
-          <a href="#" className="footer__point">О бренде</a>
-          <a href="#" className="footer__point">Программа лояльности</a>
-          <a href="#" className="footer__point">Акции</a>
-          <a href="#" className="footer__point">Доставка и оплата</a>
-          <a href="#" className="footer__point">Приемка и возврат</a>
+        <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black md:gap-6 sm:gap-4">
+          <p className="uppercase text-xs tracking-wider">информация</p>
+          <a href="#" className="flex gap-2 items-center">Контакты</a>
+          <a href="#" className="flex gap-2 items-center">О бренде</a>
+          <a href="#" className="flex gap-2 items-center">Программа лояльности</a>
+          <a href="#" className="flex gap-2 items-center">Акции</a>
+          <a href="#" className="flex gap-2 items-center">Доставка и оплата</a>
+          <a href="#" className="flex gap-2 items-center">Приемка и возврат</a>
         </div>
 
-        <div className="footer__info-block">
-          <p className="footer__info-block-title">Каталог</p>
-          <a href="#" className="footer__point">Уход за кожей</a>
-          <a href="#" className="footer__point">Уход за волосами</a>
-          <a href="#" className="footer__point">Подобрать уход</a>
+        <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
+          <p className="uppercase text-xs tracking-wider">Каталог</p>
+          <a href="#" className="flex gap-2 items-center">Уход за кожей</a>
+          <a href="#" className="flex gap-2 items-center">Уход за волосами</a>
+          <a href="#" className="flex gap-2 items-center">Подобрать уход</a>
         </div>
 
-        <div className="footer__info-block">
-          <a href="#" className="footer__point">
-            <img src={phone} alt="" />
+        <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
+          <a href="#" className="flex gap-2 items-center">
+            <img src={'../../../pages/Home/_general/img/phone.svg'} alt="" />
             +7 (495) 646 66 26
           </a>
-          <a href="#" className="footer__point">
-            <img src={whatsapp} alt="" />
+          <a href="#" className="flex gap-2 items-center">
+            <img src={'../../../pages/Home/_general/img/whatsapp.svg'} alt="" />
             +7 (926) 513 55 91
           </a>
-          <a href="#" className="footer__point">
-            <img src={mail} alt="" />
+          <a href="#" className="flex gap-2 items-center">
+            <img src={'./mail.svg'} alt="" />
             info@irc247.ru
           </a>
-          <a href="#" className="footer__point">
-            <img src={clock} alt="" />
+          <a href="#" className="flex gap-2 items-center">
+            <img src={'./clock.svg'} alt="" />
             с 10:00 до 19:00
           </a>
-          <div className="footer__social-links">
-            <a href="#" className="footer__social-link">
-              <img src={vk} alt="" />
+          <div className="flex gap-5">
+            <a href="#" className="flex gap-2 items-center">
+              <img src={'../../../pages/Home/_general/img/vk.svg'} alt="" />
             </a>
-            <a href="#" className="footer__social-link">
-              <img src={youtube} alt="" />
+            <a href="#" className="flex gap-2 items-center">
+              <img src={'../../../pages/Home/_general/img/youtube.svg'} alt="" />
             </a>
-            <a href="#" className="footer__social-link">
-              <img src={instagram} alt="" />
+            <a href="#" className="flex gap-2 items-center">
+              <img src={'../../../pages/Home/_general/img/instagram.svg'} alt="" />
             </a>
           </div>
         </div>
