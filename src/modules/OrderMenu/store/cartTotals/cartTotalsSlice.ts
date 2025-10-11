@@ -2,10 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   CartTotals,
   CartTotalsState,
-  DELIVERY_METHODS,
-  DeliveryMethodName,
   Order,
-  Recipient,
 } from "./cartTotalsTypes.ts";
 
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
@@ -23,6 +20,7 @@ import {
   INITIAL_CERTIFICATE,
 } from "./api/certificateApi.ts";
 import { addOrder } from "./api/orderApi.ts";
+import { DELIVERY_METHODS, DeliveryMethodName, Recipient } from "@/modules/OrderForm";
 
 
 export const getPromocode = createAsyncThunk(
@@ -108,6 +106,8 @@ export const createOrder = createAsyncThunk(
     }
   }
 );
+
+
 
 
 
