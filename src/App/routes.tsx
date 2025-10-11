@@ -1,14 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Home } from '../pages/Home/Home';
 import { Catalog } from '../pages/Catalog';
-import { AuthForm } from '../pages/Auth/AuthForm';
 import { Cart } from '../pages/Cart';
 import { Liked } from '../pages/Liked';
 import App from './App';  
 import { ProductAbout } from '../pages/ProductAbout/ProductAbout';
 import { Order } from '../pages/Order';
 import Admin from '../pages/Admin';
-import Payment from '@/pages/Payment/Payment';
+import { Payment } from '@/pages/Payment/Payment';
 
 export const router = createBrowserRouter([
   {
@@ -22,10 +21,6 @@ export const router = createBrowserRouter([
       {
         path: '/catalog',
         element: <Catalog />,
-      },
-      {
-        path: '/auth',
-        element: <AuthForm />,
       },
       {
         path: '/cart',
