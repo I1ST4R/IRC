@@ -1,20 +1,8 @@
-import { changeDeliveryMethod, DELIVERY_METHOD_NAMES, PAYMENT_METHODS, AppDispatch } from "@/modules/OrderMenu";
+import { changeDeliveryMethod, AppDispatch } from "@/modules/OrderMenu";
 import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
-import { DeliveryMethodName } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { DELIVERY_METHOD_NAMES, DeliveryMethodName, PAYMENT_METHODS } from "../../store/recipientTypes";
 
-// const DeliveryMethodOptions = DELIVERY_METHODS.map((el) => {
-//   return {
-//     name: el.name,
-//     label: el.label
-//   }
-// })
 
-// const PaymentMethodOptions = PAYMENT_METHODS.map((el) => {
-//   return {
-//     name: el.name,
-//     label: el.label
-//   }
-// })
 
 export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
