@@ -7,6 +7,7 @@ import { useAddToCartMutation, useGetCartQuery } from "../CartBody";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { openAccount, useAppDispatch } from "../AuthForm";
 import { ProductPrices } from "./components/ProductPrices";
+import { ProductCartBtn } from "./components/ProductCartBtn";
 
 export const ProductAbout = () => {
   const { id } = useParams();
@@ -54,15 +55,11 @@ export const ProductAbout = () => {
           <h3 className="product-about__description">{product.description}</h3>
 
           <div className="product-about__prices-cart-liked">
-           <ProductPrices price={product.price} prevPrice={product.prevPrice}/>
-            <button
-              className={`product__btn product-about__btn ${
-                isInCart() ? "product__btn--in-cart" : ""
-              }`}
-              onClick={handleCartClick}
-            >
-              {isInCart() ? "В корзине" : "Добавить в корзину"}
-            </button>
+            <ProductPrices
+              price={product.price}
+              prevPrice={product.prevPrice}
+            />
+            <ProductCartBtn userId={user.id} productId={product.id} />
 
             <button
               className={`product__like product-about__like ${
