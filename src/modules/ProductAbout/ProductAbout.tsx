@@ -7,6 +7,7 @@ import { openAccount, useAppDispatch } from "../AuthForm";
 import { ProductPrices } from "./components/ProductPrices";
 import { ProductCartBtn } from "./components/ProductCartBtn";
 import { ProductLikeBtn } from "./components/ProductLikeBtn";
+import { ProductTags } from "./components/ProductTags";
 
 export const ProductAbout = () => {
   const { id } = useParams();
@@ -36,14 +37,7 @@ export const ProductAbout = () => {
             alt={product.name}
             className="product-about__image"
           />
-
-          <div className="product-about__tags">
-            {product.tags.map((tag: Tag) => (
-              <span key={`${tag.name}-${product.id}`} className="product__tag">
-                {tag.name}
-              </span>
-            ))}
-          </div>
+          <ProductTags product={product} />
         </div>
 
         <div className="product-about__info">
@@ -58,7 +52,7 @@ export const ProductAbout = () => {
               prevPrice={product.prevPrice}
             />
             <ProductCartBtn userId={user.id} productId={product.id} />
-            <ProductLikeBtn userId={user.id} productId={product.id}/>
+            <ProductLikeBtn userId={user.id} productId={product.id} />
           </div>
 
           <div className="product-about__point product-about__point--first">
