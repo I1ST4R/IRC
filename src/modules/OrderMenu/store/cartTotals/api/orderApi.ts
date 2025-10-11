@@ -4,14 +4,14 @@ import { Order } from "../cartTotalsTypes";
 
 const axiosInstance = axios.create(API_CLIENT);
 
-export const addOrder = async (order: Order, userId: string) => {
+export const addOrder = async (order: Order<"DB">, userId: string) => {
   try {
     const responseUser = await axiosInstance.get(`/users?id=${userId}`);
     if (responseUser.data.length === 0) {
       throw new Error("Пользователь не найден");
     }
     const user = responseUser.data[0];
-    const newOrder: Order & { userId: string } = {
+    const newOrder: Order<"DB"> & { userId: string } = {
       userId: userId,
       cartTotals: order.cartTotals,
       recipient: order.recipient,

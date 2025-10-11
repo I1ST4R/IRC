@@ -21,6 +21,7 @@ import {
 } from "./api/certificateApi.ts";
 import { addOrder } from "./api/orderApi.ts";
 import { DELIVERY_METHODS, DeliveryMethodName, Recipient } from "@/modules/OrderForm";
+import { removeFromCart } from "@/modules/CartBody";
 
 
 export const getPromocode = createAsyncThunk(
@@ -72,12 +73,13 @@ export const createOrder = createAsyncThunk(
 
       const cartItemsDb = cartTotals.cartItems.map((el) => {
         return {
-          ...el,
+          isChecked: el.isChecked,
+          quantity: el.quantity,
           productId: el.product.id
         }
       })
 
-      const order : Order = {
+      const order : Order<"DB"> = {
         cartTotals: {
           ...cartTotals,
           cartItems: cartItemsDb
@@ -99,6 +101,10 @@ export const createOrder = createAsyncThunk(
         dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
       } 
 
+      await Promise.all(cartItemsDb.map((el) => {
+        return removeFromCart(userId, el.productId)
+      }))
+
       navigate("/payment");
       
     } catch (error) {
@@ -106,9 +112,6 @@ export const createOrder = createAsyncThunk(
     }
   }
 );
-
-
-
 
 
 const defaultCartTotals: CartTotals = {

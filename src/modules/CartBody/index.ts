@@ -1,5 +1,8 @@
 export {CartBody} from "./CartBody"
-export {initialCart} from "./store/cart/cartApi"
+export {
+  initialCart,
+  removeFromCart
+} from "./store/cart/cartApi"
 export {
   useGetCartQuery,
   useAddToCartMutation
