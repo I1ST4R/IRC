@@ -9,6 +9,8 @@ import { Order } from '../pages/Order';
 import Admin from '../pages/Admin';
 import { Payment } from '@/pages/Payment/Payment';
 
+
+
 export const router = createBrowserRouter([
   {
     path: '/',
