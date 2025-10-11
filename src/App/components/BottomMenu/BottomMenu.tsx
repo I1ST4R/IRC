@@ -1,39 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import catalog from './catalog.svg';
-import liked from '../../../pages/Home/_general/img/liked.svg';
-import basket from '../../../pages/Home/_general/img/basket.svg';
-import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
-import { AppDispatch} from '@/main/store';
-import { useDispatch} from 'react-redux';
-import { openAccount } from '@/entity/account/slice';
+import { openAccount, useAppDispatch } from '@/modules/AuthForm';
 
 const BottomMenu: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   return (
-    <div className="bottom-menu">
-      <Link to="/catalog" className="bottom-menu__button">
-        <img src={catalog} alt="catalog" />
+    <div className="hidden fixed bottom-0 w-full justify-around bg-white z-50 py-3 px-1 rounded-t-2xl md:flex">
+      <Link to="/catalog" className="flex flex-col items-center gap-1 font-inter font-semibold text-xs uppercase text-center">
+        <img alt="catalog" src={'./catalog.svg'}/>
         <p>Каталог</p>
       </Link>
 
-      <button className="bottom-menu__button">
-        <img src={liked} alt="liked" />
+      <Link to="/liked" className="flex flex-col items-center gap-1 font-inter font-semibold text-xs uppercase text-center">
+        <img alt="liked" src={'../../../pages/Home/_general/img/liked.svg'}  />
         <p>Избранное</p>
-      </button>
+      </Link>
 
-      <button className="bottom-menu__button">
-        <img src={basket} alt="basket" />
+      <Link to="/cart" className="flex flex-col items-center gap-1 font-inter font-semibold text-xs uppercase text-center">
+        <img alt="cart" src={'../../../pages/Home/_general/img/basket.svg'}/>
         <p>Корзина</p>
-      </button>
+      </Link>
 
-      <button className="bottom-menu__button" onClick={() => dispatch(openAccount())}>
-        <img src={personalAcc} alt="personal-acc" />
+      <button className="flex flex-col items-center gap-1 font-inter font-semibold text-xs uppercase text-center" onClick={() => dispatch(openAccount())}>
+        <img alt="personal-acc" src={'../../../pages/Home/_general/img/personal-acc.svg'}/>
         <p>Профиль</p>
       </button>
     </div>
   );
 };
 
-export default BottomMenu; 
+export default BottomMenu;
