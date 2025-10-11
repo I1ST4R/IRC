@@ -1,3 +1,5 @@
+export { useCart } from "./components/Product/components/CartBtn/useCart";
+export { useLiked } from "./components/Product/components/LikeBtn/useLiked";
 export { type Tag } from "./store/tag/tagTypes";
 export { CartBtn } from "./components/Product/components/CartBtn/CartBtn";
 export { LikeBtn } from "./components/Product/components/LikeBtn/LikeBtn";
@@ -6,3 +8,4 @@ export { useGetProductByIdQuery } from "./store/product/productApiSlice";
 export { getProductById } from "./store/product/productApi"
 export { Product } from "./components/Product/Product";
 export {type Product as ProductT} from "./store/product/productTypes";
+
