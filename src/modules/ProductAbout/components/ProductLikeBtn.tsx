@@ -6,10 +6,10 @@ export const ProductLikeBtn = ({ userId, productId }: BtnProps) => {
 
   return (
     <button
-      className={`product__like product-about__like ${
-        isLiked() ? " product__like--active" : ""
+      className={`bg-none border-none p-0 cursor-pointer md:static absolute md:top-0 top-36 left-7 ${
+        isLiked() ? "product__like--active" : ""
       }`}
-      onClick={() => likeClick}
+      onClick={likeClick}
       title={isLiked() ? "Убрать из избранного" : "В избранное"}
     >
       <svg

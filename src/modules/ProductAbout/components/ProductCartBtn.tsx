@@ -10,8 +10,8 @@ export const ProductCartBtn = ({userId, productId} : BtnProps) => {
 
   return (
     <button
-      className={`product__btn product-about__btn ${
-        isInCart() ? "product__btn--in-cart" : ""
+      className={`px-6 py-3 border border-black bg-white text-black text-sm font-semibold uppercase tracking-wider transition-colors hover:bg-black hover:text-white md:w-auto w-full ${
+        isInCart() ? "bg-black text-white" : ""
       }`}
       onClick={cartClick}
     >

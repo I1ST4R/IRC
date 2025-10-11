@@ -5,9 +5,9 @@ type ProductPricesProps = {
 
 export const ProductPrices = ({ price, prevPrice }: ProductPricesProps) => {
   return (
-    <div className="product__prices product-about__prices">
+    <div className="text-2xl whitespace-nowrap">
       <span>{price} ₽</span>
-      <span className="product__prev-price product-about__prev-price">
+      <span className="text-2xl line-through text-gray-500 ml-2">
         {prevPrice} ₽
       </span>
     </div>

@@ -11,13 +11,21 @@ type ProductInfoProps = {
 
 export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
   return (
-    <div className="product-about__info">
-      <h3 className="product-about__name">{product.name}</h3>
-      <h3 className="product-about__technology">{product.technology}</h3>
-      <h3 className="product-about__article">{product.article}</h3>
-      <h3 className="product-about__description">{product.description}</h3>
+    <div className="font-manrope font-medium">
+      <h3 className="font-semibold text-xs tracking-widest uppercase">
+        {product.name}
+      </h3>
+      <h3 className="font-europe-ext font-bold text-4xl tracking-wider uppercase my-2">
+        {product.technology}
+      </h3>
+      <h3 className="text-sm text-black/65">
+        {product.article}
+      </h3>
+      <h3 className="text-base leading-relaxed py-8 border-b border-black/7">
+        {product.description}
+      </h3>
 
-      <div className="product-about__prices-cart-liked">
+      <div className="flex gap-5 py-8 md:flex-row flex-col md:items-start items-center">
         <ProductPrices price={product.price} prevPrice={product.prevPrice} />
         <ProductCartBtn userId={userId} productId={product.id} />
         <ProductLikeBtn userId={userId} productId={product.id} />
@@ -25,14 +33,14 @@ export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
 
       <ProductFormula formula={product.formula} />
 
-      <div className="product-about__point">
-        <h3 className="product-about__point-title">Для чего</h3>
-        <p>{product.for_what}</p>
+      <div className="py-8 border-b border-black/7 border-t border-black/7">
+        <h3 className="font-extrabold text-lg tracking-wider uppercase">Для чего</h3>
+        <p className="mt-2">{product.for_what}</p>
       </div>
 
-      <div className="product-about__point">
-        <h3 className="product-about__point-title">Тип кожи</h3>
-        <p>{product.skin_type}</p>
+      <div className="py-8 border-b border-black/7">
+        <h3 className="font-extrabold text-lg tracking-wider uppercase">Тип кожи</h3>
+        <p className="mt-2">{product.skin_type}</p>
       </div>
     </div>
   );

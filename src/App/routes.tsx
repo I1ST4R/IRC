@@ -7,7 +7,7 @@ const Home = lazy(() => import('../pages/Home/Home'));
 const Catalog = lazy(() => import('../pages/Catalog'));
 const Cart = lazy(() => import('../pages/Cart'));
 const Liked = lazy(() => import('../pages/Liked'));
-const ProductAbout = lazy(() => import('../pages/ProductAbout/ProductAbout'));
+const ProductAbout = lazy(() => import('../pages/ProductAbout'));
 const Order = lazy(() => import('../pages/Order'));
 const Admin = lazy(() => import('../pages/Admin'));
 const Payment = lazy(() => import('@/pages/Payment'));
