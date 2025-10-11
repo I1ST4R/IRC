@@ -11,7 +11,7 @@ import Press from './Press/Press';
 import NewsLetter from './NewsLetter/Newsletter';
 import Blog from './Blog/Blog';
 
-export const Home = () => {
+const Home = () => {
   return (
     <>
       <main>
@@ -30,3 +30,5 @@ export const Home = () => {
     </>
   );
 }; 
+
+export default Home

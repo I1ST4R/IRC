@@ -11,7 +11,7 @@ import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } f
 import { useGetProductByIdQuery } from "@/entity/product/api";
 import { useGetUserQuery } from "@/entity/users/api";
 
-export const ProductAbout = () => {
+const ProductAbout = () => {
   const { id } = useParams();
   const {data: user} = useGetUserQuery();
   const {data: product, isLoading, error} = useGetProductByIdQuery(id ?? "", {skip: !id});
@@ -176,3 +176,5 @@ export const ProductAbout = () => {
     </div>
   );
 };
+
+export default ProductAbout

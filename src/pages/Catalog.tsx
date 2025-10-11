@@ -7,7 +7,7 @@ import { Menu } from "lucide-react";
 import { useSelector } from "react-redux";
 
 
-export const Catalog = () => {
+const Catalog = () => {
   const { isAccountOpen } = useSelector((state: RootState) => state.account);
 
   return (
@@ -32,3 +32,5 @@ export const Catalog = () => {
     </div>
   );
 }; 
+
+export default Catalog
