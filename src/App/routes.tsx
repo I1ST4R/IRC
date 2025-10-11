@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import App from './App';
+import { Loader } from '@/shared/ui/components/Loader';
 
 const Home = lazy(() => import('../pages/Home/Home'));
 const Catalog = lazy(() => import('../pages/Catalog'));
@@ -11,6 +12,12 @@ const Order = lazy(() => import('../pages/Order'));
 const Admin = lazy(() => import('../pages/Admin'));
 const Payment = lazy(() => import('@/pages/Payment'));
 
+const withSuspense = (Component: React.ComponentType, pageTitle?: string) => (
+  <Suspense fallback={<Loader title={pageTitle || "Загрузка страницы"} />}>
+    <Component />
+  </Suspense>
+);
+
 
 export const router = createBrowserRouter([
   {
@@ -19,29 +26,29 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: withSuspense(Home, "Главная страница"),
       },
       {
         path: 'catalog',
-        element: <Catalog />,
+        element: withSuspense(Catalog, "Каталог"),
         children : [
           {
             path: 'product/:id',
-            element: <ProductAbout />
+            element: withSuspense(ProductAbout, "О продукте"),
           }
         ]
       },
       {
         path: 'cart',
-        element: <Cart />,
+        element: withSuspense(Cart, "Корзина"),
         children: [
           {
             path: "order",
-            element: <Order/>,
+            element: withSuspense(Order, "Заказ"),
             children: [
               {
                 path: 'payment',
-                element: <Payment/>
+                element: withSuspense(Payment, "Оплата"),
               }
             ]
           }
