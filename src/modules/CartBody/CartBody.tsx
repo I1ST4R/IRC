@@ -20,7 +20,7 @@ export const CartBody = () => {
     error: cartError,
   } = useGetCartQuery(user?.id ?? "", { skip: !user?.id });
   const dispatch = useAppDispatch()
-
+ 
   if (!user?.id) return <Unauthorized text="чтобы добавлять товары в корзину" handleClick={() => dispatch(openAccount())}/>
   if (isCartLoading) return <Loader title="Корзина" />;
   if (cartError) return <CartBodyError />;
@@ -29,7 +29,7 @@ export const CartBody = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center font-extrabold text-xs mx-0 mb-5 ml-10 tracking-wide uppercase">
+      <div className="flex justify-between items-center font-extrabold text-xs mx-0 mb-5 ml-10 tracking-wide uppercase ">
         <span className="text-[var(--coral)]">
           В корзине <span>{cart.itemsCount}</span>
         </span>
