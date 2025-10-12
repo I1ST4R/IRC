@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import boundaries from 'eslint-plugin-boundaries'
+import importPlugin from 'eslint-plugin-import' 
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -18,12 +19,17 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      boundaries, // добавляем boundaries плагин
+      boundaries,
+      import: importPlugin, // регистрируем плагин import
     },
     settings: {
       "import/resolver": {
         typescript: {
+          project: "./tsconfig.json", // указываем путь к tsconfig
           alwaysTryTypes: true,
+        },
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
       "boundaries/elements": [

@@ -7,7 +7,7 @@ import {
   changeCheckCartItem,
   clearCart
 } from './cartApi';
-import { Cart, CartItem } from './cartTypes';
+import { Cart} from './cartTypes';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
