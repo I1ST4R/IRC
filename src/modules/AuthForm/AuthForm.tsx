@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { closeAccount, selectIsFormOpen } from './authFormSlice';
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from './store/authFormStore';
-import { RegisterForm } from './components/RegisterForm/RegisterForm';
+import { RegisterForm } from './components/RegisterForm';
+import { LoginForm } from './components/LoginForm';
 import { Button } from '@/shared/ui/kit/button';
-import { LoginForm } from './components/LoginForm/LoginForm';
-import { loginForm } from './components/LoginForm/loginFormConfig';
-import { registerForm } from './components/RegisterForm/registerFormConfig';
+import { useAppDispatch } from '@/App/store';
 
 
 export const AuthForm = () => {
@@ -16,8 +14,8 @@ export const AuthForm = () => {
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
-    loginForm.reset();
-    registerForm.reset();
+    // loginForm.reset();
+    // registerForm.reset();
   };
 
   if (isAccountOpen) return (
@@ -31,6 +29,14 @@ export const AuthForm = () => {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
+      </Button>
+
+      <Button
+        type="button"
+        onClick={() => toggleMode()}
+        className="absolute top-4 right-4 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
+      >
+        сменить тип
       </Button>
 
       { isLogin ? ( <LoginForm/>) : ( <RegisterForm/>) }

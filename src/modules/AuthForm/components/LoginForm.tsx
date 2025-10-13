@@ -5,10 +5,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
-import { loginForm, LoginFormData } from "./loginFormConfig";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
+import { LoginData } from "@/shared/store/user/userTypes";
 
 export const LoginForm = () => {
   const [login] = useLoginMutation();
+
+  const loginSchema = z.object({
+    login: z.string().min(6, 'Логин должен содержать минимум 6 символов'),
+    password: z.string().min(8, 'Пароль должен содержать минимум 8 символов')
+  })
+  
+  type LoginFormData = z.infer<typeof loginSchema>;
+  
+  const loginForm = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      login: "",
+      password: ""
+    },
+    mode: "onBlur",
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const typeLoginCheck: LoginData = {} as LoginFormData;
 
   const {
     handleSubmit,

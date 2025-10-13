@@ -1,11 +1,35 @@
 import { useRegisterMutation } from "@/shared/store/user/userApiSlice";
-import { registerForm } from "./registerFormConfig";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
+import { RegisterData } from "@/shared/store/user/userTypes";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
 
 export const RegisterForm = () => {
+
+  const registerSchema = z.object({
+    login: z.string().min(6, 'Логин должен содержать минимум 6 символов'),
+    email: z.string().email('Некорректный email'),
+    password: z.string().min(8, 'Пароль должен содержать минимум 8 символов')
+  })
+  
+  type RegisterFormData = z.infer<typeof registerSchema>;
+  
+  const registerForm = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      login: "",
+      email: "",
+      password: ""
+    },
+    mode: "onBlur",
+  });
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const typeRegisterCheck: RegisterData<"form"> = {} as RegisterFormData;
 
   const {
     handleSubmit,
@@ -90,4 +114,4 @@ export const RegisterForm = () => {
       </CardContent>
     </Card>
   );
-};
+}
