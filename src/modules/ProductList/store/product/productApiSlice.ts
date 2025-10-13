@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getProducts, getProductById } from './productApi';
 import { Product } from './productTypes';
 import { FilterParams } from '../../../Menu/store/filter/filterTypes';
+import { rootReducer } from '@/App/store';
 
 export const productApi = createApi({
   reducerPath: 'productApi',
@@ -23,7 +24,9 @@ export const productApi = createApi({
       providesTags: ['Product'],
     }),
   }),
-});
+})
+
+rootReducer.inject(productApi);
 
 export const {
   useGetProductsQuery,

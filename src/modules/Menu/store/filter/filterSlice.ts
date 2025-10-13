@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './filterTypes';
 import { checkIsInitial } from './checkIsInitial';
-import { RootState } from '../menuStore';
+import { rootReducer } from '@/App/store';
 
 export const initialState: FilterState = {
   filterParams: {
@@ -19,6 +19,15 @@ export const initialState: FilterState = {
 const filterSlice = createSlice({
   name: 'filter',
   initialState,
+  selectors:{
+    selectFilter : (state ) => state,
+    selectPriceRangeMin : (state) => state.filterParams.priceRange.min,
+    selectPriceRangeMax : (state) => state.filterParams.priceRange.max,
+    selectTagsId : (state) => state.filterParams.tagsId,
+    selectFilterLoading : (state) => state.loading,
+    selectIsInitial : (state) => state.isInitial,
+    selectFilterError : (state) => state.error
+  },
   reducers: {
     setPriceRange: (state, action: PayloadAction<number>) => {
       state.filterParams.priceRange.min = action.payload;
@@ -39,15 +48,18 @@ const filterSlice = createSlice({
       state.isInitial = true
     }
   }
-});
+}).injectInto(rootReducer)
 
-export const selectFilter = (state: RootState) => state.filter
-export const selectPriceRangeMin = (state: RootState) => state.filter.filterParams.priceRange.min
-export const selectPriceRangeMax = (state: RootState) => state.filter.filterParams.priceRange.max
-export const selectTagsId = (state: RootState) => state.filter.filterParams.tagsId
-export const selectFilterLoading = (state: RootState) => state.filter.loading
-export const selectIsInitial = (state: RootState) => state.filter.isInitial
-export const selectFilterError = (state: RootState) => state.filter.error
+
 
 export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions
+export const { 
+  selectFilter, 
+  selectPriceRangeMin, 
+  selectPriceRangeMax,
+  selectTagsId,
+  selectFilterLoading,
+  selectIsInitial,
+  selectFilterError
+} = filterSlice.selectors
 export default filterSlice.reducer; 

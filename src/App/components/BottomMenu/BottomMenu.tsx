@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { openAccount, useAppDispatch } from '@/modules/AuthForm';
+import { openAccount,  } from '@/modules/AuthForm';
+import { useAppDispatch } from '@/App/store';
 
 const BottomMenu: React.FC = () => {
   const dispatch = useAppDispatch();

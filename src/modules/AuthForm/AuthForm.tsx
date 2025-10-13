@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { closeAccount, selectIsFormOpen } from './store/authFormSlice';
+import { closeAccount, selectIsFormOpen } from './authFormSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from './store/authFormStore';
 import { RegisterForm } from './components/RegisterForm/RegisterForm';

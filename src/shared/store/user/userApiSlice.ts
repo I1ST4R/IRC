@@ -3,6 +3,7 @@ import { getUser, login, logout, register} from './userApi'
 import { likedApi } from '../../../modules/LikedBody/store/liked/likedApiSlice'
 import { User, LoginData, RegisterData } from './userTypes'
 import { cartApi } from '@/modules/CartBody/store/cart/cartApiSlice';
+import { rootReducer } from '@/App/store';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -26,7 +27,6 @@ export const usersApi = createApi({
         try {
           await queryFulfilled;
         } finally {
-          // Очистить кэш корзины и избранного при выходе пользователя
           dispatch(cartApi.util.resetApiState());
           dispatch(likedApi.util.resetApiState());
         }
@@ -48,6 +48,8 @@ export const usersApi = createApi({
     }),
   }),
 });
+
+rootReducer.inject(usersApi);
 
 export const {
   useLoginMutation,

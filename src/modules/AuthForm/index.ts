@@ -1,7 +1,7 @@
 export {
   openAccount,
   closeAccount
-} from "./store/authFormSlice"
+} from "./authFormSlice"
 export {
   useAppDispatch
 } from "./store/authFormStore"

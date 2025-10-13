@@ -5,6 +5,7 @@ import {
   removeFromLiked
 } from './likedApi';
 import { ProductT } from '@/modules/ProductList';
+import { rootReducer } from '@/App/store';
 
 
 export const likedApi = createApi({
@@ -35,6 +36,8 @@ export const likedApi = createApi({
     }),
   }),
 });
+
+rootReducer.inject(likedApi);
 
 export const {
   useGetLikedQuery,

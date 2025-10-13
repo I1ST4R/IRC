@@ -8,6 +8,7 @@ import {
   clearCart
 } from './cartApi';
 import { Cart} from './cartTypes';
+import { rootReducer } from '@/App/store';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -64,7 +65,9 @@ export const cartApi = createApi({
       invalidatesTags: ['Cart'],
     })
   }),
-});
+})
+
+rootReducer.inject(cartApi);
 
 export const {
   useGetCartQuery,

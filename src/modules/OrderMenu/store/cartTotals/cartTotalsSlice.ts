@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  CartTotals,
-  CartTotalsState,
-  Order,
-} from "./cartTotalsTypes.ts";
+import { CartTotals, CartTotalsState, Order } from "./cartTotalsTypes.ts";
 
 import { calculateCartTotals } from "./helpers/calculateCarttotals.ts";
-import { RootState } from "../orderMenuStore.ts";
 import {
   getPromo as getPromoApi,
   validatePromo as validatePromocodeApi,
@@ -16,19 +11,23 @@ import {
 import {
   getCertificate as getCertificateApi,
   validateCertificate as validateCertificateApi,
-  makeCertificateUsed as  makeCertificateUsedApi,
+  makeCertificateUsed as makeCertificateUsedApi,
   INITIAL_CERTIFICATE,
 } from "./api/certificateApi.ts";
 import { addOrder } from "./api/orderApi.ts";
-import { DELIVERY_METHODS, DeliveryMethodName, Recipient } from "@/modules/OrderForm";
+import {
+  DELIVERY_METHODS,
+  DeliveryMethodName,
+  Recipient,
+} from "@/modules/OrderForm";
 import { removeFromCart } from "@/modules/CartBody";
-
+import { rootReducer } from "@/App/store.ts";
 
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
   async (_, { dispatch }) => {
     const promo = await getPromoApi();
-    dispatch(changeCartTotals({ promo: promo }))
+    dispatch(changeCartTotals({ promo: promo }));
   }
 );
 
@@ -36,83 +35,87 @@ export const validatePromocode = createAsyncThunk(
   "cartTotals/validatePromocode",
   async (code: string, { dispatch }) => {
     const promo = await validatePromocodeApi(code);
-    dispatch(changeCartTotals({ promo: promo }))
+    dispatch(changeCartTotals({ promo: promo }));
   }
 );
 
 export const getCertificate = createAsyncThunk(
   "cartTotals/getCertificate",
-  async (_, {dispatch}) => {
-    const certificate = await getCertificateApi()
-    dispatch(changeCartTotals({ certificate: certificate }))
+  async (_, { dispatch }) => {
+    const certificate = await getCertificateApi();
+    dispatch(changeCartTotals({ certificate: certificate }));
   }
-)
+);
 
 export const validateCertificate = createAsyncThunk(
   "cartTotals/validateCertificate",
-  async (code: string, {dispatch}) => {
-    const certificate = await validateCertificateApi(code)
-    dispatch(changeCartTotals({ certificate: certificate }))
+  async (code: string, { dispatch }) => {
+    const certificate = await validateCertificateApi(code);
+    dispatch(changeCartTotals({ certificate: certificate }));
   }
-)
+);
 
 export const makeCertificateUsed = createAsyncThunk(
   "cartTotals/makeCertificateUsed",
   async (id: string, { dispatch }) => {
-    await  makeCertificateUsedApi(id);
-    dispatch(changeCartTotals({ certificate:  INITIAL_CERTIFICATE}))
-  }
-)
-
-export const createOrder = createAsyncThunk(
-  'cartTotals/createOrder', 
-  async ({ recipient, navigate, userId }: { recipient: Recipient; navigate: any; userId: string }, { dispatch, getState }) => {
-    try {
-      const state = getState() as RootState;
-      const cartTotals = selectCartTotals(state);
-
-      const cartItemsDb = cartTotals.cartItems.map((el) => {
-        return {
-          isChecked: el.isChecked,
-          quantity: el.quantity,
-          productId: el.product.id
-        }
-      })
-
-      const order : Order<"DB"> = {
-        cartTotals: {
-          ...cartTotals,
-          cartItems: cartItemsDb
-        },
-        recipient: recipient,
-      }
-      
-      await addOrder(order, userId);
-
-      const promoId = cartTotals.promo.id;
-      if(promoId){
-        await makePromocodeUsedApi(promoId);
-        dispatch(changeCartTotals({ promo: INITIAL_PROMO }));
-      } 
-
-      const certificateId = cartTotals.certificate.id;
-      if(certificateId){
-        await makeCertificateUsedApi(certificateId);
-        dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
-      } 
-
-      await Promise.all(cartItemsDb.map((el) => {
-        return removeFromCart(userId, el.productId)
-      }))
-
-      navigate("/payment");
-      
-    } catch (error) {
-      throw new Error("Error when creating an order");
-    }
+    await makeCertificateUsedApi(id);
+    dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
   }
 );
 
+export const createOrder = createAsyncThunk(
+  "cartTotals/createOrder",
+  async (
+    {
+      recipient,
+      navigate,
+      userId,
+    }: { recipient: Recipient; navigate: any; userId: string },
+    { dispatch, getState }
+  ) => {
+    const state = getState() as any;
+    
+    const cartTotals = selectCartTotals(state.cartTotals);
+
+    const cartItemsDb = cartTotals.cartItems.map((el) => {
+      return {
+        isChecked: el.isChecked,
+        quantity: el.quantity,
+        productId: el.product.id,
+      };
+    });
+
+    const order: Order<"DB"> = {
+      cartTotals: {
+        ...cartTotals,
+        cartItems: cartItemsDb,
+      },
+      recipient: recipient,
+    };
+
+    await addOrder(order, userId);
+
+    const promoId = cartTotals.promo.id;
+    if (promoId) {
+      await makePromocodeUsedApi(promoId);
+      dispatch(changeCartTotals({ promo: INITIAL_PROMO }));
+    }
+
+    const certificateId = cartTotals.certificate.id;
+    if (certificateId) {
+      await makeCertificateUsedApi(certificateId);
+      dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
+    }
+
+    await Promise.all(
+      cartItemsDb.map((el) => {
+        return removeFromCart(userId, el.productId);
+      })
+    );
+
+    navigate("/payment");
+  }
+);
 
 const defaultCartTotals: CartTotals = {
   cartItems: [],
@@ -133,6 +136,11 @@ const initialState: CartTotalsState = {
 const cartTotalsSlice = createSlice({
   name: "cartTotals",
   initialState,
+  selectors:{
+    selectCartTotals : (state) => state.item,
+    selectPromocode : (state) => state.item.promo,
+    selectCertificate : (state) => state.item.certificate
+  },
   reducers: {
     changeCartTotals(state, action: PayloadAction<Partial<CartTotals>>) {
       Object.assign(state.item, action.payload);
@@ -157,16 +165,18 @@ const cartTotalsSlice = createSlice({
         state.item.deliveryCost = deliveryMethod.cost;
         state.item.totalWithDiscount += deliveryMethod.cost;
       }
-    }
-  }
-});
+    },
+  },
+}).injectInto(rootReducer)
 
-export const selectCartTotals = (state: RootState) => state.cartTotals.item;
-export const selectPromocode = (state: RootState) => state.cartTotals.item.promo;
-export const selectCertificate = (state: RootState) => state.cartTotals.item.certificate;
 
 export const { 
   changeCartTotals, 
   changeDeliveryMethod 
 } = cartTotalsSlice.actions;
+export const { 
+  selectCartTotals,
+  selectPromocode,
+  selectCertificate
+} = cartTotalsSlice.selectors;
 export default cartTotalsSlice.reducer;

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Recipient, RecipientState } from "./recipientTypes";
-import { RootState } from "./OrderFormStore";
+import { rootReducer } from "@/App/store";
 
 export const defaultRecipient: Recipient = {
   deliveryMethod: "Курьером",
@@ -22,15 +22,16 @@ const initialState: RecipientState = {
 const recipientSlice = createSlice({
   name: "recipient",
   initialState,
+  selectors:{
+    selectRecipient: (state) => state.item,
+    selectPaymentMethod : (state) => state.item.paymentMethod
+  },
   reducers: {
     changeRecipientInfo(state, action: PayloadAction<Partial<Recipient>>) {
       Object.assign(state.item, action.payload);
     }
   }
-});
-
-export const selectRecipient = (state: RootState) => state.recipient.item
-export const selectPaymentMethod = (state: RootState) => state.recipient.item.paymentMethod
+}).injectInto(rootReducer)
 
 export const { changeRecipientInfo } = recipientSlice.actions;
-export default recipientSlice.reducer;
+export const { selectRecipient, selectPaymentMethod } = recipientSlice.selectors;

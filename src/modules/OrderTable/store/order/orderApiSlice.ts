@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getOrders, OrderRecord } from './orderApi';
+import { rootReducer } from '@/App/store';
 
 export const orderApi = createApi({
   reducerPath: 'orderApi',
@@ -15,5 +16,7 @@ export const orderApi = createApi({
     })
   }),
 });
+
+rootReducer.inject(orderApi);
 
 export const { useGetOrdersQuery } = orderApi;
