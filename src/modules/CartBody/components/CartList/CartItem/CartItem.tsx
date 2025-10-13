@@ -1,11 +1,11 @@
-import { CartItem as ICartItem } from "@/modules/CartBody/store/cart/cartTypes";
+import { CartItem as CartItemT } from "@/modules/CartBody/store/cart/cartTypes";
 import { CartItemInfo } from "./CartItemInfo/CartItemInfo";
 import { CartItemImage } from "./CartItemImage/CartItemImage";
-import { CartItemCheckbox } from "./CartItemCheckbox/CartItemCheckbox";
+import { CartItemCheckbox } from "./CartItemCheckbox";
 import { CartItemRemoveButton } from "./CartItemRemoveButton/CartItemRemoveButton";
 
 export type CartItemProps = {
-  cartItem: ICartItem;
+  cartItem: CartItemT;
   userId: string;
   isLiked: boolean;
 };

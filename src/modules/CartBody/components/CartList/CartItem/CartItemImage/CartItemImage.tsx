@@ -1,9 +1,9 @@
 import { Button } from "@/shared/ui/kit/button";
 import { CartItemProps } from "@/modules/CartBody/components/CartList/CartItem/CartItem";
-import { uselikeClick } from "./useLikeClick";
+import { UselikeClick } from "./UseLikeClick";
 
 export const CartItemImage = ({ cartItem, userId, isLiked }: CartItemProps) => {
-  const [likeClick] = uselikeClick({ cartItem, userId, isLiked });
+  const [likeClick] = UselikeClick({ cartItem, userId, isLiked });
   return (
     <div>
       <img

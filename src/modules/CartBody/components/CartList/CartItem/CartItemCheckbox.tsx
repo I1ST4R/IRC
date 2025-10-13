@@ -1,6 +1,7 @@
-import { Checkbox } from "@radix-ui/react-checkbox";
 import { useChangeCheckCartItemMutation } from "@/modules/CartBody/store/cart/cartApiSlice";
-import { CartItemAndUserIdProps } from "../CartItemInfo/CartItemInfo";
+import { CartItemAndUserIdProps } from "./CartItemInfo/CartItemInfo";
+import { Checkbox } from "@/shared/ui/kit/checkbox";
+
 
 export const CartItemCheckbox = ({cartItem, userId}: CartItemAndUserIdProps) => {
   const [changeCheckCartItem] = useChangeCheckCartItemMutation();

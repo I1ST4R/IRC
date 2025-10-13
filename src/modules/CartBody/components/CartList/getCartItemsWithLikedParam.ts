@@ -1,5 +1,6 @@
-import { Product } from "@/shared/store/productTypes";
-import { CartItem } from "../store/cart/cartTypes";
+import { ProductT } from "@/modules/ProductList";
+import { CartItem } from "../../store/cart/cartTypes";
+
 
 export type CartItemWithLikedParam = {
   cartItem: CartItem
@@ -8,7 +9,7 @@ export type CartItemWithLikedParam = {
 
 export type CartItemsAndLikedItems = {
   cartItems: CartItem[];
-  likedItems: Product[];
+  likedItems: ProductT[];
 }
 
 export const getCartItemsWithLikedParam = (params: CartItemsAndLikedItems) => {

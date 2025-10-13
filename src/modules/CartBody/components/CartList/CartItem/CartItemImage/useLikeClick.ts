@@ -1,10 +1,10 @@
 import { 
   useAddToLikedMutation, 
   useRemoveFromLikedMutation 
-} from "@/modules/LikedBody/store/liked/likedApiSlice";
-import { CartItemProps } from "@/modules/CartBody/components/CartList/CartItem/CartItem";
+} from "@/modules/LikedBody";
+import { CartItemProps } from "../CartItem";
 
-export const uselikeClick = (props: CartItemProps) => {
+export const UselikeClick = (props: CartItemProps) => {
   const [addToLiked] = useAddToLikedMutation();
   const [removeFromLiked] = useRemoveFromLikedMutation();
 

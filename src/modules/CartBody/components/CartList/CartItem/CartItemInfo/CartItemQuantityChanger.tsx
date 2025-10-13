@@ -1,6 +1,6 @@
 import { CartItem } from "@/modules/CartBody/store/cart/cartTypes";
 import { Button } from "@/shared/ui/kit/button";
-import { useQuantityChange } from "./useQuantityChange";
+import { UseQuantityChange } from "./UseQuantityChange";
 
 export type CartItemQuantityChangerProps = {
   userId: string;
@@ -10,7 +10,7 @@ export type CartItemQuantityChangerProps = {
 export const CartItemQuantityChanger = (
   props: CartItemQuantityChangerProps
 ) => {
-  const [quantityDecrease, quantityIncrease] = useQuantityChange(props)
+  const [quantityDecrease, quantityIncrease] = UseQuantityChange(props)
   
   return (
     <div className="flex items-center gap-5 px-2 py-0.5 h-9 font-normal text-xl">

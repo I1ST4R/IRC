@@ -1,13 +1,14 @@
 import { useGetCartQuery } from "@/modules/CartBody/store/cart/cartApiSlice";
-import { useGetLikedQuery } from "@/modules/LikedBody/store/liked/likedApiSlice";
+import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { initialCart } from "./store/cart/cartApi";
 import { CartList } from "./components/CartList/CartList";
-import { CartBodyError } from "./components/CartBodyError/CartBodyError";
+import { CartBodyError } from "./components/CartBodyError";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Loader } from "@/shared/ui/components/Loader";
 import { EmptyList } from "@/shared/ui/components/EmptyList";
-import { openAccount, useAppDispatch } from "../AuthForm";
+import { openAccount } from "../AuthForm";
+import { useAppDispatch } from "@/App/store";
 
 export const CartBody = () => {
   const { data: user } = useGetUserQuery();
