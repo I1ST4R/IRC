@@ -1,8 +1,8 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
 import { Cart, CartItem, CartItemDb } from "./cartTypes";
-import { getItemsCount } from "./getItemsCount";
 import { getProductById } from "@/modules/ProductList";
+import { getItemsCount } from "./getItemsCount";
 
 
 const axiosInstance = axios.create(API_CLIENT);

@@ -1,9 +1,6 @@
-import { Recipient } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { Recipient } from "@/modules/OrderForm";
 
-type OrderTableRecipient = {
-  recipient: Recipient
-}
-export const OrderTableRecipient = ({recipient} : OrderTableRecipient) => {
+export const OrderTableRecipient = ({recipient} : {recipient: Recipient}) => {
   return (
     <ul>
       <li>ФИО: {recipient.fullName}</li>

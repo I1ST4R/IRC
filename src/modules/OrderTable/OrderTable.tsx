@@ -6,11 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/kit/table";
-import { useGetOrdersQuery } from "./store/order/orderApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { OrderTableCell } from "./components/OrderTableCell";
-import { FullOrder } from "./store/order/orderApi";
+import { FullOrder } from "./store/orderApi";
 import { Loader } from "@/shared/ui/components/Loader";
+import { useGetOrdersQuery } from "./store/orderApiSlice";
 
 export const OrderTable = () => {
   const { data: orders = {}, isLoading } = useGetOrdersQuery();

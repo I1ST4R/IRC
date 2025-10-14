@@ -1,10 +1,6 @@
-import { CartTotals } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { CartTotals } from "@/modules/OrderMenu";
 
-type OrderTableCartTotalsProps = {
-  cartTotals: CartTotals;
-};
-
-export const OrderTableCartTotals = ({cartTotals}: OrderTableCartTotalsProps) => {
+export const OrderTableCartTotals = ({cartTotals}: {cartTotals: CartTotals}) => {
   return (
     <>
       <div>

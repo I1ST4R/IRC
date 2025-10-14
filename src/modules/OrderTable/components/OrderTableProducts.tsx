@@ -1,10 +1,6 @@
 import { CartItem } from "@/modules/CartBody";
 
-type OrderTableProductsProps = {
-  cartItems: CartItem[]
-}
-
-export const OrderTableProducts = ({cartItems} : OrderTableProductsProps) => {
+export const OrderTableProducts = ({cartItems} : {cartItems: CartItem[]}) => {
   return (
     <>
       <div className="mt-1.5 mb-1">

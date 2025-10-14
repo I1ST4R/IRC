@@ -1,7 +1,8 @@
 export {CartBody} from "./CartBody"
 export {
   initialCart,
-  removeFromCart
+  removeFromCart,
+  loadCartProducts
 } from "./store/cartApi"
 export {
   useGetCartQuery,
