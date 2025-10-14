@@ -2,7 +2,8 @@ export {OrderMenu} from "./OrderMenu";
 export {
   changeCartTotals,
   changeDeliveryMethod,
-  createOrder
+  createOrder,
+  selectCartTotals
 } from "./store/cartTotals/cartTotalsSlice"
 export {
   type Order,

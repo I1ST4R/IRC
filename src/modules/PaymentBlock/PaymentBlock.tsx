@@ -1,13 +1,13 @@
 import { useSelector } from "react-redux";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
-import { openAccount, useAppDispatch } from "../AuthForm";
-import { selectCartTotals } from "../OrderMenu/store/cartTotals/cartTotalsSlice";
+import { openAccount } from "@/modules/AuthForm";
+import { selectCartTotals } from "@/modules/OrderMenu";
 import { Link } from "react-router-dom";
-import { CardPaymentForm } from "./components/CardPaymentForm/CardPaymentForm";
-import { SBPPaymentForm } from "./components/SBPPaymentForm/SBPPaymentForm";
-import { selectPaymentMethod } from "../OrderForm/store/recipientSlice";
-
+import { CardPaymentForm } from "./components/CardPaymentForm";
+import { SBPPaymentForm } from "./components/SBPPaymentForm";
+import { selectPaymentMethod } from "@/modules/OrderForm";
+import { useAppDispatch } from "@/App/store";
 
 export const PaymentBlock = () => {
   const deliveryMethod = useSelector(selectPaymentMethod);

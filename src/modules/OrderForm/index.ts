@@ -1,4 +1,7 @@
-export { selectRecipient } from "./store/recipientSlice";
+export { 
+  selectRecipient,
+  selectPaymentMethod
+} from "./store/recipientSlice";
 export { OrderForm } from "./OrderForm";
 export { UseRecipientFormOnSubmit } from "./hooks/UseRecipientFormOnSubmit"
 export {
