@@ -1,7 +1,7 @@
 import { Tag } from "@/modules/ProductList";
-import { Product } from "@/modules/ProductList/store/product/productTypes";
+import { ProductT } from "@/modules/ProductList";
 
-export const ProductTags = ({product} : {product: Product}) => {
+export const ProductTags = ({product} : {product: ProductT}) => {
   return (
     <div className="absolute flex gap-1 top-10 right-7 md:flex-nowrap flex-wrap md:justify-start justify-end">
       {product.tags.map((tag: Tag) => (

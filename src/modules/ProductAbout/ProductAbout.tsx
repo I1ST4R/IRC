@@ -3,9 +3,10 @@ import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { useGetProductByIdQuery } from "../ProductList";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
-import { openAccount, useAppDispatch } from "../AuthForm";
+import { openAccount } from "../AuthForm";
 import { ProductTags } from "./components/ProductTags";
 import { ProductInfo } from "./components/ProductInfo";
+import { useAppDispatch } from "@/App/store";
 
 export const ProductAbout = () => {
   const { id } = useParams();

@@ -1,4 +1,4 @@
-import { Product } from "@/modules/ProductList/store/product/productTypes";
+import { ProductT } from "@/modules/ProductList";
 import { ProductCartBtn } from "./ProductCartBtn";
 import { ProductPrices } from "./ProductPrices";
 import { ProductLikeBtn } from "./ProductLikeBtn";
@@ -6,7 +6,7 @@ import { ProductFormula } from "./ProductFormula";
 
 type ProductInfoProps = {
   userId: string,
-  product: Product
+  product: ProductT
 }
 
 export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
