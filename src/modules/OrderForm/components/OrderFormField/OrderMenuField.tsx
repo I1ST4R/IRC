@@ -1,10 +1,16 @@
-import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
+import { FieldConfigType, FieldTypes } from "./config/fieldConfigTypes";
 import { OrderFormInput } from "./components/OrderFormInput";
 import { OrderFormSelector } from "./components/OrderFormSelector";
 import { OrderFormTextarea } from "./components/OrderFormTextarea";
 import { OrderFormDate } from "./components/OrderFormDate";
+import { Control } from "react-hook-form";
+import { RecipientFormData } from "../../helpers/recepientSchema";
 
-export const OrderFormField = (props: FieldConfigType) => {
+type OrderFormFieldProps = FieldConfigType & {
+  formControl: Control<RecipientFormData>
+}
+
+export const OrderFormField = (props: OrderFormFieldProps) => {
   switch (props.fieldType) {
     case FieldTypes.Input: {
       const { fieldType: _, ...inputProps } = props;

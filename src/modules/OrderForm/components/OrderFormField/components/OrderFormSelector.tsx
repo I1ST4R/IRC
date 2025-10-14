@@ -1,27 +1,25 @@
 import { 
-  FormControl, 
   FormField, 
   FormItem, 
   FormLabel, 
   FormMessage
 } from "@/shared/ui/kit/form";
-import { SelectorType } from "../fieldConfigTypes";
-import { formControl } from "@/modules/OrderForm/helpers/formConfig";
+import { SelectorType } from "../config/fieldConfigTypes";
 import { 
   Select, 
   SelectContent, 
   SelectItem, 
-  SelectTrigger, 
-  SelectValue 
 } from "@/shared/ui/kit/select";
-import { type DeliveryMethodName, type PaymentMethodName} from "@/modules/OrderMenu";
+import { Control } from "react-hook-form";
+import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
 
 export const OrderFormSelector = ({
   name,
   label,
   options,
-  actions
-}: SelectorType) => {
+  actions,
+  formControl
+}: SelectorType & {formControl: Control<RecipientFormData>}) => {
   return (
     <FormField
       control={formControl}
@@ -44,7 +42,7 @@ export const OrderFormSelector = ({
             <SelectContent>
               {
                 options.map((el) => {
-                  return <SelectItem value={el.name}>{el.label}</SelectItem>
+                  return <SelectItem value={el}>{el}</SelectItem>
                 })
               }
             </SelectContent>

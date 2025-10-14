@@ -1,8 +1,6 @@
 import { changeDeliveryMethod, AppDispatch } from "@/modules/OrderMenu";
 import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
-import { DELIVERY_METHOD_NAMES, DeliveryMethodName, PAYMENT_METHODS } from "../../store/recipientTypes";
-
-
+import { DELIVERY_METHOD_NAMES, DeliveryMethodName, PAYMENT_METHODS } from "../../../store/recipientTypes";
 
 export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
@@ -14,7 +12,7 @@ export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
       onBlur: (value) => { 
         dispatch(changeDeliveryMethod(value as DeliveryMethodName))
       }
-    } 
+    }, 
   },
   {
     fieldType: FieldTypes.Selector,

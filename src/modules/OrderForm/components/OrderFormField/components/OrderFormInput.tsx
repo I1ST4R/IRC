@@ -1,14 +1,16 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
-import { OtherFieldsType } from "../fieldConfigTypes";
-import { formControl } from "@/modules/OrderForm/helpers/formConfig";
+import { OtherFieldsType } from "../config/fieldConfigTypes";
 import { Input } from "@/shared/ui/kit/input";
+import { Control } from "react-hook-form";
+import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
 
 export const OrderFormInput = ({
   name,
   label,
   placeholder,
-  actions
-}: OtherFieldsType) => {
+  actions,
+  formControl
+}: OtherFieldsType & {formControl: Control<RecipientFormData>}) => {
   return (
     <FormField
       control = {formControl}

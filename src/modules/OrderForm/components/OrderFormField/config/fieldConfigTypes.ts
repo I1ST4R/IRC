@@ -1,5 +1,5 @@
-import {DELIVERY_METHOD_NAMES} from "@/modules/OrderMenu"
-import { PAYMENT_METHODS } from "@/modules/OrderMenu/store/cartTotals/cartTotalsTypes";
+import { DELIVERY_METHOD_NAMES, PAYMENT_METHODS } from "../../../store/recipientTypes";
+
 export const enum FieldTypes {
   Selector = "Selector",
   TextArea = "TextArea", 
@@ -16,28 +16,6 @@ export type FieldName =
 | "email" 
 | "deliveryDate" 
 | "comment"
-
-
-// type GeneralConfig = {
-//   name: FieldName
-//   label: string
-// }
-
-// type FieldOptionType = {
-//   value: string
-//   label: string
-// }
-
-// // Для каждого поля свой тип значения
-// type FieldValue<T extends FieldName> = 
-//   T extends "deliveryMethod" ? DeliveryMethodName :
-//   string;
-
-// // Теперь FieldAction знает КАКОЕ значение ожидать
-// type FieldAction<T extends FieldName = FieldName> = {
-//   onBlur?: (value: FieldValue<T>) => void;
-//   onChange?: (value: FieldValue<T>) => void;
-// }
 
 export type FieldOptions<T extends FieldName = FieldName> = 
   T extends "deliveryMethod" ? typeof DELIVERY_METHOD_NAMES:

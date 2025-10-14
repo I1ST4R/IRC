@@ -1,18 +1,19 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
-import { OtherFieldsType } from "../fieldConfigTypes";
+import { OtherFieldsType } from "../config/fieldConfigTypes";
 import { Calendar } from "@/shared/ui/kit/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/kit/popover";
 import { cn } from "@/shared/lib/css";
-import { formControl } from "@/modules/OrderForm/helpers/formConfig";
+import { Control } from "react-hook-form";
+import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
 
 export const OrderFormDate = ({
   name,
   label,
-  placeholder,
-  actions
-}: OtherFieldsType) => {
+  actions,
+  formControl
+}: OtherFieldsType & {formControl: Control<RecipientFormData>}) => {
   return ( 
     <FormField
       control={formControl}

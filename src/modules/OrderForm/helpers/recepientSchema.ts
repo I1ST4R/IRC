@@ -49,5 +49,5 @@ export const recipientSchema = z.object({
 
 export type RecipientFormData = z.infer<typeof recipientSchema>;
 
-//Check for matching types of zod scheme and type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const typeCheck: Recipient = {} as RecipientFormData;
