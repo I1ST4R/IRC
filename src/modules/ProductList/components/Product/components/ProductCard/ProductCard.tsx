@@ -1,13 +1,9 @@
-import { Product } from "@/modules/ProductList/store/product/productTypes";
+import { ProductT } from "@/modules/ProductList";
 import { Card, CardContent, CardDescription, CardTitle } from "@/shared/ui/kit/card";
 import { Link } from "react-router-dom";
 import { ProductTags } from "./ProductTags";
 
-type ProductCardProps = {
-  product: Product
-}
-
-export const ProductCard = ({product}: ProductCardProps) => {
+export const ProductCard = ({product}: {product: ProductT}) => {
   return (
     <Link to={`/product/${product.id}`} className="product__link">
       <Card>

@@ -1,15 +1,10 @@
 import { Product as ProductT } from "../../store/product/productTypes";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
-
 import { CartBtn } from "./components/CartBtn/CartBtn";
 import { LikeBtn } from "./components/LikeBtn/LikeBtn";
 import { ProductCard } from "./components/ProductCard/ProductCard";
 
-type ProductProps = {
-  product: ProductT;
-}
-
-export const Product = ({ product }: ProductProps) => {
+export const Product = ({ product }: {product: ProductT}) => {
   const { data: user } = useGetUserQuery();
   if(!user?.id) return
 

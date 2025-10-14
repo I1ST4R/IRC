@@ -1,9 +1,6 @@
-import { Tag } from "@/modules/ProductList/store/tag/tagTypes";
+import { Tag } from "@/modules/ProductList";
 
-type ProductTagsProps = {
-  productTags: Tag[];
-};
-export const ProductTags = ({ productTags }: ProductTagsProps) => {
+export const ProductTags = ({ productTags }: {productTags: Tag[]}) => {
   return (
     <div className="flex flex-wrap gap-1">
       {productTags.map((tag: Tag) => {

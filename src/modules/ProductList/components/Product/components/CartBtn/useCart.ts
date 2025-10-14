@@ -1,7 +1,8 @@
 import { initialCart, useAddToCartMutation, useGetCartQuery } from "@/modules/CartBody";
 import { useNavigate } from "react-router-dom";
 import { UserIdProductIdType } from "./CartBtn";
-import { openAccount, useAppDispatch } from "@/modules/AuthForm";
+import { openAccount } from "@/modules/AuthForm";
+import { useAppDispatch } from "@/App/store";
 
 export const useCart = ({userId, productId} : UserIdProductIdType) => {
   const {

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
-import { FilterParams } from "../../../Menu/store/filter/filterTypes";
 import { Product, ProductDb } from "./productTypes";
 import { getTagsById } from "../tag/tagApi";
+import { FilterParams } from "@/modules/Menu";
 
 const axiosInstance = axios.create(API_CLIENT);
 
@@ -30,17 +30,14 @@ export const getProducts = async (page: number, filter?: FilterParams) => {
 
     // Фильтрация по тегам
     if (filter?.tagsId && filter.tagsId.length > 0) {
-      console.log('Filtering by tags:', filter.tagsId);
 
       filteredProducts = filteredProducts.filter((product : ProductDb) => {
-        return Object.entries(tagsByCategory).every(([categoryId, categoryTags]) => {
+        return Object.entries(tagsByCategory).every(([_, categoryTags]) => {
           return categoryTags.some(selectedTag => 
             product.tags.some((productTag: string) => productTag === selectedTag)
           );
         });
       });
-
-      console.log('After tags filter:', filteredProducts.length);
     }
 
     // Пагинация

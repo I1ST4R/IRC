@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Product as ProductComponent } from "./components/Product/Product";
-import type { Product } from "@/modules/ProductList/store/product/productTypes";
-import { useGetProductsQuery } from "@/modules/ProductList/store/product/productApiSlice";
-import { ProductListError } from "./components/ProductError/ProductListError";
-import { NoProductsWithFilter } from "./components/NoProductsWithFilter/NoProductsWithFilter";
+import { ProductT } from "@/modules/ProductList";
+import { useGetProductsQuery } from "./store/product/productApiSlice";
+import { ProductListError } from "./components/ProductListError";
+import { NoProductsWithFilter } from "./components/NoProductsWithFilter";
 import { Button } from "@/shared/ui/kit/button";
 import { cn } from "@/shared/lib/css";
-import { selectFilter } from "../Menu/store/filter/filterSlice";
 import { Loader } from "@/shared/ui/components/Loader";
+import { selectFilter } from "@/modules/Menu";
 
 export const ProductList = () => {
   const filter = useSelector(selectFilter);
@@ -32,7 +32,7 @@ export const ProductList = () => {
   return (
     <div>
       <div className="grid grid-cols-3 gap-5 p-5 w-[1200px] mx-auto min-h-[400px]">
-        {data.products.map((product: Product) => (
+        {data.products.map((product: ProductT) => (
           <ProductComponent key={`product-${product.id}`} product={product} />
         ))}
       </div>

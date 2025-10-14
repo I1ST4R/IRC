@@ -1,6 +1,11 @@
-import { useAddToLikedMutation, useGetLikedQuery, useRemoveFromLikedMutation } from "@/modules/LikedBody";
+import { 
+  useAddToLikedMutation, 
+  useGetLikedQuery, 
+  useRemoveFromLikedMutation 
+} from "@/modules/LikedBody";
 import { UserIdProductIdType } from "../CartBtn/CartBtn";
-import { openAccount, useAppDispatch } from "@/modules/AuthForm";
+import { openAccount} from "@/modules/AuthForm";
+import { useAppDispatch } from "@/App/store";
 
 export const useLiked = ({userId, productId} : UserIdProductIdType) => {
   const {
