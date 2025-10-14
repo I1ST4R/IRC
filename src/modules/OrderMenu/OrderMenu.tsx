@@ -2,7 +2,7 @@ import { OrderMenuDiscountSection } from "./components/OrderMenuDiscountSection/
 import { OrderMenuList } from "./components/OrderMenuList/OrderMenuList";
 import { OrderMenuTotals } from "./components/OrderMenuTotals/OrderMenuTotals";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGetCheckedCartItemsQuery } from "@/modules/CartBody/store/cart/cartApiSlice";
+import { useGetCheckedCartItemsQuery } from "@/modules/CartBody/store/cartApiSlice";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Button } from "@/shared/ui/kit/button";
 import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";

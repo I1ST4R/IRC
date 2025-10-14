@@ -1,5 +1,5 @@
 import { CartItemQuantityChangerProps } from "./CartItemQuantityChanger";
-import { useUpdateCartItemQuantityMutation } from "@/modules/CartBody/store/cart/cartApiSlice";
+import { useUpdateCartItemQuantityMutation } from "@/modules/CartBody/store/cartApiSlice";
 
 export const UseQuantityChange = (params: CartItemQuantityChangerProps) => {
 

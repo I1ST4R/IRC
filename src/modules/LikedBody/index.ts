@@ -3,4 +3,4 @@ export {
   useRemoveFromLikedMutation,
   useAddToLikedMutation,
   useGetLikedQuery,
-} from "./store/liked/likedApiSlice"
+} from "./store/likedApiSlice"

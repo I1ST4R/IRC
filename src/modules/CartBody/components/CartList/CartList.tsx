@@ -1,5 +1,5 @@
 import { Button } from "@/shared/ui/kit/button";
-import { useClearCartMutation } from "../../store/cart/cartApiSlice";
+import { useClearCartMutation } from "../../store/cartApiSlice";
 import { CartItem } from "./CartItem/CartItem";
 import {
   CartItemsAndLikedItems,

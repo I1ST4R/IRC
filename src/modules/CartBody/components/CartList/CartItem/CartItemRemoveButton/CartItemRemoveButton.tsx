@@ -1,5 +1,5 @@
 import { Button } from "@/shared/ui/kit/button";
-import { useRemoveFromCartMutation } from "../../../../store/cart/cartApiSlice";
+import { useRemoveFromCartMutation } from "../../../../store/cartApiSlice";
 import { CartItemAndUserIdProps } from "../CartItemInfo/CartItemInfo";
 
 

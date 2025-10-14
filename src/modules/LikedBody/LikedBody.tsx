@@ -2,9 +2,10 @@ import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { Loader } from "@/shared/ui/components/Loader";
 import { EmptyList } from "@/shared/ui/components/EmptyList";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
-import { useGetLikedQuery } from "./store/liked/likedApiSlice";
-import { LikedList } from "./components/LikedList";
-import { openAccount, useAppDispatch } from "../AuthForm";
+import { useGetLikedQuery } from "./store/likedApiSlice";
+import { LikedList } from "./LikedList";
+import { openAccount } from "../AuthForm";
+import { useAppDispatch } from "@/App/store";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
@@ -12,7 +13,12 @@ export const LikedBody = () => {
   const dispatch = useAppDispatch()
 
   if (!user?.id) 
-    return <Unauthorized text="чтобы доабвлять товары в избранное" handleClick={() => dispatch(openAccount())}/>;
+    return(
+      <Unauthorized 
+        text="чтобы доабвлять товары в избранное" 
+        handleClick={() => dispatch(openAccount())}
+      />
+    ) 
   if (isLoading) 
     return <Loader title="Избранное" />;
   if (error) 

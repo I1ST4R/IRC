@@ -2,10 +2,10 @@ export {CartBody} from "./CartBody"
 export {
   initialCart,
   removeFromCart
-} from "./store/cart/cartApi"
+} from "./store/cartApi"
 export {
   useGetCartQuery,
   useAddToCartMutation
-} from "@/modules/CartBody/store/cart/cartApiSlice"
-export {type CartItem} from "./store/cart/cartTypes"
-export {type CartItemDb} from "./store/cart/cartTypes"
+} from "@/modules/CartBody/store/cartApiSlice"
+export {type CartItem} from "./store/cartTypes"
+export {type CartItemDb} from "./store/cartTypes"

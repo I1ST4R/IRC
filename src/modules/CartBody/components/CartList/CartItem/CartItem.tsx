@@ -1,4 +1,4 @@
-import { CartItem as CartItemT } from "@/modules/CartBody/store/cart/cartTypes";
+import { CartItem as CartItemT } from "@/modules/CartBody/store/cartTypes";
 import { CartItemInfo } from "./CartItemInfo/CartItemInfo";
 import { CartItemImage } from "./CartItemImage/CartItemImage";
 import { CartItemCheckbox } from "./CartItemCheckbox";

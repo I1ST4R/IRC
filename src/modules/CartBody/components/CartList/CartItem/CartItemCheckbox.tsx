@@ -1,4 +1,4 @@
-import { useChangeCheckCartItemMutation } from "@/modules/CartBody/store/cart/cartApiSlice";
+import { useChangeCheckCartItemMutation } from "@/modules/CartBody/store/cartApiSlice";
 import { CartItemAndUserIdProps } from "./CartItemInfo/CartItemInfo";
 import { Checkbox } from "@/shared/ui/kit/checkbox";
 

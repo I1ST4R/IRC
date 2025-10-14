@@ -1,7 +1,7 @@
-import { useGetCartQuery } from "@/modules/CartBody/store/cart/cartApiSlice";
+import { useGetCartQuery } from "@/modules/CartBody/store/cartApiSlice";
 import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
-import { initialCart } from "./store/cart/cartApi";
+import { initialCart } from "./store/cartApi";
 import { CartList } from "./components/CartList/CartList";
 import { CartBodyError } from "./components/CartBodyError";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";

@@ -1,4 +1,4 @@
-import { CartItem } from "@/modules/CartBody/store/cart/cartTypes";
+import { CartItem } from "@/modules/CartBody/store/cartTypes";
 import { OrderMenuItem } from "./OrderMenuItem";
 
 type OrderMenuProps = {

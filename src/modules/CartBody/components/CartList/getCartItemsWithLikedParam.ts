@@ -1,5 +1,5 @@
 import { ProductT } from "@/modules/ProductList";
-import { CartItem } from "../../store/cart/cartTypes";
+import { CartItem } from "../../store/cartTypes";
 
 
 export type CartItemWithLikedParam = {
