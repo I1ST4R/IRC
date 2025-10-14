@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../store/menuStore";
-import { selectTagsId, toggleTag } from "../store/filter/filterSlice";
-import { useCallback } from "react";
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { Label } from "@radix-ui/react-label";
+import { useDispatch, useSelector } from "react-redux"
+import { selectTagsId, toggleTag } from "../store/filter/filterSlice"
+import { useCallback } from "react"
+import { Checkbox } from "@radix-ui/react-checkbox"
+import { Label } from "@radix-ui/react-label"
+import { AppDispatch } from "@/App/store"
 
 type MenuTagProps = {
   tagId: string
@@ -12,12 +12,12 @@ type MenuTagProps = {
 
 export const MenuTag = ({tagId, tagName} : MenuTagProps) => {
   
-  const filterTags = useSelector(selectTagsId);
-  const dispatch = useDispatch<AppDispatch>();
+  const filterTags = useSelector(selectTagsId)
+  const dispatch = useDispatch<AppDispatch>()
 
   const isTagSelected = useCallback(
     (tagId: string) => {
-      return filterTags.some((t: string) => t === tagId) || false;
+      return filterTags.some((t: string) => t === tagId) || false
     },
     [filterTags]
   );
@@ -29,7 +29,7 @@ export const MenuTag = ({tagId, tagName} : MenuTagProps) => {
         checked={isTagSelected(tagId)} 
         onChange={() => dispatch(toggleTag(tagId))}
       />
-      <Label htmlFor="terms">{tagId}</Label>
+      <Label htmlFor="terms">{tagName}</Label>
     </label>
   );
 };

@@ -1,25 +1,23 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setPriceRange,
   resetFilters,
-} from "./store/filter/filterSlice";
-import { AppDispatch} from "./store/menuStore";
-import { Slider } from "@/shared/ui/kit/slider";
-import {
   selectPriceRangeMax,
   selectPriceRangeMin,
 } from "./store/filter/filterSlice";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@radix-ui/react-accordion";
+import { Slider } from "@/shared/ui/kit/slider";
 import { MenuCategories } from "./components/MenuCategories";
 import { Button } from "@/shared/ui/kit/button";
+import { useAppDispatch } from "@/App/store";
+import { 
+  Accordion,
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger 
+} from "@/shared/ui/kit/accordion";
 
 export const Menu = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="w-[300px] min-w-[300px] bg-white rounded shadow-sm">

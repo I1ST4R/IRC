@@ -1,3 +1,4 @@
+export { useGetTagsByIdQuery } from "./store/tag/tagApiSlice";
 export { useCart } from "./components/Product/components/CartBtn/useCart";
 export { useLiked } from "./components/Product/components/LikeBtn/useLiked";
 export { type Tag } from "./store/tag/tagTypes";

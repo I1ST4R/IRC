@@ -1,10 +1,10 @@
-import { Accordion, AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
-import { useGetCategoriesQuery } from "../store/category/categoryApiSlice";
-import { CategoryCheckboxes } from "./CategoryCheckboxes";
-import { Loader } from "@/shared/ui/components/Loader";
+import { Accordion, AccordionItem, AccordionTrigger } from "@/shared/ui/kit/accordion"
+import { useGetCategoriesQuery } from "../store/category/categoryApiSlice"
+import { CategoryCheckboxes } from "./CategoryCheckboxes"
+import { Loader } from "@/shared/ui/components/Loader"
 
 export const MenuCategories = () => {
-  const { data: categories = [], isLoading: isCategoryLoading} = useGetCategoriesQuery();
+  const { data: categories = [], isLoading: isCategoryLoading} = useGetCategoriesQuery()
   if(isCategoryLoading) return <Loader title="Категории"/>
 
   return (

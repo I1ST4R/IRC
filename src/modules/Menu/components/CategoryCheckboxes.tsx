@@ -1,20 +1,15 @@
+import { useGetTagsByIdQuery } from "@/modules/ProductList"
+import { Category } from "../store/category/categoryTypes"
+import { MenuTag } from "./MenuTag"
 
-import { Category } from "../store/category/categoryTypes";
-import { MenuTag } from "./Menutag";
-import { useGetTagsByIdQuery } from "@/modules/ProductList/store/tag/tagApiSlice";
-
-type CategoryCheckboxes = {
-  category: Category;
-};
-
-export const CategoryCheckboxes = ({ category }: CategoryCheckboxes) => {
-  const { data: tagsRecord } = useGetTagsByIdQuery(category.tags);
-  if (!tagsRecord) return;
+export const CategoryCheckboxes = ({ category }: {category: Category}) => {
+  const { data: tags } = useGetTagsByIdQuery(category.tags)
+  if (!tags) return
 
   return (
     <div className="flex flex-col gap-3">
-      {category.tags.map((tagId) => {
-        return <MenuTag tagId = {tagId} tagName={tagsRecord[tagId].name}/>
+      {tags.map((tag) => {
+        return <MenuTag tagId = {tag.id} tagName = {tag.name} />
       })}
     </div>
   );
