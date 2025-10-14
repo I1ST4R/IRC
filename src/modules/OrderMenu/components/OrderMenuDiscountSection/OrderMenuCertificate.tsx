@@ -1,10 +1,11 @@
 import { useState } from "react";
+import React from 'react';
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 import { selectCertificate, validateCertificate } from "../../store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store/orderMenuStore";
+import { useAppDispatch } from "@/App/store";
 
 export const OrderMenuCertificate = () => {
   const [certTouched, setCertTouched] = useState(false);

@@ -1,6 +1,7 @@
-import { changeDeliveryMethod, AppDispatch } from "@/modules/OrderMenu";
+import { changeDeliveryMethod } from "@/modules/OrderMenu";
 import { FieldConfigType, FieldTypes } from "./fieldConfigTypes";
 import { DELIVERY_METHOD_NAMES, DeliveryMethodName, PAYMENT_METHODS } from "../../../store/recipientTypes";
+import { AppDispatch } from "@/App/store";
 
 export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {

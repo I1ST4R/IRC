@@ -1,8 +1,8 @@
 import { Form } from "react-hook-form";
 import { OrderFormField } from "./components/OrderFormField/OrderMenuField";
-import { useAppDispatch } from "../OrderMenu";
 import { getFieldConfig } from "./components/OrderFormField/config/fieldConfig";
 import { UseRecipientForm } from "./hooks/UseRecipientForm";
+import { useAppDispatch } from "@/App/store";
 
 export const OrderForm = () => {
   const dispatch = useAppDispatch()

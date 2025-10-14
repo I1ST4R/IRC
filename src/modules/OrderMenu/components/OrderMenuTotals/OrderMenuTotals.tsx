@@ -2,11 +2,7 @@ import { OrderMenuTotalsPoint } from "./OrderMenuTotalsPoint";
 import { getOrderMenuTotalsItems } from "./getOrderMenuTotalsItems";
 import { CartTotals } from "../../store/cartTotals/cartTotalsTypes";
 
-type OrderMenuTotalsProps = {
-  cartTotals: CartTotals;
-};
-
-export const OrderMenuTotals = ({cartTotals}: OrderMenuTotalsProps) => {
+export const OrderMenuTotals = ({cartTotals}: {cartTotals: CartTotals}) => {
   const items = getOrderMenuTotalsItems(cartTotals);
   return (
     <div className="p-3 border-b border-gray-200">

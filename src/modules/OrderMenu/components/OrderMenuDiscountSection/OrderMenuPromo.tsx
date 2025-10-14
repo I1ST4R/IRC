@@ -1,11 +1,11 @@
 import { useState } from "react";
+import React from 'react';
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { useSelector } from "react-redux";
 import { selectPromocode, validatePromocode } from "../../store/cartTotals/cartTotalsSlice";
-import { useAppDispatch } from "../../store/orderMenuStore";
-
+import { useAppDispatch } from "@/App/store";
 
 export const OrderMenuPromo = () => {
   const [promoTouched, setPromoTouched] = useState(false);

@@ -2,20 +2,17 @@ import { OrderMenuDiscountSection } from "./components/OrderMenuDiscountSection/
 import { OrderMenuList } from "./components/OrderMenuList/OrderMenuList";
 import { OrderMenuTotals } from "./components/OrderMenuTotals/OrderMenuTotals";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGetCheckedCartItemsQuery } from "@/modules/CartBody/store/cartApiSlice";
+import { useGetCheckedCartItemsQuery } from "@/modules/CartBody";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Button } from "@/shared/ui/kit/button";
 import { selectCartTotals } from "./store/cartTotals/cartTotalsSlice";
 import { useSelector } from "react-redux";
-import { useAppDispatch as useCartTotalsDispatch} from "./store/orderMenuStore";
 import { changeCartTotals } from "."
 import { Loader } from "@/shared/ui/components/Loader";
-import { onSubmit } from "../OrderForm";
-import { useAppDispatch as useRecipientDispatch } from "../OrderForm";
+import { useAppDispatch } from "@/App/store";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
-  const cartTotalsDispatch = useCartTotalsDispatch();
   const location = useLocation();
   const { data: user } = useGetUserQuery();
   const { data: checkedCartItems, isLoading: isCartItemsLoading } = useGetCheckedCartItemsQuery(
@@ -24,20 +21,25 @@ export const OrderMenu = () => {
   );
   const cartTotals = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/order";
+  const dispatch = useAppDispatch()
 
   if(isCartItemsLoading) return <Loader title="Корзина"/>
 
   const handleCheckout = () => {
+    if (!user?.id) return
     if (!isOrderPage) {
-      navigate("/order");
+      navigate("order");
       return;
     }
-    onSubmit(useRecipientDispatch(), navigate)
+    dispatch(
+      changeCartTotals({
+        cartItems: checkedCartItems?.items
+      })
+    )
+    navigate("payment")
   };
 
   if (!user?.id || !checkedCartItems || checkedCartItems.items.length === 0) return null;
-
-  cartTotalsDispatch(changeCartTotals({ cartItems: checkedCartItems?.items || [] }));
 
   return (
     <div className="bg-[#F2F2F2] w-73">
