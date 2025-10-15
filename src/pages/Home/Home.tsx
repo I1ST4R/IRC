@@ -10,6 +10,7 @@ import Founder from './Founder/Founder';
 import Press from './Press/Press';
 import NewsLetter from './NewsLetter/Newsletter';
 import Blog from './Blog/Blog';
+import './home.scss'
 
 const Home = () => {
   return (
