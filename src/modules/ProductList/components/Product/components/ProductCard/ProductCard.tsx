@@ -5,17 +5,17 @@ import { ProductTags } from "./ProductTags";
 
 export const ProductCard = ({product}: {product: ProductT}) => {
   return (
-    <Link to={`/product/${product.id}`} className="product__link">
-      <Card>
+    <Link to={`/product/${product.id}`} className="h-full block">
+      <Card className="shadow-none border-b-0 flex-col rounded-none bg-[rgb(242,242,242)] ">
         <img src={product.img} alt={product.name} className="w-full h-[270px] object-contain object-center" />
         <ProductTags productTags = {product.tags}/>
-        <CardTitle className="font-manrope font-semibold text-xs uppercase tracking-wide m-0">
+        <CardTitle className="font-manrope font-semibold text-xs uppercase tracking-wide px-8 my-2">
           {product.name}
         </CardTitle>
-        <CardDescription className="font-europe-ext font-medium text-xl uppercase tracking-wide pb-2.5 m-0">
+        <CardDescription className=" px-8 font-europe-ext text-xl uppercase pb-2.5 m-0 text-black">
           {product.technology}
         </CardDescription>
-        <CardContent className="absolute bottom-[50px] left-[30px] flex items-center gap-2.5 font-manrope text-xl font-bold">
+        <CardContent className=" px-8 flex items-center gap-2.5 font-manrope text-xl font-bold">
           <span>{product.price} ₽</span>
           <span className="font-manrope font-medium text-lg line-through text-black/50">{product.prevPrice} ₽</span>
         </CardContent>
