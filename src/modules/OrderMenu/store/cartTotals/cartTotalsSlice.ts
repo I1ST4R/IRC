@@ -21,7 +21,6 @@ import {
   Recipient,
 } from "@/modules/OrderForm";
 import { removeFromCart } from "@/modules/CartBody";
-import { rootReducer } from "@/App/store.ts";
 
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
@@ -117,7 +116,7 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-const defaultCartTotals: CartTotals = {
+export const defaultCartTotals: CartTotals = {
   cartItems: [],
   total: 0,
   totalWithDiscount: 0,
@@ -133,7 +132,7 @@ const initialState: CartTotalsState = {
   error: null,
 };
 
-const cartTotalsSlice = createSlice({
+export const cartTotalsSlice = createSlice({
   name: "cartTotals",
   initialState,
   selectors:{
@@ -167,7 +166,7 @@ const cartTotalsSlice = createSlice({
       }
     },
   },
-}).injectInto(rootReducer)
+})
 
 
 export const { 
@@ -179,4 +178,3 @@ export const {
   selectPromocode,
   selectCertificate
 } = cartTotalsSlice.selectors;
-export default cartTotalsSlice.reducer;

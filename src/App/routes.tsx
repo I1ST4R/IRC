@@ -32,37 +32,31 @@ export const router = createBrowserRouter([
       {
         path: 'catalog',
         element: withSuspense(Catalog, "Каталог"),
-        children : [
-          {
-            path: 'product/:id',
-            element: withSuspense(ProductAbout, "О продукте"),
-          }
-        ]
+      },
+      {
+        path: 'catalog/product/:id',
+        element: withSuspense(ProductAbout, "О продукте"),
       },
       {
         path: 'cart',
         element: withSuspense(Cart, "Корзина"),
-        children: [
-          {
-            path: "order",
-            element: withSuspense(Order, "Заказ"),
-            children: [
-              {
-                path: 'payment',
-                element: withSuspense(Payment, "Оплата"),
-              }
-            ]
-          }
-        ]
+      },
+      {
+        path: 'cart/order',
+        element: withSuspense(Order, "Заказ"),
+      },
+      {
+        path: 'cart/order/payment',
+        element: withSuspense(Payment, "Оплата"),
       },
       {
         path: 'liked',
-        element: <Liked />,
+        element: withSuspense(Liked, "Избранное"),
       },
       {
         path: 'admin',
-        element: <Admin />,
+        element: withSuspense(Admin, "Админка"),
       },
     ],
   },
-]); 
+]);

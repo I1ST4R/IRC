@@ -1,4 +1,3 @@
-console.log('=== STORE.TS START ===')
 import { usersApi } from '@/shared/store/user/userApiSlice';
 import { orderApi } from '@/modules/OrderTable/store/orderApiSlice';
 import { productApi } from '@/modules/ProductList/store/product/productApiSlice';
@@ -11,11 +10,16 @@ import { authFormSlice } from '@/modules/AuthForm/authFormSlice';
 import { filterSlice } from '@/modules/Menu/store/filter/filterSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
+import { cartTotalsSlice } from '@/modules/OrderMenu/store/cartTotals/cartTotalsSlice';
+import { recipientSlice } from '@/modules/OrderForm/store/recipientSlice';
+
 
 export const store = configureStore({
   reducer: {
     filter: filterSlice.reducer,
     authForm: authFormSlice.reducer,
+    cartTotals: cartTotalsSlice.reducer,
+    recipient: recipientSlice.reducer,
     [usersApi.reducerPath]: usersApi.reducer, 
     [likedApi.reducerPath]: likedApi.reducer,
     [productApi.reducerPath]: productApi.reducer,

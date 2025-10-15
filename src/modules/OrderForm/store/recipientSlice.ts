@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Recipient, RecipientState } from "./recipientTypes";
-import { rootReducer } from "@/App/store";
 
 export const defaultRecipient: Recipient = {
   deliveryMethod: "Курьером",
@@ -19,7 +18,7 @@ const initialState: RecipientState = {
   error: null,
 };
 
-const recipientSlice = createSlice({
+export const recipientSlice = createSlice({
   name: "recipient",
   initialState,
   selectors:{
@@ -31,7 +30,7 @@ const recipientSlice = createSlice({
       Object.assign(state.item, action.payload);
     }
   }
-}).injectInto(rootReducer)
+})
 
 export const { changeRecipientInfo } = recipientSlice.actions;
 export const { selectRecipient, selectPaymentMethod } = recipientSlice.selectors;

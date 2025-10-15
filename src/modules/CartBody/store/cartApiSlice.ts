@@ -1,4 +1,3 @@
-console.log('=== CARTAPI.TS START ===');
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   getCart,

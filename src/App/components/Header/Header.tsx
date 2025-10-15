@@ -5,8 +5,8 @@ import {
   useGetUserQuery,
   useLogoutMutation,
 } from "@/shared/store/user/userApiSlice";
-import { initialCart, useGetCartQuery } from "@/modules/CartBody";
-import { useGetLikedQuery } from "@/modules/LikedBody";
+// import { initialCart, useGetCartQuery } from "@/modules/CartBody";
+// import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useAppDispatch } from "@/App/store";
 
 const Header = () => {
@@ -21,12 +21,12 @@ const Header = () => {
   const { data: user } = useGetUserQuery();
 
   // RTK Query хуки
-  const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", {
-    skip: !user?.id,
-  });
-  const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? "", {
-    skip: !user?.id,
-  });
+  // const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", {
+  //   skip: !user?.id,
+  // });
+  // const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? "", {
+  //   skip: !user?.id,
+  // });
   const [logout] = useLogoutMutation();
 
   useEffect(() => {
@@ -53,6 +53,8 @@ const Header = () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const stub = 5
 
   const handleMenuClick = () => {
     setIsMenuActive(!isMenuActive);
@@ -197,12 +199,12 @@ const Header = () => {
               src={"../../../pages/Home/_general/img/liked.svg"}
               alt="liked"
             />
-            {likedItems.length > 0 && (
+            {stub > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 id="liked__counter"
               >
-                {likedItems.length}
+                {stub}
               </div>
             )}
           </Link>
@@ -216,12 +218,12 @@ const Header = () => {
               src={"../../../pages/Home/_general/img/basket.svg"}
               alt="basket"
             />
-            {cart.itemsCount > 0 && (
+            {stub > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 id="basket-counter"
               >
-                {cart.itemsCount}
+                {stub}
               </div>
             )}
           </Link>

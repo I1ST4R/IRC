@@ -1,21 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom'; 
+import { RouterProvider } from 'react-router-dom'; // Измените здесь
 import './index.css';
+import { router } from '../routes';
+import { store } from '../store';
 
 const initApp = async () => {
-  // Сначала импортируем store
-  const { store } = await import('../store');
-  // Потом App
-  const App = (await import('../App')).default;
-  
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter> 
-          <App />
-        </BrowserRouter>
+        <RouterProvider router={router} /> {/* Используйте RouterProvider */}
       </Provider>
     </React.StrictMode>,
   );

@@ -16,6 +16,21 @@
           "productId": "4",
           "quantity": 1,
           "isChecked": false
+        },
+        {
+          "productId": "1",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "6",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "5",
+          "quantity": 1,
+          "isChecked": true
         }
       ],
       "liked": [
@@ -964,7 +979,7 @@
   "promo": [
     {
       "id": "1",
-      "used": true,
+      "used": false,
       "code": "PROMO10",
       "discount": 0.1
     },
@@ -989,6 +1004,5 @@
       "discount": 2000
     }
   ],
-  "orders": [
-  ]
+  "orders": []
 }
