@@ -3,7 +3,6 @@ import {
   resetFilters,
   PRICE_RANGE_MIN,
   PRICE_RANGE_MAX,
-  selectPriceRangeMin,
 } from "./store/filter/filterSlice";
 import { Slider } from "@/shared/ui/kit/slider";
 import { MenuCategories } from "./components/MenuCategories";
@@ -24,21 +23,22 @@ export const Menu = () => {
 
   return (
     <div className="w-[300px] min-w-[300px]">
-      <Accordion type="single">
+      <Accordion type="single" collapsible>
         <AccordionItem value="0" className="px-5 border-1">
           <AccordionTrigger>Цена {priceRangeMin}</AccordionTrigger>
           <AccordionContent>
             <div className="flex justify-between">
-              <p className="mt-2.5">{PRICE_RANGE_MIN}</p>
+              <p>{PRICE_RANGE_MIN}</p>
               <Slider
-                className="mt-2 w-40"
+                className="w-40"
                 min={PRICE_RANGE_MIN}
+                value={[priceRangeMin, PRICE_RANGE_MAX]}
                 onValueChange={(value) => setPriceRangeMin(value[0])}
                 onValueCommit={() => dispatch(setPriceRange(priceRangeMin))}
                 max={PRICE_RANGE_MAX}
                 step={100}
               />
-              <p className="mt-2.5">{PRICE_RANGE_MAX}</p>
+              <p>{PRICE_RANGE_MAX}</p>
             </div>
           </AccordionContent>
         </AccordionItem>
