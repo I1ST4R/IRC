@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './filterTypes';
-import { checkIsInitial } from './checkIsInitial';
-import { rootReducer } from '@/App/store';
 
 export const initialState: FilterState = {
   filterParams: {
@@ -16,7 +14,13 @@ export const initialState: FilterState = {
   error: null
 };
 
-const filterSlice = createSlice({
+const initialJSON = JSON.stringify(initialState);
+
+const checkIsInitial = (state: FilterState): boolean => {
+  return JSON.stringify(state) === initialJSON;
+};
+
+export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   selectors:{
@@ -48,9 +52,7 @@ const filterSlice = createSlice({
       state.isInitial = true
     }
   }
-}).injectInto(rootReducer)
-
-
+})
 
 export const { setPriceRange, toggleTag, resetFilters } = filterSlice.actions
 export const { 
@@ -62,4 +64,3 @@ export const {
   selectIsInitial,
   selectFilterError
 } = filterSlice.selectors
-export default filterSlice.reducer; 

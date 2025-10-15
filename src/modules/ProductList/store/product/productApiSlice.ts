@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getProducts, getProductById } from './productApi';
 import { Product } from './productTypes';
-import { rootReducer } from '@/App/store';
 import { FilterParams } from '@/modules/Menu';
 
 export const productApi = createApi({
@@ -25,8 +24,6 @@ export const productApi = createApi({
     }),
   }),
 })
-
-rootReducer.inject(productApi);
 
 export const {
   useGetProductsQuery,

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { openAccount, useAppDispatch } from "@/modules/AuthForm";
+import { openAccount } from "@/modules/AuthForm";
 import {
   useGetUserQuery,
   useLogoutMutation,
 } from "@/shared/store/user/userApiSlice";
 import { initialCart, useGetCartQuery } from "@/modules/CartBody";
 import { useGetLikedQuery } from "@/modules/LikedBody";
+import { useAppDispatch } from "@/App/store";
 
-const Header: React.FC = () => {
+const Header = () => {
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
@@ -246,5 +247,6 @@ const Header: React.FC = () => {
     </header>
   );
 };
+
 
 export default Header;

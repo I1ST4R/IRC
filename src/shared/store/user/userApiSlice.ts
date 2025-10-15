@@ -1,59 +1,46 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { getUser, login, logout, register} from './userApi'
-import { likedApi } from '../../../modules/LikedBody/store/likedApiSlice'
-import { User, LoginData, RegisterData } from './userTypes'
-import { cartApi } from '@/modules/CartBody/store/cartApiSlice';
-import { rootReducer } from '@/App/store';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getUser, login, logout, register } from "./userApi";
+import { User, LoginData, RegisterData } from "./userTypes";
 
 export const usersApi = createApi({
-  reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-  tagTypes: ['User'],
+  reducerPath: "usersApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "/" }),
+  tagTypes: ["User"],
   endpoints: (build) => ({
     login: build.mutation<User, LoginData>({
       queryFn: (data) =>
         login(data)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     logout: build.mutation<User, void>({
       queryFn: () =>
         logout()
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
-      invalidatesTags: ['User'],
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-        } finally {
-          dispatch(cartApi.util.resetApiState());
-          dispatch(likedApi.util.resetApiState());
-        }
-      },
+      invalidatesTags: ["User"],
     }),
     getUser: build.query<User, void>({
       queryFn: () =>
         getUser()
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
-      providesTags: ['User'],
+      providesTags: ["User"],
     }),
     register: build.mutation<User, RegisterData>({
       queryFn: (data) =>
         register(data)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
   }),
 });
-
-rootReducer.inject(usersApi);
 
 export const {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
-  useGetUserQuery
+  useGetUserQuery,
 } = usersApi;

@@ -76,6 +76,7 @@ CardFooter.displayName = "CardFooter";
 const CardAction = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 >(({ className, ...props }, ref) => (
   <div
     data-slot="card-action"

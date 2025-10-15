@@ -3,8 +3,9 @@ import { useUpdateCartItemQuantityMutation } from "@/modules/CartBody/store/cart
 
 export const UseQuantityChange = (params: CartItemQuantityChangerProps) => {
 
+  const [updateCartItemQuantity] = useUpdateCartItemQuantityMutation();
+
   const quantityChange = (type: "increase" | "decrease") => {
-    const [updateCartItemQuantity] = useUpdateCartItemQuantityMutation();
     const productId = params.cartItem.product.id;
 
     if (type === "decrease" && params.cartItem.quantity === 1) return;

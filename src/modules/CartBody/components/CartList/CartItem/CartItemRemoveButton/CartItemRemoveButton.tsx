@@ -1,6 +1,6 @@
 import { Button } from "@/shared/ui/kit/button";
-import { useRemoveFromCartMutation } from "../../../../store/cartApiSlice";
 import { CartItemAndUserIdProps } from "../CartItemInfo/CartItemInfo";
+import { useRemoveFromCartMutation } from "@/modules/CartBody/store/cartApiSlice";
 
 
 export const CartItemRemoveButton = ({cartItem, userId}: CartItemAndUserIdProps) => {

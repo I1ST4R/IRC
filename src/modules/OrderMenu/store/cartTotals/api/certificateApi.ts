@@ -28,7 +28,7 @@ export const validateCertificate = async (code: string) => {
   try {
     const upperCode = code.toUpperCase();
     const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
-    let certificate = INITIAL_CERTIFICATE
+    const certificate = INITIAL_CERTIFICATE
     if (response.data && response.data.length > 0 && !response.data[0].used) {
       Object.assign(certificate, response.data[0], {valid: true})
 

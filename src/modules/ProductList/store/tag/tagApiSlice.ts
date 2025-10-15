@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getTagsById } from './tagApi';
 import { Tag } from './tagTypes';
-import { rootReducer } from '@/App/store';
 
 export const tagApi = createApi({
   reducerPath: 'tagApi',
@@ -17,7 +16,5 @@ export const tagApi = createApi({
     }),
   }),
 });
-
-rootReducer.inject(tagApi);
 
 export const { useGetTagsByIdQuery } = tagApi;

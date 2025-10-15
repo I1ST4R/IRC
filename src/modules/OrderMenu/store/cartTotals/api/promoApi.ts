@@ -28,7 +28,7 @@ export const validatePromo = async (code: string) => {
     const upperCode = code.toUpperCase();
     
     const response = await axiosInstance.get(`/promo?code=${upperCode}`);
-    let promo = INITIAL_PROMO
+    const promo = INITIAL_PROMO
     if (response.data && response.data.length > 0 && !response.data[0].used) {
       Object.assign(promo, response.data[0], { valid: true })
 

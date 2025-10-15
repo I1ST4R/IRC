@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { rootReducer} from '@/App/store';
 
 export type AuthFormState = {
   isFormOpen: boolean
@@ -7,7 +6,7 @@ export type AuthFormState = {
 
 const initialState: AuthFormState = { isFormOpen: false }
 
-const authFormSlice = createSlice({
+export const authFormSlice = createSlice({
   name: 'authForm',
   initialState,
   selectors:{
@@ -21,7 +20,7 @@ const authFormSlice = createSlice({
       state.isFormOpen = false
     }
   },
-}).injectInto(rootReducer)
+})
 
 export const { openAccount, closeAccount } = authFormSlice.actions;
 export const { selectIsFormOpen } = authFormSlice.selectors;

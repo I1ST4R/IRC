@@ -1,3 +1,4 @@
+console.log('=== CARTAPI.TS START ===');
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   getCart,
@@ -8,7 +9,6 @@ import {
   clearCart
 } from './cartApi';
 import { Cart} from './cartTypes';
-import { rootReducer } from '@/App/store';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -66,8 +66,6 @@ export const cartApi = createApi({
     })
   }),
 })
-
-rootReducer.inject(cartApi);
 
 export const {
   useGetCartQuery,

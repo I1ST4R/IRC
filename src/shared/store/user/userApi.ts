@@ -81,7 +81,7 @@ export const register = async (data: RegisterData) => {
 
     const response = await axiosInstance.post<User>('/users', userData);
     if(response.data.id) localStorage.setItem('userId', response.data.id)
-    const { password, ...userWithoutPassword } = response.data;
+    const { password: _, ...userWithoutPassword } = response.data;
     return userWithoutPassword as User;
   } catch (error: any) {
     console.error('error in register', error);
