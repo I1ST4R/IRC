@@ -1,14 +1,14 @@
 
+import { Menu } from "@/modules/Menu";
 import { ProductList } from "@/modules/ProductList";
 import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
-import { Menu } from "lucide-react";
 
 const Catalog = () => {
 
   return (
-    <div className="catalog container">
+    <div className="container m-auto pt-25">
       <BreadCrumb/>
-      <div className="catalog__content">
+      <div className="flex">
         <Menu />
         <ProductList/>
       </div>

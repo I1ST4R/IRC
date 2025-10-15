@@ -87,7 +87,7 @@ const Header = () => {
         </button>
 
         {/* Основные ссылки */}
-        <div className="w-30 flex justify-between items-center">
+        <div className="w-140 flex justify-between items-center">
           <Link
             to="/catalog"
             className="font-manrope text-13 font-800 uppercase tracking-wider px-0.4 border-b-2 border-transparent hover:border-black transition-colors duration-700 ease-in-out user-select-none"

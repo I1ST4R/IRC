@@ -31,7 +31,7 @@ export const ProductList = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-5 p-5 w-[1200px] mx-auto min-h-[400px]">
+      <div className="grid grid-cols-3 gap-5 pl-5 w-[1200px] mx-auto min-h-[400px]">
         {data.products.map((product: ProductT) => (
           <ProductComponent key={`product-${product.id}`} product={product} />
         ))}

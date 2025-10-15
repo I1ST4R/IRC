@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbSeparator,
 } from "../kit/breadcrumb";
 
 interface BreadCrumbItem {
@@ -47,23 +48,28 @@ export const BreadCrumb = () => {
   });
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="p-5">
       <BreadcrumbList>
         {breadcrumbs.map((item, index) => (
-          <BreadcrumbItem key={item.path}>
-            <BreadcrumbLink asChild>
-              <Link
-                to={item.path}
-                className={
-                  index === breadcrumbs.length - 1
-                    ? "text-foreground font-semibold"
-                    : ""
-                }
-              >
-                {item.name}
-              </Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+          <>
+            <BreadcrumbItem key={item.path}>
+              <BreadcrumbLink asChild>
+                <Link
+                  to={item.path}
+                  className={
+                    index === breadcrumbs.length - 1
+                      ? "font-semibold"
+                      : ""
+                  }
+                >
+                  {item.name}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {index < breadcrumbs.length - 1 && (
+              <BreadcrumbSeparator />
+            )}
+          </>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, AccordionTrigger } from "@/shared/ui/kit/accordion"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/kit/accordion"
 import { useGetCategoriesQuery } from "../store/category/categoryApiSlice"
 import { CategoryCheckboxes } from "./CategoryCheckboxes"
 import { Loader } from "@/shared/ui/components/Loader"
@@ -12,7 +12,9 @@ export const MenuCategories = () => {
       {categories.map((category) => (
       <AccordionItem value={category.id}>
         <AccordionTrigger>{category.name}</AccordionTrigger>
-        <CategoryCheckboxes category={category}/>
+        <AccordionContent>
+          <CategoryCheckboxes category={category}/>
+        </AccordionContent>
       </AccordionItem>
     ))}
     </Accordion>

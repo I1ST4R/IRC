@@ -9,11 +9,11 @@ import { Slider } from "@/shared/ui/kit/slider";
 import { MenuCategories } from "./components/MenuCategories";
 import { Button } from "@/shared/ui/kit/button";
 import { useAppDispatch } from "@/App/store";
-import { 
+import {
   Accordion,
-  AccordionContent, 
-  AccordionItem, 
-  AccordionTrigger 
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/shared/ui/kit/accordion";
 
 export const Menu = () => {
@@ -35,10 +35,16 @@ export const Menu = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <MenuCategories/>
-      <Button asChild onClick={() => dispatch(resetFilters())} variant="squareRemove">
-        <img src="reset.svg" alt="reset" />
-        очистить
+      <MenuCategories />
+      <Button
+        asChild
+        onClick={() => dispatch(resetFilters())}
+        variant="squareRemove"
+      >
+        <div className="flex items-center gap-2">
+          <img src="reset.svg" alt="reset" />
+          <span>очистить</span>
+        </div>
       </Button>
     </div>
   );
