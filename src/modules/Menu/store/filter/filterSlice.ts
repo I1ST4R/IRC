@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FilterState } from './filterTypes';
 
+export const PRICE_RANGE_MIN = 500
+export const PRICE_RANGE_MAX = 10000
+
 export const initialState: FilterState = {
   filterParams: {
     priceRange: {
-      min: 500,
-      max: 10000
+      min: PRICE_RANGE_MIN,
+      max: PRICE_RANGE_MAX
     },
     tagsId: [],
   },

@@ -10,7 +10,7 @@ export const MenuCategories = () => {
   return (
     <Accordion type="multiple">
       {categories.map((category) => (
-      <AccordionItem value={category.id}>
+      <AccordionItem value={category.id} className="px-5 border-1 border-t-0">
         <AccordionTrigger>{category.name}</AccordionTrigger>
         <AccordionContent>
           <CategoryCheckboxes category={category}/>

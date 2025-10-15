@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import { selectTagsId, toggleTag } from "../store/filter/filterSlice"
 import { useCallback } from "react"
-import { Checkbox } from "@radix-ui/react-checkbox"
 import { Label } from "@radix-ui/react-label"
 import { AppDispatch } from "@/App/store"
+import { Checkbox } from "@/shared/ui/kit/checkbox"
 
 type MenuTagProps = {
   tagId: string
@@ -14,6 +14,8 @@ export const MenuTag = ({tagId, tagName} : MenuTagProps) => {
   
   const filterTags = useSelector(selectTagsId)
   const dispatch = useDispatch<AppDispatch>()
+
+  console.log(filterTags)
 
   const isTagSelected = useCallback(
     (tagId: string) => {
@@ -27,7 +29,8 @@ export const MenuTag = ({tagId, tagName} : MenuTagProps) => {
       <Checkbox 
         id={tagId} 
         checked={isTagSelected(tagId)} 
-        onChange={() => dispatch(toggleTag(tagId))}
+        onClick={() => dispatch(toggleTag(tagId))}
+        className="w-5 h-5"
       />
       <Label htmlFor="terms">{tagName}</Label>
     </label>
