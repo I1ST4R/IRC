@@ -8,6 +8,12 @@ import {
 // import { initialCart, useGetCartQuery } from "@/modules/CartBody";
 // import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useAppDispatch } from "@/App/store";
+import logo from './logo.svg';
+import arrowDown from './arrow-down-coral.svg';
+import search from './search.svg';
+import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
+import liked from '../../../pages/Home/_general/img/liked.svg';
+import basket from '../../../pages/Home/_general/img/basket.svg';
 
 const Header = () => {
   const [isMenuActive, setIsMenuActive] = useState(false);
@@ -74,7 +80,7 @@ const Header = () => {
       <div className="container mx-auto h-25 flex justify-between items-center">
         {/* Меню для мобильных устройств */}
         <button className="hidden md:flex items-center gap-2.5 h-auto">
-          <img className="w-25 h-auto" src={"./logo.svg"} alt="logo" />
+          <img className="w-25 h-auto" src={logo}  alt="logo" />
           <p className="font-manrope text-13 font-800 uppercase tracking-wider">
             МЕНЮ
           </p>
@@ -117,7 +123,7 @@ const Header = () => {
           >
             <p>О бренде</p>
             <img
-              src={"./arrow-down-coral.svg"}
+              src={arrowDown}
               alt="arrow"
               className={`transition-transform duration-700 ease-in-out ${
                 isMenuActive ? "rotate-180" : ""
@@ -149,7 +155,7 @@ const Header = () => {
         {/* Кнопки действий */}
         <div className="flex items-center gap-7.5">
           <button className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out hover:[&_svg_path]:fill-none hover:[&_svg_path]:stroke-coral">
-            <img src={"./search.svg"} alt="search" />
+            <img src={search} alt="search" />
           </button>
 
           {user?.id ? (
@@ -184,7 +190,7 @@ const Header = () => {
               onClick={() => dispatch(openAccount())}
             >
               <img
-                src={"../../../pages/Home/_general/img/personal-acc.svg"}
+                src={personalAcc}
                 alt="personal-acc"
               />
             </button>
@@ -196,7 +202,7 @@ const Header = () => {
             id="liked__container1"
           >
             <img
-              src={"../../../pages/Home/_general/img/liked.svg"}
+              src={liked}
               alt="liked"
             />
             {stub > 0 && (
@@ -215,7 +221,7 @@ const Header = () => {
             id="basket__container1"
           >
             <img
-              src={"../../../pages/Home/_general/img/basket.svg"}
+              src={basket}
               alt="basket"
             />
             {stub > 0 && (

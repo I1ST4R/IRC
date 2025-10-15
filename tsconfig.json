@@ -25,6 +25,6 @@
     "src/**/*.tsx",
     "src/**/*.d.ts",  // важно!
     "src/App/build/**/*"
-  ],
+, "*.d.ts"  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
