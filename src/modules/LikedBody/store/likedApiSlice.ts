@@ -5,6 +5,7 @@ import {
   removeFromLiked
 } from './likedApi';
 import { ProductT } from '@/modules/ProductList';
+import { Product } from '@/modules/ProductList/store/product/productTypes';
 
 
 export const likedApi = createApi({
@@ -12,7 +13,7 @@ export const likedApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Liked'],
   endpoints: (build) => ({
-    getLiked: build.query<ProductT[], string>({
+    getLiked: build.query<Record<string, Product>, string>({
       queryFn: (userId) =>
         getLiked(userId)
           .then((data) => ({ data }))

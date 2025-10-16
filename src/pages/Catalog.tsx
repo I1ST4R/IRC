@@ -6,7 +6,7 @@ import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 const Catalog = () => {
 
   return (
-    <div className="container m-auto pt-25">
+    <div className="container m-auto ">
       <BreadCrumb/>
       <div className="flex">
         <Menu />

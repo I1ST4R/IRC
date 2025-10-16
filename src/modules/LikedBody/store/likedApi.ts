@@ -2,6 +2,7 @@ import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
 import { LikedItemDb } from "./likedTypes";
 import { getProductById, ProductT } from "@/modules/ProductList";
+import { Product } from "@/modules/ProductList/store/product/productTypes";
 
 const axiosInstance = axios.create(API_CLIENT);
 
@@ -14,10 +15,14 @@ export const getLiked = async (userId: string) => {
     const user = response.data[0];
     if (!user.liked) {
       await axiosInstance.patch(`/users/${user.id}`, { liked: [] });
-      return [];
+      return {};
     }
     const products = await loadProducts(user.liked);
-    return products;
+    const idToProduct = products.reduce((acc : Record<string, Product>, el) => {
+      acc[el.id] = el
+      return acc
+    }, {})
+    return idToProduct;
   } catch (error: any) {
     console.error("error in getLiked", error);
     throw error;

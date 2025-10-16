@@ -3,9 +3,8 @@ import { Swiper } from 'swiper';
 import { EffectFade, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
-// import ovals from './ovals.svg';
-// import arrowRight from '../_general/img/arrow-right-white.svg';
-import { BreadCrumb } from '@/shared/ui/components/BreadCrumb';
+import ovals from './ovals.svg';
+import arrowRight from '../_general/img/arrow-right-white.svg';
 
 const MainBlock: React.FC = () => {
   const swiperRef = useRef<Swiper | null>(null);
@@ -40,8 +39,7 @@ const MainBlock: React.FC = () => {
   return (
     <div className="main-block container--big">
       <div className="container">
-        <BreadCrumb/>
-        {/* <img src={ovals} className="main-block__bg-svg" alt="" /> */}
+        <img src={ovals} className="main-block__bg-svg" alt="" />
 
         <div 
           ref={swiperContainerRef}
@@ -70,7 +68,7 @@ const MainBlock: React.FC = () => {
 
           <a href="#" className="btn btn--active btn--flex main-block__btn">
             <span>Подобрать уход</span>
-            {/* <img src={arrowRight} alt="" /> */}
+            <img src={arrowRight} alt="" />
           </a>
         </div>
       </div>

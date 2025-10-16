@@ -8,9 +8,9 @@ export const MenuCategories = () => {
   if(isCategoryLoading) return <Loader title="Категории"/>
 
   return (
-    <Accordion type="multiple">
+    <Accordion type="multiple" key="tags">
       {categories.map((category) => (
-      <AccordionItem value={category.id} className="px-5 border-1 border-t-0">
+      <AccordionItem value={category.id} className="px-5 border-1 border-t-0" key={category.id}>
         <AccordionTrigger>{category.name}</AccordionTrigger>
         <AccordionContent>
           <CategoryCheckboxes category={category}/>

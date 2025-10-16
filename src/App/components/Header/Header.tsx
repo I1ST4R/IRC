@@ -72,7 +72,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed w-full bg-white/75 z-50 transition-transform duration-500 ease-in-out ${
+      className={`w-full bg-white/75 z-50 transition-transform duration-500 ease-in-out ${
         isHeaderVisible ? "scale-y-100" : "scale-y-0"
       }`}
       ref={headerRef}

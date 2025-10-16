@@ -20,12 +20,13 @@ import { useState } from "react";
 export const Menu = () => {
   const dispatch = useAppDispatch();
   const [priceRangeMin, setPriceRangeMin] = useState(PRICE_RANGE_MIN)
+  console.log(1)
 
   return (
     <div className="w-[300px] min-w-[300px]">
-      <Accordion type="single" collapsible>
+      <Accordion type="single" collapsible key="price">
         <AccordionItem value="0" className="px-5 border-1">
-          <AccordionTrigger>Цена {priceRangeMin}</AccordionTrigger>
+          <AccordionTrigger className="text-[14px]">Цена {priceRangeMin}</AccordionTrigger>
           <AccordionContent>
             <div className="flex justify-between">
               <p>{PRICE_RANGE_MIN}</p>
