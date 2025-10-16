@@ -10,9 +10,9 @@ export const Cart: React.FC = () => {
         <BreadCrumb/>
         <h2 className="cart__title">Корзина</h2>
       </div>
-      <div>
+      <div className="grid grid-cols-[auto_300px] gap-[50px]">
         <CartBody />
-        {/* <OrderMenu /> */}
+        <OrderMenu />
       </div>
     </div>
   );

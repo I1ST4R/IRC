@@ -46,15 +46,15 @@ export const CartBody = () => {
   if (cart.itemsCount === 0)
     return <EmptyList title="Корзина" message="Ваша корзина пуста" />;
   return (
-    <div>
-      <div className="flex justify-between items-center text-xs mx-0 mb-5 ml-5 tracking-wide">
+    <div className="mb-10">
+      <div className="flex justify-between mx-0 mb-5 ml-5 ">
         <p className="font-manrope text-[14px]" >
           В корзине <span className="text-[var(--coral)] font-bold">{cart.itemsCount}</span>
         </p>
         {cartItemsArray.length > 0 && (
           <Button
             onClick={() => clearCart({ userId: user?.id ?? "" })}
-            className="p-0 bg-transparent cursor-pointer w-5 h-5"
+            className="p-0 bg-transparent cursor-pointer w-5 h-5 mr-1"
             variant="squareRemove"
           >
             <img src={garbage} className="w-5 h-5" alt="cart-garbage-icon" />
@@ -62,7 +62,7 @@ export const CartBody = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-[auto_300px] gap-[50px]">
+      <div>
         <CartList
           cartAndLiked={{
             cartItems: cartItemsArray,
