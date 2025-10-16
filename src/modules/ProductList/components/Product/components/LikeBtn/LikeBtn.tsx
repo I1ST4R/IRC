@@ -4,16 +4,18 @@ import { useLiked } from "./useLiked";
 export type LikeBtnProps = {
   userId: string,
   productId: string,
-  isLiked: boolean
+  isLiked: boolean,
+  styles?: string
 }
 
-export const LikeBtn = ({userId, productId, isLiked}: LikeBtnProps) => {
+export const LikeBtn = ({userId, productId, isLiked, styles}: LikeBtnProps) => {
   const likeClick = useLiked({userId, productId, isLiked})
   return (
     <button
       type="button"
       className={cn(
         "absolute top-5 left-5 bg-none border-none cursor-pointer p-0 flex items-center justify-center",
+        styles,
         isLiked && "[&_svg]:fill-[#CA354F] [&_svg]:stroke-[#CA354F]"
       )}
       onClick={likeClick}

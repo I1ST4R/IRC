@@ -5,7 +5,7 @@ import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 
 export const Cart: React.FC = () => {
   return (
-    <div className="cart container">
+    <div className="cart container m-auto">
       <div className="cart__header">
         <BreadCrumb/>
         <h2 className="cart__title">Корзина</h2>

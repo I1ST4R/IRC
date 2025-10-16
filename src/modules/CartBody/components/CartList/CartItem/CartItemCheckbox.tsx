@@ -8,10 +8,9 @@ export const CartItemCheckbox = ({cartItem, userId}: CartItemAndUserIdProps) => 
   const handleChangeCheckCart = () => {
     changeCheckCartItem({ userId: userId, productId: cartItem.product.id });
   };
-  
   return (
     <div className="mr-4 z-1">
-      <Checkbox onChange={handleChangeCheckCart} checked={cartItem.isChecked} />
+      <Checkbox checked={cartItem.isChecked} onClick={handleChangeCheckCart}  />
     </div>
   );
 };
