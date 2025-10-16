@@ -18,7 +18,7 @@ export const CartBtn = ({ userId, productId, isInCart}: CartBtnProps) => {
         "px-2.5 py-[10px] h-9 text-xs font-bold uppercase transition-all duration-200 font-manrope absolute bottom-0 w-full",
         isInCart
           ? "bg-[var(--coral)] text-white hover:bg-coralDark"
-          : "bg-gray-500 text-black hover:bg-coral hover:text-white"
+          : "bg-gray-300 text-black hover:bg-coral hover:text-white"
       )}
       onClick={cartClick}
     >
