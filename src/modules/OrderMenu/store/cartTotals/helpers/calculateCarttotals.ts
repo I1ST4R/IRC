@@ -37,7 +37,11 @@ export const calculateCartTotals = (
     cartTotals.totalWithDiscount -= cartTotals.promoDiscount;
   }
 
-  if (certificateDiscount > 0) cartTotals.totalWithDiscount -= certificateDiscount;
+  if (certificateDiscount > 0){
+    cartTotals.certificateDiscount = certificateDiscount
+    cartTotals.totalWithDiscount -= certificateDiscount;
+  }
+   
 
   return cartTotals;
 }

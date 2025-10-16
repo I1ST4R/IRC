@@ -4,6 +4,7 @@ import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { Alert, AlertTitle } from "@/shared/ui/kit/alert";
 import {
+  changeCartTotals,
   getCertificate,
   removeCertificate,
   selectCertificate,
@@ -40,6 +41,7 @@ export const OrderMenuCertificate = () => {
           onClick={() => {
             dispatch(removeCertificate())
             setCertTouched(false)
+            dispatch(changeCartTotals({}))
           }}
           >
             <svg

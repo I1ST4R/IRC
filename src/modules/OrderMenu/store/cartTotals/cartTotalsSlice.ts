@@ -152,10 +152,10 @@ export const cartTotalsSlice = createSlice({
       );
 
       state.item.total = cartTotals.total;
-      state.item.totalWithDiscount = cartTotals.totalWithDiscount;
       state.item.discount = cartTotals.discount;
       state.item.promo.discount = cartTotals.promoDiscount;
       state.item.certificate.discount = cartTotals.certificateDiscount;
+      state.item.totalWithDiscount = cartTotals.totalWithDiscount;
     },
     changeDeliveryMethod(state, action: PayloadAction<DeliveryMethodName>) {
       const deliveryMethod = DELIVERY_METHODS.find((el) => {

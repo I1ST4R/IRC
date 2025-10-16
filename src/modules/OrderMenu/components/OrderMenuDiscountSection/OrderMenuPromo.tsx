@@ -5,6 +5,7 @@ import { Input } from "@/shared/ui/kit/input";
 import { cn } from "@/shared/lib/css";
 import { useSelector } from "react-redux";
 import {
+  changeCartTotals,
   getPromocode,
   removePromo,
   selectPromocode,
@@ -40,6 +41,7 @@ export const OrderMenuPromo = () => {
           className="bg-transparent w-5 block h-10 p-0 m-0 hover:bg-transparent cursor-pointer"
           onClick={() => {
             dispatch(removePromo())
+            dispatch(changeCartTotals({}))
             setPromoTouched(false)
           }}
           >
