@@ -26,13 +26,7 @@ export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
   async (_, { dispatch }) => {
     const promo = await getPromoApi();
-    dispatch(changeCartTotals({ promo: {
-      ...promo,
-      valid: !promo.used,
-      discount: 0,
-      persent: promo.discount
-    } }));
-    return promo
+    dispatch(changeCartTotals({promo: promo}))
   }
 );
 

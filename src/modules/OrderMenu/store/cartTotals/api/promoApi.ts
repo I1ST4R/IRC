@@ -20,7 +20,13 @@ export const getPromo = async () => {
     localStorage.removeItem("promoId")
     return INITIAL_PROMO
   }
-  return response.data[0]
+  return {
+    id: response.data[0].id,
+    valid: !response.data[0].used,
+    code: response.data[0].code,
+    discount: 0,
+    percent: response.data[0].discount,
+  } 
 }
 
 export const validatePromo = async (code: string) => {
@@ -31,15 +37,14 @@ export const validatePromo = async (code: string) => {
     let promo = INITIAL_PROMO
     if (response.data && response.data.length > 0 && !response.data[0].used) {
       promo = {
-        ...response.data[0],
+        id: response.data[0].id,
+        valid: true,
+        code: response.data[0].code,
         discount: 0,
         percent: response.data[0].discount,
-        valid: true
-      }
-      Object.assign(promo, response.data[0], { valid: true })
+      } 
 
       localStorage.setItem("promoId", promo.id ?? "")
-      return promo
     }
     return promo;
   } catch (error: any) {

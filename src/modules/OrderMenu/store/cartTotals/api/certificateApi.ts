@@ -14,26 +14,35 @@ const axiosInstance = axios.create(API_CLIENT);
 export const getCertificate = async () => {
   const certificateId = localStorage.getItem("certificateId")
   if(!certificateId) return INITIAL_CERTIFICATE
-  const response = await axiosInstance.get<Certificate[]>(`/certificates?id=${certificateId}`)
+  const response = await axiosInstance.get(`/certificates?id=${certificateId}`)
 
   if(response.data.length === 0) {
     localStorage.removeItem("certificateId")
     return INITIAL_CERTIFICATE
   }
-
-  return response.data[0]
+  
+  return {
+    id: response.data[0].id,
+    valid: !response.data[0].used,
+    code: response.data[0].code,
+    discount: response.data[0].discount
+  } 
 }
 
 export const validateCertificate = async (code: string) => {
   try {
     const upperCode = code.toUpperCase();
     const response = await axiosInstance.get(`/certificates?code=${upperCode}`);
-    const certificate = INITIAL_CERTIFICATE
+    let certificate = INITIAL_CERTIFICATE
     if (response.data && response.data.length > 0 && !response.data[0].used) {
-      Object.assign(certificate, response.data[0], {valid: true})
+      certificate = {
+        id: response.data[0].id,
+        valid: true,
+        code: response.data[0].code,
+        discount: response.data[0].discount
+      } as Certificate
 
       localStorage.setItem("certificateId", certificate.id ?? "")
-      return certificate;
     }
     return certificate;
   } catch (error: any) {
