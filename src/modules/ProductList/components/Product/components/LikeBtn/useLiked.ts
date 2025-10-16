@@ -4,9 +4,9 @@ import {
 } from "@/modules/LikedBody";
 import { openAccount} from "@/modules/AuthForm";
 import { useAppDispatch } from "@/App/store";
-import { ProductBtnProps } from "./LikeBtn";
+import { LikeBtnProps } from "./LikeBtn";
 
-export const useLiked = ({userId, productId, isLiked} : ProductBtnProps) => {
+export const useLiked = ({userId, productId, isLiked} : LikeBtnProps) => {
   const [removeFromLiked] = useRemoveFromLikedMutation();
   const [addToLiked] = useAddToLikedMutation();
   const dispatch = useAppDispatch()

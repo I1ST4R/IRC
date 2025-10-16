@@ -3,9 +3,10 @@ import { lazy, Suspense } from 'react';
 import App from './App';
 import React from "react"
 import { Loader } from '@/shared/ui/components/Loader';
+import Catalog from '../pages/Catalog';
 
 const Home = lazy(() => import('../pages/Home/Home'));
-const Catalog = lazy(() => import('../pages/Catalog'));
+// const Catalog = lazy(() => import('../pages/Catalog'));
 const Cart = lazy(() => import('../pages/Cart'));
 const Liked = lazy(() => import('../pages/Liked'));
 const ProductAbout = lazy(() => import('../pages/ProductAbout'));
@@ -27,11 +28,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: withSuspense(Home, "Главная страница"),
+        element: <Home/>,
       },
       {
         path: 'catalog',
-        element: withSuspense(Catalog, "Каталог"),
+        element: <Catalog/>,
       },
       {
         path: 'catalog/product/:id',

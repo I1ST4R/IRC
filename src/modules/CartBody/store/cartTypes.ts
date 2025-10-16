@@ -7,8 +7,14 @@ type CartItemBase<T> = {
 
 export type CartItemDb = CartItemBase<{ productId: string }>;
 export type CartItem = CartItemBase<{ product: Product }>;
+export type CartItems = Record<string, CartItem>
 
 export type Cart = {
   items:CartItem[]
+  itemsCount: number
+}
+
+export type CartWithRecord = {
+  items:CartItems
   itemsCount: number
 }

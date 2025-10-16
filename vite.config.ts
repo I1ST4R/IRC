@@ -15,6 +15,11 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    watch: {
+      ignored: [
+        '**/db.json', // игнорировать изменения БД json-server, чтобы не триггерить full reload
+      ],
+    },
   },
   build: {
     outDir: resolve(__dirname, 'dist'), // абсолютный путь к dist

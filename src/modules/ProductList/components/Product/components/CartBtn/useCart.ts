@@ -1,30 +1,20 @@
-import { initialCart, useAddToCartMutation, useGetCartQuery } from "@/modules/CartBody";
+import { useAddToCartMutation } from "@/modules/CartBody";
 import { useNavigate } from "react-router-dom";
-import { UserIdProductIdType } from "./CartBtn";
 import { openAccount } from "@/modules/AuthForm";
 import { useAppDispatch } from "@/App/store";
+import { CartBtnProps } from "./CartBtn";
 
-export const useCart = ({userId, productId} : UserIdProductIdType) => {
-  const {
-    data: cart = initialCart,
-    isLoading: isCartLoading,
-  } = useGetCartQuery(userId, { skip: !userId });
+export const useCart = ({userId, productId, isInCart} : CartBtnProps) => {
   const [addToCart] = useAddToCartMutation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
 
-  const cartClick = async () => {
+  return () => {
     if (!userId) {
       dispatch(openAccount())
       return;
     }
-    if (isInCart()) navigate("/cart") 
+    if (isInCart) navigate("/cart") 
     else addToCart({ userId: userId, productId: productId })
   }
-
-  const isInCart = () => {
-    if (isCartLoading) return false
-    return cart.items.some((item) => item.product.id === productId)
-  };
-  return {isInCart, cartClick}
 }

@@ -1,14 +1,14 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
-import { Cart, CartItem, CartItemDb } from "./cartTypes";
+import { Cart, CartItem, CartItemDb, CartItems, CartWithRecord } from "./cartTypes";
 import { getProductById } from "@/modules/ProductList";
 import { getItemsCount } from "./getItemsCount";
 
 
 const axiosInstance = axios.create(API_CLIENT);
 
-export const initialCart : Cart = {
-  items: [],
+export const initialCart : CartWithRecord = {
+  items: {},
   itemsCount: 0
 } 
 
@@ -21,18 +21,23 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
     const user = response.data[0];
     if (!user.cart) return initialCart
     const cartItems = await loadCartProducts(user.cart)
-    cartItems[0]
-    const cartItemsWithCount = {
-      items: cartItems,
-      itemsCount: 3
-    } as Cart
+
+    const cartItemsWithCount : CartWithRecord = {
+      items: createIdToCartItem(cartItems),
+      itemsCount: cartItems.reduce((acc, el) => {
+        acc += el.quantity
+        return acc
+      }, 0)
+    } 
 
     if(isOnlyCheckedItems){
+      const checkedCartItems = cartItems.filter((el) => el.isChecked)
       return{
         ...cartItemsWithCount,
-        items: cartItemsWithCount.items.filter((el) => el.isChecked === true),
-      } as Cart
+        items: createIdToCartItem(checkedCartItems),
+      } as CartWithRecord
     }
+
     return cartItemsWithCount
 
   } catch (error: any) {
@@ -40,6 +45,13 @@ export const getCart = async (userId: string, isOnlyCheckedItems: boolean = fals
     throw error;
   }
 };
+
+const createIdToCartItem = (cartItems : CartItem[]) => {
+  return cartItems.reduce((acc : CartItems, el) => {
+    acc[el.product.id] = el
+    return acc
+  }, {})
+}
 
 export const loadCartProducts = async (cartItems: CartItemDb[]) => {
   try {

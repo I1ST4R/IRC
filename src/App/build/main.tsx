@@ -10,7 +10,7 @@ const initApp = async () => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <Provider store={store}>
-        <RouterProvider router={router} /> {/* Используйте RouterProvider */}
+        <RouterProvider router={router} /> 
       </Provider>
     </React.StrictMode>,
   );

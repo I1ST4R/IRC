@@ -41,6 +41,16 @@
           "productId": "7",
           "quantity": 1,
           "isChecked": true
+        },
+        {
+          "productId": "8",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "9",
+          "quantity": 1,
+          "isChecked": true
         }
       ],
       "liked": [
@@ -49,6 +59,12 @@
         },
         {
           "productId": "8"
+        },
+        {
+          "productId": "4"
+        },
+        {
+          "productId": "5"
         },
         {
           "productId": "3"

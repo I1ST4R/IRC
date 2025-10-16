@@ -7,6 +7,7 @@ import { FilterParams } from "@/modules/Menu";
 const axiosInstance = axios.create(API_CLIENT);
 
 export const getProducts = async (page: number, filter?: FilterParams) => {
+  console.log("getProducts")
   try {
     const response = await axiosInstance.get('/products');
     let filteredProducts = response.data;

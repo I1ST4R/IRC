@@ -18,11 +18,7 @@ export const getLiked = async (userId: string) => {
       return {};
     }
     const products = await loadProducts(user.liked);
-    const idToProduct = products.reduce((acc : Record<string, Product>, el) => {
-      acc[el.id] = el
-      return acc
-    }, {})
-    return idToProduct;
+    return createIdToProduct(products)
   } catch (error: any) {
     console.error("error in getLiked", error);
     throw error;
@@ -36,6 +32,13 @@ const loadProducts = async (liked: LikedItemDb[]) => {
   );
   return products;
 };
+
+const createIdToProduct = (products : ProductT[]) => {
+  return products.reduce((acc : Record<string, Product>, el) => {
+    acc[el.id] = el
+    return acc
+  }, {})
+}
 
 export const addToLiked = async (userId: string, productId: string) => {
   try {
@@ -54,7 +57,7 @@ export const addToLiked = async (userId: string, productId: string) => {
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, {
       liked,
     });
-    return updateResponse.data.liked as ProductT[];
+    return updateResponse.data.liked;
   } catch (error: any) {
     console.error("error in addToLiked", error);
     throw error;

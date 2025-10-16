@@ -7,21 +7,21 @@ import {
   changeCheckCartItem,
   clearCart
 } from './cartApi';
-import { Cart} from './cartTypes';
+import { Cart, CartWithRecord} from './cartTypes';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   tagTypes: ['Cart'],
   endpoints: (build) => ({
-    getCart: build.query<Cart, string>({
+    getCart: build.query<CartWithRecord, string>({
       queryFn: (userId) =>
         getCart(userId)
           .then((data) => ({ data }))
           .catch((error) => ({ error })),
       providesTags: ['Cart'],
     }),
-    getCheckedCartItems: build.query<Cart, string>({
+    getCheckedCartItems: build.query<CartWithRecord, string>({
       queryFn: (userId) =>
         getCart(userId, true)
           .then((data) => ({ data }))
@@ -56,7 +56,7 @@ export const cartApi = createApi({
           .catch((error) => ({ error })),
       invalidatesTags: ['Cart'],
     }),
-    clearCart: build.mutation<Cart, { userId: string }>({
+    clearCart: build.mutation<CartWithRecord, { userId: string }>({
       queryFn: ({ userId }) =>
         clearCart(userId)
           .then((data) => ({ data }))

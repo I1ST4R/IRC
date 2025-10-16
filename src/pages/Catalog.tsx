@@ -8,7 +8,7 @@ const Catalog = () => {
   return (
     <div className="container m-auto ">
       <BreadCrumb/>
-      <div className="flex">
+      <div className="flex justify-between">
         <Menu />
         <ProductList/>
       </div>

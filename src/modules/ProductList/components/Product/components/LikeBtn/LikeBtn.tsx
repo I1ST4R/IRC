@@ -1,20 +1,20 @@
 import { cn } from "@/shared/lib/css";
 import { useLiked } from "./useLiked";
 
-export type ProductBtnProps = {
+export type LikeBtnProps = {
   userId: string,
   productId: string,
   isLiked: boolean
 }
 
-export const LikeBtn = (props: ProductBtnProps) => {
-  const likeClick = useLiked(props);
-
+export const LikeBtn = ({userId, productId, isLiked}: LikeBtnProps) => {
+  const likeClick = useLiked({userId, productId, isLiked})
   return (
     <button
+      type="button"
       className={cn(
         "absolute top-5 left-5 bg-none border-none cursor-pointer p-0 flex items-center justify-center",
-        props.isLiked && "[&_svg]:fill-[#CA354F] [&_svg]:stroke-[#CA354F]"
+        isLiked && "[&_svg]:fill-[#CA354F] [&_svg]:stroke-[#CA354F]"
       )}
       onClick={likeClick}
     >
