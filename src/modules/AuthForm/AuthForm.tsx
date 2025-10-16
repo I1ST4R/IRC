@@ -39,7 +39,8 @@ export const AuthForm = () => {
         сменить тип
       </Button>
 
-      { isLogin ? ( <LoginForm/>) : ( <RegisterForm/>) }
+      {/* { isLogin ? ( <LoginForm/>) : ( <RegisterForm/>) } */}
+      <LoginForm/>
     </div>
   );
 };

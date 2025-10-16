@@ -1,8 +1,7 @@
-import { Form } from "react-hook-form";
 import { useLoginMutation } from "@/shared/store/user/userApiSlice";
 import { ControllerRenderProps } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
 import { useForm } from "react-hook-form";
@@ -15,9 +14,11 @@ export const LoginForm = () => {
 
   const loginSchema = z.object({
     login: z.string().min(6, 'Логин должен содержать минимум 6 символов'),
-    password: z.string().min(8, 'Пароль должен содержать минимум 8 символов')
+    password: z.string().min(6, 'Пароль должен содержать минимум 8 символов')
   })
   
+  
+
   type LoginFormData = z.infer<typeof loginSchema>;
   
   const loginForm = useForm<LoginFormData>({
