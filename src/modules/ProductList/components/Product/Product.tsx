@@ -13,7 +13,6 @@ type ProductProps = {
 }
 
 export const Product = ({ product, userId, likedItems, cartItems}: ProductProps) => {
-  console.log(product)
   const isLiked = likedItems[product.id]?.id === product.id
   const isInCart = cartItems[product.id]?.product.id === product.id
   return (

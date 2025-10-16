@@ -7,10 +7,12 @@ import { LikedList } from "./LikedList";
 import { openAccount } from "../AuthForm";
 import { useAppDispatch } from "@/App/store";
 import { useMemo } from "react";
+import { initialCart, useGetCartQuery } from "../CartBody";
 
 export const LikedBody = () => {
   const { data: user } = useGetUserQuery();
   const { data: likedItems = {}, isLoading, error } = useGetLikedQuery(user?.id ?? "", { skip: !user?.id });
+  const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", { skip: !user?.id })
   const dispatch = useAppDispatch()
 
   const likedItemsArray = useMemo(() => {
@@ -39,7 +41,12 @@ export const LikedBody = () => {
           В избранном <span className="font-semibold">{likedItemsArray.length}</span>
         </span>
       </div>
-      <LikedList likedItemsRecord={likedItems} likedItems={likedItemsArray}/>
+      <LikedList 
+        likedItemsRecord={likedItems} 
+        likedItems={likedItemsArray} 
+        cartItems={cart.items}
+        userId={user.id}
+      />
     </div>
   );
 };
