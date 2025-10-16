@@ -59,7 +59,7 @@ export const OrderMenu = () => {
       />
       <OrderMenuTotals cartTotals={cartTotals} />
       <OrderMenuDiscountSection />
-      <Button onClick={handleCheckout} className="mb-5">Оформить заказ</Button>
+      <Button onClick={handleCheckout} className="mb-5 cursor-pointer">Оформить заказ</Button>
     </div>
   );
 };

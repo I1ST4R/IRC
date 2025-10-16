@@ -19,7 +19,7 @@ export const AuthForm = () => {
   };
 
   if (isAccountOpen) return (
-    <div className="relative">
+    <div className="absolute top-100 left-100">
       {/* Крестик для закрытия */}
       <Button
         type="button"

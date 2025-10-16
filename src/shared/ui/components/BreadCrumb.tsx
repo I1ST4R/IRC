@@ -51,7 +51,7 @@ export const BreadCrumb = () => {
     <Breadcrumb className="p-5">
       <BreadcrumbList>
         {breadcrumbs.map((item, index) => (
-          <div key={`${item.path}-block`}>
+          <div key={`${item.path}-block`} className="flex items-center">
             <BreadcrumbItem key={`${item.path}-item`}>
               <BreadcrumbLink asChild>
                 <Link
