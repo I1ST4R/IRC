@@ -1,5 +1,4 @@
 import { openAccount, } from "@/modules/AuthForm";
-import "./_order.scss";
 import { OrderForm } from "@/modules/OrderForm";
 import { OrderMenu } from "@/modules/OrderMenu";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
@@ -17,7 +16,7 @@ export const Order = () => {
   return (
     <div className="order container">
       <BreadCrumb/>
-      <OrderForm/>
+      {/* <OrderForm/> */}
       <OrderMenu/>
     </div>
   );

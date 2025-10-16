@@ -21,7 +21,7 @@ export const OrderMenu = () => {
     { skip: !user?.id }
   );
   const cartTotals = useSelector(selectCartTotals);
-  const isOrderPage = location.pathname === "/order";
+  const isOrderPage = location.pathname === "/cart/order";
   const dispatch = useAppDispatch()
 
   const cartItemsArray = useMemo(()=> {

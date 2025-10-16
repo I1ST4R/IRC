@@ -7,6 +7,7 @@ type OrderMenuProps = {
 }
 
 export const OrderMenuList = (props: OrderMenuProps) => {
+  console.log(props.isOrderPage)
   if(!props.isOrderPage || props.checkedCartItems.length === 0) return <></>
 
   return (
