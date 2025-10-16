@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { RegisterData } from "@/shared/store/user/userTypes";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/kit/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
@@ -39,13 +38,10 @@ export const RegisterForm = () => {
   const [register] = useRegisterMutation()
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="text-2xl text-center">Регистрация</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="w-full max-w-md">
+      <div>
         <Form {...registerForm}>
-          <form onSubmit={handleSubmit((data) => register({...data, type: "client"}))} className="space-y-4">
+          <form onSubmit={handleSubmit((data) => register({...data, type: "client"}))} className="space-y-6">
             
             {/* Поле логина */}
             <FormField
@@ -57,6 +53,8 @@ export const RegisterForm = () => {
                   <FormControl>
                     <Input
                       placeholder="Введите ваш логин"
+                      style={{marginTop: "10px"}}
+                      className="border-1 rounded-[2px] bg-transparent py-3 px-2.5 w-full normal-case tracking-normal"
                       {...field}
                     />
                   </FormControl>
@@ -64,7 +62,7 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-
+  
             {/* Поле пароля */}
             <FormField
               control={control}
@@ -76,6 +74,8 @@ export const RegisterForm = () => {
                     <Input
                       type="password"
                       placeholder="Введите ваш пароль"
+                      style={{marginTop: "10px"}}
+                      className="border-1 rounded-[2px] bg-transparent py-3 px-2.5 w-full normal-case tracking-normal"
                       {...field}
                     />
                   </FormControl>
@@ -83,7 +83,7 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-
+  
             {/* Поле почты */}
             <FormField
               control={control}
@@ -95,6 +95,8 @@ export const RegisterForm = () => {
                     <Input
                       type="email"
                       placeholder="Введите вашу почту"
+                      style={{marginTop: "10px"}}
+                      className="border-1 rounded-[2px] bg-transparent py-3 px-2.5 w-full normal-case tracking-normal"
                       {...field}
                     />
                   </FormControl>
@@ -102,16 +104,16 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-
+  
             <Button
               type="submit"
-              className="w-full"
+              className="w-full rounded-[2px] h-11 text-[14px] font-semibold"
             >
               Зарегистрироваться
             </Button>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

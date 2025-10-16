@@ -90,26 +90,6 @@
       "orders": [
         "b0dd"
       ]
-    },
-    {
-      "id": "b209",
-      "login": "test-rega",
-      "password": "test-rega",
-      "email": "test-rega@mail.ru",
-      "type": "client",
-      "cart": [],
-      "liked": [],
-      "orders": []
-    },
-    {
-      "id": "84b9",
-      "login": "testRega",
-      "password": "testRega",
-      "email": "testRega@mail.ru",
-      "type": "client",
-      "liked": [],
-      "cart": [],
-      "orders": []
     }
   ],
   "products": [
