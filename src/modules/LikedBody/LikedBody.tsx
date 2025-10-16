@@ -34,7 +34,7 @@ export const LikedBody = () => {
     return <EmptyList title="Избранное" message="Ваш список избранного пуст"/>;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className=" px-5 pb-8">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Избранное</h2>
         <span className="text-gray-600">

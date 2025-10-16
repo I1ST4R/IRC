@@ -3,7 +3,7 @@ import { BreadCrumb } from "@/shared/ui/components/BreadCrumb";
 
  const Liked = () => { 
   return(
-    <div>
+    <div className="container m-auto">
       <BreadCrumb/>
       <LikedBody/>
     </div>
