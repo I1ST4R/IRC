@@ -12,7 +12,7 @@ export const Cart: React.FC = () => {
       </div>
       <div>
         <CartBody />
-        <OrderMenu />
+        {/* <OrderMenu /> */}
       </div>
     </div>
   );
