@@ -51,7 +51,7 @@ export const OrderMenu = () => {
   if (!user?.id || !cartItemsArray || cartItemsArray.length === 0) return null;
 
   return (
-    <div className="bg-[#F2F2F2] w-73">
+    <div className="bg-[#F2F2F2] w-73 mb-8">
       <p className=" border-b border-gray-200 uppercase font-manrope text-xs font-semibold p-5">Ваш заказ</p>
       <OrderMenuList
         isOrderPage={isOrderPage}
@@ -59,7 +59,7 @@ export const OrderMenu = () => {
       />
       <OrderMenuTotals cartTotals={cartTotals} />
       <OrderMenuDiscountSection />
-      <Button onClick={handleCheckout}>Оформить заказ</Button>
+      <Button onClick={handleCheckout} className="mb-5">Оформить заказ</Button>
     </div>
   );
 };

@@ -50,6 +50,7 @@ export const validateCertificate = createAsyncThunk(
   "cartTotals/validateCertificate",
   async (code: string, { dispatch }) => {
     const certificate = await validateCertificateApi(code);
+    console.log(certificate)
     dispatch(changeCartTotals({ certificate: certificate }));
   }
 );
@@ -165,13 +166,23 @@ export const cartTotalsSlice = createSlice({
         state.item.totalWithDiscount += deliveryMethod.cost;
       }
     },
+    removePromo(state) {
+      state.item.promo = INITIAL_PROMO
+      localStorage.removeItem("promoId")
+    },
+    removeCertificate(state) {
+      state.item.certificate = INITIAL_CERTIFICATE
+      localStorage.removeItem("certificateId")
+    }
   },
 })
 
 
 export const { 
   changeCartTotals, 
-  changeDeliveryMethod 
+  changeDeliveryMethod,
+  removeCertificate,
+  removePromo
 } = cartTotalsSlice.actions;
 export const { 
   selectCartTotals,

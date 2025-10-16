@@ -3,7 +3,7 @@ import { OrderMenuPromo } from "./OrderMenuPromo"
 
 export const OrderMenuDiscountSection = () => {
   return (
-    <div className="order-menu__item">
+    <div className="pt-5 w-60 m-auto">
       <OrderMenuPromo/>
       <OrderMenuCertificate/>
     </div>

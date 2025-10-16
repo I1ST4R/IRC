@@ -971,13 +971,13 @@
     {
       "id": "1",
       "used": true,
-      "code": "SERTIFICATE1000",
+      "code": "CERTIFICATE1000",
       "discount": 1000
     },
     {
       "id": "2",
       "used": false,
-      "code": "SERTIFICATE2000",
+      "code": "CERTIFICATE2000",
       "discount": 2000
     }
   ],
