@@ -11,6 +11,16 @@
           "productId": "3",
           "quantity": 5,
           "isChecked": true
+        },
+        {
+          "productId": "1",
+          "quantity": 1,
+          "isChecked": true
+        },
+        {
+          "productId": "2",
+          "quantity": 1,
+          "isChecked": true
         }
       ],
       "liked": [
