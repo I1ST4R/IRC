@@ -8,7 +8,6 @@ export const Cart: React.FC = () => {
     <div className="cart container m-auto">
       <div className="cart__header">
         <BreadCrumb/>
-        <h2 className="cart__title">Корзина</h2>
       </div>
       <div className="grid grid-cols-[auto_300px] gap-[50px]">
         <CartBody />

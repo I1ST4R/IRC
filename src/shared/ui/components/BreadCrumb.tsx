@@ -51,15 +51,13 @@ export const BreadCrumb = () => {
     <Breadcrumb className="p-5">
       <BreadcrumbList>
         {breadcrumbs.map((item, index) => (
-          <>
-            <BreadcrumbItem key={item.path}>
+          <div key={`${item.path}-block`}>
+            <BreadcrumbItem key={`${item.path}-item`}>
               <BreadcrumbLink asChild>
                 <Link
                   to={item.path}
                   className={
-                    index === breadcrumbs.length - 1
-                      ? "font-semibold"
-                      : ""
+                    index === breadcrumbs.length - 1 ? "font-semibold" : ""
                   }
                 >
                   {item.name}
@@ -67,9 +65,9 @@ export const BreadCrumb = () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
             {index < breadcrumbs.length - 1 && (
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator key={`${item.path}-separator`} />
             )}
-          </>
+          </div>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

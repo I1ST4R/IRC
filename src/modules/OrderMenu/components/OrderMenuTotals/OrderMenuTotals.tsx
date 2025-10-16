@@ -8,7 +8,7 @@ export const OrderMenuTotals = ({cartTotals}: {cartTotals: CartTotals}) => {
     <div className="p-5 border-b border-gray-200">
       {items.map((el) => {
         if (el.value === null) return <></>;
-        return <OrderMenuTotalsPoint name={el.name} value={el.value} />;
+        return <OrderMenuTotalsPoint key={el.name} name={el.name} value={el.value} />;
       })}
     </div>
   );
