@@ -10,7 +10,7 @@ export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
     label: "Доставка",
     options: DELIVERY_METHOD_NAMES,
     actions: {
-      onBlur: (value) => { 
+      onChange: (value) => { 
         dispatch(changeDeliveryMethod(value as DeliveryMethodName))
       }
     }, 

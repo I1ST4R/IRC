@@ -1,21 +1,30 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/kit/form";
 import { OtherFieldsType } from "../config/fieldConfigTypes";
 import { Calendar } from "@/shared/ui/kit/calendar";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/shared/ui/kit/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/kit/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/shared/ui/kit/popover";
 import { cn } from "@/shared/lib/css";
 import { Control } from "react-hook-form";
 import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
-import { format } from "date-fns";
 
 export const OrderFormDate = ({
   name,
   label,
   actions,
-  formControl
-}: OtherFieldsType & {formControl: Control<RecipientFormData>}) => {
-  return ( 
+  formControl,
+}: OtherFieldsType & { formControl: Control<RecipientFormData> }) => {
+  return (
     <FormField
       control={formControl}
       name={name}
@@ -28,16 +37,20 @@ export const OrderFormDate = ({
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full pl-3 text-left font-normal bg-[rgb(242,242,242)] hover:bg-[rgb(226,226,226)] h-10 flex items-center cursor-pointer" ,
+                    "w-full pl-3 text-left font-normal bg-[rgb(242,242,242)] hover:bg-[rgb(226,226,226)] h-10 flex items-center cursor-pointer",
                     !field.value && "text-muted-foreground"
                   )}
                   onBlur={() => {
-                    field.onBlur(); 
-                    if(field.value) actions?.onBlur?.(field.value); 
+                    field.onBlur();
+                    if (field.value) actions?.onBlur?.(field.value);
                   }}
                 >
-                  
-                  {field.value ? ( format(new Date(field.value), "PPP")
+                  {field.value ? (
+                    new Date(field.value).toLocaleDateString("ru-RU", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })
                   ) : (
                     <span>Выберите дату</span>
                   )}
@@ -45,11 +58,17 @@ export const OrderFormDate = ({
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0 bg-white min-w-[300px]" align="start">
               <Calendar
                 mode="single"
                 selected={field.value ? new Date(field.value) : undefined}
-                onSelect={(date) => field.onChange(date?.toISOString())}
+                onSelect={(date) => {
+                  if (date) {
+                    const dateString = date.toISOString();
+                    field.onChange(dateString);
+                    actions?.onChange?.(dateString);
+                  }
+                }}
                 disabled={(date) => date <= new Date()}
                 initialFocus
               />

@@ -124,7 +124,7 @@ export const defaultCartTotals: CartTotals = {
   discount: 0,
   promo: INITIAL_PROMO,
   certificate: INITIAL_CERTIFICATE,
-  deliveryCost: 0,
+  deliveryCost: 500,
 };
 
 const initialState: CartTotalsState = {
@@ -159,7 +159,7 @@ export const cartTotalsSlice = createSlice({
     },
     changeDeliveryMethod(state, action: PayloadAction<DeliveryMethodName>) {
       const deliveryMethod = DELIVERY_METHODS.find((el) => {
-        el.name === action.payload;
+        return el.name === action.payload;
       });
       if (deliveryMethod) {
         state.item.deliveryCost = deliveryMethod.cost;
