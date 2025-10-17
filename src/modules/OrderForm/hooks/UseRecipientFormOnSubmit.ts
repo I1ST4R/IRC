@@ -13,7 +13,6 @@ export const UseRecipientFormOnSubmit = (
   return () => {
     form.handleSubmit((validData) => {
       dispatch(changeRecipientInfo(validData))
-      navigate("/payment")
     })()
   };
 }

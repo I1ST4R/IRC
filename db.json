@@ -32,7 +32,10 @@
         "2dd9",
         "ade0",
         "20fb",
-        "ffee"
+        "ffee",
+        "fed3",
+        "2eed",
+        "3565"
       ]
     },
     {
@@ -1328,6 +1331,154 @@
         "address": "",
         "email": "",
         "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "fed3",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 7500,
+        "totalWithDiscount": 6500,
+        "discount": 1000,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "2eed",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          }
+        ],
+        "total": 3500,
+        "totalWithDiscount": 3000,
+        "discount": 500,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "3565",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 7500,
+        "totalWithDiscount": 6500,
+        "discount": 1000,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "Роблокс Порнович",
+        "phone": "79190024147",
+        "address": "ул. Гвалы дом 52 кв 228",
+        "email": "roblox_porno@gmail.com",
+        "deliveryDate": "2025-10-30T21:00:00.000Z",
         "comment": "",
         "paymentPhone": "79190024147"
       }

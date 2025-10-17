@@ -14,6 +14,7 @@ export const defaultRecipient: Recipient = {
 
 const initialState: RecipientState = {
   item: defaultRecipient,
+  formClick: false,
   loading: "idle",
   error: null,
 };
@@ -23,14 +24,18 @@ export const recipientSlice = createSlice({
   initialState,
   selectors:{
     selectRecipient: (state) => state.item,
-    selectPaymentMethod : (state) => state.item.paymentMethod
+    selectPaymentMethod : (state) => state.item.paymentMethod,
+    selectFormClick: (state) => state.formClick
   },
   reducers: {
     changeRecipientInfo(state, action: PayloadAction<Partial<Recipient>>) {
       Object.assign(state.item, action.payload);
+    },
+    setFormClick(state, action: PayloadAction<boolean>) {
+      state.formClick = action.payload
     }
   }
 })
 
-export const { changeRecipientInfo } = recipientSlice.actions;
-export const { selectRecipient, selectPaymentMethod } = recipientSlice.selectors;
+export const { changeRecipientInfo, setFormClick } = recipientSlice.actions;
+export const { selectRecipient, selectPaymentMethod, selectFormClick } = recipientSlice.selectors;

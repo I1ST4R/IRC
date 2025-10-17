@@ -11,6 +11,7 @@ import { changeCartTotals } from "."
 import { Loader } from "@/shared/ui/components/Loader";
 import { useAppDispatch } from "@/App/store";
 import { useEffect, useMemo } from "react";
+import { setFormClick } from "../OrderForm";
 
 export const OrderMenu = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const OrderMenu = () => {
   const cartTotals = useSelector(selectCartTotals);
   const isOrderPage = location.pathname === "/cart/order";
   const dispatch = useAppDispatch()
+
 
   const cartItemsArray = useMemo(()=> {
     return Object.values(cart.items)
@@ -45,6 +47,7 @@ export const OrderMenu = () => {
       navigate("order");
       return;
     }
+    dispatch(setFormClick(true))
     navigate("payment")
   };
 
