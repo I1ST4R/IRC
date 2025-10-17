@@ -1,4 +1,12 @@
 import React from 'react';
+import logo from './logo.svg'
+import phone from '../../../pages/Home/_general/img/phone.svg'
+import watsapp from '../../../pages/Home/_general/img/whatsapp.svg'
+import mail from './mail.svg'
+import clock from './clock.svg'
+import vk from '../../../pages/Home/_general/img/vk.svg'
+import youtube from '../../../pages/Home/_general/img/youtube.svg'
+import instagram from '../../../pages/Home/_general/img/instagram.svg'
 
 const Footer: React.FC = () => {
   return (
@@ -6,7 +14,7 @@ const Footer: React.FC = () => {
       <div className="grid grid-cols-4 px-5">
         
         <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
-          <img src={'./logo.svg'} alt="" className="mb-14" />
+          <img src={logo} alt="" className="mb-14" />
           <a href="#" className="flex gap-2 items-center">Соглашение с политикой конфиденциальности</a>
           <a href="#" className="flex gap-2 items-center">Пользовательское соглашение</a>
           <a href="#" className="flex gap-2 items-center">Карта сайта</a>
@@ -32,30 +40,30 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
           <a href="#" className="flex gap-2 items-center">
-            <img src={'../../../pages/Home/_general/img/phone.svg'} alt="" />
+            <img src={phone} alt="" />
             +7 (495) 646 66 26
           </a>
           <a href="#" className="flex gap-2 items-center">
-            <img src={'../../../pages/Home/_general/img/whatsapp.svg'} alt="" />
+            <img src={watsapp} alt="" />
             +7 (926) 513 55 91
           </a>
           <a href="#" className="flex gap-2 items-center">
-            <img src={'./mail.svg'} alt="" />
+            <img src={mail} alt="" />
             info@irc247.ru
           </a>
           <a href="#" className="flex gap-2 items-center">
-            <img src={'./clock.svg'} alt="" />
+            <img src={clock} alt="" />
             с 10:00 до 19:00
           </a>
           <div className="flex gap-5">
             <a href="#" className="flex gap-2 items-center">
-              <img src={'../../../pages/Home/_general/img/vk.svg'} alt="" />
+              <img src={vk} alt="" />
             </a>
             <a href="#" className="flex gap-2 items-center">
-              <img src={'../../../pages/Home/_general/img/youtube.svg'} alt="" />
+              <img src={youtube} alt="" />
             </a>
             <a href="#" className="flex gap-2 items-center">
-              <img src={'../../../pages/Home/_general/img/instagram.svg'} alt="" />
+              <img src={instagram} alt="" />
             </a>
           </div>
         </div>
