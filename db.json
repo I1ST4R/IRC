@@ -8,18 +8,8 @@
       "type": "admin",
       "cart": [
         {
-          "productId": "3",
-          "quantity": 5,
-          "isChecked": true
-        },
-        {
           "productId": "1",
-          "quantity": 1,
-          "isChecked": true
-        },
-        {
-          "productId": "2",
-          "quantity": 1,
+          "quantity": 2,
           "isChecked": true
         }
       ],
@@ -41,34 +31,8 @@
         }
       ],
       "orders": [
-        "4ee2",
-        "0249",
-        "ad4b",
-        "6ac1",
-        "c3a2",
-        "34db",
-        "d17f",
-        "4460",
-        "ff6a",
-        "0a53",
-        "29d2",
-        "08f2",
-        "3c80",
-        "6b85",
-        "f45b",
-        "3b31",
-        "58dc",
-        "1ce3",
-        "3b7c",
-        "77e3",
-        "c520",
-        "7a9c",
-        "bdf4",
-        "118c",
-        "d965",
-        "f272",
-        "634e",
-        "6a0a"
+        "8015",
+        "eb76"
       ]
     },
     {
@@ -97,9 +61,7 @@
           "quantity": 1
         }
       ],
-      "orders": [
-        "b0dd"
-      ]
+      "orders": []
     }
   ],
   "products": [
@@ -971,5 +933,103 @@
       "discount": 2000
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "8015",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 5,
+            "productId": "3"
+          }
+        ],
+        "total": 23500,
+        "totalWithDiscount": 20500,
+        "discount": 3000,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "eb76",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          }
+        ],
+        "total": 5000,
+        "totalWithDiscount": 4200,
+        "discount": 800,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    }
+  ]
 }

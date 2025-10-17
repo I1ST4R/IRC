@@ -1,10 +1,10 @@
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
 import { ControllerRenderProps, useForm } from "react-hook-form";
-import { AppDispatch, useAppDispatch } from "@/App/store";
+import { useAppDispatch } from "@/App/store";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
@@ -35,48 +35,48 @@ export const SBPPaymentForm = () => {
   })
   
   const recipient = useSelector(selectRecipient)
-  const onSBPPaymentSubmit = (
-    dispatch: AppDispatch,
-    navigate: NavigateFunction,
-    userId: string
-  ) => {
-    SBPPaymentForm.handleSubmit((validData) => {
-      
-      dispatch(createOrder({ 
+  const onValidSubmit = (validData: SBPPaymentData) => {
+    dispatch(
+      createOrder({
         recipient: {
           ...recipient,
-          paymentPhone: validData.phone
-        }, 
-        navigate, 
-        userId 
-      }));
-    })()
-  };
-
+          paymentPhone: validData.phone,
+        },
+        navigate,
+        userId: user?.id ?? "",
+      })
+    )
+      .unwrap()
+      .catch((err) => console.error("createOrder failed", err));
+  }
   return (
     <Form {...SBPPaymentForm}>
-      <form
-        onSubmit={() => onSBPPaymentSubmit(dispatch, navigate, user?.id ?? "")}
-        className="space-y-6"
-      >
-        <FormField
-          control={SBPPaymentForm.control}
-          name="phone"
-          render={({ field }: { field: ControllerRenderProps<SBPPaymentData, "phone"> }) => (
-            <FormItem>
-              <FormLabel>Телефон</FormLabel>
-              <FormControl>
-                <Input placeholder="телефон" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+  <div className="space-y-4">
+    <h2 className="text-xl font-semibold text-center">Оплата через СБП</h2>
+    
+    <form
+      onSubmit={SBPPaymentForm.handleSubmit(onValidSubmit)}
+      className="space-y-6 border-1 border-gray-400 p-5 rounded-[3px]"
+    >
+      <FormField
+        control={SBPPaymentForm.control}
+        name="phone"
+        render={({ field }: { field: ControllerRenderProps<SBPPaymentData, "phone"> }) => (
+          <FormItem>
+            <FormLabel>Телефон</FormLabel>
+            <FormControl>
+              <Input placeholder="телефон" {...field} className="rounded-none w-full py-2.5 pl-3"/>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-        <Button type="submit" className="w-full">
-          Оплатить
-        </Button>
-      </form>
-    </Form>
+      <Button type="submit" className="w-full rounded-[2px] h-11 text-[14px] font-semibold">
+        Оплатить
+      </Button>
+    </form>
+  </div>
+</Form>
   );
 };

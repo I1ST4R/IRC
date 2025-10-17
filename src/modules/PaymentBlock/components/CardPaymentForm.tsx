@@ -1,11 +1,11 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/kit/form";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGetUserQuery } from "@/shared/store/user/userApiSlice";
 import { ControllerRenderProps, useForm } from "react-hook-form";
 import { Input } from "@/shared/ui/kit/input";
 import { Button } from "@/shared/ui/kit/button";
 import z from "zod";
-import { AppDispatch, useAppDispatch } from "@/App/store";
+import { useAppDispatch } from "@/App/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { selectRecipient } from "@/modules/OrderForm";
@@ -31,28 +31,27 @@ export const CardPaymentForm = () => {
     mode: "onChange"
   })
   
-  const onСardPaymentSubmit = (
-    dispatch: AppDispatch,
-    navigate: NavigateFunction,
-    userId: string
-  ) => {
-    cardPaymentForm.handleSubmit((validData) => {
-      dispatch(createOrder({ 
+  const onValidSubmit = (validData: CardPaymentData) => {
+    dispatch(
+      createOrder({
         recipient: {
           ...recipient,
-          cardNumber: validData.number
-        }, 
-        navigate, 
-        userId 
-      }));
-    })()
+          cardNumber: validData.number,
+        },
+        navigate,
+        userId: user?.id ?? "",
+      })
+    )
+      .unwrap()
+      .catch((err) => console.error("createOrder failed", err));
   };
 
   return (
     <Form {...cardPaymentForm}>
+      <h2 className="text-xl font-semibold text-center">Оплата по номеру карты</h2>
       <form
-        onSubmit={() => onСardPaymentSubmit(dispatch, navigate, user?.id ?? "")}
-        className="space-y-6"
+        onSubmit={cardPaymentForm.handleSubmit(onValidSubmit)}
+        className="space-y-6 border-1 border-gray-400 p-5 rounded-[3px]"
       >
         <FormField
           control={cardPaymentForm.control}
@@ -68,7 +67,7 @@ export const CardPaymentForm = () => {
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full rounded-[2px] h-11 text-[14px] font-semibold">
           Оплатить
         </Button>
       </form>

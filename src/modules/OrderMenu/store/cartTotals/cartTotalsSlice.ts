@@ -75,8 +75,7 @@ export const createOrder = createAsyncThunk(
   ) => {
     const state = getState() as any;
     
-    const cartTotals = selectCartTotals(state.cartTotals);
-
+    const cartTotals = selectCartTotals(state);
     const cartItemsDb = cartTotals.cartItems.map((el) => {
       return {
         isChecked: el.isChecked,
@@ -84,7 +83,6 @@ export const createOrder = createAsyncThunk(
         productId: el.product.id,
       };
     });
-
     const order: Order<"DB"> = {
       cartTotals: {
         ...cartTotals,
@@ -94,7 +92,6 @@ export const createOrder = createAsyncThunk(
     };
 
     await addOrder(order, userId);
-
     const promoId = cartTotals.promo.id;
     if (promoId) {
       await makePromocodeUsedApi(promoId);
@@ -113,7 +110,7 @@ export const createOrder = createAsyncThunk(
       })
     );
 
-    navigate("/payment");
+    navigate("/cart");
   }
 );
 

@@ -20,7 +20,6 @@ import { useState } from "react";
 export const Menu = () => {
   const dispatch = useAppDispatch();
   const [priceRangeMin, setPriceRangeMin] = useState(PRICE_RANGE_MIN)
-  console.log(1)
 
   return (
     <div className="w-[300px] min-w-[300px]">

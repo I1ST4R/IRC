@@ -27,13 +27,13 @@ export const PaymentBlock = () => {
     return (
       <div>
         Чтобы оплатить заказ его надо сначала создать (как бы это ни было
-        странно), перейдите в <Link to="/catatlog">каталог</Link> и выберите
+        странно), перейдите в <Link to="/catalog"><span className="text-[var(--coral)]">каталог</span></Link> и выберите
         что-нибудь.
       </div>
     );
 
   return (
-    <div className="payment container">
+    <div className="payment w-100 h-150 m-auto pt-50">
     { deliveryMethod === "Банковская карта" ? <CardPaymentForm/> : <SBPPaymentForm/> }
     </div>
   )
