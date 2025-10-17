@@ -1,6 +1,6 @@
 # Online Store (Backend + Frontend)
 
-**Stack:** HTML, SCSS, JS, TS, React, Redux Toolkit, React Router, JSON, Axios
+**Stack:** HTML, SCSS, Tailwind, TS, React, Redux Toolkit, React Router, JSON, Axios, RTK Query, Zod, RHF, shadcn
 
 ----------------  
 ### Backend (Simple)
