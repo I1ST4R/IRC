@@ -20,7 +20,7 @@ export const OrderFormTextarea = ({
           <FormControl>
             <Textarea
               placeholder={placeholder}
-              className="resize-none"
+              className="resize-none h-30 rounded-none bg-[rgb(242,242,242)]"
               {...field}
             />
           </FormControl>

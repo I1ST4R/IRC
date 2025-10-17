@@ -20,6 +20,7 @@ export const OrderFormInput = ({
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input
+            className="rounded-none w-full py-2.5 pl-3"
              placeholder={placeholder} 
              {...field} 
              onBlur={(e) => {

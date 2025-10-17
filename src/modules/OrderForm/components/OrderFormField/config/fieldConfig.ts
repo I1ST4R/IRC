@@ -7,7 +7,7 @@ export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
     fieldType: FieldTypes.Selector,
     name: "deliveryMethod",
-    label: "Способ доставки",
+    label: "Доставка",
     options: DELIVERY_METHOD_NAMES,
     actions: {
       onBlur: (value) => { 
@@ -18,43 +18,43 @@ export const getFieldConfig = (dispatch: AppDispatch):  FieldConfigType[] => [
   {
     fieldType: FieldTypes.Selector,
     name: "paymentMethod",
-    label: "Способ оплаты",
+    label: "Оплата",
     options: PAYMENT_METHODS
   },
   {
     fieldType: FieldTypes.Input,
     name: "fullName",
     label: "ФИО",
-    placeholder: "Иванов Иван Иванович"
+    placeholder: "Введите ваше полное имя"
   },
   {
     fieldType: FieldTypes.Input,
     name: "phone",
     label: "Телефон",
-    placeholder: "+7 (999) 123-45-67"
+    placeholder: "+7 (___) ___-__-__"
   },
   {
     fieldType: FieldTypes.Input,
     name: "email",
     label: "Email",
-    placeholder: "your@email.com"
+    placeholder: "Введите ваш email"
   },
   {
     fieldType: FieldTypes.Input,
     name: "address",
     label: "Адрес",
-    placeholder: "г. Москва, ул. Примерная, д. 1"
+    placeholder: "Введите Адрес доставки"
   },
   {
     fieldType: FieldTypes.Date,
     name: "deliveryDate",
-    label: "Дата доставки",
+    label: "Введите дату доставки",
     placeholder: ""
   },
   {
     fieldType: FieldTypes.TextArea,
     name: "comment",
-    label: "Комментарий (необязательно)",
+    label: "Комментарий к заказу (необязательно)",
     placeholder: "Дополнительная информация для курьера"
   }
 ] as const

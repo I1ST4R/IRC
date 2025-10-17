@@ -1,4 +1,5 @@
 import { 
+  FormControl,
   FormField, 
   FormItem, 
   FormLabel, 
@@ -8,7 +9,9 @@ import { SelectorType } from "../config/fieldConfigTypes";
 import { 
   Select, 
   SelectContent, 
-  SelectItem, 
+  SelectItem,
+  SelectTrigger,
+  SelectValue, 
 } from "@/shared/ui/kit/select";
 import { Control } from "react-hook-form";
 import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
@@ -34,11 +37,11 @@ export const OrderFormSelector = ({
               actions?.onChange?.(value); 
             }}
             >
-            {/* <FormControl>
+            <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Выберите способ доставки" />
               </SelectTrigger>
-            </FormControl> */}
+            </FormControl>
             <SelectContent>
               {
                 options.map((el) => {

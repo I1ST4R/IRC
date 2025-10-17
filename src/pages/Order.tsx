@@ -21,7 +21,7 @@ export const Order = () => {
   return (
     <div className="order container m-auto">
       <BreadCrumb />
-      <div className="flex justify-between pl-5">
+      <div className="grid grid-cols-[auto_300px] gap-7 pl-5 pb-5">
         <OrderForm />
         <OrderMenu />
       </div>

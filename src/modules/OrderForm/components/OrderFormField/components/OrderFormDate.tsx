@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/kit/popover
 import { cn } from "@/shared/lib/css";
 import { Control } from "react-hook-form";
 import { RecipientFormData } from "@/modules/OrderForm/helpers/recepientSchema";
+import { format } from "date-fns";
 
 export const OrderFormDate = ({
   name,
@@ -27,7 +28,7 @@ export const OrderFormDate = ({
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full pl-3 text-left font-normal",
+                    "w-full pl-3 text-left font-normal bg-[rgb(242,242,242)] hover:bg-[rgb(226,226,226)] h-10 flex items-center cursor-pointer" ,
                     !field.value && "text-muted-foreground"
                   )}
                   onBlur={() => {
@@ -35,12 +36,11 @@ export const OrderFormDate = ({
                     if(field.value) actions?.onBlur?.(field.value); 
                   }}
                 >
-{/*                   
-                  {field.value ? (
-                    format(new Date(field.value), "PPP")
+                  
+                  {field.value ? ( format(new Date(field.value), "PPP")
                   ) : (
                     <span>Выберите дату</span>
-                  )} */}
+                  )}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
               </FormControl>

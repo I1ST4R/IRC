@@ -11,7 +11,7 @@ export const OrderForm = () => {
   const form = UseRecipientForm()
 
   return (
-    <Form {...form}>
+    <Form {...form} >
       <form className="space-y-6">
         {fieldConfig.map((el) => (
           <OrderFormField {...el} formControl = {form.control} key={el.name} />
