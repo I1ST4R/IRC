@@ -5,7 +5,7 @@ import { ProductTags } from "./ProductTags";
 
 export const ProductCard = ({product}: {product: ProductT}) => {
   return (
-    <Link to={`/product/${product.id}`} className="h-full block">
+    <Link to={`product/${product.id}`} className="h-full block">
       <Card className="shadow-none border-b-0 flex-col rounded-none bg-[rgb(242,242,242)] ">
         <img src={product.img} alt={product.name} className="w-full h-[270px] object-contain object-center" />
         <ProductTags productTags = {product.tags}/>

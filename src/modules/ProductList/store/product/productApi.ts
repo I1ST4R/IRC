@@ -76,9 +76,11 @@ const getProductsWithTags = async (products: ProductDb[]) => {
 }
 
 export const getProductById = async (productId: string) => {
+  console.log(1)
   try{
     const response = await axiosInstance.get(`/products/${productId}`);
     const productWithTags = await getProductsWithTags([response.data]);
+    console.log(productWithTags[0])
     return productWithTags[0];
   }catch (error: any) {
     console.error('error in getProductById', error);

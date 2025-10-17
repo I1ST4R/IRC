@@ -5,18 +5,18 @@ import { useGetProductByIdQuery } from "../ProductList";
 import { Unauthorized } from "@/shared/ui/components/Unauthorized";
 import { openAccount } from "../AuthForm";
 import { ProductTags } from "./components/ProductTags";
-import { ProductInfo } from "./components/ProductInfo";
 import { useAppDispatch } from "@/App/store";
+import { ProductInfo } from "./components/ProductInfo";
 
 export const ProductAbout = () => {
   const { id } = useParams();
-  const { data: user } = useGetUserQuery();
+  const { data: user, isLoading } = useGetUserQuery();
   const { data: product, error } = useGetProductByIdQuery(id ?? "", {
     skip: !id,
   });
   const dispatch = useAppDispatch();
   if (error) return <div>Ошибка при загрузке продукта</div>;
-  if (!product) return <div>Товар не найден</div>;
+  if (!product || Object.values(product).length === 0 || isLoading) return <div>Товар не найден</div>;
   if (!user?.id)
     return (
       <Unauthorized
@@ -31,8 +31,8 @@ export const ProductAbout = () => {
       <div className="product-about__container">
         <div className="product-about__image-container">
           <img
-            src={`/${product.img}`}
-            alt={product.name}
+            src={`/${product?.img}`}
+            alt={product?.name}
             className="product-about__image"
           />
           <ProductTags product={product} />

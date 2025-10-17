@@ -1,8 +1,8 @@
-import { ProductT } from "@/modules/ProductList";
-import { ProductCartBtn } from "./ProductCartBtn";
+import { CartBtn, LikeBtn, ProductT } from "@/modules/ProductList";
 import { ProductPrices } from "./ProductPrices";
-import { ProductLikeBtn } from "./ProductLikeBtn";
 import { ProductFormula } from "./ProductFormula";
+import { initialCart, useGetCartQuery } from "@/modules/CartBody";
+import { useGetLikedQuery } from "@/modules/LikedBody";
 
 type ProductInfoProps = {
   userId: string,
@@ -10,6 +10,14 @@ type ProductInfoProps = {
 }
 
 export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
+  const { data: cart = initialCart} = useGetCartQuery(
+    userId ?? "",
+    { skip: !userId }
+  );
+  const { data: likedItems = {} } = useGetLikedQuery(
+    userId ?? "",
+    { skip: !userId }
+  );
   return (
     <div className="font-manrope font-medium">
       <h3 className="font-semibold text-xs tracking-widest uppercase">
@@ -27,8 +35,8 @@ export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
 
       <div className="flex gap-5 py-8 md:flex-row flex-col md:items-start items-center">
         <ProductPrices price={product.price} prevPrice={product.prevPrice} />
-        <ProductCartBtn userId={userId} productId={product.id} />
-        <ProductLikeBtn userId={userId} productId={product.id} />
+        <CartBtn userId={userId} productId={product.id} isInCart={cart.items[product.id]?.product?.id === product.id}/>
+        <LikeBtn userId={userId} productId={product.id} isLiked={likedItems[product.id]?.id === product.id}/>
       </div>
 
       <ProductFormula formula={product.formula} />

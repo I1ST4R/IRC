@@ -3,34 +3,34 @@ import { CartTotals } from "@/modules/OrderMenu";
 export const OrderTableCartTotals = ({cartTotals}: {cartTotals: CartTotals}) => {
   return (
     <>
-      <div>
+      <p>
         Сумма: <b>{cartTotals.total} ₽</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Сумма со скидкой: <b>{cartTotals.totalWithDiscount} ₽</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Скидка: <b>{cartTotals.discount} ₽</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Скидка по промокоду: <b>{cartTotals.promo.discount ?? "-"}</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Скидка по сертификату:{" "}
         <b>{cartTotals.certificate.discount ?? "-"}</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Доставка: <b>{cartTotals.deliveryCost} ₽</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Промокод: <b>{cartTotals.promo.id ?? "-"}</b>
-      </div>
-      <div>
+      </p>
+      <p>
         Сертификат: <b>{cartTotals.certificate.id ?? "-"}</b>
-      </div>
-      <div className="mt-1.5 mb-1">
+      </p>
+      <p className="mt-1.5 mb-1">
         <b>Получатель:</b>
-      </div>
+      </p>
     </>
   );
 };
