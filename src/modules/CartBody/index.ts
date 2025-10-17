@@ -2,7 +2,8 @@ export {CartBody} from "./CartBody"
 export {
   initialCart,
   removeFromCart,
-  loadCartProducts
+  loadCartProducts,
+  removeCheckedItemsFromCart
 } from "./store/cartApi"
 export {
   useGetCartQuery,

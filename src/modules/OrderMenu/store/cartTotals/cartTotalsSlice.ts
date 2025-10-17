@@ -20,7 +20,7 @@ import {
   DeliveryMethodName,
   Recipient,
 } from "@/modules/OrderForm";
-import { removeFromCart } from "@/modules/CartBody";
+import { removeCheckedItemsFromCart, removeFromCart } from "@/modules/CartBody";
 
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
@@ -104,13 +104,9 @@ export const createOrder = createAsyncThunk(
       dispatch(changeCartTotals({ certificate: INITIAL_CERTIFICATE }));
     }
 
-    await Promise.all(
-      cartItemsDb.map((el) => {
-        return removeFromCart(userId, el.productId);
-      })
-    );
+    await removeCheckedItemsFromCart(userId)
 
-    navigate("/cart");
+     navigate("/cart");
   }
 );
 

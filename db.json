@@ -6,13 +6,7 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [
-        {
-          "productId": "1",
-          "quantity": 2,
-          "isChecked": true
-        }
-      ],
+      "cart": [],
       "liked": [
         {
           "productId": "6"
@@ -32,7 +26,12 @@
       ],
       "orders": [
         "8015",
-        "eb76"
+        "eb76",
+        "fea4",
+        "bc20",
+        "2dd9",
+        "ade0",
+        "20fb"
       ]
     },
     {
@@ -1004,6 +1003,256 @@
         "total": 5000,
         "totalWithDiscount": 4200,
         "discount": 800,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "fea4",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 9000,
+        "totalWithDiscount": 7700,
+        "discount": 1300,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "bc20",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          }
+        ],
+        "total": 5000,
+        "totalWithDiscount": 4200,
+        "discount": 800,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "2dd9",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 9000,
+        "totalWithDiscount": 7700,
+        "discount": 1300,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "ade0",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 9000,
+        "totalWithDiscount": 7700,
+        "discount": 1300,
+        "promo": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0,
+          "percent": 0
+        },
+        "certificate": {
+          "id": null,
+          "valid": false,
+          "code": null,
+          "discount": 0
+        },
+        "deliveryCost": 500
+      },
+      "recipient": {
+        "deliveryMethod": "Курьером",
+        "paymentMethod": "СБП",
+        "fullName": "",
+        "phone": "",
+        "address": "",
+        "email": "",
+        "deliveryDate": "",
+        "comment": "",
+        "paymentPhone": "79190024147"
+      }
+    },
+    {
+      "id": "20fb",
+      "userId": "anpri65",
+      "cartTotals": {
+        "cartItems": [
+          {
+            "isChecked": true,
+            "quantity": 2,
+            "productId": "1"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "2"
+          },
+          {
+            "isChecked": true,
+            "quantity": 1,
+            "productId": "3"
+          }
+        ],
+        "total": 9000,
+        "totalWithDiscount": 7700,
+        "discount": 1300,
         "promo": {
           "id": null,
           "valid": false,

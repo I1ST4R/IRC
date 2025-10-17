@@ -46,8 +46,6 @@ export const SBPPaymentForm = () => {
         userId: user?.id ?? "",
       })
     )
-      .unwrap()
-      .catch((err) => console.error("createOrder failed", err));
   }
   return (
     <Form {...SBPPaymentForm}>

@@ -109,7 +109,30 @@ export const removeFromCart = async (userId: string, productId: string) => {
     }
     const user = response.data[0];
     const cart = (user.cart || []).filter((item: CartItemDb) => item.productId !== productId);
-    
+    console.log(cart, productId)
+    const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
+    const cartItems = await loadCartProducts(updateResponse.data.cart)
+
+    const cartItemsWithCount = {
+      items: cartItems, 
+      itemsCount: getItemsCount(updateResponse.data.cart)
+    } as Cart
+
+    return cartItemsWithCount
+  } catch (error: any) {
+    console.error('error in removeFromCart', error);
+    throw error;
+  }
+};
+
+export const removeCheckedItemsFromCart = async (userId: string) => {
+  try {
+    const response = await axiosInstance.get(`/users?id=${userId}`);
+    if (response.data.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    const user = response.data[0];
+    const cart = (user.cart || []).filter((item: CartItemDb) => item.isChecked !== true);
     const updateResponse = await axiosInstance.patch(`/users/${user.id}`, { cart });
     const cartItems = await loadCartProducts(updateResponse.data.cart)
 
