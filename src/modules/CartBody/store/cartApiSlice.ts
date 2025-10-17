@@ -66,6 +66,8 @@ export const cartApi = createApi({
   }),
 })
 
+export const invalidateCartTags = cartApi.util.invalidateTags.bind(cartApi.util)
+
 export const {
   useGetCartQuery,
   useGetCheckedCartItemsQuery,
