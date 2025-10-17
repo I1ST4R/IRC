@@ -20,8 +20,6 @@ export const AuthForm = () => {
   const { data: user } = useGetUserQuery(); 
   const dispatch = useAppDispatch();
 
-  console.log(!!user?.id)
-
   if(user?.id) return <></>
 
   return (
