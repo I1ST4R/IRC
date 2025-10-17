@@ -26,10 +26,12 @@ const Header = () => {
   const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", {
     skip: !user?.id,
   });
-  const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? "", {
+  const { data: likedItems = {} } = useGetLikedQuery(user?.id ?? "", {
     skip: !user?.id,
   });
   const [logout] = useLogoutMutation();
+
+  const numOfLiked = Object.values(likedItems).length
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,8 +56,6 @@ const Header = () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const stub = 5;
 
   const handleLogout = () => {
     logout();
@@ -125,12 +125,12 @@ const Header = () => {
             id="liked__container1"
           >
             <img src={liked} alt="liked" />
-            {stub > 0 && (
+            {numOfLiked > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 id="liked__counter"
               >
-                {stub}
+                {numOfLiked}
               </div>
             )}
           </Link>
@@ -141,12 +141,12 @@ const Header = () => {
             id="basket__container1"
           >
             <img src={basket} alt="basket" />
-            {stub > 0 && (
+            {cart.itemsCount > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 id="basket-counter"
               >
-                {stub}
+                {cart.itemsCount}
               </div>
             )}
           </Link>

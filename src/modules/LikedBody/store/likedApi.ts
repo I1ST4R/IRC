@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts";
 import { LikedItemDb } from "./likedTypes";
-import { getProductById, ProductT } from "@/modules/ProductList";
+import { getProductById } from "@/modules/ProductList/store/product/productApi";
+import { type Product as ProductT } from "@/modules/ProductList/store/product/productTypes";
 import { Product } from "@/modules/ProductList/store/product/productTypes";
 
 const axiosInstance = axios.create(API_CLIENT);

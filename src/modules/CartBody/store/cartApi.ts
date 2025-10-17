@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_CLIENT } from "@/shared/consts"
 import { Cart, CartItem, CartItemDb, CartItems, CartWithRecord } from "./cartTypes";
-import { getProductById } from "@/modules/ProductList";
+import { getProductById } from "@/modules/ProductList/store/product/productApi";
 import { getItemsCount } from "./getItemsCount";
 
 
