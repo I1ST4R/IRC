@@ -20,7 +20,7 @@ import {
   DeliveryMethodName,
   Recipient,
 } from "@/modules/OrderForm";
-import { invalidateCartTags, removeCheckedItemsFromCart, removeFromCart } from "@/modules/CartBody";
+import { invalidateCartTags, removeCheckedItemsFromCart} from "@/modules/CartBody";
 
 export const getPromocode = createAsyncThunk(
   "cartTotals/getPromocode",
