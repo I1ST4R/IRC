@@ -3,7 +3,7 @@ import React from 'react';
 const Footer: React.FC = () => {
   return (
     <footer className="bg-[#E1E7F0] py-12">
-      <div className="grid grid-cols-4 justify-between max-w-6xl mx-auto px-4 md:grid-cols-2 md:justify-center md:gap-14 md:pb-10 sm:grid-cols-1">
+      <div className="grid grid-cols-4 px-5">
         
         <div className="flex flex-col gap-4 text-left items-start font-manrope font-extrabold text-sm text-black">
           <img src={'./logo.svg'} alt="" className="mb-14" />

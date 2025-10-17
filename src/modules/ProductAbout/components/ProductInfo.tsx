@@ -35,8 +35,18 @@ export const ProductInfo = ({ userId, product }: ProductInfoProps) => {
 
       <div className="flex gap-5 py-8 md:flex-row flex-col md:items-start items-center">
         <ProductPrices price={product.price} prevPrice={product.prevPrice} />
-        <CartBtn userId={userId} productId={product.id} isInCart={cart.items[product.id]?.product?.id === product.id}/>
-        <LikeBtn userId={userId} productId={product.id} isLiked={likedItems[product.id]?.id === product.id}/>
+        <LikeBtn 
+          styles="static mt-2" 
+          userId={userId} 
+          productId={product.id} 
+          isLiked={likedItems[product.id]?.id === product.id}
+        />
+        <CartBtn 
+          styles="static cursor-pointer" 
+          userId={userId} 
+          productId={product.id} 
+          isInCart={cart.items[product.id]?.product?.id === product.id}
+        />
       </div>
 
       <ProductFormula formula={product.formula} />

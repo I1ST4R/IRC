@@ -6,9 +6,10 @@ export type CartBtnProps = {
   userId: string,
   productId: string,
   isInCart: boolean
+  styles?: string
 }
 
-export const CartBtn = ({ userId, productId, isInCart}: CartBtnProps) => {
+export const CartBtn = ({ userId, productId, isInCart, styles}: CartBtnProps) => {
   const cartClick = useCart({userId, productId, isInCart})
 
   return (
@@ -16,6 +17,7 @@ export const CartBtn = ({ userId, productId, isInCart}: CartBtnProps) => {
       variant="destructive"
       className={cn(
         "px-2.5 py-[10px] h-9 text-xs font-bold uppercase transition-all duration-200 font-manrope absolute bottom-0 w-full",
+        styles,
         isInCart
           ? "bg-[var(--coral)] text-white hover:bg-coralDark"
           : "bg-gray-300 text-black hover:bg-coral hover:text-white"

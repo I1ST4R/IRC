@@ -26,14 +26,14 @@ export const ProductAbout = () => {
     );
 
   return (
-    <div className="product-about container">
+    <div className="product-about container pb-10">
       <BreadCrumb />
-      <div className="product-about__container">
-        <div className="product-about__image-container">
+      <div className="grid grid-cols-2 gap-10">
+        <div className="flex justify-center items-center bg-[rgb(242,242,242)] relative">
           <img
             src={`/${product?.img}`}
             alt={product?.name}
-            className="product-about__image"
+            className=""
           />
           <ProductTags product={product} />
         </div>

@@ -8,18 +8,14 @@ import {
 // import { initialCart, useGetCartQuery } from "@/modules/CartBody";
 // import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useAppDispatch } from "@/App/store";
-import logo from './logo.svg';
-import arrowDown from './arrow-down-coral.svg';
 import search from './search.svg';
 import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
 import liked from '../../../pages/Home/_general/img/liked.svg';
 import basket from '../../../pages/Home/_general/img/basket.svg';
 
 const Header = () => {
-  const [isMenuActive, setIsMenuActive] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
 
@@ -43,7 +39,6 @@ const Header = () => {
       if (counter.current >= 300 && counter.current !== 0) {
         counter.current = 0;
         setIsHeaderVisible(false);
-        setIsMenuActive(false);
       }
       if (counter.current < -300 && counter.current !== 0) {
         counter.current = 0;
@@ -62,10 +57,6 @@ const Header = () => {
 
   const stub = 5
 
-  const handleMenuClick = () => {
-    setIsMenuActive(!isMenuActive);
-  };
-
   const handleLogout = () => {
     logout();
   };
@@ -78,15 +69,7 @@ const Header = () => {
       ref={headerRef}
     >
       <div className="container mx-auto h-25 flex justify-between items-center">
-        {/* Меню для мобильных устройств */}
-        <button className="hidden md:flex items-center gap-2.5 h-auto">
-          <img className="w-25 h-auto" src={logo}  alt="logo" />
-          <p className="font-manrope text-13 font-800 uppercase tracking-wider">
-            МЕНЮ
-          </p>
-        </button>
 
-        {/* Основные ссылки */}
         <div className="w-140 flex justify-between items-center">
           <Link
             to="/catalog"
@@ -112,47 +95,8 @@ const Header = () => {
           >
             Блог
           </a>
-
-          {/* Выпадающее меню "О бренде" */}
-          <button
-            className={`font-manrope text-13 font-800 uppercase tracking-wider px-0.4 border-b-2 border-transparent hover:border-black transition-colors duration-700 ease-in-out user-select-none flex items-center gap-2.5 cursor-pointer relative ${
-              isMenuActive ? "hover:border-transparent" : ""
-            }`}
-            ref={btnRef}
-            onClick={handleMenuClick}
-          >
-            <p>О бренде</p>
-            <img
-              src={arrowDown}
-              alt="arrow"
-              className={`transition-transform duration-700 ease-in-out ${
-                isMenuActive ? "rotate-180" : ""
-              }`}
-            />
-
-            {/* Выпадающий список */}
-            <ul
-              className={`absolute top-17 left-1/2 -translate-x-1/2 w-62.5 list-none flex flex-col items-start bg-white border-t-2 border-coral shadow-lg opacity-0 invisible -translate-y-2.5 transition-all duration-300 ease-in-out ${
-                isMenuActive ? "opacity-100 visible translate-y-0" : ""
-              }`}
-            >
-              <li className="p-5 border-b border-black/10 text-left transition-all duration-300 ease-in-out hover:bg-gray-100 hover:text-coral">
-                <a href="#">Доставки и оплата</a>
-              </li>
-              <li className="p-5 border-b border-black/10 text-left transition-all duration-300 ease-in-out hover:bg-gray-100 hover:text-coral">
-                <a href="#">Где купить</a>
-              </li>
-              <li className="p-5 border-b border-black/10 text-left transition-all duration-300 ease-in-out hover:bg-gray-100 hover:text-coral">
-                <a href="#">Программа лояльности</a>
-              </li>
-              <li className="p-5 text-left transition-all duration-300 ease-in-out hover:bg-gray-100 hover:text-coral">
-                <a href="#">Контакты</a>
-              </li>
-            </ul>
-          </button>
         </div>
 
-        {/* Кнопки действий */}
         <div className="flex items-center gap-7.5">
           <button className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out hover:[&_svg_path]:fill-none hover:[&_svg_path]:stroke-coral">
             <img src={search} alt="search" />

@@ -6,7 +6,13 @@
       "password": "newUser",
       "email": "newUser",
       "type": "admin",
-      "cart": [],
+      "cart": [
+        {
+          "productId": "1",
+          "quantity": 1,
+          "isChecked": true
+        }
+      ],
       "liked": [
         {
           "productId": "6"
