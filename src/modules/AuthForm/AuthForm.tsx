@@ -21,12 +21,13 @@ export const AuthForm = () => {
   const dispatch = useAppDispatch();
 
   if(user?.id) return <></>
+  console.log(isAccountOpen)
 
   return (
     <Dialog
       open={isAccountOpen}
       onOpenChange={(open) => {
-        if (!open) dispatch(closeAccount());
+        if (!open) dispatch(closeAccount())
       }}
     >
       <DialogContent className="sm:max-w-[425px]">

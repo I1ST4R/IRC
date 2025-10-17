@@ -1,34 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { openAccount } from "@/modules/AuthForm";
+import { closeAccount, openAccount } from "@/modules/AuthForm";
 import {
   useGetUserQuery,
   useLogoutMutation,
 } from "@/shared/store/user/userApiSlice";
-// import { initialCart, useGetCartQuery } from "@/modules/CartBody";
+import { initialCart, useGetCartQuery } from "@/modules/CartBody";
 // import { useGetLikedQuery } from "@/modules/LikedBody";
 import { useAppDispatch } from "@/App/store";
-import search from './search.svg';
-import personalAcc from '../../../pages/Home/_general/img/personal-acc.svg';
-import liked from '../../../pages/Home/_general/img/liked.svg';
-import basket from '../../../pages/Home/_general/img/basket.svg';
+import search from "./search.svg";
+import personalAcc from "../../../pages/Home/_general/img/personal-acc.svg";
+import arrow from "./arrow.svg";
+import liked from "../../../pages/Home/_general/img/liked.svg";
+import basket from "../../../pages/Home/_general/img/basket.svg";
+import { useGetLikedQuery } from "@/modules/LikedBody";
 
 const Header = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
   const previousScrollPosition = useRef(0);
   const counter = useRef(0);
-
   const dispatch = useAppDispatch();
   const { data: user } = useGetUserQuery();
 
-  // RTK Query хуки
-  // const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", {
-  //   skip: !user?.id,
-  // });
-  // const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? "", {
-  //   skip: !user?.id,
-  // });
+  const { data: cart = initialCart } = useGetCartQuery(user?.id ?? "", {
+    skip: !user?.id,
+  });
+  const { data: likedItems = [] } = useGetLikedQuery(user?.id ?? "", {
+    skip: !user?.id,
+  });
   const [logout] = useLogoutMutation();
 
   useEffect(() => {
@@ -55,10 +55,11 @@ const Header = () => {
     };
   }, []);
 
-  const stub = 5
+  const stub = 5;
 
   const handleLogout = () => {
     logout();
+    dispatch(closeAccount())
   };
 
   return (
@@ -69,7 +70,6 @@ const Header = () => {
       ref={headerRef}
     >
       <div className="container mx-auto h-25 flex justify-between items-center">
-
         <div className="w-140 flex justify-between items-center">
           <Link
             to="/catalog"
@@ -103,40 +103,19 @@ const Header = () => {
           </button>
 
           {user?.id ? (
-            <div className="header__user-info">
-              <button
-                onClick={handleLogout}
-                className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out"
-                title="Выйти"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14 4L12.59 5.41L18.17 11H2V13H18.17L12.59 18.59L14 20L22 12L14 4Z"
-                    fill="#333"
-                  />
-                  <path
-                    d="M7 2H17V0H7V2Z"
-                    fill="#333"
-                    transform="rotate(90 17 2)"
-                  />
-                </svg>
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out"
+              title="Выйти"
+            >
+              <img src={arrow} alt="" />
+            </button>
           ) : (
             <button
               className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out"
               onClick={() => dispatch(openAccount())}
             >
-              <img
-                src={personalAcc}
-                alt="personal-acc"
-              />
+              <img src={personalAcc} alt="personal-acc" />
             </button>
           )}
 
@@ -145,10 +124,7 @@ const Header = () => {
             className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out"
             id="liked__container1"
           >
-            <img
-              src={liked}
-              alt="liked"
-            />
+            <img src={liked} alt="liked" />
             {stub > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
@@ -164,10 +140,7 @@ const Header = () => {
             className="header__button relative bg-none border-none cursor-pointer p-0 flex items-center justify-center transition-all duration-300 ease-in-out"
             id="basket__container1"
           >
-            <img
-              src={basket}
-              alt="basket"
-            />
+            <img src={basket} alt="basket" />
             {stub > 0 && (
               <div
                 className="counter absolute -top-2 -right-2 bg-coral text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
@@ -199,6 +172,5 @@ const Header = () => {
     </header>
   );
 };
-
 
 export default Header;

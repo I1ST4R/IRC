@@ -73,7 +73,7 @@ export const OrderMenuPromo = () => {
     );
 
   return (
-    <div className="order-menu__field">
+    <div className="mb-2">
       <Input
         type="text"
         onBlur={handlePromocodeBlur}

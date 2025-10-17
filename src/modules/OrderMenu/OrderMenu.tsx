@@ -62,7 +62,9 @@ export const OrderMenu = () => {
       />
       <OrderMenuTotals cartTotals={cartTotals} />
       <OrderMenuDiscountSection />
-      <Button onClick={handleCheckout} className="mb-5 cursor-pointer">Оформить заказ</Button>
+      <div className="mt-2 flex justify-center mb-5">
+        <Button onClick={handleCheckout} className="cursor-pointer">Оформить заказ</Button>
+      </div>
     </div>
   );
 };
